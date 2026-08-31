@@ -87,8 +87,6 @@ UC11 ..> UC10 : <<include>>
 
 ' KVA-Freigabe ist ein bedingter Zwischenschritt des Auftrags
 UC4 ..> UC1 : <<extend>>
-' Bei fehlendem Teil erweitert die Bestellung die Reservierung
-UC7 ..> UC6 : <<extend>>
 ' Reklamation kann den regulären Abschluss erweitern
 UC12 ..> UC11 : <<extend>>
 ' Unterschreitet der Lagerbestand den Meldebestand, erweitert der Nachbestellvorschlag die Verfügbarkeitsprüfung
