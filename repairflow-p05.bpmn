@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p05" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p05">
+    <bpmn:participant id="Part_Disposition" name="Ersatzteil-Disposition" processRef="Proc_p05" />
+    <bpmn:participant id="Part_Lieferant" name="Lieferant" />
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p05" name="Ersatzteil-Bestellung beim Lieferanten" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Disposition" name="Ersatzteil-Disposition">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Lieferant</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Bestellung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Freigabe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_InternFreigabe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Senden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Status</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Ev_Bestaetigung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Bestaetigt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Liefertermin</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Fehlteile">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Lieferant" name="Lieferant waehlen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:incoming>Flow_best_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Bestellung" name="Lieferantenbestellung + Positionen anlegen">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Freigabe" name="Freigabe/Budget noetig?">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_freigabe_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_freigabe_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_InternFreigabe" name="Intern freigeben">
+      <bpmn:incoming>Flow_freigabe_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Senden" name="Bestellung an Lieferant senden">
+      <bpmn:incoming>Flow_freigabe_nein</bpmn:incoming>
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Status" name="Status: Teile bestellt">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:intermediateCatchEvent id="Ev_Bestaetigung" name="Auftragsbestaetigung empfangen">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Bestaetigung" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="GW_Bestaetigt" name="bestaetigt + lieferbar?">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_best_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_best_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Liefertermin" name="Liefertermin hinterlegen">
+      <bpmn:incoming>Flow_best_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_1" name="Bestellung ausgeloest: Lieferung erwartet">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Lieferant" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Lieferant" targetRef="Task_Bestellung" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Bestellung" targetRef="GW_Freigabe" />
+    <bpmn:sequenceFlow id="Flow_freigabe_ja" name="ja" sourceRef="GW_Freigabe" targetRef="Task_InternFreigabe" />
+    <bpmn:sequenceFlow id="Flow_freigabe_nein" name="nein" sourceRef="GW_Freigabe" targetRef="Task_Senden" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_InternFreigabe" targetRef="Task_Senden" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Senden" targetRef="Task_Status" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Status" targetRef="Ev_Bestaetigung" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Ev_Bestaetigung" targetRef="GW_Bestaetigt" />
+    <bpmn:sequenceFlow id="Flow_best_nein" name="nein" sourceRef="GW_Bestaetigt" targetRef="Task_Lieferant" />
+    <bpmn:sequenceFlow id="Flow_best_ja" name="ja" sourceRef="GW_Bestaetigt" targetRef="Task_Liefertermin" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_Liefertermin" targetRef="End_1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p05">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p05" bpmnElement="Proc_p05">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Lieferant_di" bpmnElement="Task_Lieferant">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Bestellung_di" bpmnElement="Task_Bestellung">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Freigabe_di" bpmnElement="GW_Freigabe" isMarkerVisible="true">
+        <dc:Bounds x="500" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_InternFreigabe_di" bpmnElement="Task_InternFreigabe">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Senden_di" bpmnElement="Task_Senden">
+        <dc:Bounds x="775" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Status_di" bpmnElement="Task_Status">
+        <dc:Bounds x="925" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Ev_Bestaetigung_di" bpmnElement="Ev_Bestaetigung">
+        <dc:Bounds x="1107" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Bestaetigt_di" bpmnElement="GW_Bestaetigt" isMarkerVisible="true">
+        <dc:Bounds x="1250" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Liefertermin_di" bpmnElement="Task_Liefertermin">
+        <dc:Bounds x="1375" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="1557" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="500" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_freigabe_ja_di" bpmnElement="Flow_freigabe_ja">
+        <di:waypoint x="550" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_freigabe_nein_di" bpmnElement="Flow_freigabe_nein">
+        <di:waypoint x="525" y="95" />
+        <di:waypoint x="525" y="140" />
+        <di:waypoint x="825" y="140" />
+        <di:waypoint x="825" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="775" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="875" y="70" />
+        <di:waypoint x="925" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1025" y="70" />
+        <di:waypoint x="1107" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1143" y="70" />
+        <di:waypoint x="1250" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_best_nein_di" bpmnElement="Flow_best_nein">
+        <di:waypoint x="1275" y="95" />
+        <di:waypoint x="1275" y="140" />
+        <di:waypoint x="225" y="140" />
+        <di:waypoint x="225" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_best_ja_di" bpmnElement="Flow_best_ja">
+        <di:waypoint x="1300" y="70" />
+        <di:waypoint x="1375" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="1475" y="70" />
+        <di:waypoint x="1557" y="70" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

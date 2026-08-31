@@ -1,0 +1,52 @@
+@startuml
+title SD2 - Filialuebergreifende Ersatzteil-Reservierung
+
+actor Disposition
+participant Reparaturauftrag as RA
+participant Ersatzteil as ET
+participant Lagerbestand as LB
+participant Filiale
+participant Reservierung as Res
+
+RA -> Disposition : ermittleBenoetigteTeile()
+activate Disposition
+
+Disposition -> ET : getBenoetigteMenge()
+ET --> Disposition : menge
+
+Disposition -> LB : pruefeBestand(teil, eigeneFiliale)
+activate LB
+LB --> Disposition : verfuegbarLokal(anzahl)
+deactivate LB
+
+alt lokal ausreichend verfuegbar
+    Disposition -> Res : reserviere(teil, menge, eigeneFiliale)
+    activate Res
+    Res -> LB : mindereVerfuegbar(menge)
+    Res --> Disposition : reserviertLokal
+    deactivate Res
+else lokal nicht ausreichend
+    loop fuer jede andere Filiale (bis Bedarf gedeckt)
+        Disposition -> Filiale : pruefeBestand(teil)
+        activate Filiale
+        Filiale -> LB : pruefeBestand(teil, filiale)
+        LB --> Filiale : verfuegbar(anzahl)
+        Filiale --> Disposition : bestandMeldung(anzahl)
+        deactivate Filiale
+    end
+    alt in anderer Filiale gefunden
+        Disposition -> Res : reserviere(teil, menge, andereFiliale)
+        activate Res
+        Res -> LB : mindereVerfuegbar(menge)
+        Res --> Disposition : reserviertExtern
+        deactivate Res
+        Disposition -> Filiale : loeseUmlagerungAus(teil, menge, zielFiliale)
+    else nirgends verfuegbar
+        Disposition -> RA : meldeNachbestellbedarf(teil, menge)
+        note right of RA : -> loest SD3 (Lieferantenbestellung) aus
+    end
+end
+
+Disposition --> RA : reservierungsErgebnis()
+deactivate Disposition
+@enduml

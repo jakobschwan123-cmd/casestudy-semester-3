@@ -1,0 +1,51 @@
+@startuml
+title SD5 - Reklamationsbearbeitung mit Gewaehrleistungsentscheidung
+
+actor Kunde
+actor Techniker
+participant Reklamation as Rekl
+participant Reparaturauftrag as RA
+participant Rechnung
+participant Kostenvoranschlag as KVA
+
+Kunde -> Techniker : meldeMangel(auftrag, beschreibung)
+Techniker -> Rekl : erstelle(auftrag, beschreibung)
+activate Rekl
+Rekl -> RA : ladeUrsprungsauftrag()
+activate RA
+RA --> Rekl : auftragsdaten(reparaturdatum)
+deactivate RA
+Rekl -> Rechnung : ladeRechnung(auftrag)
+activate Rechnung
+Rechnung --> Rekl : rechnungsdatum
+deactivate Rechnung
+
+Rekl -> Rekl : pruefeGewaehrleistung(mangel, datum)
+
+alt innerhalb Gewaehrleistung
+    Rekl -> RA : legeNachbesserungAn(kostenlos)
+    activate RA
+    RA -> RA : setStatus("angenommen")
+    note right of RA : neuer Zyklus, kostenlos
+    RA --> Rekl : nachbesserungAngelegt
+    deactivate RA
+    Rekl -> Kunde : bestaetigeKostenloseNachbesserung()
+else ausserhalb Gewaehrleistung
+    Rekl -> Kunde : informiereKostenpflicht()
+    opt Kunde widerspricht Entscheidung
+        Kunde -> Techniker : eskaliere(reklamation)
+        Techniker -> Rekl : setzeStatus("in Pruefung")
+    end
+    alt Kunde akzeptiert Kostenpflicht
+        Rekl -> KVA : erstelleKVA(neuerAuftrag)
+        activate KVA
+        KVA --> Rekl : kvaErstellt
+        note right of Rekl : -> weiter mit SD1 (KVA-Freigabe)
+        deactivate KVA
+    else Kunde lehnt ab
+        Rekl -> Rekl : setzeStatus("abgeschlossen ohne Reparatur")
+    end
+end
+Rekl --> Techniker : reklamationBearbeitet
+deactivate Rekl
+@enduml

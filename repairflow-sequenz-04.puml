@@ -1,0 +1,40 @@
+@startuml
+title SD4 - Fertigmeldung + Kundenbenachrichtigung
+
+actor Techniker
+participant Reparaturschritt as Schritt
+participant Arbeitszeitbuchung as AZB
+participant Reparaturauftrag as RA
+actor Kunde
+
+Techniker -> Schritt : schliesseAb(schrittId)
+activate Schritt
+Schritt -> AZB : buche(techniker, dauer)
+activate AZB
+AZB --> Schritt : zeitGebucht
+deactivate AZB
+Schritt --> Techniker : schrittAbgeschlossen
+deactivate Schritt
+
+Techniker -> RA : pruefeVollstaendigkeit()
+activate RA
+RA -> Schritt : alleSchritteAbgeschlossen()
+activate Schritt
+Schritt --> RA : true/false
+deactivate Schritt
+
+alt alle Schritte abgeschlossen
+    RA -> RA : setStatus("fertig")
+    note right of RA : Status: in Reparatur -> fertig
+    RA -> Kunde : benachrichtigeFertigstellung()
+    opt Kunde hat Benachrichtigungskanal hinterlegt
+        RA -> Kunde : sendeNachricht(kanal, "Geraet abholbereit")
+        Kunde --> RA : nachrichtZugestellt
+    end
+    RA --> Techniker : fertiggemeldet
+else noch offene Schritte
+    RA --> Techniker : nochOffeneSchritte(anzahl)
+    note right of RA : Status bleibt: in Reparatur
+end
+deactivate RA
+@enduml

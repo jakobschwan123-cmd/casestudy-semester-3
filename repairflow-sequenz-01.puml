@@ -1,0 +1,48 @@
+@startuml
+title SD1 - KVA-Freigabe mit Kundenschleife
+
+actor Techniker
+participant Reparaturauftrag as RA
+participant Kostenvoranschlag as KVA
+participant KVAPosition as Pos
+actor Kunde
+
+Techniker -> KVA : erstelleKVA(auftrag)
+activate KVA
+loop je Diagnose-/Ersatzteil-Bedarf
+    KVA -> Pos : addPosition(bezeichnung, menge, preis)
+    activate Pos
+    Pos --> KVA : positionHinzugefuegt
+    deactivate Pos
+end
+KVA -> KVA : berechneGesamtsumme()
+KVA --> Techniker : kvaFertig(summe)
+deactivate KVA
+
+Techniker -> RA : setStatus("KVA offen")
+note right of RA : Status: KVA offen
+Techniker -> Kunde : sendeKVAzurFreigabe(kva)
+
+loop solange keine Kundenreaktion (max. Frist)
+    Kunde --> Techniker : keineReaktion
+    Techniker -> Kunde : erinnereAnFreigabe(kva)
+end
+
+alt Kunde gibt frei
+    Kunde -> KVA : freigeben()
+    activate KVA
+    KVA -> RA : setStatus("freigegeben")
+    note right of RA : Status: freigegeben
+    KVA --> Kunde : freigabeBestaetigt
+    deactivate KVA
+    RA --> Techniker : starteBeschaffung()
+else Kunde lehnt ab
+    Kunde -> KVA : ablehnen(grund)
+    activate KVA
+    KVA -> RA : setStatus("abgelehnt")
+    note right of RA : Status: abgelehnt (Endzustand)
+    KVA --> Kunde : ablehnungBestaetigt
+    deactivate KVA
+    RA -> Kunde : benachrichtigeAbholungOhneReparatur()
+end
+@enduml

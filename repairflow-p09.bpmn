@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p09" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p09">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p09" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p09" name="Terminplanung + Werkstattauslastung" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker (Werkstattleitung)">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Sammeln</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Bewerten</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Kapazitaet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Kapazitaet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Verschieben</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Techniker</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Zuweisen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Kundentermin</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Abstimmen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Eingeplant</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Informiert</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Auftrag braucht Slot">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Sammeln" name="Offene Auftraege sammeln">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Bewerten" name="Prioritaet + Aufwand bewerten">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Kapazitaet" name="Kapazitaet pruefen">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Kapazitaet" name="Kapazitaet frei?">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_kap_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_kap_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Verschieben" name="Verschieben / andere Filiale">
+      <bpmn:incoming>Flow_kap_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Techniker" name="Techniker + Zeitfenster waehlen">
+      <bpmn:incoming>Flow_kap_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Zuweisen" name="Auftrag zuweisen + einplanen">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Kundentermin" name="Kundentermin erforderlich?">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_kt_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_kt_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Abstimmen" name="Termin mit Kunde abstimmen">
+      <bpmn:incoming>Flow_kt_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Eingeplant" name="Auftrag eingeplant">
+      <bpmn:incoming>Flow_kt_nein</bpmn:incoming>
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Informiert" name="Kunde ueber Termin informiert">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Sammeln" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Sammeln" targetRef="Task_Bewerten" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Bewerten" targetRef="Task_Kapazitaet" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Kapazitaet" targetRef="GW_Kapazitaet" />
+    <bpmn:sequenceFlow id="Flow_kap_nein" name="nein" sourceRef="GW_Kapazitaet" targetRef="Task_Verschieben" />
+    <bpmn:sequenceFlow id="Flow_kap_ja" name="ja" sourceRef="GW_Kapazitaet" targetRef="Task_Techniker" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Verschieben" targetRef="End_Informiert" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Techniker" targetRef="Task_Zuweisen" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_Zuweisen" targetRef="GW_Kundentermin" />
+    <bpmn:sequenceFlow id="Flow_kt_ja" name="ja" sourceRef="GW_Kundentermin" targetRef="Task_Abstimmen" />
+    <bpmn:sequenceFlow id="Flow_kt_nein" name="nein" sourceRef="GW_Kundentermin" targetRef="End_Eingeplant" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_Abstimmen" targetRef="End_Eingeplant" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p09">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p09" bpmnElement="Proc_p09">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Sammeln_di" bpmnElement="Task_Sammeln">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Bewerten_di" bpmnElement="Task_Bewerten">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Kapazitaet_di" bpmnElement="Task_Kapazitaet">
+        <dc:Bounds x="475" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Kapazitaet_di" bpmnElement="GW_Kapazitaet" isMarkerVisible="true">
+        <dc:Bounds x="650" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Verschieben_di" bpmnElement="Task_Verschieben">
+        <dc:Bounds x="775" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Informiert_di" bpmnElement="End_Informiert">
+        <dc:Bounds x="957" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Techniker_di" bpmnElement="Task_Techniker">
+        <dc:Bounds x="775" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Zuweisen_di" bpmnElement="Task_Zuweisen">
+        <dc:Bounds x="925" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Kundentermin_di" bpmnElement="GW_Kundentermin" isMarkerVisible="true">
+        <dc:Bounds x="1100" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Abstimmen_di" bpmnElement="Task_Abstimmen">
+        <dc:Bounds x="1225" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Eingeplant_di" bpmnElement="End_Eingeplant">
+        <dc:Bounds x="1407" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="475" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="575" y="70" />
+        <di:waypoint x="650" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_kap_nein_di" bpmnElement="Flow_kap_nein">
+        <di:waypoint x="700" y="70" />
+        <di:waypoint x="775" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_kap_ja_di" bpmnElement="Flow_kap_ja">
+        <di:waypoint x="675" y="95" />
+        <di:waypoint x="675" y="210" />
+        <di:waypoint x="775" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="875" y="70" />
+        <di:waypoint x="957" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="875" y="210" />
+        <di:waypoint x="925" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1025" y="210" />
+        <di:waypoint x="1100" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_kt_ja_di" bpmnElement="Flow_kt_ja">
+        <di:waypoint x="1150" y="210" />
+        <di:waypoint x="1225" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_kt_nein_di" bpmnElement="Flow_kt_nein">
+        <di:waypoint x="1125" y="235" />
+        <di:waypoint x="1125" y="280" />
+        <di:waypoint x="1425" y="280" />
+        <di:waypoint x="1425" y="228" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="1325" y="210" />
+        <di:waypoint x="1407" y="210" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

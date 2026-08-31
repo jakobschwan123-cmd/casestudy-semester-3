@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><XMI xmlns:UML="href://org.omg/UML/1.3" xmi.version="1.1">
+    <XMI.header>
+        <XMI.documentation>
+            <XMI.exporter>PlantUML</XMI.exporter>
+            <XMI.exporterVersion>1.2026.6</XMI.exporterVersion>
+        </XMI.documentation>
+        <XMI.metamodel xmi.name="UML" xmi.version="1.4"/>
+    </XMI.header>
+    <XMI.content>
+        <UML:Model name="PlantUML" xmi.id="model1">
+            <UML:Namespace.ownedElement>
+                <UML:Class name="AuftragStatus" xmi.id="ent0001">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="ANGENOMMEN" xmi.id="att54"/>
+                        <UML:Attribute name="IN_DIAGNOSE" xmi.id="att55"/>
+                        <UML:Attribute name="KVA_OFFEN" xmi.id="att56"/>
+                        <UML:Attribute name="FREIGEGEBEN" xmi.id="att57"/>
+                        <UML:Attribute name="ABGELEHNT" xmi.id="att58"/>
+                        <UML:Attribute name="TEILE_BESTELLT" xmi.id="att59"/>
+                        <UML:Attribute name="IN_REPARATUR" xmi.id="att60"/>
+                        <UML:Attribute name="FERTIG" xmi.id="att61"/>
+                        <UML:Attribute name="ABGEHOLT" xmi.id="att62"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="KvaStatus" xmi.id="ent0002">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="ENTWURF" xmi.id="att63"/>
+                        <UML:Attribute name="VERSENDET" xmi.id="att64"/>
+                        <UML:Attribute name="FREIGEGEBEN" xmi.id="att65"/>
+                        <UML:Attribute name="ABGELEHNT" xmi.id="att66"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="ReservierungStatus" xmi.id="ent0003">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="RESERVIERT" xmi.id="att67"/>
+                        <UML:Attribute name="ENTNOMMEN" xmi.id="att68"/>
+                        <UML:Attribute name="STORNIERT" xmi.id="att69"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="BestellStatus" xmi.id="ent0004">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="OFFEN" xmi.id="att70"/>
+                        <UML:Attribute name="BESTAETIGT" xmi.id="att71"/>
+                        <UML:Attribute name="WARENEINGANG" xmi.id="att72"/>
+                        <UML:Attribute name="STORNIERT" xmi.id="att73"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="ZahlungStatus" xmi.id="ent0005">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="OFFEN" xmi.id="att74"/>
+                        <UML:Attribute name="BEZAHLT" xmi.id="att75"/>
+                        <UML:Attribute name="MAHNUNG" xmi.id="att76"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="GeraeteTyp" xmi.id="ent0006">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="FAHRRAD" xmi.id="att77"/>
+                        <UML:Attribute name="EBIKE" xmi.id="att78"/>
+                        <UML:Attribute name="ELEKTRONIK" xmi.id="att79"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class isAbstract="true" name="Person" xmi.id="ent0007">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="id : Long" visibility="protected" xmi.id="att80"/>
+                        <UML:Attribute name="name : String" visibility="protected" xmi.id="att81"/>
+                        <UML:Attribute name="telefon : String" visibility="protected" xmi.id="att82"/>
+                        <UML:Attribute name="email : String" visibility="protected" xmi.id="att83"/>
+                        <UML:Operation name="getKontakt() : String" visibility="public" xmi.id="att84"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Kunde" xmi.id="ent0008">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="kundennummer : String" visibility="private" xmi.id="att85"/>
+                        <UML:Attribute name="adresse : String" visibility="private" xmi.id="att86"/>
+                        <UML:Operation name="legeAuftragAn(g : Geraet) : Reparaturauftrag" visibility="public" xmi.id="att87"/>
+                        <UML:Operation name="gibKvaFrei(kva : Kostenvoranschlag) : void" visibility="public" xmi.id="att88"/>
+                        <UML:Operation name="lehneKvaAb(kva : Kostenvoranschlag) : void" visibility="public" xmi.id="att89"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Techniker" xmi.id="ent0009">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="personalnummer : String" visibility="private" xmi.id="att90"/>
+                        <UML:Attribute name="qualifikation : String" visibility="private" xmi.id="att91"/>
+                        <UML:Operation name="erfasseBefund(a : Reparaturauftrag) : Fehlerbefund" visibility="public" xmi.id="att92"/>
+                        <UML:Operation name="bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung" visibility="public" xmi.id="att93"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Filiale" xmi.id="ent0010">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="filialnummer : String" visibility="private" xmi.id="att94"/>
+                        <UML:Attribute name="name : String" visibility="private" xmi.id="att95"/>
+                        <UML:Attribute name="adresse : String" visibility="private" xmi.id="att96"/>
+                        <UML:Operation name="getAuslastung(von : Date, bis : Date) : double" visibility="public" xmi.id="att97"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Lieferant" xmi.id="ent0011">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="lieferantennummer : String" visibility="private" xmi.id="att98"/>
+                        <UML:Attribute name="name : String" visibility="private" xmi.id="att99"/>
+                        <UML:Attribute name="lieferzeitTage : int" visibility="private" xmi.id="att100"/>
+                        <UML:Operation name="erstelleBestellung(pos : List&lt;Bestellposition&gt;) : Lieferantenbestellung" visibility="public" xmi.id="att101"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Reparaturauftrag" xmi.id="ent0012">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="auftragsnummer : String" visibility="private" xmi.id="att102"/>
+                        <UML:Attribute name="eingangsdatum : Date" visibility="private" xmi.id="att103"/>
+                        <UML:Attribute name="status : AuftragStatus" visibility="private" xmi.id="att104"/>
+                        <UML:Operation name="wechsleStatus(neu : AuftragStatus) : void" visibility="public" xmi.id="att105"/>
+                        <UML:Operation name="fertigmelden() : void" visibility="public" xmi.id="att106"/>
+                        <UML:Operation name="benachrichtigeKunde() : void" visibility="public" xmi.id="att107"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Geraet" xmi.id="ent0013">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="seriennummer : String" visibility="private" xmi.id="att108"/>
+                        <UML:Attribute name="hersteller : String" visibility="private" xmi.id="att109"/>
+                        <UML:Attribute name="modell : String" visibility="private" xmi.id="att110"/>
+                        <UML:Attribute name="typ : GeraeteTyp" visibility="private" xmi.id="att111"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Fehlerbefund" xmi.id="ent0014">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="befundnummer : String" visibility="private" xmi.id="att112"/>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att113"/>
+                        <UML:Attribute name="beschreibung : String" visibility="private" xmi.id="att114"/>
+                        <UML:Attribute name="schweregrad : int" visibility="private" xmi.id="att115"/>
+                        <UML:Operation name="istReparaturLohnend() : boolean" visibility="public" xmi.id="att116"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Kostenvoranschlag" xmi.id="ent0015">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="kvaNummer : String" visibility="private" xmi.id="att117"/>
+                        <UML:Attribute name="erstelldatum : Date" visibility="private" xmi.id="att118"/>
+                        <UML:Attribute name="gueltigBis : Date" visibility="private" xmi.id="att119"/>
+                        <UML:Attribute name="status : KvaStatus" visibility="private" xmi.id="att120"/>
+                        <UML:Operation name="berechneSumme() : double" visibility="public" xmi.id="att121"/>
+                        <UML:Operation name="versendeAnKunde() : void" visibility="public" xmi.id="att122"/>
+                        <UML:Operation name="setzeStatus(s : KvaStatus) : void" visibility="public" xmi.id="att123"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="KvaPosition" xmi.id="ent0016">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="bezeichnung : String" visibility="private" xmi.id="att124"/>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att125"/>
+                        <UML:Attribute name="einzelpreis : double" visibility="private" xmi.id="att126"/>
+                        <UML:Operation name="zwischensumme() : double" visibility="public" xmi.id="att127"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Reparaturschritt" xmi.id="ent0017">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="schrittnummer : int" visibility="private" xmi.id="att128"/>
+                        <UML:Attribute name="beschreibung : String" visibility="private" xmi.id="att129"/>
+                        <UML:Attribute name="abgeschlossen : boolean" visibility="private" xmi.id="att130"/>
+                        <UML:Operation name="markiereErledigt() : void" visibility="public" xmi.id="att131"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Arbeitszeitbuchung" xmi.id="ent0018">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att132"/>
+                        <UML:Attribute name="dauerMinuten : int" visibility="private" xmi.id="att133"/>
+                        <UML:Attribute name="stundensatz : double" visibility="private" xmi.id="att134"/>
+                        <UML:Operation name="berechneKosten() : double" visibility="public" xmi.id="att135"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Ersatzteil" xmi.id="ent0019">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="artikelnummer : String" visibility="private" xmi.id="att136"/>
+                        <UML:Attribute name="bezeichnung : String" visibility="private" xmi.id="att137"/>
+                        <UML:Attribute name="einkaufspreis : double" visibility="private" xmi.id="att138"/>
+                        <UML:Attribute name="verkaufspreis : double" visibility="private" xmi.id="att139"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Lagerbestand" xmi.id="ent0020">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att140"/>
+                        <UML:Attribute name="meldebestand : int" visibility="private" xmi.id="att141"/>
+                        <UML:Operation name="pruefeVerfuegbarkeit(anzahl : int) : boolean" visibility="public" xmi.id="att142"/>
+                        <UML:Operation name="bucheZugang(anzahl : int) : void" visibility="public" xmi.id="att143"/>
+                        <UML:Operation name="bucheAbgang(anzahl : int) : void" visibility="public" xmi.id="att144"/>
+                        <UML:Operation name="istMeldebestandUnterschritten() : boolean" visibility="public" xmi.id="att145"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="ErsatzteilReservierung" xmi.id="ent0021">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="reservierungsnummer : String" visibility="private" xmi.id="att146"/>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att147"/>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att148"/>
+                        <UML:Attribute name="status : ReservierungStatus" visibility="private" xmi.id="att149"/>
+                        <UML:Operation name="reserviere() : void" visibility="public" xmi.id="att150"/>
+                        <UML:Operation name="storniere() : void" visibility="public" xmi.id="att151"/>
+                        <UML:Operation name="entnehmen() : void" visibility="public" xmi.id="att152"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Lieferantenbestellung" xmi.id="ent0022">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="bestellnummer : String" visibility="private" xmi.id="att153"/>
+                        <UML:Attribute name="bestelldatum : Date" visibility="private" xmi.id="att154"/>
+                        <UML:Attribute name="status : BestellStatus" visibility="private" xmi.id="att155"/>
+                        <UML:Operation name="bucheWareneingang() : void" visibility="public" xmi.id="att156"/>
+                        <UML:Operation name="berechneBestellwert() : double" visibility="public" xmi.id="att157"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Bestellposition" xmi.id="ent0023">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att158"/>
+                        <UML:Attribute name="einzelpreis : double" visibility="private" xmi.id="att159"/>
+                        <UML:Operation name="positionswert() : double" visibility="public" xmi.id="att160"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Rechnung" xmi.id="ent0024">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="rechnungsnummer : String" visibility="private" xmi.id="att161"/>
+                        <UML:Attribute name="rechnungsdatum : Date" visibility="private" xmi.id="att162"/>
+                        <UML:Attribute name="bruttobetrag : double" visibility="private" xmi.id="att163"/>
+                        <UML:Attribute name="zahlungStatus : ZahlungStatus" visibility="private" xmi.id="att164"/>
+                        <UML:Operation name="berechneBetrag() : double" visibility="public" xmi.id="att165"/>
+                        <UML:Operation name="erfasseZahlung() : void" visibility="public" xmi.id="att166"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Reklamation" xmi.id="ent0025">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="reklamationsnummer : String" visibility="private" xmi.id="att167"/>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att168"/>
+                        <UML:Attribute name="grund : String" visibility="private" xmi.id="att169"/>
+                        <UML:Attribute name="istGewaehrleistung : boolean" visibility="private" xmi.id="att170"/>
+                        <UML:Operation name="pruefeGewaehrleistung() : boolean" visibility="public" xmi.id="att171"/>
+                        <UML:Operation name="schliesseAb() : void" visibility="public" xmi.id="att172"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+            </UML:Namespace.ownedElement>
+        </UML:Model>
+    </XMI.content>
+</XMI>

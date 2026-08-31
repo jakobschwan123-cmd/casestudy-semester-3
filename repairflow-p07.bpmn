@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p07" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p07">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p07" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p07" name="Abholung + Rechnung + Zahlung" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Benachrichtigung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Rechnung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Ev_Abholung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Uebergabe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Zahlung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Zurueckstellen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Abgeholt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Reparatur fertig">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Benachrichtigung" name="Abhol-Benachrichtigung an Kunde senden">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Rechnung" name="Rechnung erstellen">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:intermediateCatchEvent id="Ev_Abholung" name="Kunde erscheint zur Abholung">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:incoming>Flow_loop</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Abholung" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:task id="Task_Uebergabe" name="Geraet + Rechnung uebergeben">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Zahlung" name="Zahlung erfolgt?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_zahl_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_zahl_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Zurueckstellen" name="Uebergabe zurueckstellen">
+      <bpmn:incoming>Flow_zahl_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_loop</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Abgeholt" name="Status: abgeholt / Auftrag schliessen">
+      <bpmn:incoming>Flow_zahl_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_1" name="Auftrag abgeschlossen">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Benachrichtigung" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Benachrichtigung" targetRef="Task_Rechnung" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Rechnung" targetRef="Ev_Abholung" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Ev_Abholung" targetRef="Task_Uebergabe" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Uebergabe" targetRef="GW_Zahlung" />
+    <bpmn:sequenceFlow id="Flow_zahl_nein" name="nein" sourceRef="GW_Zahlung" targetRef="Task_Zurueckstellen" />
+    <bpmn:sequenceFlow id="Flow_zahl_ja" name="ja" sourceRef="GW_Zahlung" targetRef="Task_Abgeholt" />
+    <bpmn:sequenceFlow id="Flow_loop" sourceRef="Task_Zurueckstellen" targetRef="Ev_Abholung" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Abgeholt" targetRef="End_1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p07">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p07" bpmnElement="Proc_p07">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Benachrichtigung_di" bpmnElement="Task_Benachrichtigung">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Rechnung_di" bpmnElement="Task_Rechnung">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Ev_Abholung_di" bpmnElement="Ev_Abholung">
+        <dc:Bounds x="507" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Uebergabe_di" bpmnElement="Task_Uebergabe">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Zahlung_di" bpmnElement="GW_Zahlung" isMarkerVisible="true">
+        <dc:Bounds x="800" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Zurueckstellen_di" bpmnElement="Task_Zurueckstellen">
+        <dc:Bounds x="925" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Abgeholt_di" bpmnElement="Task_Abgeholt">
+        <dc:Bounds x="925" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="1107" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="507" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="543" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="800" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zahl_nein_di" bpmnElement="Flow_zahl_nein">
+        <di:waypoint x="850" y="70" />
+        <di:waypoint x="925" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zahl_ja_di" bpmnElement="Flow_zahl_ja">
+        <di:waypoint x="825" y="95" />
+        <di:waypoint x="825" y="210" />
+        <di:waypoint x="925" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_loop_di" bpmnElement="Flow_loop">
+        <di:waypoint x="975" y="110" />
+        <di:waypoint x="975" y="140" />
+        <di:waypoint x="525" y="140" />
+        <di:waypoint x="525" y="88" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1025" y="210" />
+        <di:waypoint x="1107" y="210" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

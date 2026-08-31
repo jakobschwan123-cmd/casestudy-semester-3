@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p03" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p03">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p03" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p03" name="KVA-Erstellung + Kundenfreigabe" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_KVA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Kalkulieren</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_StatusOffen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Senden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EV_Warten</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Ev_Freigabe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Ev_Ablehnung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Ev_Timer</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Freigegeben</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Abgelehnt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Nachfassen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Freigegeben</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Abgelehnt</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Diagnose ok">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_KVA" name="KVA + KVA-Positionen erstellen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Kalkulieren" name="Summen/Steuer kalkulieren">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_StatusOffen" name="Status: KVA offen">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Senden" name="KVA an Kunde senden">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:eventBasedGateway id="EV_Warten" name="warten auf Reaktion">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:incoming>Flow_loop</bpmn:incoming>
+      <bpmn:outgoing>Flow_zu_Freigabe</bpmn:outgoing>
+      <bpmn:outgoing>Flow_zu_Ablehnung</bpmn:outgoing>
+      <bpmn:outgoing>Flow_zu_Timer</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="Ev_Freigabe" name="Freigabe empfangen">
+      <bpmn:incoming>Flow_zu_Freigabe</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Freigabe" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Ev_Ablehnung" name="Ablehnung empfangen">
+      <bpmn:incoming>Flow_zu_Ablehnung</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Ablehnung" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Ev_Timer" name="Frist abgelaufen">
+      <bpmn:incoming>Flow_zu_Timer</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerDef_Frist" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:task id="Task_Freigegeben" name="Status: freigegeben">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Abgelehnt" name="Status: abgelehnt">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_10</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Nachfassen" name="Nachfassen">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_loop</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Freigegeben" name="KVA freigegeben: Teile pruefen">
+      <bpmn:incoming>Flow_9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Abgelehnt" name="KVA abgelehnt: Abholung">
+      <bpmn:incoming>Flow_10</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_KVA" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_KVA" targetRef="Task_Kalkulieren" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Kalkulieren" targetRef="Task_StatusOffen" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_StatusOffen" targetRef="Task_Senden" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Senden" targetRef="EV_Warten" />
+    <bpmn:sequenceFlow id="Flow_zu_Freigabe" sourceRef="EV_Warten" targetRef="Ev_Freigabe" />
+    <bpmn:sequenceFlow id="Flow_zu_Ablehnung" sourceRef="EV_Warten" targetRef="Ev_Ablehnung" />
+    <bpmn:sequenceFlow id="Flow_zu_Timer" sourceRef="EV_Warten" targetRef="Ev_Timer" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Ev_Freigabe" targetRef="Task_Freigegeben" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Ev_Ablehnung" targetRef="Task_Abgelehnt" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Ev_Timer" targetRef="Task_Nachfassen" />
+    <bpmn:sequenceFlow id="Flow_loop" sourceRef="Task_Nachfassen" targetRef="EV_Warten" />
+    <bpmn:sequenceFlow id="Flow_9" sourceRef="Task_Freigegeben" targetRef="End_Freigegeben" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="Task_Abgelehnt" targetRef="End_Abgelehnt" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p03">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p03" bpmnElement="Proc_p03">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_KVA_di" bpmnElement="Task_KVA">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Kalkulieren_di" bpmnElement="Task_Kalkulieren">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_StatusOffen_di" bpmnElement="Task_StatusOffen">
+        <dc:Bounds x="475" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Senden_di" bpmnElement="Task_Senden">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EV_Warten_di" bpmnElement="EV_Warten">
+        <dc:Bounds x="800" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Ev_Freigabe_di" bpmnElement="Ev_Freigabe">
+        <dc:Bounds x="957" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Freigegeben_di" bpmnElement="Task_Freigegeben">
+        <dc:Bounds x="1075" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Freigegeben_di" bpmnElement="End_Freigegeben">
+        <dc:Bounds x="1257" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Ev_Ablehnung_di" bpmnElement="Ev_Ablehnung">
+        <dc:Bounds x="957" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Abgelehnt_di" bpmnElement="Task_Abgelehnt">
+        <dc:Bounds x="1075" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Abgelehnt_di" bpmnElement="End_Abgelehnt">
+        <dc:Bounds x="1257" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Ev_Timer_di" bpmnElement="Ev_Timer">
+        <dc:Bounds x="957" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Nachfassen_di" bpmnElement="Task_Nachfassen">
+        <dc:Bounds x="1075" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="475" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="575" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="800" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zu_Freigabe_di" bpmnElement="Flow_zu_Freigabe">
+        <di:waypoint x="850" y="70" />
+        <di:waypoint x="957" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zu_Ablehnung_di" bpmnElement="Flow_zu_Ablehnung">
+        <di:waypoint x="825" y="95" />
+        <di:waypoint x="825" y="210" />
+        <di:waypoint x="957" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zu_Timer_di" bpmnElement="Flow_zu_Timer">
+        <di:waypoint x="825" y="95" />
+        <di:waypoint x="825" y="350" />
+        <di:waypoint x="957" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="993" y="70" />
+        <di:waypoint x="1075" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_9_di" bpmnElement="Flow_9">
+        <di:waypoint x="1175" y="70" />
+        <di:waypoint x="1257" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="993" y="210" />
+        <di:waypoint x="1075" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10">
+        <di:waypoint x="1175" y="210" />
+        <di:waypoint x="1257" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="993" y="350" />
+        <di:waypoint x="1075" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_loop_di" bpmnElement="Flow_loop">
+        <di:waypoint x="1125" y="390" />
+        <di:waypoint x="1125" y="420" />
+        <di:waypoint x="825" y="420" />
+        <di:waypoint x="825" y="95" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

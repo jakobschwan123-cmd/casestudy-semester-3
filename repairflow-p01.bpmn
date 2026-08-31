@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p01" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p01">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p01" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p01" name="Auftragsannahme + Geraeteregistrierung" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Kundendaten</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Bestandskunde</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Laden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Neuanlage</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Geraet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Symptome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Auftrag</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Beleg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Kunde bringt Geraet">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Kundendaten" name="Kundendaten aufnehmen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Bestandskunde" name="Bestandskunde?">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Laden" name="Kundendatensatz laden">
+      <bpmn:incoming>Flow_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Neuanlage" name="Kunde neu anlegen">
+      <bpmn:incoming>Flow_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Geraet" name="Geraet registrieren">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Symptome" name="Symptome + Sichtpruefung erfassen">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Auftrag" name="Reparaturauftrag anlegen: Status angenommen">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Beleg" name="Annahmebeleg an Kunde aushaendigen">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_8</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_1" name="Auftrag angenommen">
+      <bpmn:incoming>Flow_8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Kundendaten" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Kundendaten" targetRef="GW_Bestandskunde" />
+    <bpmn:sequenceFlow id="Flow_ja" name="ja" sourceRef="GW_Bestandskunde" targetRef="Task_Laden" />
+    <bpmn:sequenceFlow id="Flow_nein" name="nein" sourceRef="GW_Bestandskunde" targetRef="Task_Neuanlage" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Laden" targetRef="Task_Geraet" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Neuanlage" targetRef="Task_Geraet" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Geraet" targetRef="Task_Symptome" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Symptome" targetRef="Task_Auftrag" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_Auftrag" targetRef="Task_Beleg" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_Beleg" targetRef="End_1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p01">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p01" bpmnElement="Proc_p01">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Kundendaten_di" bpmnElement="Task_Kundendaten">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Bestandskunde_di" bpmnElement="GW_Bestandskunde" isMarkerVisible="true">
+        <dc:Bounds x="350" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Laden_di" bpmnElement="Task_Laden">
+        <dc:Bounds x="475" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Geraet_di" bpmnElement="Task_Geraet">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Symptome_di" bpmnElement="Task_Symptome">
+        <dc:Bounds x="775" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Auftrag_di" bpmnElement="Task_Auftrag">
+        <dc:Bounds x="925" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Beleg_di" bpmnElement="Task_Beleg">
+        <dc:Bounds x="1075" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="1257" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Neuanlage_di" bpmnElement="Task_Neuanlage">
+        <dc:Bounds x="475" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="350" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ja_di" bpmnElement="Flow_ja">
+        <di:waypoint x="400" y="70" />
+        <di:waypoint x="475" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_nein_di" bpmnElement="Flow_nein">
+        <di:waypoint x="375" y="95" />
+        <di:waypoint x="375" y="210" />
+        <di:waypoint x="475" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="575" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="775" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="875" y="70" />
+        <di:waypoint x="925" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1025" y="70" />
+        <di:waypoint x="1075" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8">
+        <di:waypoint x="1175" y="70" />
+        <di:waypoint x="1257" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="575" y="210" />
+        <di:waypoint x="675" y="210" />
+        <di:waypoint x="675" y="110" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

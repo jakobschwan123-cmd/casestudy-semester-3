@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p08" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p08">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p08" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p08" name="Reklamation / Gewaehrleistung" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Erfassen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Pruefen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Gewaehrleistung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Nacharbeit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Angebot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Annahme</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Lieferantenteil</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Retoure</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Dokumentieren</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Erledigt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Abgelehnt</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Kunde meldet Mangel">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_Mangel" />
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Erfassen" name="Reklamation erfassen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Pruefen" name="Mangel + Ursache pruefen">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Gewaehrleistung" name="Gewaehrleistungsfall?">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_gew_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gew_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Nacharbeit" name="Kostenfreie Nacharbeit veranlassen">
+      <bpmn:incoming>Flow_gew_ja</bpmn:incoming>
+      <bpmn:incoming>Flow_ann_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Angebot" name="Kostenpflichtiges Angebot unterbreiten">
+      <bpmn:incoming>Flow_gew_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Annahme" name="Kunde nimmt an?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_ann_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ann_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW_Lieferantenteil" name="Lieferantenteil defekt?">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_lief_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_lief_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Retoure" name="Retoure anstossen: P10">
+      <bpmn:incoming>Flow_lief_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Dokumentieren" name="Ergebnis dokumentieren + Kunde informieren">
+      <bpmn:incoming>Flow_lief_nein</bpmn:incoming>
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Erledigt" name="Reklamation erledigt">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Abgelehnt" name="Reklamation abgelehnt">
+      <bpmn:incoming>Flow_ann_nein</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Erfassen" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Erfassen" targetRef="Task_Pruefen" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Pruefen" targetRef="GW_Gewaehrleistung" />
+    <bpmn:sequenceFlow id="Flow_gew_ja" name="ja" sourceRef="GW_Gewaehrleistung" targetRef="Task_Nacharbeit" />
+    <bpmn:sequenceFlow id="Flow_gew_nein" name="nein" sourceRef="GW_Gewaehrleistung" targetRef="Task_Angebot" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Angebot" targetRef="GW_Annahme" />
+    <bpmn:sequenceFlow id="Flow_ann_ja" name="ja" sourceRef="GW_Annahme" targetRef="Task_Nacharbeit" />
+    <bpmn:sequenceFlow id="Flow_ann_nein" name="nein" sourceRef="GW_Annahme" targetRef="End_Abgelehnt" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Nacharbeit" targetRef="GW_Lieferantenteil" />
+    <bpmn:sequenceFlow id="Flow_lief_ja" name="ja" sourceRef="GW_Lieferantenteil" targetRef="Task_Retoure" />
+    <bpmn:sequenceFlow id="Flow_lief_nein" name="nein" sourceRef="GW_Lieferantenteil" targetRef="Task_Dokumentieren" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Retoure" targetRef="Task_Dokumentieren" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_Dokumentieren" targetRef="End_Erledigt" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p08">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p08" bpmnElement="Proc_p08">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Erfassen_di" bpmnElement="Task_Erfassen">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Pruefen_di" bpmnElement="Task_Pruefen">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Gewaehrleistung_di" bpmnElement="GW_Gewaehrleistung" isMarkerVisible="true">
+        <dc:Bounds x="500" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Nacharbeit_di" bpmnElement="Task_Nacharbeit">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Lieferantenteil_di" bpmnElement="GW_Lieferantenteil" isMarkerVisible="true">
+        <dc:Bounds x="800" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Retoure_di" bpmnElement="Task_Retoure">
+        <dc:Bounds x="925" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Dokumentieren_di" bpmnElement="Task_Dokumentieren">
+        <dc:Bounds x="1075" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Erledigt_di" bpmnElement="End_Erledigt">
+        <dc:Bounds x="1257" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Angebot_di" bpmnElement="Task_Angebot">
+        <dc:Bounds x="625" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Annahme_di" bpmnElement="GW_Annahme" isMarkerVisible="true">
+        <dc:Bounds x="800" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Abgelehnt_di" bpmnElement="End_Abgelehnt">
+        <dc:Bounds x="957" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="500" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_gew_ja_di" bpmnElement="Flow_gew_ja">
+        <di:waypoint x="550" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_gew_nein_di" bpmnElement="Flow_gew_nein">
+        <di:waypoint x="525" y="95" />
+        <di:waypoint x="525" y="210" />
+        <di:waypoint x="625" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="800" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_lief_ja_di" bpmnElement="Flow_lief_ja">
+        <di:waypoint x="850" y="70" />
+        <di:waypoint x="925" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_lief_nein_di" bpmnElement="Flow_lief_nein">
+        <di:waypoint x="825" y="95" />
+        <di:waypoint x="825" y="140" />
+        <di:waypoint x="1125" y="140" />
+        <di:waypoint x="1125" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1025" y="70" />
+        <di:waypoint x="1075" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1175" y="70" />
+        <di:waypoint x="1257" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="725" y="210" />
+        <di:waypoint x="800" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ann_ja_di" bpmnElement="Flow_ann_ja">
+        <di:waypoint x="825" y="235" />
+        <di:waypoint x="825" y="280" />
+        <di:waypoint x="675" y="280" />
+        <di:waypoint x="675" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ann_nein_di" bpmnElement="Flow_ann_nein">
+        <di:waypoint x="850" y="210" />
+        <di:waypoint x="957" y="210" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

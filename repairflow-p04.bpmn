@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p04" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p04">
+    <bpmn:participant id="Part_Disposition" name="Ersatzteil-Disposition" processRef="Proc_p04" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p04" name="Ersatzteil-Verfuegbarkeit + Reservierung" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Disposition" name="Ersatzteil-Disposition">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Teileliste</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Eigen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Eigen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ResEigen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Andere</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Andere</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Umlagerung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ZuBestellen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Alle</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Verfuegbar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Fehlteile</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="KVA freigegeben">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Teileliste" name="Teileliste uebernehmen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Eigen" name="Eigenen Lagerbestand pruefen">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Eigen" name="eigener Bestand ausreichend?">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_eigen_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_eigen_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_ResEigen" name="Reservierung eigene Filiale anlegen">
+      <bpmn:incoming>Flow_eigen_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Andere" name="Andere Filialen pruefen">
+      <bpmn:incoming>Flow_eigen_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Andere" name="andere Filiale hat Teil?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_andere_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_andere_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Umlagerung" name="Umlagerung + Reservierung anlegen">
+      <bpmn:incoming>Flow_andere_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_ZuBestellen" name="Teil als zu-bestellen markieren">
+      <bpmn:incoming>Flow_andere_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Alle" name="alle Teile beschafft/reserviert?">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_alle_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_alle_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Verfuegbar" name="Alle Teile verfuegbar: Reparatur">
+      <bpmn:incoming>Flow_alle_ja</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Fehlteile" name="Fehlteile: Bestellung ausloesen">
+      <bpmn:incoming>Flow_alle_nein</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Teileliste" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Teileliste" targetRef="Task_Eigen" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Eigen" targetRef="GW_Eigen" />
+    <bpmn:sequenceFlow id="Flow_eigen_ja" name="ja" sourceRef="GW_Eigen" targetRef="Task_ResEigen" />
+    <bpmn:sequenceFlow id="Flow_eigen_nein" name="nein" sourceRef="GW_Eigen" targetRef="Task_Andere" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_ResEigen" targetRef="GW_Alle" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Andere" targetRef="GW_Andere" />
+    <bpmn:sequenceFlow id="Flow_andere_ja" name="ja" sourceRef="GW_Andere" targetRef="Task_Umlagerung" />
+    <bpmn:sequenceFlow id="Flow_andere_nein" name="nein" sourceRef="GW_Andere" targetRef="Task_ZuBestellen" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Umlagerung" targetRef="GW_Alle" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_ZuBestellen" targetRef="GW_Alle" />
+    <bpmn:sequenceFlow id="Flow_alle_ja" name="ja" sourceRef="GW_Alle" targetRef="End_Verfuegbar" />
+    <bpmn:sequenceFlow id="Flow_alle_nein" name="nein" sourceRef="GW_Alle" targetRef="End_Fehlteile" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p04">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p04" bpmnElement="Proc_p04">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Teileliste_di" bpmnElement="Task_Teileliste">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Eigen_di" bpmnElement="Task_Eigen">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Eigen_di" bpmnElement="GW_Eigen" isMarkerVisible="true">
+        <dc:Bounds x="500" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ResEigen_di" bpmnElement="Task_ResEigen">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Alle_di" bpmnElement="GW_Alle" isMarkerVisible="true">
+        <dc:Bounds x="1100" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Verfuegbar_di" bpmnElement="End_Verfuegbar">
+        <dc:Bounds x="1257" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Andere_di" bpmnElement="Task_Andere">
+        <dc:Bounds x="625" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Andere_di" bpmnElement="GW_Andere" isMarkerVisible="true">
+        <dc:Bounds x="800" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Umlagerung_di" bpmnElement="Task_Umlagerung">
+        <dc:Bounds x="925" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Fehlteile_di" bpmnElement="End_Fehlteile">
+        <dc:Bounds x="1257" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ZuBestellen_di" bpmnElement="Task_ZuBestellen">
+        <dc:Bounds x="925" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="500" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_eigen_ja_di" bpmnElement="Flow_eigen_ja">
+        <di:waypoint x="550" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_eigen_nein_di" bpmnElement="Flow_eigen_nein">
+        <di:waypoint x="525" y="95" />
+        <di:waypoint x="525" y="210" />
+        <di:waypoint x="625" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="1100" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_alle_ja_di" bpmnElement="Flow_alle_ja">
+        <di:waypoint x="1150" y="70" />
+        <di:waypoint x="1257" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_alle_nein_di" bpmnElement="Flow_alle_nein">
+        <di:waypoint x="1125" y="95" />
+        <di:waypoint x="1125" y="210" />
+        <di:waypoint x="1257" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="725" y="210" />
+        <di:waypoint x="800" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_andere_ja_di" bpmnElement="Flow_andere_ja">
+        <di:waypoint x="850" y="210" />
+        <di:waypoint x="925" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_andere_nein_di" bpmnElement="Flow_andere_nein">
+        <di:waypoint x="825" y="235" />
+        <di:waypoint x="825" y="350" />
+        <di:waypoint x="925" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1025" y="210" />
+        <di:waypoint x="1125" y="210" />
+        <di:waypoint x="1125" y="95" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1025" y="350" />
+        <di:waypoint x="1125" y="350" />
+        <di:waypoint x="1125" y="95" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

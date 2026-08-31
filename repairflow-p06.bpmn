@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p06" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p06">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p06" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p06" name="Reparaturdurchfuehrung + Arbeitszeiterfassung" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Status</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Entnehmen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SchrittStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Arbeitszeit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Weitere</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Zusatzbefund</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Endkontrolle</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Qualitaet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Fertig</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Nachtrag</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Teile verfuegbar">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Status" name="Status: in Reparatur">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Entnehmen" name="Teile entnehmen (Reservierung aufloesen)">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_SchrittStart" name="Reparaturschritt starten">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:incoming>Flow_weitere_ja</bpmn:incoming>
+      <bpmn:incoming>Flow_qual_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Arbeitszeit" name="Arbeitszeit buchen + Schritt ausfuehren">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Weitere" name="weitere Reparaturschritte offen?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_weitere_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_weitere_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW_Zusatzbefund" name="Zusatzbefund / Mehraufwand?">
+      <bpmn:incoming>Flow_weitere_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_zusatz_ja</bpmn:outgoing>
+      <bpmn:outgoing>Flow_zusatz_nein</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Endkontrolle" name="Endkontrolle / Funktionstest">
+      <bpmn:incoming>Flow_zusatz_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Qualitaet" name="Qualitaet ok?">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_qual_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_qual_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Fertig" name="Reparatur fertig">
+      <bpmn:incoming>Flow_qual_ja</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Nachtrag" name="Nachtrags-KVA: zurueck zu P3">
+      <bpmn:incoming>Flow_zusatz_ja</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Status" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Status" targetRef="Task_Entnehmen" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Entnehmen" targetRef="Task_SchrittStart" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_SchrittStart" targetRef="Task_Arbeitszeit" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Arbeitszeit" targetRef="GW_Weitere" />
+    <bpmn:sequenceFlow id="Flow_weitere_ja" name="ja" sourceRef="GW_Weitere" targetRef="Task_SchrittStart" />
+    <bpmn:sequenceFlow id="Flow_weitere_nein" name="nein" sourceRef="GW_Weitere" targetRef="GW_Zusatzbefund" />
+    <bpmn:sequenceFlow id="Flow_zusatz_ja" name="ja" sourceRef="GW_Zusatzbefund" targetRef="End_Nachtrag" />
+    <bpmn:sequenceFlow id="Flow_zusatz_nein" name="nein" sourceRef="GW_Zusatzbefund" targetRef="Task_Endkontrolle" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Endkontrolle" targetRef="GW_Qualitaet" />
+    <bpmn:sequenceFlow id="Flow_qual_nein" name="nein" sourceRef="GW_Qualitaet" targetRef="Task_SchrittStart" />
+    <bpmn:sequenceFlow id="Flow_qual_ja" name="ja" sourceRef="GW_Qualitaet" targetRef="End_Fertig" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p06">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p06" bpmnElement="Proc_p06">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Status_di" bpmnElement="Task_Status">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Entnehmen_di" bpmnElement="Task_Entnehmen">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SchrittStart_di" bpmnElement="Task_SchrittStart">
+        <dc:Bounds x="475" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Arbeitszeit_di" bpmnElement="Task_Arbeitszeit">
+        <dc:Bounds x="625" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Weitere_di" bpmnElement="GW_Weitere" isMarkerVisible="true">
+        <dc:Bounds x="800" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Zusatzbefund_di" bpmnElement="GW_Zusatzbefund" isMarkerVisible="true">
+        <dc:Bounds x="950" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Nachtrag_di" bpmnElement="End_Nachtrag">
+        <dc:Bounds x="1107" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Endkontrolle_di" bpmnElement="Task_Endkontrolle">
+        <dc:Bounds x="1075" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Qualitaet_di" bpmnElement="GW_Qualitaet" isMarkerVisible="true">
+        <dc:Bounds x="1250" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Fertig_di" bpmnElement="End_Fertig">
+        <dc:Bounds x="1407" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="475" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="575" y="70" />
+        <di:waypoint x="625" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="725" y="70" />
+        <di:waypoint x="800" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_weitere_ja_di" bpmnElement="Flow_weitere_ja">
+        <di:waypoint x="825" y="95" />
+        <di:waypoint x="825" y="140" />
+        <di:waypoint x="525" y="140" />
+        <di:waypoint x="525" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_weitere_nein_di" bpmnElement="Flow_weitere_nein">
+        <di:waypoint x="850" y="70" />
+        <di:waypoint x="950" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zusatz_ja_di" bpmnElement="Flow_zusatz_ja">
+        <di:waypoint x="1000" y="70" />
+        <di:waypoint x="1107" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_zusatz_nein_di" bpmnElement="Flow_zusatz_nein">
+        <di:waypoint x="975" y="95" />
+        <di:waypoint x="975" y="210" />
+        <di:waypoint x="1075" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1175" y="210" />
+        <di:waypoint x="1250" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_qual_nein_di" bpmnElement="Flow_qual_nein">
+        <di:waypoint x="1275" y="235" />
+        <di:waypoint x="1275" y="280" />
+        <di:waypoint x="525" y="280" />
+        <di:waypoint x="525" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_qual_ja_di" bpmnElement="Flow_qual_ja">
+        <di:waypoint x="1300" y="210" />
+        <di:waypoint x="1407" y="210" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

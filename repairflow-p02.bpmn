@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p02" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p02">
+    <bpmn:participant id="Part_Kunde" name="Kunde" />
+    <bpmn:participant id="Part_Werkstatt" name="Werkstatt/Techniker" processRef="Proc_p02" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p02" name="Fehlerdiagnose" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Werkstatt" name="Werkstatt/Techniker">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Status</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Techniker</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Funktionstest</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Reproduzierbar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Erweitert</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Befund</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Teilebedarf</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_Reparabel</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Aufwand</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Totalschaden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_KVA</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Auftrag angenommen">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Status" name="Status: in Diagnose">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Techniker" name="Techniker zuweisen">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Funktionstest" name="Funktionstest / Messung durchfuehren">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:incoming>Flow_loop</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Reproduzierbar" name="Fehler reproduzierbar?">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Erweitert" name="Erweiterte Pruefung">
+      <bpmn:incoming>Flow_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_loop</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Befund" name="Fehlerbefund dokumentieren">
+      <bpmn:incoming>Flow_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Teilebedarf" name="Teilebedarf identifizieren">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_Reparabel" name="Reparabel + wirtschaftlich?">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_reparabel_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_reparabel_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Aufwand" name="Aufwand grob schaetzen">
+      <bpmn:incoming>Flow_reparabel_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Totalschaden" name="Totalschaden: Kunde informiert">
+      <bpmn:incoming>Flow_reparabel_nein</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_KVA" name="Diagnose ok: KVA anstossen">
+      <bpmn:incoming>Flow_7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Status" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Status" targetRef="Task_Techniker" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_Techniker" targetRef="Task_Funktionstest" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Funktionstest" targetRef="GW_Reproduzierbar" />
+    <bpmn:sequenceFlow id="Flow_nein" name="nein" sourceRef="GW_Reproduzierbar" targetRef="Task_Erweitert" />
+    <bpmn:sequenceFlow id="Flow_ja" name="ja" sourceRef="GW_Reproduzierbar" targetRef="Task_Befund" />
+    <bpmn:sequenceFlow id="Flow_loop" sourceRef="Task_Erweitert" targetRef="Task_Funktionstest" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Befund" targetRef="Task_Teilebedarf" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Teilebedarf" targetRef="GW_Reparabel" />
+    <bpmn:sequenceFlow id="Flow_reparabel_nein" name="nein" sourceRef="GW_Reparabel" targetRef="End_Totalschaden" />
+    <bpmn:sequenceFlow id="Flow_reparabel_ja" name="ja" sourceRef="GW_Reparabel" targetRef="Task_Aufwand" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_Aufwand" targetRef="End_KVA" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p02">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p02" bpmnElement="Proc_p02">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Status_di" bpmnElement="Task_Status">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Techniker_di" bpmnElement="Task_Techniker">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Funktionstest_di" bpmnElement="Task_Funktionstest">
+        <dc:Bounds x="475" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Reproduzierbar_di" bpmnElement="GW_Reproduzierbar" isMarkerVisible="true">
+        <dc:Bounds x="650" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Erweitert_di" bpmnElement="Task_Erweitert">
+        <dc:Bounds x="775" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Befund_di" bpmnElement="Task_Befund">
+        <dc:Bounds x="775" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Teilebedarf_di" bpmnElement="Task_Teilebedarf">
+        <dc:Bounds x="925" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_Reparabel_di" bpmnElement="GW_Reparabel" isMarkerVisible="true">
+        <dc:Bounds x="1100" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Totalschaden_di" bpmnElement="End_Totalschaden">
+        <dc:Bounds x="1257" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Aufwand_di" bpmnElement="Task_Aufwand">
+        <dc:Bounds x="1225" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_KVA_di" bpmnElement="End_KVA">
+        <dc:Bounds x="1407" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="475" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="575" y="70" />
+        <di:waypoint x="650" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_nein_di" bpmnElement="Flow_nein">
+        <di:waypoint x="700" y="70" />
+        <di:waypoint x="775" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ja_di" bpmnElement="Flow_ja">
+        <di:waypoint x="675" y="95" />
+        <di:waypoint x="675" y="210" />
+        <di:waypoint x="775" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_loop_di" bpmnElement="Flow_loop">
+        <di:waypoint x="825" y="110" />
+        <di:waypoint x="825" y="140" />
+        <di:waypoint x="525" y="140" />
+        <di:waypoint x="525" y="110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="875" y="210" />
+        <di:waypoint x="925" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1025" y="210" />
+        <di:waypoint x="1100" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_reparabel_nein_di" bpmnElement="Flow_reparabel_nein">
+        <di:waypoint x="1150" y="210" />
+        <di:waypoint x="1257" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_reparabel_ja_di" bpmnElement="Flow_reparabel_ja">
+        <di:waypoint x="1125" y="235" />
+        <di:waypoint x="1125" y="350" />
+        <di:waypoint x="1225" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7">
+        <di:waypoint x="1325" y="350" />
+        <di:waypoint x="1407" y="350" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

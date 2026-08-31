@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Def_repairflow_p10" targetNamespace="http://dhbw/repairflow">
+  <bpmn:collaboration id="Collab_p10">
+    <bpmn:participant id="Part_Disposition" name="Ersatzteil-Disposition" processRef="Proc_p10" />
+    <bpmn:participant id="Part_Lieferant" name="Lieferant" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_p10" name="Ersatzteil-Retoure + Lieferanten-Reklamation" isExecutable="false">
+    <bpmn:laneSet>
+      <bpmn:lane id="Lane_Disposition" name="Ersatzteil-Disposition">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Grund</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RMA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Ev_Freigabe</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_RMA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Eskalieren</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Zuruecksenden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW_ErsatzGutschrift</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_Gutschrift</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Ersatz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_Gutschrift</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Defektes/falsches Teil">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Grund" name="Retourengrund + Bestellbezug erfassen">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_RMA" name="RMA beim Lieferant anfordern">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:intermediateCatchEvent id="Ev_Freigabe" name="RMA-Freigabe empfangen">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:incoming>Flow_loop</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MsgDef_RMA" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="GW_RMA" name="RMA genehmigt?">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_rma_nein</bpmn:outgoing>
+      <bpmn:outgoing>Flow_rma_ja</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Eskalieren" name="Eskalieren / Frist setzen">
+      <bpmn:incoming>Flow_rma_nein</bpmn:incoming>
+      <bpmn:outgoing>Flow_loop</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_Zuruecksenden" name="Teil zuruecksenden + Bestand korrigieren">
+      <bpmn:incoming>Flow_rma_ja</bpmn:incoming>
+      <bpmn:outgoing>Flow_5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="GW_ErsatzGutschrift" name="Ersatz oder Gutschrift?">
+      <bpmn:incoming>Flow_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_ersatz</bpmn:outgoing>
+      <bpmn:outgoing>Flow_gutschrift</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Gutschrift" name="Gutschrift verbuchen">
+      <bpmn:incoming>Flow_gutschrift</bpmn:incoming>
+      <bpmn:outgoing>Flow_6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Ersatz" name="Ersatz erhalten: P6 fortsetzen">
+      <bpmn:incoming>Flow_ersatz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Gutschrift" name="Gutschrift verbucht">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_Grund" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Grund" targetRef="Task_RMA" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_RMA" targetRef="Ev_Freigabe" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Ev_Freigabe" targetRef="GW_RMA" />
+    <bpmn:sequenceFlow id="Flow_rma_nein" name="nein" sourceRef="GW_RMA" targetRef="Task_Eskalieren" />
+    <bpmn:sequenceFlow id="Flow_rma_ja" name="ja" sourceRef="GW_RMA" targetRef="Task_Zuruecksenden" />
+    <bpmn:sequenceFlow id="Flow_loop" sourceRef="Task_Eskalieren" targetRef="Ev_Freigabe" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_Zuruecksenden" targetRef="GW_ErsatzGutschrift" />
+    <bpmn:sequenceFlow id="Flow_ersatz" name="Ersatz" sourceRef="GW_ErsatzGutschrift" targetRef="End_Ersatz" />
+    <bpmn:sequenceFlow id="Flow_gutschrift" name="Gutschrift" sourceRef="GW_ErsatzGutschrift" targetRef="Task_Gutschrift" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_Gutschrift" targetRef="End_Gutschrift" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Proc_p10">
+    <bpmndi:BPMNPlane id="BPMNPlane_Proc_p10" bpmnElement="Proc_p10">
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="57" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Grund_di" bpmnElement="Task_Grund">
+        <dc:Bounds x="175" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RMA_di" bpmnElement="Task_RMA">
+        <dc:Bounds x="325" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Ev_Freigabe_di" bpmnElement="Ev_Freigabe">
+        <dc:Bounds x="507" y="52" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_RMA_di" bpmnElement="GW_RMA" isMarkerVisible="true">
+        <dc:Bounds x="650" y="45" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Eskalieren_di" bpmnElement="Task_Eskalieren">
+        <dc:Bounds x="775" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Zuruecksenden_di" bpmnElement="Task_Zuruecksenden">
+        <dc:Bounds x="775" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW_ErsatzGutschrift_di" bpmnElement="GW_ErsatzGutschrift" isMarkerVisible="true">
+        <dc:Bounds x="950" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Ersatz_di" bpmnElement="End_Ersatz">
+        <dc:Bounds x="1107" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_Gutschrift_di" bpmnElement="Task_Gutschrift">
+        <dc:Bounds x="1075" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_Gutschrift_di" bpmnElement="End_Gutschrift">
+        <dc:Bounds x="1257" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1">
+        <di:waypoint x="93" y="70" />
+        <di:waypoint x="175" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2">
+        <di:waypoint x="275" y="70" />
+        <di:waypoint x="325" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3">
+        <di:waypoint x="425" y="70" />
+        <di:waypoint x="507" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4">
+        <di:waypoint x="543" y="70" />
+        <di:waypoint x="650" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_rma_nein_di" bpmnElement="Flow_rma_nein">
+        <di:waypoint x="700" y="70" />
+        <di:waypoint x="775" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_rma_ja_di" bpmnElement="Flow_rma_ja">
+        <di:waypoint x="675" y="95" />
+        <di:waypoint x="675" y="210" />
+        <di:waypoint x="775" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_loop_di" bpmnElement="Flow_loop">
+        <di:waypoint x="825" y="110" />
+        <di:waypoint x="825" y="140" />
+        <di:waypoint x="525" y="140" />
+        <di:waypoint x="525" y="88" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5">
+        <di:waypoint x="875" y="210" />
+        <di:waypoint x="950" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_ersatz_di" bpmnElement="Flow_ersatz">
+        <di:waypoint x="1000" y="210" />
+        <di:waypoint x="1107" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_gutschrift_di" bpmnElement="Flow_gutschrift">
+        <di:waypoint x="975" y="235" />
+        <di:waypoint x="975" y="350" />
+        <di:waypoint x="1075" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6">
+        <di:waypoint x="1175" y="350" />
+        <di:waypoint x="1257" y="350" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

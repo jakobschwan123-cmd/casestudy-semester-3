@@ -1,0 +1,44 @@
+@startuml
+title SD3 - Nachbestell-Trigger bei Meldebestand
+
+participant Lagerbestand as LB
+actor Disposition
+participant Ersatzteil as ET
+participant Lieferant
+participant Lieferantenbestellung as LBest
+participant Bestellposition as BPos
+
+LB -> LB : pruefeMeldebestand()
+alt Bestand < Meldebestand
+    LB -> Disposition : erzeugeNachbestellvorschlag(teil, fehlmenge)
+    activate Disposition
+    Disposition -> ET : getVorzugslieferant()
+    ET --> Disposition : lieferant
+
+    opt manuelle Freigabe erforderlich
+        Disposition -> Disposition : pruefeUndFreigebeVorschlag()
+    end
+
+    alt offene Bestellung beim Lieferant vorhanden
+        Disposition -> LBest : ergaenzePosition(teil, menge)
+        activate LBest
+        LBest -> BPos : addPosition(teil, menge)
+        LBest --> Disposition : positionErgaenzt
+        deactivate LBest
+    else keine offene Bestellung
+        Disposition -> LBest : erstelleBestellung(lieferant)
+        activate LBest
+        LBest -> BPos : addPosition(teil, menge)
+        LBest -> Lieferant : uebermittleBestellung()
+        activate Lieferant
+        Lieferant --> LBest : bestellungBestaetigt(liefertermin)
+        deactivate Lieferant
+        LBest --> Disposition : bestellungAngelegt(termin)
+        deactivate LBest
+    end
+    Disposition --> LB : nachbestellungAusgeloest()
+    deactivate Disposition
+else Bestand ausreichend
+    LB -> LB : keineAktion()
+end
+@enduml
