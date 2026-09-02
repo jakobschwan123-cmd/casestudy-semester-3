@@ -1,0 +1,78 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam classFontSize 11
+skinparam nodesep 25
+skinparam ranksep 45
+hide circle
+title cd : Fokus 4 – Mandant, Filialen und Rollen
+
+abstract class Person {
+  # name : String
+  # telefon : String
+  # email : String
+  --
+  + getKontakt() : String
+}
+class Kunde {
+  - kundennummer : String
+  - adresse : String
+  - benachrichtigungskanal : String
+  --
+  + fordereSofortdiagnoseAn(medien : List<Medienanhang>) : Voranmeldung
+  + legeAuftragAn(g : Geraet) : Reparaturauftrag
+  + gibKvaFrei(kva : Kostenvoranschlag) : void
+  + lehneKvaAb(kva : Kostenvoranschlag) : void
+  + meldeMangel(a : Reparaturauftrag, beschreibung : String) : Reklamation
+}
+abstract class Mitarbeiter {
+  # personalnummer : String
+  # rolle : String
+  --
+  + getRolle() : String
+}
+class Techniker {
+  - qualifikation : String
+  --
+  + pruefeDiagnosevorschlag(v : KIDiagnosevorschlag) : boolean
+  + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
+  + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
+}
+class Disponent {
+  + pruefeVerfuegbarkeit(e : Ersatzteil, menge : int) : boolean
+  + reserviereTeil(e : Ersatzteil, menge : int) : ErsatzteilReservierung
+  + loeseBestellungAus(l : Lieferant) : Lieferantenbestellung
+  + bucheWareneingang(b : Lieferantenbestellung) : void
+}
+class Werkstattleiter {
+  + weiseTechnikerZu(a : Reparaturauftrag, t : Techniker) : void
+  + pruefeAuslastung(f : Filiale, datum : Date) : double
+  + gibBestellungFrei(b : Lieferantenbestellung) : void
+  + entscheideReklamation(r : Reklamation) : void
+}
+class Werkstattbetrieb <<mandant>> {
+  - betriebsnummer : String
+  - firmenname : String
+  - tarif : String
+  - aktivSeit : Date
+  --
+  + legeFilialeAn(name : String, adresse : String) : Filiale
+  + getFilialen() : List<Filiale>
+}
+class Filiale <<stammdaten>> {
+  - filialnummer : String
+  - name : String
+  - adresse : String
+  --
+  + getAuslastung(von : Date, bis : Date) : double
+  + getFreieTermine(ab : Date) : List<Date>
+}
+Person <|-- Kunde
+Person <|-- Mitarbeiter
+Mitarbeiter <|-- Techniker
+Mitarbeiter <|-- Disponent
+Mitarbeiter <|-- Werkstattleiter
+Werkstattbetrieb "1" *-down- "1..*" Filiale : betreibt >
+Werkstattbetrieb "1" -- "1..*" Mitarbeiter : beschäftigt >
+Mitarbeiter "1..*" -- "1" Filiale : arbeitet in >
+@enduml

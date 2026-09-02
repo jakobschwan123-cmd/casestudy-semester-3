@@ -1,0 +1,22 @@
+@startuml sd-Reparaturauftrag
+title sd : Klasse Reparaturauftrag
+[*] --> angenommen : Auftragsannahme / wechsleStatus(ANGENOMMEN)
+angenommen --> inDiagnose : Diagnosebeginn / wechsleStatus(IN_DIAGNOSE)
+inDiagnose --> kvaOffen : KVA versendet / wechsleStatus(KVA_OFFEN)
+inDiagnose --> abgelehnt : Totalschaden / benachrichtigeKunde()
+kvaOffen --> freigegeben : Kunde.gibKvaFrei() / wechsleStatus(FREIGEGEBEN)
+kvaOffen --> abgelehnt : Kunde.lehneKvaAb() oder Frist abgelaufen / wechsleStatus(ABGELEHNT)
+freigegeben --> teileBestellt : Fehlteile / wechsleStatus(TEILE_BESTELLT)
+freigegeben --> inReparatur : alle Teile verfuegbar / wechsleStatus(IN_REPARATUR)
+teileBestellt --> inReparatur : Wareneingang gebucht / wechsleStatus(IN_REPARATUR)
+inReparatur --> kvaOffen : Zusatzbefund / Nachtrags-KVA
+inReparatur --> fertig : fertigmelden() [alleSchritteAbgeschlossen()] / benachrichtigeKunde()
+fertig --> abgeholt : Zahlung erfasst / wechsleStatus(ABGEHOLT)
+abgeholt --> angenommen : Reklamation.legeNachbesserungAn() [Gewaehrleistung]
+abgeholt --> [*]
+abgelehnt --> [*]
+state "in Diagnose" as inDiagnose
+state "KVA offen" as kvaOffen
+state "Teile bestellt" as teileBestellt
+state "in Reparatur" as inReparatur
+@enduml

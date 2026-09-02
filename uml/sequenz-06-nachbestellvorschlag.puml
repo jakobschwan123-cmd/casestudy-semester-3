@@ -1,0 +1,52 @@
+@startuml
+title sqd : UC12 Nachbestellvorschlag bei Meldebestand / UC10 Lieferantenbestellung auslösen
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+participant ": Lagerbestand" as LB
+actor Disponent
+participant ": Ersatzteil" as ET
+participant ": Lieferantenbestellung" as LBEST
+participant ": Bestellposition" as BPOS
+actor Werkstattleiter
+actor Lieferant
+
+LB -> LB : bucheAbgang(anzahl)
+activate LB
+LB -> LB : istMeldebestandUnterschritten()
+alt Meldebestand unterschritten
+    LB -> Disponent : Nachbestellvorschlag (Ersatzteil, Fehlmenge)
+    deactivate LB
+    activate Disponent
+    Disponent -> ET : getVorzugslieferant()
+    activate ET
+    ET --> Disponent : lieferant
+    deactivate ET
+    alt offene Bestellung beim Lieferanten vorhanden
+        Disponent -> LBEST : addPosition(teil, menge)
+        activate LBEST
+        LBEST -> BPOS : <<create>>
+        LBEST --> Disponent : Position ergänzt
+        deactivate LBEST
+    else keine offene Bestellung
+        Disponent -> Disponent : loeseBestellungAus(lieferant)
+        Disponent -> LBEST : <<create>>
+        activate LBEST
+        Disponent -> LBEST : addPosition(teil, menge)
+        LBEST -> BPOS : <<create>>
+        LBEST -> LBEST : berechneBestellwert()
+        LBEST --> Disponent : bestellwert
+        opt Bestellwert über Freigabegrenze
+            Disponent -> Werkstattleiter : Freigabe anfordern
+            Werkstattleiter -> LBEST : gibBestellungFrei(b)
+        end
+        Disponent -> LBEST : uebermittle()
+        LBEST -> Lieferant : Bestellung senden
+        Lieferant --> LBEST : Auftragsbestätigung (Liefertermin)
+        LBEST --> Disponent : Status BESTAETIGT, liefertermin
+        deactivate LBEST
+    end
+    deactivate Disponent
+else Bestand ausreichend
+    note over LB : keine Aktion
+end
+@enduml

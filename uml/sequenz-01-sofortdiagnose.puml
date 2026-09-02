@@ -1,0 +1,64 @@
+@startuml
+title sqd : UC01 Sofortdiagnose anfordern (KI-Sofortdiagnose mit Vorab-KVA und Vorreservierung)
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+skinparam maxMessageSize 200
+actor Kunde
+participant ": Voranmeldung" as VA
+participant ": Medienanhang" as MA
+participant ": KIDiagnosevorschlag" as KI
+participant ": Kostenvoranschlag" as KVA
+participant ": Lagerbestand" as LB
+participant ": ErsatzteilReservierung" as RES
+participant ": Filiale" as FIL
+
+Kunde -> VA : <<create>> erstellen(medien, symptome)
+activate VA
+VA -> MA : <<create>>
+loop je Medienanhang
+    VA -> MA : analysieren()
+    activate MA
+    MA --> VA : auswertbar / KIDiagnosevorschlag
+    deactivate MA
+end
+alt Medien nicht auswertbar
+    VA --> Kunde : bessereAufnahmeAnfordern()
+else Medien auswertbar
+    VA -> KI : <<create>>
+    VA -> KI : erzeugeVorabKva()
+    activate KI
+    KI -> KVA : <<create>> (vorlaeufig = true)
+    KI -> KVA : addPosition(p)
+    KI -> KVA : berechneSumme()
+    KVA --> KI : summe
+    KI --> VA : Kostenvoranschlag [vorläufig]
+    deactivate KI
+    VA -> KI : getBenoetigteTeile()
+    KI --> VA : List<Ersatzteil>
+    loop je benötigtes Ersatzteil, je Filiale
+        VA -> LB : pruefeVerfuegbarkeit(anzahl)
+        activate LB
+        LB --> VA : verfuegbar
+        deactivate LB
+    end
+    VA -> FIL : getFreieTermine(ab)
+    activate FIL
+    FIL --> VA : List<Date>
+    deactivate FIL
+    VA --> Kunde : Diagnosevorschlag, Vorab-KVA, Terminvorschlag
+    alt Kunde bestätigt innerhalb 7 Tagen
+        Kunde -> VA : bestaetigen()
+        opt Teile verfügbar
+            VA -> RES : <<create>> reserviere()
+            activate RES
+            RES -> LB : bucheAbgang(anzahl)
+            RES --> VA : Status VORRESERVIERT
+            deactivate RES
+        end
+        VA --> Kunde : Voranmeldebestätigung
+    else keine Reaktion (Timer)
+        VA -> VA : verwerfen()
+    end
+end
+deactivate VA
+@enduml

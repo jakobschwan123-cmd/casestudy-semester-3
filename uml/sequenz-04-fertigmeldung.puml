@@ -1,0 +1,43 @@
+@startuml
+title sqd : UC14 Auftrag fertigmelden und Kunde benachrichtigen
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+actor Techniker
+participant ": Reparaturschritt" as RS
+participant ": Arbeitszeitbuchung" as AZB
+participant ": Reparaturauftrag" as RA
+participant ": Rechnung" as RE
+actor Kunde
+
+Techniker -> RS : schliesseAb()
+activate RS
+RS -> AZB : <<create>> (dauerMinuten, stundensatz)
+activate AZB
+AZB -> AZB : berechneKosten()
+AZB --> RS : kosten
+deactivate AZB
+RS --> Techniker : Schritt abgeschlossen
+deactivate RS
+
+Techniker -> RA : fertigmelden()
+activate RA
+RA -> RA : alleSchritteAbgeschlossen()
+alt alle Schritte abgeschlossen
+    RA -> RA : wechsleStatus(FERTIG)
+    note right of RA : Status: in Reparatur -> fertig
+    RA -> RE : <<create>> berechneBetrag()
+    activate RE
+    RE --> RA : bruttobetrag
+    deactivate RE
+    RA -> Kunde : benachrichtigeKunde("Gerät abholbereit")
+    opt Kunde hat Benachrichtigungskanal hinterlegt (E-Mail / SMS / App)
+        RA -> Kunde : Push-Nachricht über RepairFlow-App
+        Kunde --> RA : zugestellt
+    end
+    RA --> Techniker : fertiggemeldet
+else noch offene Schritte
+    RA --> Techniker : offene Schritte (Anzahl)
+    note right of RA : Status bleibt: in Reparatur
+end
+deactivate RA
+@enduml

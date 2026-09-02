@@ -1,0 +1,36 @@
+@startuml sqd-04-Auftrag-fertigmelden
+title sqd : Auftrag fertigmelden + Kunde benachrichtigen
+actor Techniker
+participant ": Reparaturschritt" as Schritt
+participant ": Arbeitszeitbuchung" as AZB
+participant ": Reparaturauftrag" as RA
+actor Kunde
+
+Techniker -> Techniker : bucheArbeitszeit(schritt, dauer)
+Techniker -> AZB : <<create>> Arbeitszeitbuchung(datum, dauer, stundensatz)
+activate AZB
+AZB -> AZB : berechneKosten()
+AZB --> Techniker : kosten
+deactivate AZB
+Techniker -> Schritt : markiereErledigt()
+activate Schritt
+Schritt --> Techniker : abgeschlossen = true
+deactivate Schritt
+
+Techniker -> RA : fertigmelden()
+activate RA
+RA -> RA : alleSchritteAbgeschlossen()
+alt alle Reparaturschritte abgeschlossen
+    RA -> RA : wechsleStatus(FERTIG)
+    note right of RA : Status: in Reparatur -> fertig
+    opt Kunde hat Benachrichtigungskanal hinterlegt
+        RA -> Kunde : benachrichtigeKunde("Geraet abholbereit")
+        Kunde --> RA : Zustellung bestaetigt
+    end
+    RA --> Techniker : fertiggemeldet
+else noch offene Reparaturschritte
+    RA --> Techniker : anzahlOffeneSchritte
+    note right of RA : Status bleibt: in Reparatur
+end
+deactivate RA
+@enduml

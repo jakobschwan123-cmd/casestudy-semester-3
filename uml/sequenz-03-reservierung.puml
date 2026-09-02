@@ -1,0 +1,57 @@
+@startuml
+title sqd : UC09 Ersatzteil reservieren (filialübergreifend)
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+actor Disponent
+participant ": Reparaturauftrag" as RA
+participant ": Kostenvoranschlag" as KVA
+participant ": Ersatzteil" as ET
+participant ": Lagerbestand" as LB
+participant ": ErsatzteilReservierung" as RES
+participant ": Filiale" as FIL
+
+Disponent -> RA : Teileliste übernehmen
+activate RA
+RA -> KVA : getPositionen()
+KVA --> RA : List<KvaPosition>
+RA --> Disponent : List<Ersatzteil>
+deactivate RA
+
+loop je benötigtes Ersatzteil
+    Disponent -> LB : pruefeVerfuegbarkeit(anzahl) [eigene Filiale]
+    activate LB
+    LB --> Disponent : verfuegbar
+    deactivate LB
+    alt eigener Bestand ausreichend
+        Disponent -> RES : <<create>> reserviere()
+        activate RES
+        RES -> LB : bucheAbgang(anzahl)
+        RES --> Disponent : Status RESERVIERT
+        deactivate RES
+    else eigener Bestand nicht ausreichend
+        loop je andere Filiale (bis Bedarf gedeckt)
+            Disponent -> FIL : Bestand abfragen
+            FIL -> LB : pruefeVerfuegbarkeit(anzahl)
+            LB --> FIL : verfuegbar
+            FIL --> Disponent : bestandsmeldung
+        end
+        alt in anderer Filiale verfügbar
+            Disponent -> RES : <<create>> reserviere() [andere Filiale]
+            activate RES
+            RES -> LB : bucheAbgang(anzahl)
+            RES --> Disponent : Status RESERVIERT + Umlagerung
+            deactivate RES
+        else nirgends verfügbar
+            Disponent -> RA : Fehlteil melden
+            note right of RA : -> UC10 Lieferantenbestellung auslösen
+        end
+    end
+    Disponent -> LB : istMeldebestandUnterschritten()
+    LB --> Disponent : true / false
+    opt Meldebestand unterschritten
+        Disponent -> Disponent : Nachbestellvorschlag erzeugen (UC12)
+    end
+end
+Disponent -> RA : wechsleStatus(TEILE_BESTELLT)
+note right of RA : Status: Teile bestellt / reserviert
+@enduml

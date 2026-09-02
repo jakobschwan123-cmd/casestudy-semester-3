@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?><XMI xmlns:UML="href://org.omg/UML/1.3" xmi.version="1.1">
+    <XMI.header>
+        <XMI.documentation>
+            <XMI.exporter>PlantUML</XMI.exporter>
+            <XMI.exporterVersion>1.2025.4</XMI.exporterVersion>
+        </XMI.documentation>
+        <XMI.metamodel xmi.name="UML" xmi.version="1.4"/>
+    </XMI.header>
+    <XMI.content>
+        <UML:Model name="PlantUML" xmi.id="model1">
+            <UML:Namespace.ownedElement>
+                <UML:Class name="AuftragStatus" xmi.id="ent0002">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="ANGENOMMEN" xmi.id="att63"/>
+                        <UML:Attribute name="IN_DIAGNOSE" xmi.id="att64"/>
+                        <UML:Attribute name="KVA_OFFEN" xmi.id="att65"/>
+                        <UML:Attribute name="FREIGEGEBEN" xmi.id="att66"/>
+                        <UML:Attribute name="ABGELEHNT" xmi.id="att67"/>
+                        <UML:Attribute name="TEILE_BESTELLT" xmi.id="att68"/>
+                        <UML:Attribute name="IN_REPARATUR" xmi.id="att69"/>
+                        <UML:Attribute name="FERTIG" xmi.id="att70"/>
+                        <UML:Attribute name="ABGEHOLT" xmi.id="att71"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="KvaStatus" xmi.id="ent0003">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="ENTWURF" xmi.id="att72"/>
+                        <UML:Attribute name="VERSENDET" xmi.id="att73"/>
+                        <UML:Attribute name="FREIGEGEBEN" xmi.id="att74"/>
+                        <UML:Attribute name="ABGELEHNT" xmi.id="att75"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="ReservierungStatus" xmi.id="ent0004">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="RESERVIERT" xmi.id="att76"/>
+                        <UML:Attribute name="ENTNOMMEN" xmi.id="att77"/>
+                        <UML:Attribute name="STORNIERT" xmi.id="att78"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="BestellStatus" xmi.id="ent0005">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="OFFEN" xmi.id="att79"/>
+                        <UML:Attribute name="BESTAETIGT" xmi.id="att80"/>
+                        <UML:Attribute name="WARENEINGANG" xmi.id="att81"/>
+                        <UML:Attribute name="STORNIERT" xmi.id="att82"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="ZahlungStatus" xmi.id="ent0006">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="OFFEN" xmi.id="att83"/>
+                        <UML:Attribute name="BEZAHLT" xmi.id="att84"/>
+                        <UML:Attribute name="MAHNUNG" xmi.id="att85"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="GeraeteTyp" xmi.id="ent0007">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="FAHRRAD" xmi.id="att86"/>
+                        <UML:Attribute name="EBIKE" xmi.id="att87"/>
+                        <UML:Attribute name="ELEKTRONIK" xmi.id="att88"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class isAbstract="true" name="Person" xmi.id="ent0008">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="id : Long" visibility="protected" xmi.id="att89"/>
+                        <UML:Attribute name="name : String" visibility="protected" xmi.id="att90"/>
+                        <UML:Attribute name="telefon : String" visibility="protected" xmi.id="att91"/>
+                        <UML:Attribute name="email : String" visibility="protected" xmi.id="att92"/>
+                        <UML:Operation name="getKontakt() : String" visibility="public" xmi.id="att93"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Kunde" xmi.id="ent0009">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="kundennummer : String" visibility="private" xmi.id="att94"/>
+                        <UML:Attribute name="adresse : String" visibility="private" xmi.id="att95"/>
+                        <UML:Attribute name="benachrichtigungskanal : String" visibility="private" xmi.id="att96"/>
+                        <UML:Operation name="legeAuftragAn(g : Geraet) : Reparaturauftrag" visibility="public" xmi.id="att97"/>
+                        <UML:Operation name="gibKvaFrei(kva : Kostenvoranschlag) : void" visibility="public" xmi.id="att98"/>
+                        <UML:Operation name="lehneKvaAb(kva : Kostenvoranschlag, grund : String) : void" visibility="public" xmi.id="att99"/>
+                        <UML:Operation name="meldeMangel(a : Reparaturauftrag, beschreibung : String) : Reklamation" visibility="public" xmi.id="att100"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class isAbstract="true" name="Mitarbeiter" xmi.id="ent0010">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="personalnummer : String" visibility="protected" xmi.id="att101"/>
+                        <UML:Attribute name="rolle : String" visibility="protected" xmi.id="att102"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Techniker" xmi.id="ent0011">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="qualifikation : String" visibility="private" xmi.id="att103"/>
+                        <UML:Operation name="erfasseBefund(a : Reparaturauftrag) : Fehlerbefund" visibility="public" xmi.id="att104"/>
+                        <UML:Operation name="bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung" visibility="public" xmi.id="att105"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Werkstattleiter" xmi.id="ent0012">
+                    <UML:Classifier.feature>
+                        <UML:Operation name="weiseTechnikerZu(a : Reparaturauftrag, t : Techniker) : void" visibility="public" xmi.id="att106"/>
+                        <UML:Operation name="pruefeAuslastung(f : Filiale) : double" visibility="public" xmi.id="att107"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Disponent" xmi.id="ent0013">
+                    <UML:Classifier.feature>
+                        <UML:Operation name="pruefeVerfuegbarkeit(e : Ersatzteil, menge : int) : boolean" visibility="public" xmi.id="att108"/>
+                        <UML:Operation name="loeseBestellungAus(l : Lieferant) : Lieferantenbestellung" visibility="public" xmi.id="att109"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Filiale" xmi.id="ent0014">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="filialnummer : String" visibility="private" xmi.id="att110"/>
+                        <UML:Attribute name="name : String" visibility="private" xmi.id="att111"/>
+                        <UML:Attribute name="adresse : String" visibility="private" xmi.id="att112"/>
+                        <UML:Operation name="getAuslastung(von : Date, bis : Date) : double" visibility="public" xmi.id="att113"/>
+                        <UML:Operation name="pruefeBestand(e : Ersatzteil) : int" visibility="public" xmi.id="att114"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Lieferant" xmi.id="ent0015">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="lieferantennummer : String" visibility="private" xmi.id="att115"/>
+                        <UML:Attribute name="name : String" visibility="private" xmi.id="att116"/>
+                        <UML:Attribute name="lieferzeitTage : int" visibility="private" xmi.id="att117"/>
+                        <UML:Operation name="bestaetigeBestellung(b : Lieferantenbestellung) : Date" visibility="public" xmi.id="att118"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Reparaturauftrag" xmi.id="ent0016">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="auftragsnummer : String" visibility="private" xmi.id="att119"/>
+                        <UML:Attribute name="eingangsdatum : Date" visibility="private" xmi.id="att120"/>
+                        <UML:Attribute name="status : AuftragStatus" visibility="private" xmi.id="att121"/>
+                        <UML:Operation name="wechsleStatus(neu : AuftragStatus) : void" visibility="public" xmi.id="att122"/>
+                        <UML:Operation name="fertigmelden() : void" visibility="public" xmi.id="att123"/>
+                        <UML:Operation name="benachrichtigeKunde(text : String) : void" visibility="public" xmi.id="att124"/>
+                        <UML:Operation name="alleSchritteAbgeschlossen() : boolean" visibility="public" xmi.id="att125"/>
+                        <UML:Operation name="ermittleTeilebedarf() : List&lt;Ersatzteil&gt;" visibility="public" xmi.id="att126"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Geraet" xmi.id="ent0017">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="seriennummer : String" visibility="private" xmi.id="att127"/>
+                        <UML:Attribute name="hersteller : String" visibility="private" xmi.id="att128"/>
+                        <UML:Attribute name="modell : String" visibility="private" xmi.id="att129"/>
+                        <UML:Attribute name="typ : GeraeteTyp" visibility="private" xmi.id="att130"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Fehlerbefund" xmi.id="ent0018">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="befundnummer : String" visibility="private" xmi.id="att131"/>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att132"/>
+                        <UML:Attribute name="beschreibung : String" visibility="private" xmi.id="att133"/>
+                        <UML:Attribute name="schweregrad : int" visibility="private" xmi.id="att134"/>
+                        <UML:Operation name="istReparaturLohnend() : boolean" visibility="public" xmi.id="att135"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Kostenvoranschlag" xmi.id="ent0019">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="kvaNummer : String" visibility="private" xmi.id="att136"/>
+                        <UML:Attribute name="erstelldatum : Date" visibility="private" xmi.id="att137"/>
+                        <UML:Attribute name="gueltigBis : Date" visibility="private" xmi.id="att138"/>
+                        <UML:Attribute name="status : KvaStatus" visibility="private" xmi.id="att139"/>
+                        <UML:Operation name="fuegePositionHinzu(p : KvaPosition) : void" visibility="public" xmi.id="att140"/>
+                        <UML:Operation name="berechneSumme() : double" visibility="public" xmi.id="att141"/>
+                        <UML:Operation name="versendeAnKunde() : void" visibility="public" xmi.id="att142"/>
+                        <UML:Operation name="setzeStatus(s : KvaStatus) : void" visibility="public" xmi.id="att143"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="KvaPosition" xmi.id="ent0020">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="bezeichnung : String" visibility="private" xmi.id="att144"/>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att145"/>
+                        <UML:Attribute name="einzelpreis : double" visibility="private" xmi.id="att146"/>
+                        <UML:Operation name="zwischensumme() : double" visibility="public" xmi.id="att147"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Reparaturschritt" xmi.id="ent0021">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="schrittnummer : int" visibility="private" xmi.id="att148"/>
+                        <UML:Attribute name="beschreibung : String" visibility="private" xmi.id="att149"/>
+                        <UML:Attribute name="abgeschlossen : boolean" visibility="private" xmi.id="att150"/>
+                        <UML:Operation name="markiereErledigt() : void" visibility="public" xmi.id="att151"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Arbeitszeitbuchung" xmi.id="ent0022">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att152"/>
+                        <UML:Attribute name="dauerMinuten : int" visibility="private" xmi.id="att153"/>
+                        <UML:Attribute name="stundensatz : double" visibility="private" xmi.id="att154"/>
+                        <UML:Operation name="berechneKosten() : double" visibility="public" xmi.id="att155"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Ersatzteil" xmi.id="ent0023">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="artikelnummer : String" visibility="private" xmi.id="att156"/>
+                        <UML:Attribute name="bezeichnung : String" visibility="private" xmi.id="att157"/>
+                        <UML:Attribute name="einkaufspreis : double" visibility="private" xmi.id="att158"/>
+                        <UML:Attribute name="verkaufspreis : double" visibility="private" xmi.id="att159"/>
+                        <UML:Operation name="getVorzugslieferant() : Lieferant" visibility="public" xmi.id="att160"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Lagerbestand" xmi.id="ent0024">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att161"/>
+                        <UML:Attribute name="reserviert : int" visibility="private" xmi.id="att162"/>
+                        <UML:Attribute name="meldebestand : int" visibility="private" xmi.id="att163"/>
+                        <UML:Operation name="pruefeVerfuegbarkeit(anzahl : int) : boolean" visibility="public" xmi.id="att164"/>
+                        <UML:Operation name="bucheZugang(anzahl : int) : void" visibility="public" xmi.id="att165"/>
+                        <UML:Operation name="bucheAbgang(anzahl : int) : void" visibility="public" xmi.id="att166"/>
+                        <UML:Operation name="istMeldebestandUnterschritten() : boolean" visibility="public" xmi.id="att167"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="ErsatzteilReservierung" xmi.id="ent0025">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="reservierungsnummer : String" visibility="private" xmi.id="att168"/>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att169"/>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att170"/>
+                        <UML:Attribute name="status : ReservierungStatus" visibility="private" xmi.id="att171"/>
+                        <UML:Operation name="reserviere() : void" visibility="public" xmi.id="att172"/>
+                        <UML:Operation name="storniere() : void" visibility="public" xmi.id="att173"/>
+                        <UML:Operation name="entnehmen() : void" visibility="public" xmi.id="att174"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Lieferantenbestellung" xmi.id="ent0026">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="bestellnummer : String" visibility="private" xmi.id="att175"/>
+                        <UML:Attribute name="bestelldatum : Date" visibility="private" xmi.id="att176"/>
+                        <UML:Attribute name="liefertermin : Date" visibility="private" xmi.id="att177"/>
+                        <UML:Attribute name="status : BestellStatus" visibility="private" xmi.id="att178"/>
+                        <UML:Operation name="fuegePositionHinzu(e : Ersatzteil, menge : int) : Bestellposition" visibility="public" xmi.id="att179"/>
+                        <UML:Operation name="uebermittle() : void" visibility="public" xmi.id="att180"/>
+                        <UML:Operation name="bucheWareneingang() : void" visibility="public" xmi.id="att181"/>
+                        <UML:Operation name="berechneBestellwert() : double" visibility="public" xmi.id="att182"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Bestellposition" xmi.id="ent0027">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="menge : int" visibility="private" xmi.id="att183"/>
+                        <UML:Attribute name="einzelpreis : double" visibility="private" xmi.id="att184"/>
+                        <UML:Operation name="positionswert() : double" visibility="public" xmi.id="att185"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Rechnung" xmi.id="ent0028">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="rechnungsnummer : String" visibility="private" xmi.id="att186"/>
+                        <UML:Attribute name="rechnungsdatum : Date" visibility="private" xmi.id="att187"/>
+                        <UML:Attribute name="bruttobetrag : double" visibility="private" xmi.id="att188"/>
+                        <UML:Attribute name="zahlungStatus : ZahlungStatus" visibility="private" xmi.id="att189"/>
+                        <UML:Operation name="berechneBetrag() : double" visibility="public" xmi.id="att190"/>
+                        <UML:Operation name="erfasseZahlung() : void" visibility="public" xmi.id="att191"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Class name="Reklamation" xmi.id="ent0029">
+                    <UML:Classifier.feature>
+                        <UML:Attribute name="reklamationsnummer : String" visibility="private" xmi.id="att192"/>
+                        <UML:Attribute name="datum : Date" visibility="private" xmi.id="att193"/>
+                        <UML:Attribute name="grund : String" visibility="private" xmi.id="att194"/>
+                        <UML:Attribute name="istGewaehrleistung : boolean" visibility="private" xmi.id="att195"/>
+                        <UML:Operation name="pruefeGewaehrleistung() : boolean" visibility="public" xmi.id="att196"/>
+                        <UML:Operation name="legeNachbesserungAn() : Reparaturauftrag" visibility="public" xmi.id="att197"/>
+                        <UML:Operation name="schliesseAb() : void" visibility="public" xmi.id="att198"/>
+                    </UML:Classifier.feature>
+                </UML:Class>
+                <UML:Generalization child="ent0009" name="" namespace="model1" parent="ent0008" xmi.id="ass199"/>
+                <UML:Generalization child="ent0010" name="" namespace="model1" parent="ent0008" xmi.id="ass200"/>
+                <UML:Generalization child="ent0011" name="" namespace="model1" parent="ent0010" xmi.id="ass201"/>
+                <UML:Generalization child="ent0012" name="" namespace="model1" parent="ent0010" xmi.id="ass202"/>
+                <UML:Generalization child="ent0013" name="" namespace="model1" parent="ent0010" xmi.id="ass203"/>
+                <UML:Association name="beauftragt" namespace="model1" xmi.id="ass204">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass204" name="1" type="ent0009" xmi.id="end205">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass204" name="0..*" type="ent0016" xmi.id="end206">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="betrifft" namespace="model1" xmi.id="ass207">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd aggregation="composite" association="ass207" name="1" type="ent0016" xmi.id="end208">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass207" name="1" type="ent0017" xmi.id="end209">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="bearbeitet in" namespace="model1" xmi.id="ass210">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass210" name="0..*" type="ent0016" xmi.id="end211">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass210" name="1" type="ent0014" xmi.id="end212">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="arbeitet in" namespace="model1" xmi.id="ass213">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass213" name="1..*" type="ent0010" xmi.id="end214">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass213" name="1" type="ent0014" xmi.id="end215">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="hat" namespace="model1" xmi.id="ass216">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd aggregation="composite" association="ass216" name="1" type="ent0016" xmi.id="end217">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass216" name="0..1" type="ent0018" xmi.id="end218">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="erstellt von" namespace="model1" xmi.id="ass219">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass219" name="0..*" type="ent0018" xmi.id="end220">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass219" name="1" type="ent0011" xmi.id="end221">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="hat" namespace="model1" xmi.id="ass222">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd aggregation="composite" association="ass222" name="1" type="ent0016" xmi.id="end223">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass222" name="0..*" type="ent0019" xmi.id="end224">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="besteht aus" namespace="model1" xmi.id="ass225">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd aggregation="composite" association="ass225" name="1" type="ent0019" xmi.id="end226">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass225" name="1..*" type="ent0020" xmi.id="end227">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="referenziert" namespace="model1" xmi.id="ass228">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass228" name="0..*" type="ent0020" xmi.id="end229">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass228" name="0..1" type="ent0023" xmi.id="end230">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="gliedert sich in" namespace="model1" xmi.id="ass231">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd aggregation="composite" association="ass231" name="1" type="ent0016" xmi.id="end232">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass231" name="0..*" type="ent0021" xmi.id="end233">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="erfasst" namespace="model1" xmi.id="ass234">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass234" name="1" type="ent0021" xmi.id="end235">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass234" name="0..*" type="ent0022" xmi.id="end236">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="gebucht von" namespace="model1" xmi.id="ass237">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass237" name="0..*" type="ent0022" xmi.id="end238">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass237" name="1" type="ent0011" xmi.id="end239">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="zugewiesen an" namespace="model1" xmi.id="ass240">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass240" name="0..*" type="ent0016" xmi.id="end241">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass240" name="0..1" type="ent0011" xmi.id="end242">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="gefuehrt als" namespace="model1" xmi.id="ass243">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass243" name="1" type="ent0023" xmi.id="end244">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass243" name="0..*" type="ent0024" xmi.id="end245">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="liegt in" namespace="model1" xmi.id="ass246">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass246" name="0..*" type="ent0024" xmi.id="end247">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass246" name="1" type="ent0014" xmi.id="end248">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="reserviert auf" namespace="model1" xmi.id="ass249">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass249" name="0..*" type="ent0025" xmi.id="end250">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass249" name="1" type="ent0024" xmi.id="end251">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="fuer" namespace="model1" xmi.id="ass252">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass252" name="0..*" type="ent0025" xmi.id="end253">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass252" name="1" type="ent0016" xmi.id="end254">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="erhaelt" namespace="model1" xmi.id="ass255">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass255" name="1" type="ent0015" xmi.id="end256">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass255" name="0..*" type="ent0026" xmi.id="end257">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="besteht aus" namespace="model1" xmi.id="ass258">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd aggregation="composite" association="ass258" name="1" type="ent0026" xmi.id="end259">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass258" name="1..*" type="ent0027" xmi.id="end260">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="betrifft" namespace="model1" xmi.id="ass261">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass261" name="0..*" type="ent0027" xmi.id="end262">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass261" name="1" type="ent0023" xmi.id="end263">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="bestellt von" namespace="model1" xmi.id="ass264">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass264" name="0..*" type="ent0026" xmi.id="end265">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass264" name="1" type="ent0014" xmi.id="end266">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="abgerechnet mit" namespace="model1" xmi.id="ass267">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass267" name="1" type="ent0016" xmi.id="end268">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass267" name="0..1" type="ent0028" xmi.id="end269">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="reklamiert als" namespace="model1" xmi.id="ass270">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass270" name="1" type="ent0016" xmi.id="end271">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass270" name="0..*" type="ent0029" xmi.id="end272">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+            </UML:Namespace.ownedElement>
+        </UML:Model>
+    </XMI.content>
+</XMI>

@@ -1,0 +1,96 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam classFontSize 11
+skinparam nodesep 25
+skinparam ranksep 45
+hide circle
+title cd : Fokus 3 – Ersatzteil-Disposition
+
+class Disponent {
+  + pruefeVerfuegbarkeit(e : Ersatzteil, menge : int) : boolean
+  + reserviereTeil(e : Ersatzteil, menge : int) : ErsatzteilReservierung
+  + loeseBestellungAus(l : Lieferant) : Lieferantenbestellung
+  + bucheWareneingang(b : Lieferantenbestellung) : void
+}
+class Ersatzteil <<stammdaten>> {
+  - artikelnummer : String
+  - bezeichnung : String
+  - einkaufspreis : double
+  - verkaufspreis : double
+  --
+  + getVorzugslieferant() : Lieferant
+}
+class Lagerbestand {
+  - menge : int
+  - reserviert : int
+  - meldebestand : int
+  --
+  + pruefeVerfuegbarkeit(anzahl : int) : boolean
+  + bucheZugang(anzahl : int) : void
+  + bucheAbgang(anzahl : int) : void
+  + istMeldebestandUnterschritten() : boolean
+}
+class ErsatzteilReservierung {
+  - reservierungsnummer : String
+  - menge : int
+  - datum : Date
+  - status : ReservierungStatus
+  --
+  + reserviere() : void
+  + storniere() : void
+  + entnehmen() : void
+}
+class Lieferantenbestellung {
+  - bestellnummer : String
+  - bestelldatum : Date
+  - liefertermin : Date
+  - status : BestellStatus
+  --
+  + addPosition(teil : Ersatzteil, menge : int) : void
+  + uebermittle() : void
+  + bucheWareneingang() : void
+  + berechneBestellwert() : double
+}
+class Bestellposition {
+  - menge : int
+  - einzelpreis : double
+  --
+  + positionswert() : double
+}
+class Lieferant <<stammdaten>> {
+  - lieferantennummer : String
+  - name : String
+  - lieferzeitTage : int
+  --
+  + erstelleBestellung(pos : List<Bestellposition>) : Lieferantenbestellung
+}
+class Reparaturauftrag {
+  - auftragsnummer : String
+  - eingangsdatum : Date
+  - status : AuftragStatus
+  - werkstatttermin : Date
+  --
+  + wechsleStatus(neu : AuftragStatus) : void
+  + alleSchritteAbgeschlossen() : boolean
+  + fertigmelden() : void
+  + benachrichtigeKunde(text : String) : void
+}
+class Filiale <<stammdaten>> {
+  - filialnummer : String
+  - name : String
+  - adresse : String
+  --
+  + getAuslastung(von : Date, bis : Date) : double
+  + getFreieTermine(ab : Date) : List<Date>
+}
+Reparaturauftrag "0..*" -- "1" Filiale : bearbeitet in >
+Ersatzteil "1" -down- "0..*" Lagerbestand : geführt als >
+Lagerbestand "0..*" -- "1" Filiale : liegt in >
+ErsatzteilReservierung "0..*" -- "1" Lagerbestand : reserviert auf >
+ErsatzteilReservierung "0..*" -- "0..1" Reparaturauftrag : für >
+Lieferant "1" -down- "0..*" Lieferantenbestellung : erhält >
+Lieferantenbestellung "1" *-down- "1..*" Bestellposition : besteht aus >
+Bestellposition "0..*" -- "1" Ersatzteil : betrifft >
+Lieferantenbestellung "0..*" -- "1" Filiale : bestellt von >
+@enduml

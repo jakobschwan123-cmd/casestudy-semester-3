@@ -1,0 +1,54 @@
+@startuml sqd-02-Ersatzteil-reservieren
+title sqd : Ersatzteil-Verfuegbarkeit pruefen + Ersatzteil reservieren
+actor Disponent
+participant ": Reparaturauftrag" as RA
+participant "eigene : Filiale" as F1
+participant ": Lagerbestand" as LB
+participant "andere : Filiale" as F2
+participant ": ErsatzteilReservierung" as Res
+
+Disponent -> RA : ermittleTeilebedarf()
+activate RA
+RA --> Disponent : List<Ersatzteil>
+deactivate RA
+
+loop je benoetigtes Ersatzteil
+    Disponent -> F1 : pruefeBestand(ersatzteil)
+    activate F1
+    F1 -> LB : pruefeVerfuegbarkeit(menge)
+    LB --> F1 : verfuegbar
+    F1 --> Disponent : bestand
+    deactivate F1
+
+    alt eigener Bestand ausreichend
+        Disponent -> Res : <<create>> ErsatzteilReservierung(lagerbestand, menge)
+        activate Res
+        Res -> Res : reserviere()
+        Res -> LB : bucheAbgang(menge)
+        note right of LB : reserviert erhoeht,\nphysische Entnahme erst\nbei Reparaturbeginn
+        Res --> Disponent : RESERVIERT
+        deactivate Res
+    else eigener Bestand nicht ausreichend
+        loop fuer jede andere Filiale, bis Bedarf gedeckt
+            Disponent -> F2 : pruefeBestand(ersatzteil)
+            activate F2
+            F2 -> LB : pruefeVerfuegbarkeit(menge)
+            LB --> F2 : verfuegbar
+            F2 --> Disponent : bestand
+            deactivate F2
+        end
+        alt in anderer Filiale verfuegbar
+            Disponent -> Res : <<create>> ErsatzteilReservierung(lagerbestandAndereFiliale, menge)
+            activate Res
+            Res -> Res : reserviere()
+            Res -> LB : bucheAbgang(menge)
+            Res --> Disponent : RESERVIERT (Umlagerung)
+            deactivate Res
+        else nirgends verfuegbar
+            Disponent -> Disponent : Fehlteil vormerken
+            note right of Disponent : -> Lieferantenbestellung (sqd 03)
+        end
+    end
+end
+Disponent -> RA : wechsleStatus(TEILE_BESTELLT) [nur bei Fehlteilen]
+@enduml

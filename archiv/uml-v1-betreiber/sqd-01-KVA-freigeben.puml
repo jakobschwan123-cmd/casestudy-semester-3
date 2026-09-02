@@ -1,0 +1,50 @@
+@startuml sqd-01-KVA-freigeben
+title sqd : KVA freigeben/ablehnen
+actor Techniker
+participant ": Reparaturauftrag" as RA
+participant ": Kostenvoranschlag" as KVA
+participant ": KvaPosition" as Pos
+actor Kunde
+
+Techniker -> KVA : <<create>> Kostenvoranschlag(auftrag)
+activate KVA
+loop je Ersatzteil / Arbeitswert aus dem Fehlerbefund
+    Techniker -> Pos : <<create>> KvaPosition(bezeichnung, menge, einzelpreis)
+    Techniker -> KVA : fuegePositionHinzu(pos)
+    KVA -> Pos : zwischensumme()
+    Pos --> KVA : betrag
+end
+KVA -> KVA : berechneSumme()
+KVA --> Techniker : summe
+deactivate KVA
+
+Techniker -> RA : wechsleStatus(KVA_OFFEN)
+note right of RA : Status: KVA offen
+Techniker -> KVA : versendeAnKunde()
+activate KVA
+KVA -> KVA : setzeStatus(VERSENDET)
+KVA -> Kunde : Kostenvoranschlag
+deactivate KVA
+
+loop bis Kundenreaktion oder Frist abgelaufen (max. 1 Erinnerung)
+    RA -> Kunde : benachrichtigeKunde("Erinnerung KVA-Freigabe")
+end
+
+alt Kunde gibt frei
+    Kunde -> KVA : gibKvaFrei(kva)
+    activate KVA
+    KVA -> KVA : setzeStatus(FREIGEGEBEN)
+    KVA -> RA : wechsleStatus(FREIGEGEBEN)
+    note right of RA : Status: freigegeben\n-> Ersatzteil-Beschaffung (sqd 02)
+    KVA --> Kunde : Freigabe bestaetigt
+    deactivate KVA
+else Kunde lehnt ab
+    Kunde -> KVA : lehneKvaAb(kva, grund)
+    activate KVA
+    KVA -> KVA : setzeStatus(ABGELEHNT)
+    KVA -> RA : wechsleStatus(ABGELEHNT)
+    note right of RA : Status: abgelehnt (Endzustand)
+    RA -> Kunde : benachrichtigeKunde("Geraet zur Abholung bereit")
+    deactivate KVA
+end
+@enduml

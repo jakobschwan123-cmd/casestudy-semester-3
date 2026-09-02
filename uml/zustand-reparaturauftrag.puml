@@ -1,0 +1,19 @@
+@startuml
+title sd : Klasse Reparaturauftrag – Zustandsdiagramm
+skinparam defaultFontName Arial
+[*] --> angenommen : Auftrag anlegen /\nwechsleStatus(ANGENOMMEN)
+angenommen --> inDiagnose : Techniker zugewiesen /\nwechsleStatus(IN_DIAGNOSE)
+inDiagnose --> kvaOffen : Diagnose abgeschlossen /\nKostenvoranschlag.versendeAnKunde()
+inDiagnose --> abgeholt : nicht reparierbar /\nbenachrichtigeKunde()
+kvaOffen --> freigegeben : Kunde.gibKvaFrei() /\nwechsleStatus(FREIGEGEBEN)
+kvaOffen --> abgelehnt : Kunde.lehneKvaAb() /\nwechsleStatus(ABGELEHNT)
+freigegeben --> teileBestellt : Fehlteile bestellt /\nwechsleStatus(TEILE_BESTELLT)
+freigegeben --> inReparatur : alle Teile reserviert
+teileBestellt --> inReparatur : Wareneingang gebucht /\nwechsleStatus(IN_REPARATUR)
+inReparatur --> kvaOffen : Zusatzbefund /\nNachtrags-KVA
+inReparatur --> fertig : fertigmelden()\n[alleSchritteAbgeschlossen()]
+fertig --> abgeholt : Übergabe und Zahlung /\nwechsleStatus(ABGEHOLT)
+abgelehnt --> abgeholt : Gerät abgeholt
+abgeholt --> angenommen : Reklamation (Gewährleistung) /\nNacharbeit anlegen
+abgeholt --> [*]
+@enduml

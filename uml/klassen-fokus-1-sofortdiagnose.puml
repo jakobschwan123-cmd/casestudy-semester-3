@@ -1,0 +1,118 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam classFontSize 11
+skinparam nodesep 25
+skinparam ranksep 45
+hide circle
+title cd : Fokus 1 – Kundenkontakt und KI-Sofortdiagnose
+
+class Kunde {
+  - kundennummer : String
+  - adresse : String
+  - benachrichtigungskanal : String
+  --
+  + fordereSofortdiagnoseAn(medien : List<Medienanhang>) : Voranmeldung
+  + legeAuftragAn(g : Geraet) : Reparaturauftrag
+  + gibKvaFrei(kva : Kostenvoranschlag) : void
+  + lehneKvaAb(kva : Kostenvoranschlag) : void
+  + meldeMangel(a : Reparaturauftrag, beschreibung : String) : Reklamation
+}
+class Voranmeldung {
+  - voranmeldungsnummer : String
+  - erstelltAm : Date
+  - gueltigBis : Date
+  - symptombeschreibung : String
+  - wunschtermin : Date
+  - bestaetigt : boolean
+  --
+  + erstellen(medien : List<Medienanhang>, symptome : String) : void
+  + bestaetigen() : void
+  + verwerfen() : void
+  + bessereAufnahmeAnfordern() : void
+  + inAuftragUebernehmen() : Reparaturauftrag
+}
+class Medienanhang {
+  - dateiname : String
+  - typ : MedienTyp
+  - aufnahmedatum : Date
+  - auswertbar : boolean
+  --
+  + analysieren() : KIDiagnosevorschlag
+}
+class KIDiagnosevorschlag {
+  - vorschlagsnummer : String
+  - wahrscheinlicheUrsache : String
+  - konfidenz : double
+  - geschaetzterAufwandMin : int
+  - bestaetigt : boolean
+  --
+  + erzeugeVorabKva() : Kostenvoranschlag
+  + getBenoetigteTeile() : List<Ersatzteil>
+  + bestaetigen(t : Techniker) : void
+}
+class Kostenvoranschlag {
+  - kvaNummer : String
+  - erstelldatum : Date
+  - gueltigBis : Date
+  - status : KvaStatus
+  - vorlaeufig : boolean
+  --
+  + addPosition(p : KvaPosition) : void
+  + getPositionen() : List<KvaPosition>
+  + berechneSumme() : double
+  + versendeAnKunde() : void
+  + freigeben() : void
+  + ablehnen(grund : String) : void
+  + setzeStatus(s : KvaStatus) : void
+}
+class ErsatzteilReservierung {
+  - reservierungsnummer : String
+  - menge : int
+  - datum : Date
+  - status : ReservierungStatus
+  --
+  + reserviere() : void
+  + storniere() : void
+  + entnehmen() : void
+}
+class Filiale <<stammdaten>> {
+  - filialnummer : String
+  - name : String
+  - adresse : String
+  --
+  + getAuslastung(von : Date, bis : Date) : double
+  + getFreieTermine(ab : Date) : List<Date>
+}
+class Reparaturauftrag {
+  - auftragsnummer : String
+  - eingangsdatum : Date
+  - status : AuftragStatus
+  - werkstatttermin : Date
+  --
+  + wechsleStatus(neu : AuftragStatus) : void
+  + alleSchritteAbgeschlossen() : boolean
+  + fertigmelden() : void
+  + benachrichtigeKunde(text : String) : void
+}
+class Ersatzteil <<stammdaten>> {
+  - artikelnummer : String
+  - bezeichnung : String
+  - einkaufspreis : double
+  - verkaufspreis : double
+  --
+  + getVorzugslieferant() : Lieferant
+}
+Kunde "1" -down- "0..*" Voranmeldung : stellt >
+Kunde "1" -down- "0..*" Reparaturauftrag : beauftragt >
+Voranmeldung "1" *-down- "1..*" Medienanhang : enthält >
+Voranmeldung "1" *-down- "0..1" KIDiagnosevorschlag : führt zu >
+Voranmeldung "0..*" -- "1" Filiale : Wunschfiliale >
+Voranmeldung "0..1" -- "0..1" Reparaturauftrag : wird übernommen in >
+KIDiagnosevorschlag "1" -- "0..1" Kostenvoranschlag : erzeugt vorläufigen >
+KIDiagnosevorschlag "0..*" -- "0..*" Ersatzteil : schlägt vor >
+Reparaturauftrag "0..*" -- "1" Filiale : bearbeitet in >
+Reparaturauftrag "1" *-- "0..*" Kostenvoranschlag : hat >
+ErsatzteilReservierung "0..*" -- "0..1" Reparaturauftrag : für >
+ErsatzteilReservierung "0..*" -- "0..1" Voranmeldung : vorreserviert für >
+@enduml

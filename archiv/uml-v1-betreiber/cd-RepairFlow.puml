@@ -1,0 +1,242 @@
+@startuml cd-RepairFlow
+title cd : RepairFlow (FixWerk GmbH)
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide circle
+
+' ============ ENUMS ============
+enum AuftragStatus {
+  ANGENOMMEN
+  IN_DIAGNOSE
+  KVA_OFFEN
+  FREIGEGEBEN
+  ABGELEHNT
+  TEILE_BESTELLT
+  IN_REPARATUR
+  FERTIG
+  ABGEHOLT
+}
+enum KvaStatus {
+  ENTWURF
+  VERSENDET
+  FREIGEGEBEN
+  ABGELEHNT
+}
+enum ReservierungStatus {
+  RESERVIERT
+  ENTNOMMEN
+  STORNIERT
+}
+enum BestellStatus {
+  OFFEN
+  BESTAETIGT
+  WARENEINGANG
+  STORNIERT
+}
+enum ZahlungStatus {
+  OFFEN
+  BEZAHLT
+  MAHNUNG
+}
+enum GeraeteTyp {
+  FAHRRAD
+  EBIKE
+  ELEKTRONIK
+}
+
+' ============ PERSONEN / ORGANISATION ============
+abstract class Person {
+  # id : Long
+  # name : String
+  # telefon : String
+  # email : String
+  + getKontakt() : String
+}
+class Kunde {
+  - kundennummer : String
+  - adresse : String
+  - benachrichtigungskanal : String
+  + legeAuftragAn(g : Geraet) : Reparaturauftrag
+  + gibKvaFrei(kva : Kostenvoranschlag) : void
+  + lehneKvaAb(kva : Kostenvoranschlag, grund : String) : void
+  + meldeMangel(a : Reparaturauftrag, beschreibung : String) : Reklamation
+}
+abstract class Mitarbeiter {
+  # personalnummer : String
+  # rolle : String
+}
+class Techniker {
+  - qualifikation : String
+  + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
+  + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
+}
+class Werkstattleiter {
+  + weiseTechnikerZu(a : Reparaturauftrag, t : Techniker) : void
+  + pruefeAuslastung(f : Filiale) : double
+}
+class Disponent {
+  + pruefeVerfuegbarkeit(e : Ersatzteil, menge : int) : boolean
+  + loeseBestellungAus(l : Lieferant) : Lieferantenbestellung
+}
+class Filiale {
+  - filialnummer : String
+  - name : String
+  - adresse : String
+  + getAuslastung(von : Date, bis : Date) : double
+  + pruefeBestand(e : Ersatzteil) : int
+}
+class Lieferant {
+  - lieferantennummer : String
+  - name : String
+  - lieferzeitTage : int
+  + bestaetigeBestellung(b : Lieferantenbestellung) : Date
+}
+
+' ============ AUFTRAG / DIAGNOSE / KVA ============
+class Reparaturauftrag {
+  - auftragsnummer : String
+  - eingangsdatum : Date
+  - status : AuftragStatus
+  + wechsleStatus(neu : AuftragStatus) : void
+  + fertigmelden() : void
+  + benachrichtigeKunde(text : String) : void
+  + alleSchritteAbgeschlossen() : boolean
+  + ermittleTeilebedarf() : List<Ersatzteil>
+}
+class Geraet {
+  - seriennummer : String
+  - hersteller : String
+  - modell : String
+  - typ : GeraeteTyp
+}
+class Fehlerbefund {
+  - befundnummer : String
+  - datum : Date
+  - beschreibung : String
+  - schweregrad : int
+  + istReparaturLohnend() : boolean
+}
+class Kostenvoranschlag {
+  - kvaNummer : String
+  - erstelldatum : Date
+  - gueltigBis : Date
+  - status : KvaStatus
+  + fuegePositionHinzu(p : KvaPosition) : void
+  + berechneSumme() : double
+  + versendeAnKunde() : void
+  + setzeStatus(s : KvaStatus) : void
+}
+class KvaPosition {
+  - bezeichnung : String
+  - menge : int
+  - einzelpreis : double
+  + zwischensumme() : double
+}
+
+' ============ REPARATUR ============
+class Reparaturschritt {
+  - schrittnummer : int
+  - beschreibung : String
+  - abgeschlossen : boolean
+  + markiereErledigt() : void
+}
+class Arbeitszeitbuchung {
+  - datum : Date
+  - dauerMinuten : int
+  - stundensatz : double
+  + berechneKosten() : double
+}
+
+' ============ ERSATZTEIL / LAGER ============
+class Ersatzteil {
+  - artikelnummer : String
+  - bezeichnung : String
+  - einkaufspreis : double
+  - verkaufspreis : double
+  + getVorzugslieferant() : Lieferant
+}
+class Lagerbestand {
+  - menge : int
+  - reserviert : int
+  - meldebestand : int
+  + pruefeVerfuegbarkeit(anzahl : int) : boolean
+  + bucheZugang(anzahl : int) : void
+  + bucheAbgang(anzahl : int) : void
+  + istMeldebestandUnterschritten() : boolean
+}
+class ErsatzteilReservierung {
+  - reservierungsnummer : String
+  - menge : int
+  - datum : Date
+  - status : ReservierungStatus
+  + reserviere() : void
+  + storniere() : void
+  + entnehmen() : void
+}
+class Lieferantenbestellung {
+  - bestellnummer : String
+  - bestelldatum : Date
+  - liefertermin : Date
+  - status : BestellStatus
+  + fuegePositionHinzu(e : Ersatzteil, menge : int) : Bestellposition
+  + uebermittle() : void
+  + bucheWareneingang() : void
+  + berechneBestellwert() : double
+}
+class Bestellposition {
+  - menge : int
+  - einzelpreis : double
+  + positionswert() : double
+}
+
+' ============ RECHNUNG / REKLAMATION ============
+class Rechnung {
+  - rechnungsnummer : String
+  - rechnungsdatum : Date
+  - bruttobetrag : double
+  - zahlungStatus : ZahlungStatus
+  + berechneBetrag() : double
+  + erfasseZahlung() : void
+}
+class Reklamation {
+  - reklamationsnummer : String
+  - datum : Date
+  - grund : String
+  - istGewaehrleistung : boolean
+  + pruefeGewaehrleistung() : boolean
+  + legeNachbesserungAn() : Reparaturauftrag
+  + schliesseAb() : void
+}
+
+' ============ VERERBUNG ============
+Person <|-- Kunde
+Person <|-- Mitarbeiter
+Mitarbeiter <|-- Techniker
+Mitarbeiter <|-- Werkstattleiter
+Mitarbeiter <|-- Disponent
+
+' ============ ASSOZIATIONEN ============
+Kunde "1" -- "0..*" Reparaturauftrag : beauftragt >
+Reparaturauftrag "1" *-- "1" Geraet : betrifft >
+Reparaturauftrag "0..*" -- "1" Filiale : bearbeitet in >
+Mitarbeiter "1..*" -- "1" Filiale : arbeitet in >
+Reparaturauftrag "1" *-- "0..1" Fehlerbefund : hat >
+Fehlerbefund "0..*" -- "1" Techniker : erstellt von >
+Reparaturauftrag "1" *-- "0..*" Kostenvoranschlag : hat >
+Kostenvoranschlag "1" *-- "1..*" KvaPosition : besteht aus >
+KvaPosition "0..*" -- "0..1" Ersatzteil : referenziert >
+Reparaturauftrag "1" *-- "0..*" Reparaturschritt : gliedert sich in >
+Reparaturschritt "1" -- "0..*" Arbeitszeitbuchung : erfasst >
+Arbeitszeitbuchung "0..*" -- "1" Techniker : gebucht von >
+Reparaturauftrag "0..*" -- "0..1" Techniker : zugewiesen an >
+Ersatzteil "1" -- "0..*" Lagerbestand : gefuehrt als >
+Lagerbestand "0..*" -- "1" Filiale : liegt in >
+ErsatzteilReservierung "0..*" -- "1" Lagerbestand : reserviert auf >
+ErsatzteilReservierung "0..*" -- "1" Reparaturauftrag : fuer >
+Lieferant "1" -- "0..*" Lieferantenbestellung : erhaelt >
+Lieferantenbestellung "1" *-- "1..*" Bestellposition : besteht aus >
+Bestellposition "0..*" -- "1" Ersatzteil : betrifft >
+Lieferantenbestellung "0..*" -- "1" Filiale : bestellt von >
+Reparaturauftrag "1" -- "0..1" Rechnung : abgerechnet mit >
+Reparaturauftrag "1" -- "0..*" Reklamation : reklamiert als >
+@enduml

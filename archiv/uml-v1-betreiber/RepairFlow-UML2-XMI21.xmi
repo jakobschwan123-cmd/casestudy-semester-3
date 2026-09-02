@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1">
+  <xmi:Documentation exporter="RepairFlow XMI Generator" exporterVersion="1.0"/>
+  <uml:Model xmi:id="id_0001" name="RepairFlow">
+    <packagedElement xmi:type="uml:Package" xmi:id="id_0002" name="Datentypen">
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0003" name="String"/>
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0004" name="int"/>
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0005" name="double"/>
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0006" name="boolean"/>
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0007" name="Date"/>
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0008" name="Long"/>
+      <packagedElement xmi:type="uml:PrimitiveType" xmi:id="id_0009" name="void"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="id_0010" name="Klassenmodell (cd RepairFlow)">
+      <packagedElement xmi:type="uml:Enumeration" xmi:id="id_0011" name="AuftragStatus">
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0012" name="ANGENOMMEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0013" name="IN_DIAGNOSE"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0014" name="KVA_OFFEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0015" name="FREIGEGEBEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0016" name="ABGELEHNT"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0017" name="TEILE_BESTELLT"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0018" name="IN_REPARATUR"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0019" name="FERTIG"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0020" name="ABGEHOLT"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Enumeration" xmi:id="id_0021" name="KvaStatus">
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0022" name="ENTWURF"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0023" name="VERSENDET"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0024" name="FREIGEGEBEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0025" name="ABGELEHNT"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Enumeration" xmi:id="id_0026" name="ReservierungStatus">
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0027" name="RESERVIERT"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0028" name="ENTNOMMEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0029" name="STORNIERT"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Enumeration" xmi:id="id_0030" name="BestellStatus">
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0031" name="OFFEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0032" name="BESTAETIGT"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0033" name="WARENEINGANG"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0034" name="STORNIERT"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Enumeration" xmi:id="id_0035" name="ZahlungStatus">
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0036" name="OFFEN"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0037" name="BEZAHLT"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0038" name="MAHNUNG"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Enumeration" xmi:id="id_0039" name="GeraeteTyp">
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0040" name="FAHRRAD"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0041" name="EBIKE"/>
+        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="id_0042" name="ELEKTRONIK"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0043" name="Person" isAbstract="true">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0044" name="id" visibility="protected" type="id_0008"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0045" name="name" visibility="protected" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0046" name="telefon" visibility="protected" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0047" name="email" visibility="protected" type="id_0003"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0048" name="getKontakt" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0049" direction="return" type="id_0003"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0050" name="Kunde">
+        <generalization xmi:type="uml:Generalization" xmi:id="id_0051" general="id_0043"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0052" name="kundennummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0053" name="adresse" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0054" name="benachrichtigungskanal" visibility="private" type="id_0003"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0055" name="legeAuftragAn" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0056" name="g" direction="in" type="id_0057"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0058" direction="return" type="id_0059"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0060" name="gibKvaFrei" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0061" name="kva" direction="in" type="id_0062"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0063" name="lehneKvaAb" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0064" name="kva" direction="in" type="id_0062"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0065" name="grund" direction="in" type="id_0003"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0066" name="meldeMangel" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0067" name="a" direction="in" type="id_0059"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0068" name="beschreibung" direction="in" type="id_0003"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0069" direction="return" type="id_0070"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0071" name="Mitarbeiter" isAbstract="true">
+        <generalization xmi:type="uml:Generalization" xmi:id="id_0072" general="id_0043"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0073" name="personalnummer" visibility="protected" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0074" name="rolle" visibility="protected" type="id_0003"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0075" name="Techniker">
+        <generalization xmi:type="uml:Generalization" xmi:id="id_0076" general="id_0071"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0077" name="qualifikation" visibility="private" type="id_0003"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0078" name="erfasseBefund" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0079" name="a" direction="in" type="id_0059"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0080" direction="return" type="id_0081"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0082" name="bucheArbeitszeit" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0083" name="s" direction="in" type="id_0084"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0085" name="dauer" direction="in" type="id_0004"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0086" direction="return" type="id_0087"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0088" name="Werkstattleiter">
+        <generalization xmi:type="uml:Generalization" xmi:id="id_0089" general="id_0071"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0090" name="weiseTechnikerZu" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0091" name="a" direction="in" type="id_0059"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0092" name="t" direction="in" type="id_0075"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0093" name="pruefeAuslastung" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0094" name="f" direction="in" type="id_0095"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0096" direction="return" type="id_0005"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0097" name="Disponent">
+        <generalization xmi:type="uml:Generalization" xmi:id="id_0098" general="id_0071"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0099" name="pruefeVerfuegbarkeit" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0100" name="e" direction="in" type="id_0101"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0102" name="menge" direction="in" type="id_0004"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0103" direction="return" type="id_0006"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0104" name="loeseBestellungAus" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0105" name="l" direction="in" type="id_0106"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0107" direction="return" type="id_0108"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0095" name="Filiale">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0109" name="filialnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0110" name="name" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0111" name="adresse" visibility="private" type="id_0003"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0112" name="getAuslastung" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0113" name="von" direction="in" type="id_0007"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0114" name="bis" direction="in" type="id_0007"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0115" direction="return" type="id_0005"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0116" name="pruefeBestand" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0117" name="e" direction="in" type="id_0101"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0118" direction="return" type="id_0004"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0106" name="Lieferant">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0119" name="lieferantennummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0120" name="name" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0121" name="lieferzeitTage" visibility="private" type="id_0004"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0122" name="bestaetigeBestellung" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0123" name="b" direction="in" type="id_0108"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0124" direction="return" type="id_0007"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0059" name="Reparaturauftrag">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0125" name="auftragsnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0126" name="eingangsdatum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0127" name="status" visibility="private" type="id_0011"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0128" name="wechsleStatus" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0129" name="neu" direction="in" type="id_0011"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0130" name="fertigmelden" visibility="public">
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0131" name="benachrichtigeKunde" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0132" name="text" direction="in" type="id_0003"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0133" name="alleSchritteAbgeschlossen" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0134" direction="return" type="id_0006"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0135" name="ermittleTeilebedarf" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0136" direction="return" type="id_0101"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0057" name="Geraet">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0137" name="seriennummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0138" name="hersteller" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0139" name="modell" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0140" name="typ" visibility="private" type="id_0039"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0081" name="Fehlerbefund">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0141" name="befundnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0142" name="datum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0143" name="beschreibung" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0144" name="schweregrad" visibility="private" type="id_0004"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0145" name="istReparaturLohnend" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0146" direction="return" type="id_0006"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0062" name="Kostenvoranschlag">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0147" name="kvaNummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0148" name="erstelldatum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0149" name="gueltigBis" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0150" name="status" visibility="private" type="id_0021"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0151" name="fuegePositionHinzu" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0152" name="p" direction="in" type="id_0153"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0154" name="berechneSumme" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0155" direction="return" type="id_0005"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0156" name="versendeAnKunde" visibility="public">
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0157" name="setzeStatus" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0158" name="s" direction="in" type="id_0021"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0153" name="KvaPosition">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0159" name="bezeichnung" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0160" name="menge" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0161" name="einzelpreis" visibility="private" type="id_0005"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0162" name="zwischensumme" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0163" direction="return" type="id_0005"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0084" name="Reparaturschritt">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0164" name="schrittnummer" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0165" name="beschreibung" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0166" name="abgeschlossen" visibility="private" type="id_0006"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0167" name="markiereErledigt" visibility="public">
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0087" name="Arbeitszeitbuchung">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0168" name="datum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0169" name="dauerMinuten" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0170" name="stundensatz" visibility="private" type="id_0005"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0171" name="berechneKosten" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0172" direction="return" type="id_0005"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0101" name="Ersatzteil">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0173" name="artikelnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0174" name="bezeichnung" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0175" name="einkaufspreis" visibility="private" type="id_0005"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0176" name="verkaufspreis" visibility="private" type="id_0005"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0177" name="getVorzugslieferant" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0178" direction="return" type="id_0106"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0179" name="Lagerbestand">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0180" name="menge" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0181" name="reserviert" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0182" name="meldebestand" visibility="private" type="id_0004"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0183" name="pruefeVerfuegbarkeit" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0184" name="anzahl" direction="in" type="id_0004"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0185" direction="return" type="id_0006"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0186" name="bucheZugang" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0187" name="anzahl" direction="in" type="id_0004"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0188" name="bucheAbgang" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0189" name="anzahl" direction="in" type="id_0004"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0190" name="istMeldebestandUnterschritten" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0191" direction="return" type="id_0006"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0192" name="ErsatzteilReservierung">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0193" name="reservierungsnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0194" name="menge" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0195" name="datum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0196" name="status" visibility="private" type="id_0026"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0197" name="reserviere" visibility="public">
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0198" name="storniere" visibility="public">
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0199" name="entnehmen" visibility="public">
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0108" name="Lieferantenbestellung">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0200" name="bestellnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0201" name="bestelldatum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0202" name="liefertermin" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0203" name="status" visibility="private" type="id_0030"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0204" name="fuegePositionHinzu" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0205" name="e" direction="in" type="id_0101"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0206" name="menge" direction="in" type="id_0004"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0207" direction="return" type="id_0208"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0209" name="uebermittle" visibility="public">
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0210" name="bucheWareneingang" visibility="public">
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0211" name="berechneBestellwert" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0212" direction="return" type="id_0005"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0208" name="Bestellposition">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0213" name="menge" visibility="private" type="id_0004"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0214" name="einzelpreis" visibility="private" type="id_0005"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0215" name="positionswert" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0216" direction="return" type="id_0005"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0217" name="Rechnung">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0218" name="rechnungsnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0219" name="rechnungsdatum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0220" name="bruttobetrag" visibility="private" type="id_0005"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0221" name="zahlungStatus" visibility="private" type="id_0035"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0222" name="berechneBetrag" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0223" direction="return" type="id_0005"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0224" name="erfasseZahlung" visibility="public">
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="id_0070" name="Reklamation">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0225" name="reklamationsnummer" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0226" name="datum" visibility="private" type="id_0007"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0227" name="grund" visibility="private" type="id_0003"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="id_0228" name="istGewaehrleistung" visibility="private" type="id_0006"/>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0229" name="pruefeGewaehrleistung" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0230" direction="return" type="id_0006"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0231" name="legeNachbesserungAn" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="id_0232" direction="return" type="id_0059"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="id_0233" name="schliesseAb" visibility="public">
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0234" name="beauftragt" memberEnd="id_0235 id_0236">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0235" type="id_0050" association="id_0234"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0237" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0238" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0236" type="id_0059" association="id_0234"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0239" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0240" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0241" name="betrifft" memberEnd="id_0242 id_0243">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0242" type="id_0059" association="id_0241" aggregation="composite"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0244" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0245" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0243" type="id_0057" association="id_0241"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0246" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0247" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0248" name="bearbeitet in" memberEnd="id_0249 id_0250">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0249" type="id_0059" association="id_0248"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0251" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0252" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0250" type="id_0095" association="id_0248"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0253" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0254" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0255" name="arbeitet in" memberEnd="id_0256 id_0257">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0256" type="id_0071" association="id_0255"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0258" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0259" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0257" type="id_0095" association="id_0255"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0260" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0261" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0262" name="hat" memberEnd="id_0263 id_0264">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0263" type="id_0059" association="id_0262" aggregation="composite"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0265" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0266" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0264" type="id_0081" association="id_0262"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0267" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0268" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0269" name="erstellt von" memberEnd="id_0270 id_0271">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0270" type="id_0081" association="id_0269"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0272" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0273" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0271" type="id_0075" association="id_0269"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0274" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0275" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0276" name="hat" memberEnd="id_0277 id_0278">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0277" type="id_0059" association="id_0276" aggregation="composite"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0279" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0280" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0278" type="id_0062" association="id_0276"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0281" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0282" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0283" name="besteht aus" memberEnd="id_0284 id_0285">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0284" type="id_0062" association="id_0283" aggregation="composite"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0286" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0287" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0285" type="id_0153" association="id_0283"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0288" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0289" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0290" name="referenziert" memberEnd="id_0291 id_0292">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0291" type="id_0153" association="id_0290"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0293" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0294" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0292" type="id_0101" association="id_0290"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0295" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0296" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0297" name="gliedert sich in" memberEnd="id_0298 id_0299">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0298" type="id_0059" association="id_0297" aggregation="composite"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0300" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0301" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0299" type="id_0084" association="id_0297"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0302" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0303" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0304" name="erfasst" memberEnd="id_0305 id_0306">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0305" type="id_0084" association="id_0304"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0307" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0308" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0306" type="id_0087" association="id_0304"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0309" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0310" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0311" name="gebucht von" memberEnd="id_0312 id_0313">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0312" type="id_0087" association="id_0311"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0314" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0315" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0313" type="id_0075" association="id_0311"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0316" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0317" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0318" name="zugewiesen an" memberEnd="id_0319 id_0320">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0319" type="id_0059" association="id_0318"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0321" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0322" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0320" type="id_0075" association="id_0318"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0323" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0324" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0325" name="gefuehrt als" memberEnd="id_0326 id_0327">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0326" type="id_0101" association="id_0325"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0328" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0329" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0327" type="id_0179" association="id_0325"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0330" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0331" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0332" name="liegt in" memberEnd="id_0333 id_0334">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0333" type="id_0179" association="id_0332"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0335" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0336" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0334" type="id_0095" association="id_0332"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0337" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0338" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0339" name="reserviert auf" memberEnd="id_0340 id_0341">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0340" type="id_0192" association="id_0339"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0342" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0343" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0341" type="id_0179" association="id_0339"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0344" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0345" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0346" name="fuer" memberEnd="id_0347 id_0348">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0347" type="id_0192" association="id_0346"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0349" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0350" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0348" type="id_0059" association="id_0346"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0351" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0352" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0353" name="erhaelt" memberEnd="id_0354 id_0355">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0354" type="id_0106" association="id_0353"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0356" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0357" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0355" type="id_0108" association="id_0353"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0358" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0359" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0360" name="besteht aus" memberEnd="id_0361 id_0362">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0361" type="id_0108" association="id_0360" aggregation="composite"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0363" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0364" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0362" type="id_0208" association="id_0360"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0365" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0366" value="*"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0367" name="betrifft" memberEnd="id_0368 id_0369">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0368" type="id_0208" association="id_0367"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0370" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0371" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0369" type="id_0101" association="id_0367"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0372" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0373" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0374" name="bestellt von" memberEnd="id_0375 id_0376">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0375" type="id_0108" association="id_0374"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0377" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0378" value="*"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0376" type="id_0095" association="id_0374"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0379" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0380" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0381" name="abgerechnet mit" memberEnd="id_0382 id_0383">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0382" type="id_0059" association="id_0381"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0384" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0385" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0383" type="id_0217" association="id_0381"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0386" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0387" value="1"/></ownedEnd>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0388" name="reklamiert als" memberEnd="id_0389 id_0390">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0389" type="id_0059" association="id_0388"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0391" value="1"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0392" value="1"/></ownedEnd>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0390" type="id_0070" association="id_0388"><lowerValue xmi:type="uml:LiteralInteger" xmi:id="id_0393" value="0"/><upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="id_0394" value="*"/></ownedEnd>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="id_0395" name="Use-Case-Modell (ud RepairFlow)">
+      <packagedElement xmi:type="uml:Actor" xmi:id="id_0396" name="Kunde"/>
+      <packagedElement xmi:type="uml:Actor" xmi:id="id_0397" name="Serviceannahme"/>
+      <packagedElement xmi:type="uml:Actor" xmi:id="id_0398" name="Techniker"/>
+      <packagedElement xmi:type="uml:Actor" xmi:id="id_0399" name="Disponent"/>
+      <packagedElement xmi:type="uml:Actor" xmi:id="id_0400" name="Werkstattleiter"/>
+      <packagedElement xmi:type="uml:Actor" xmi:id="id_0401" name="Lieferant"/>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0402" name="Reparaturauftrag anlegen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0403" name="Diagnosebefund erfassen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0404" name="KVA erstellen">
+        <include xmi:type="uml:Include" xmi:id="id_0405" addition="id_0403"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0406" name="KVA freigeben/ablehnen">
+        <extend xmi:type="uml:Extend" xmi:id="id_0407" extendedCase="id_0402"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0408" name="Ersatzteil-Verfuegbarkeit pruefen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0409" name="Ersatzteil reservieren">
+        <include xmi:type="uml:Include" xmi:id="id_0410" addition="id_0408"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0411" name="Lieferantenbestellung ausloesen">
+        <include xmi:type="uml:Include" xmi:id="id_0412" addition="id_0409"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0413" name="Wareneingang buchen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0414" name="Reparaturschritt/Arbeitszeit erfassen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0415" name="Auftrag fertigmelden + Kunde benachrichtigen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0416" name="Rechnung erstellen + Zahlung erfassen">
+        <include xmi:type="uml:Include" xmi:id="id_0417" addition="id_0415"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0418" name="Reklamation bearbeiten">
+        <extend xmi:type="uml:Extend" xmi:id="id_0419" extendedCase="id_0416"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0420" name="Werkstatttermin planen + Techniker zuweisen">
+      </packagedElement>
+      <packagedElement xmi:type="uml:UseCase" xmi:id="id_0421" name="Nachbestellvorschlag bei Meldebestand">
+        <extend xmi:type="uml:Extend" xmi:id="id_0422" extendedCase="id_0408"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0423" memberEnd="id_0424 id_0425">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0424" type="id_0396" association="id_0423"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0425" type="id_0402" association="id_0423"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0426" memberEnd="id_0427 id_0428">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0427" type="id_0396" association="id_0426"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0428" type="id_0406" association="id_0426"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0429" memberEnd="id_0430 id_0431">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0430" type="id_0396" association="id_0429"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0431" type="id_0416" association="id_0429"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0432" memberEnd="id_0433 id_0434">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0433" type="id_0396" association="id_0432"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0434" type="id_0418" association="id_0432"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0435" memberEnd="id_0436 id_0437">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0436" type="id_0397" association="id_0435"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0437" type="id_0402" association="id_0435"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0438" memberEnd="id_0439 id_0440">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0439" type="id_0397" association="id_0438"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0440" type="id_0416" association="id_0438"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0441" memberEnd="id_0442 id_0443">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0442" type="id_0397" association="id_0441"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0443" type="id_0418" association="id_0441"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0444" memberEnd="id_0445 id_0446">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0445" type="id_0398" association="id_0444"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0446" type="id_0403" association="id_0444"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0447" memberEnd="id_0448 id_0449">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0448" type="id_0398" association="id_0447"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0449" type="id_0404" association="id_0447"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0450" memberEnd="id_0451 id_0452">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0451" type="id_0398" association="id_0450"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0452" type="id_0414" association="id_0450"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0453" memberEnd="id_0454 id_0455">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0454" type="id_0398" association="id_0453"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0455" type="id_0415" association="id_0453"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0456" memberEnd="id_0457 id_0458">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0457" type="id_0399" association="id_0456"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0458" type="id_0408" association="id_0456"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0459" memberEnd="id_0460 id_0461">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0460" type="id_0399" association="id_0459"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0461" type="id_0409" association="id_0459"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0462" memberEnd="id_0463 id_0464">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0463" type="id_0399" association="id_0462"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0464" type="id_0411" association="id_0462"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0465" memberEnd="id_0466 id_0467">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0466" type="id_0399" association="id_0465"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0467" type="id_0413" association="id_0465"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0468" memberEnd="id_0469 id_0470">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0469" type="id_0399" association="id_0468"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0470" type="id_0421" association="id_0468"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0471" memberEnd="id_0472 id_0473">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0472" type="id_0400" association="id_0471"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0473" type="id_0420" association="id_0471"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0474" memberEnd="id_0475 id_0476">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0475" type="id_0400" association="id_0474"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0476" type="id_0418" association="id_0474"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0477" memberEnd="id_0478 id_0479">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0478" type="id_0401" association="id_0477"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0479" type="id_0411" association="id_0477"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="id_0480" memberEnd="id_0481 id_0482">
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0481" type="id_0401" association="id_0480"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="id_0482" type="id_0413" association="id_0480"/>
+      </packagedElement>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>

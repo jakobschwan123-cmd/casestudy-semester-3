@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_09" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:collaboration id="Collab_09">
+    <bpmn:documentation>Meldet der Kunde nach der Abholung einen Mangel, wird die Reklamation dem Ursprungsauftrag zugeordnet, der Mangel geprueft und der Gewaehrleistungsfall bewertet. Je nach Ergebnis folgt kostenfreie Nacharbeit oder ein kostenpflichtiges Angebot.</bpmn:documentation>
+    <bpmn:participant id="Part_09_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_09" />
+    <bpmn:participant id="Part_09_Kunde" name="Kunde" />
+    <bpmn:messageFlow id="MsgFlow_09_1" name="Mangelmeldung" sourceRef="Part_09_Kunde" targetRef="Start_09" />
+    <bpmn:messageFlow id="MsgFlow_09_2" name="Angebot" sourceRef="T09_Angebot" targetRef="Part_09_Kunde" />
+    <bpmn:messageFlow id="MsgFlow_09_3" name="Annahme / Ablehnung" sourceRef="Part_09_Kunde" targetRef="T09_Entscheidung" />
+    <bpmn:messageFlow id="MsgFlow_09_4" name="Ergebnis" sourceRef="T09_Info" targetRef="Part_09_Kunde" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_09" name="09 Reklamation und Gewährleistung" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_09">
+      <bpmn:lane id="Lane_09_1" name="Techniker">
+        <bpmn:flowNodeRef>T09_Pruefen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Bewerten</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW09_Gewaehr</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_09a</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Nacharbeit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW09_Teil</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Retoure</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_09b</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_09_2" name="Service / Annahme">
+        <bpmn:flowNodeRef>Start_09</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Erfassen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Zuordnen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Annehmen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Angebot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Entscheidung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW09_Angebot</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_OhneReparatur</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Info</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T09_Abschluss</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_09c</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_09</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_09_3" name="Werkstattleitung">
+        <bpmn:flowNodeRef>T09_Freigeben</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_09" name="Mangel gemeldet">
+      <bpmn:outgoing>Flow_09_1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="Start_09_def" messageRef="Msg_09_1" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="T09_Erfassen" name="Reklamation erfassen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t09_erfassen" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_2</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T09_Erfassen_out_DataObjRef_09_1">
+        <bpmn:targetRef>DataObjRef_09_1</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="T09_Zuordnen" name="Ursprungsauftrag und Rechnung zuordnen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t09_zuordnen" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_3</bpmn:outgoing>
+      <bpmn:property id="T09_Zuordnen_prop_DataObjRef_09_2" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T09_Zuordnen_in_DataObjRef_09_2">
+        <bpmn:sourceRef>DataObjRef_09_2</bpmn:sourceRef>
+        <bpmn:targetRef>T09_Zuordnen_prop_DataObjRef_09_2</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="T09_Annehmen" name="Gerät annehmen und Mangel dokumentieren">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t09_annehmen" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="T09_Pruefen" name="Mangel prüfen">
+      <bpmn:incoming>Flow_09_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_5</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:businessRuleTask id="T09_Bewerten" name="Gewährleistungsfall bewerten">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.gewaehrleistung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_6</bpmn:outgoing>
+      <bpmn:property id="T09_Bewerten_prop_DataObjRef_09_3" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T09_Bewerten_in_DataObjRef_09_3">
+        <bpmn:sourceRef>DataObjRef_09_3</bpmn:sourceRef>
+        <bpmn:targetRef>T09_Bewerten_prop_DataObjRef_09_3</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:businessRuleTask>
+    <bpmn:exclusiveGateway id="GW09_Gewaehr" name="Gewährleistung?">
+      <bpmn:incoming>Flow_09_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_7</bpmn:outgoing>
+      <bpmn:outgoing>Flow_09_8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T09_Freigeben" name="Kostenfreie Nacharbeit freigeben">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t09_freigeben" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_13</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="T09_Angebot" name="Kostenpflichtiges Angebot senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t09_angebot" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_9</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:receiveTask id="T09_Entscheidung" name="Kundenentscheidung empfangen" messageRef="Msg_09_2">
+      <bpmn:incoming>Flow_09_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_10</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:exclusiveGateway id="GW09_Angebot" name="Angebot angenommen?">
+      <bpmn:incoming>Flow_09_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_11</bpmn:outgoing>
+      <bpmn:outgoing>Flow_09_12</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T09_OhneReparatur" name="Reklamation ohne Reparatur schließen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t09_ohnereparatur" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_22</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Join_09a" name="">
+      <bpmn:incoming>Flow_09_11</bpmn:incoming>
+      <bpmn:incoming>Flow_09_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_14</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T09_Nacharbeit" name="Nacharbeit durchführen">
+      <bpmn:incoming>Flow_09_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_15</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="GW09_Teil" name="Lieferantenteil defekt?">
+      <bpmn:incoming>Flow_09_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_16</bpmn:outgoing>
+      <bpmn:outgoing>Flow_09_17</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:callActivity id="T09_Retoure" name="10 Lieferanten-Retoure">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="Proc_10" propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_18</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:exclusiveGateway id="Join_09b" name="">
+      <bpmn:incoming>Flow_09_17</bpmn:incoming>
+      <bpmn:incoming>Flow_09_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="T09_Info" name="Kunde über Ergebnis informieren">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t09_info" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_20</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:serviceTask id="T09_Abschluss" name="Reklamation abschließen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t09_abschluss" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_21</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T09_Abschluss_out_DataStore_09_1">
+        <bpmn:targetRef>DataStore_09_1</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Join_09c" name="">
+      <bpmn:incoming>Flow_09_21</bpmn:incoming>
+      <bpmn:incoming>Flow_09_22</bpmn:incoming>
+      <bpmn:outgoing>Flow_09_23</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_09" name="Reklamation abgeschlossen">
+      <bpmn:incoming>Flow_09_23</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_09_1" sourceRef="Start_09" targetRef="T09_Erfassen" />
+    <bpmn:sequenceFlow id="Flow_09_2" sourceRef="T09_Erfassen" targetRef="T09_Zuordnen" />
+    <bpmn:sequenceFlow id="Flow_09_3" sourceRef="T09_Zuordnen" targetRef="T09_Annehmen" />
+    <bpmn:sequenceFlow id="Flow_09_4" sourceRef="T09_Annehmen" targetRef="T09_Pruefen" />
+    <bpmn:sequenceFlow id="Flow_09_5" sourceRef="T09_Pruefen" targetRef="T09_Bewerten" />
+    <bpmn:sequenceFlow id="Flow_09_6" sourceRef="T09_Bewerten" targetRef="GW09_Gewaehr" />
+    <bpmn:sequenceFlow id="Flow_09_7" sourceRef="GW09_Gewaehr" targetRef="T09_Freigeben" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=gewaehrleistung</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_8" sourceRef="GW09_Gewaehr" targetRef="T09_Angebot" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(gewaehrleistung)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_9" sourceRef="T09_Angebot" targetRef="T09_Entscheidung" />
+    <bpmn:sequenceFlow id="Flow_09_10" sourceRef="T09_Entscheidung" targetRef="GW09_Angebot" />
+    <bpmn:sequenceFlow id="Flow_09_11" sourceRef="GW09_Angebot" targetRef="Join_09a" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=angebotAngenommen</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_12" sourceRef="GW09_Angebot" targetRef="T09_OhneReparatur" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(angebotAngenommen)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_13" sourceRef="T09_Freigeben" targetRef="Join_09a" />
+    <bpmn:sequenceFlow id="Flow_09_14" sourceRef="Join_09a" targetRef="T09_Nacharbeit" />
+    <bpmn:sequenceFlow id="Flow_09_15" sourceRef="T09_Nacharbeit" targetRef="GW09_Teil" />
+    <bpmn:sequenceFlow id="Flow_09_16" sourceRef="GW09_Teil" targetRef="T09_Retoure" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=lieferantenteilDefekt</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_17" sourceRef="GW09_Teil" targetRef="Join_09b" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(lieferantenteilDefekt)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_18" sourceRef="T09_Retoure" targetRef="Join_09b" />
+    <bpmn:sequenceFlow id="Flow_09_19" sourceRef="Join_09b" targetRef="T09_Info" />
+    <bpmn:sequenceFlow id="Flow_09_20" sourceRef="T09_Info" targetRef="T09_Abschluss" />
+    <bpmn:sequenceFlow id="Flow_09_21" sourceRef="T09_Abschluss" targetRef="Join_09c" />
+    <bpmn:sequenceFlow id="Flow_09_22" sourceRef="T09_OhneReparatur" targetRef="Join_09c" />
+    <bpmn:sequenceFlow id="Flow_09_23" sourceRef="Join_09c" targetRef="End_09" />
+    <bpmn:dataObjectReference id="DataObjRef_09_1" name="Reklamation" dataObjectRef="DataObj_09_1" />
+    <bpmn:dataObject id="DataObj_09_1" />
+    <bpmn:dataObjectReference id="DataObjRef_09_2" name="Reparatur-auftrag" dataObjectRef="DataObj_09_2" />
+    <bpmn:dataObject id="DataObj_09_2" />
+    <bpmn:dataObjectReference id="DataObjRef_09_3" name="Fehlerbefund" dataObjectRef="DataObj_09_3" />
+    <bpmn:dataObject id="DataObj_09_3" />
+    <bpmn:dataStoreReference id="DataStore_09_1" name="RepairFlow-Datenbank" />
+  </bpmn:process>
+  <bpmn:message id="Msg_09_1" name="Reklamation">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Msg_09_2" name="Angebotsentscheidung">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="Diagram_09">
+    <bpmndi:BPMNPlane id="Plane_09" bpmnElement="Collab_09">
+      <bpmndi:BPMNShape id="Part_09_Werkstatt_di" bpmnElement="Part_09_Werkstatt" isHorizontal="true">
+        <dc:Bounds x="120" y="250" width="3655" height="930" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_09_1_di" bpmnElement="Lane_09_1" isHorizontal="true">
+        <dc:Bounds x="150" y="250" width="3625" height="340" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_09_2_di" bpmnElement="Lane_09_2" isHorizontal="true">
+        <dc:Bounds x="150" y="590" width="3625" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_09_3_di" bpmnElement="Lane_09_3" isHorizontal="true">
+        <dc:Bounds x="150" y="1010" width="3625" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Part_09_Kunde_di" bpmnElement="Part_09_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="3655" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_09_di" bpmnElement="Start_09">
+        <dc:Bounds x="227" y="710" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="190" y="752" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Erfassen_di" bpmnElement="T09_Erfassen">
+        <dc:Bounds x="370" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Zuordnen_di" bpmnElement="T09_Zuordnen">
+        <dc:Bounds x="560" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Annehmen_di" bpmnElement="T09_Annehmen">
+        <dc:Bounds x="750" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Pruefen_di" bpmnElement="T09_Pruefen">
+        <dc:Bounds x="940" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Bewerten_di" bpmnElement="T09_Bewerten">
+        <dc:Bounds x="1130" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW09_Gewaehr_di" bpmnElement="GW09_Gewaehr">
+        <dc:Bounds x="1360" y="362" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1232" y="332" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Freigeben_di" bpmnElement="T09_Freigeben">
+        <dc:Bounds x="1510" y="1052" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Angebot_di" bpmnElement="T09_Angebot">
+        <dc:Bounds x="1510" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Entscheidung_di" bpmnElement="T09_Entscheidung">
+        <dc:Bounds x="1700" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW09_Angebot_di" bpmnElement="GW09_Angebot">
+        <dc:Bounds x="1930" y="702" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1802" y="672" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_OhneReparatur_di" bpmnElement="T09_OhneReparatur">
+        <dc:Bounds x="2270" y="802" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_09a_di" bpmnElement="Join_09a">
+        <dc:Bounds x="2120" y="362" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Nacharbeit_di" bpmnElement="T09_Nacharbeit">
+        <dc:Bounds x="2270" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW09_Teil_di" bpmnElement="GW09_Teil">
+        <dc:Bounds x="2500" y="362" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2450" y="328" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Retoure_di" bpmnElement="T09_Retoure">
+        <dc:Bounds x="2650" y="462" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_09b_di" bpmnElement="Join_09b">
+        <dc:Bounds x="2880" y="362" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Info_di" bpmnElement="T09_Info">
+        <dc:Bounds x="3030" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T09_Abschluss_di" bpmnElement="T09_Abschluss">
+        <dc:Bounds x="3220" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_09c_di" bpmnElement="Join_09c">
+        <dc:Bounds x="3450" y="702" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_09_di" bpmnElement="End_09">
+        <dc:Bounds x="3647" y="710" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3610" y="752" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_09_1_di" bpmnElement="DataObjRef_09_1">
+        <dc:Bounds x="469" y="602" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="345" y="614" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_09_2_di" bpmnElement="DataObjRef_09_2">
+        <dc:Bounds x="659" y="602" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="535" y="614" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_09_3_di" bpmnElement="DataObjRef_09_3">
+        <dc:Bounds x="1229" y="262" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1105" y="274" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_09_1_di" bpmnElement="DataStore_09_1">
+        <dc:Bounds x="3185" y="948" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3061" y="960" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_09_1_di" bpmnElement="Flow_09_1">
+        <di:waypoint x="263" y="728" />
+        <di:waypoint x="370" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_2_di" bpmnElement="Flow_09_2">
+        <di:waypoint x="500" y="728" />
+        <di:waypoint x="560" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_3_di" bpmnElement="Flow_09_3">
+        <di:waypoint x="690" y="728" />
+        <di:waypoint x="750" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_4_di" bpmnElement="Flow_09_4">
+        <di:waypoint x="880" y="728" />
+        <di:waypoint x="1005" y="728" />
+        <di:waypoint x="1005" y="428" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_5_di" bpmnElement="Flow_09_5">
+        <di:waypoint x="1070" y="388" />
+        <di:waypoint x="1130" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_6_di" bpmnElement="Flow_09_6">
+        <di:waypoint x="1260" y="388" />
+        <di:waypoint x="1360" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_7_di" bpmnElement="Flow_09_7">
+        <di:waypoint x="1385" y="412" />
+        <di:waypoint x="1385" y="1092" />
+        <di:waypoint x="1510" y="1092" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1392" y="422" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_8_di" bpmnElement="Flow_09_8">
+        <di:waypoint x="1410" y="388" />
+        <di:waypoint x="1575" y="388" />
+        <di:waypoint x="1575" y="688" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1416" y="364" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_9_di" bpmnElement="Flow_09_9">
+        <di:waypoint x="1640" y="728" />
+        <di:waypoint x="1700" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_10_di" bpmnElement="Flow_09_10">
+        <di:waypoint x="1830" y="728" />
+        <di:waypoint x="1930" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_11_di" bpmnElement="Flow_09_11">
+        <di:waypoint x="1955" y="702" />
+        <di:waypoint x="1955" y="388" />
+        <di:waypoint x="2120" y="388" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1962" y="674" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_12_di" bpmnElement="Flow_09_12">
+        <di:waypoint x="1980" y="728" />
+        <di:waypoint x="2335" y="728" />
+        <di:waypoint x="2335" y="802" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1986" y="704" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_13_di" bpmnElement="Flow_09_13">
+        <di:waypoint x="1640" y="1092" />
+        <di:waypoint x="2145" y="1092" />
+        <di:waypoint x="2145" y="412" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_14_di" bpmnElement="Flow_09_14">
+        <di:waypoint x="2170" y="388" />
+        <di:waypoint x="2270" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_15_di" bpmnElement="Flow_09_15">
+        <di:waypoint x="2400" y="388" />
+        <di:waypoint x="2500" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_16_di" bpmnElement="Flow_09_16">
+        <di:waypoint x="2525" y="412" />
+        <di:waypoint x="2525" y="502" />
+        <di:waypoint x="2650" y="502" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2532" y="422" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_17_di" bpmnElement="Flow_09_17">
+        <di:waypoint x="2550" y="388" />
+        <di:waypoint x="2880" y="388" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2556" y="364" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_18_di" bpmnElement="Flow_09_18">
+        <di:waypoint x="2780" y="502" />
+        <di:waypoint x="2905" y="502" />
+        <di:waypoint x="2905" y="412" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_19_di" bpmnElement="Flow_09_19">
+        <di:waypoint x="2905" y="412" />
+        <di:waypoint x="2905" y="728" />
+        <di:waypoint x="3030" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_20_di" bpmnElement="Flow_09_20">
+        <di:waypoint x="3160" y="728" />
+        <di:waypoint x="3220" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_21_di" bpmnElement="Flow_09_21">
+        <di:waypoint x="3350" y="728" />
+        <di:waypoint x="3450" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_22_di" bpmnElement="Flow_09_22">
+        <di:waypoint x="2400" y="842" />
+        <di:waypoint x="3475" y="842" />
+        <di:waypoint x="3475" y="752" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09_23_di" bpmnElement="Flow_09_23">
+        <di:waypoint x="3500" y="728" />
+        <di:waypoint x="3647" y="728" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_09_1_di" bpmnElement="MsgFlow_09_1">
+        <di:waypoint x="245" y="115" />
+        <di:waypoint x="245" y="710" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="253" y="402" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_09_2_di" bpmnElement="MsgFlow_09_2">
+        <di:waypoint x="1605" y="688" />
+        <di:waypoint x="1605" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1613" y="391" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_09_3_di" bpmnElement="MsgFlow_09_3">
+        <di:waypoint x="1795" y="115" />
+        <di:waypoint x="1795" y="688" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1803" y="391" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_09_4_di" bpmnElement="MsgFlow_09_4">
+        <di:waypoint x="3125" y="688" />
+        <di:waypoint x="3125" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3133" y="391" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T09_Erfassen_out_DataObjRef_09_1_di" bpmnElement="T09_Erfassen_out_DataObjRef_09_1">
+        <di:waypoint x="475" y="688" />
+        <di:waypoint x="487" y="652" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T09_Zuordnen_in_DataObjRef_09_2_di" bpmnElement="T09_Zuordnen_in_DataObjRef_09_2">
+        <di:waypoint x="677" y="652" />
+        <di:waypoint x="665" y="688" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T09_Bewerten_in_DataObjRef_09_3_di" bpmnElement="T09_Bewerten_in_DataObjRef_09_3">
+        <di:waypoint x="1247" y="312" />
+        <di:waypoint x="1235" y="348" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T09_Abschluss_out_DataStore_09_1_di" bpmnElement="T09_Abschluss_out_DataStore_09_1">
+        <di:waypoint x="3245" y="768" />
+        <di:waypoint x="3210" y="948" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

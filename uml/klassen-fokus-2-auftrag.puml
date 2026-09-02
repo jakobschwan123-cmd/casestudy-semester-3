@@ -1,0 +1,119 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam classFontSize 11
+skinparam nodesep 25
+skinparam ranksep 45
+hide circle
+title cd : Fokus 2 – Auftragsabwicklung
+
+class Kunde {
+  - kundennummer : String
+  - adresse : String
+  - benachrichtigungskanal : String
+  --
+  + fordereSofortdiagnoseAn(medien : List<Medienanhang>) : Voranmeldung
+  + legeAuftragAn(g : Geraet) : Reparaturauftrag
+  + gibKvaFrei(kva : Kostenvoranschlag) : void
+  + lehneKvaAb(kva : Kostenvoranschlag) : void
+  + meldeMangel(a : Reparaturauftrag, beschreibung : String) : Reklamation
+}
+class Techniker {
+  - qualifikation : String
+  --
+  + pruefeDiagnosevorschlag(v : KIDiagnosevorschlag) : boolean
+  + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
+  + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
+}
+class Reparaturauftrag {
+  - auftragsnummer : String
+  - eingangsdatum : Date
+  - status : AuftragStatus
+  - werkstatttermin : Date
+  --
+  + wechsleStatus(neu : AuftragStatus) : void
+  + alleSchritteAbgeschlossen() : boolean
+  + fertigmelden() : void
+  + benachrichtigeKunde(text : String) : void
+}
+class Geraet {
+  - seriennummer : String
+  - hersteller : String
+  - modell : String
+  - typ : GeraeteTyp
+}
+class Fehlerbefund {
+  - befundnummer : String
+  - datum : Date
+  - beschreibung : String
+  - schweregrad : int
+  --
+  + istReparaturLohnend() : boolean
+}
+class Kostenvoranschlag {
+  - kvaNummer : String
+  - erstelldatum : Date
+  - gueltigBis : Date
+  - status : KvaStatus
+  - vorlaeufig : boolean
+  --
+  + addPosition(p : KvaPosition) : void
+  + getPositionen() : List<KvaPosition>
+  + berechneSumme() : double
+  + versendeAnKunde() : void
+  + freigeben() : void
+  + ablehnen(grund : String) : void
+  + setzeStatus(s : KvaStatus) : void
+}
+class KvaPosition {
+  - bezeichnung : String
+  - menge : int
+  - einzelpreis : double
+  --
+  + zwischensumme() : double
+}
+class Reparaturschritt {
+  - schrittnummer : int
+  - beschreibung : String
+  - abgeschlossen : boolean
+  --
+  + schliesseAb() : void
+}
+class Arbeitszeitbuchung {
+  - datum : Date
+  - dauerMinuten : int
+  - stundensatz : double
+  --
+  + berechneKosten() : double
+}
+class Rechnung {
+  - rechnungsnummer : String
+  - rechnungsdatum : Date
+  - bruttobetrag : double
+  - zahlungStatus : ZahlungStatus
+  --
+  + berechneBetrag() : double
+  + erfasseZahlung(art : String) : void
+}
+class Reklamation {
+  - reklamationsnummer : String
+  - datum : Date
+  - grund : String
+  - istGewaehrleistung : boolean
+  --
+  + pruefeGewaehrleistung() : boolean
+  + schliesseAb() : void
+}
+Kunde "1" -down- "0..*" Reparaturauftrag : beauftragt >
+Reparaturauftrag "1" *-- "1" Geraet : betrifft >
+Reparaturauftrag "0..*" -- "0..1" Techniker : zugewiesen an >
+Reparaturauftrag "1" *-- "0..1" Fehlerbefund : hat >
+Fehlerbefund "0..*" -- "1" Techniker : erstellt von >
+Reparaturauftrag "1" *-- "0..*" Kostenvoranschlag : hat >
+Kostenvoranschlag "1" *-down- "1..*" KvaPosition : besteht aus >
+Reparaturauftrag "1" *-down- "0..*" Reparaturschritt : gliedert sich in >
+Reparaturschritt "1" *-down- "0..*" Arbeitszeitbuchung : erfasst >
+Arbeitszeitbuchung "0..*" -- "1" Techniker : gebucht von >
+Reparaturauftrag "1" -down- "0..1" Rechnung : abgerechnet mit >
+Reparaturauftrag "1" -down- "0..*" Reklamation : reklamiert als >
+@enduml

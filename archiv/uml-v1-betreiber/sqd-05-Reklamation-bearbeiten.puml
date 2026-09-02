@@ -1,0 +1,38 @@
+@startuml sqd-05-Reklamation-bearbeiten
+title sqd : Reklamation bearbeiten
+actor Kunde
+actor Serviceannahme as SA
+participant ": Reklamation" as Rekl
+participant ": Reparaturauftrag" as RA
+participant ": Rechnung" as Re
+participant ": Kostenvoranschlag" as KVA
+
+Kunde -> SA : meldeMangel(auftrag, beschreibung)
+SA -> Rekl : <<create>> Reklamation(auftrag, grund)
+activate Rekl
+Rekl -> RA : status, eingangsdatum
+Rekl -> Re : rechnungsdatum
+Rekl -> Rekl : pruefeGewaehrleistung()
+
+alt innerhalb der Gewaehrleistung
+    Rekl -> Rekl : legeNachbesserungAn()
+    Rekl -> RA : wechsleStatus(ANGENOMMEN)
+    note right of RA : neuer Zyklus, kostenfrei
+    Rekl -> Kunde : benachrichtigeKunde("kostenfreie Nachbesserung")
+else ausserhalb der Gewaehrleistung
+    Rekl -> Kunde : benachrichtigeKunde("kostenpflichtiges Angebot")
+    opt Kunde widerspricht
+        Kunde -> SA : Widerspruch
+        SA -> Rekl : Pruefung durch Werkstattleitung vermerken
+    end
+    alt Kunde akzeptiert Kostenpflicht
+        SA -> KVA : <<create>> Kostenvoranschlag(auftrag)
+        note right of KVA : -> weiter mit sqd 01 (KVA freigeben)
+    else Kunde lehnt ab
+        Rekl -> Rekl : schliesseAb()
+        note right of Rekl : abgeschlossen ohne Reparatur
+    end
+end
+Rekl --> SA : Reklamation bearbeitet
+deactivate Rekl
+@enduml

@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_07" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:collaboration id="Collab_07">
+    <bpmn:documentation>Der Techniker entnimmt die reservierten Teile und arbeitet die Reparaturschritte mit Zeiterfassung ab. Zusatzbefunde fuehren zu einem Nachtrags-KVA, den der Kunde freigeben muss. Nach Endkontrolle wird der Auftrag auf 'fertig' gesetzt.</bpmn:documentation>
+    <bpmn:participant id="Part_07_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_07" />
+    <bpmn:participant id="Part_07_Kunde" name="Kunde" />
+    <bpmn:messageFlow id="MsgFlow_07_1" name="Nachtrags-KVA" sourceRef="T07_NachtragSenden" targetRef="Part_07_Kunde" />
+    <bpmn:messageFlow id="MsgFlow_07_2" name="Freigabe / Ablehnung" sourceRef="Part_07_Kunde" targetRef="T07_Entscheidung" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_07" name="07 Reparaturdurchführung und Arbeitszeiterfassung" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_07">
+      <bpmn:lane id="Lane_07_1" name="Service / Annahme">
+        <bpmn:flowNodeRef>T07_NachtragSenden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Entscheidung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW07_Nachtrag</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_07_2" name="Techniker">
+        <bpmn:flowNodeRef>Start_07</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Status</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Entnahme</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_07</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Start</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Ausfuehren</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Doku</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW07_Weitere</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW07_Zusatz</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Nachtrag</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_07</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Endkontrolle</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW07_Qualitaet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Nacharbeit</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T07_Fertig</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_07</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_07" name="Ersatzteile verfügbar">
+      <bpmn:outgoing>Flow_07_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="T07_Status" name="Auftragsstatus auf 'in Reparatur' setzen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t07_status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_2</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T07_Status_out_DataObjRef_07_1">
+        <bpmn:targetRef>DataObjRef_07_1</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+      <bpmn:dataOutputAssociation id="T07_Status_out_DataStore_07_1">
+        <bpmn:targetRef>DataStore_07_1</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="T07_Entnahme" name="Reservierte Ersatzteile entnehmen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t07_entnahme" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_3</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T07_Entnahme_out_DataObjRef_07_2">
+        <bpmn:targetRef>DataObjRef_07_2</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Merge_07" name="">
+      <bpmn:incoming>Flow_07_3</bpmn:incoming>
+      <bpmn:incoming>Flow_07_8</bpmn:incoming>
+      <bpmn:incoming>Flow_07_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T07_Start" name="Reparaturschritt starten und Zeit erfassen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t07_start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="T07_Ausfuehren" name="Reparaturschritt ausführen">
+      <bpmn:incoming>Flow_07_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_6</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:userTask id="T07_Doku" name="Schritt dokumentieren und Zeit stoppen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t07_doku" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_7</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T07_Doku_out_DataObjRef_07_3">
+        <bpmn:targetRef>DataObjRef_07_3</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW07_Weitere" name="Weitere Schritte offen?">
+      <bpmn:incoming>Flow_07_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_8</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW07_Zusatz" name="Zusatzbefund festgestellt?">
+      <bpmn:incoming>Flow_07_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_10</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_11</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T07_Nachtrag" name="Nachtrags-KVA erstellen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t07_nachtrag" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_12</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="T07_NachtragSenden" name="Nachtrag an Kunde senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t07_nachtragsenden" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_13</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:receiveTask id="T07_Entscheidung" name="Kundenentscheidung empfangen" messageRef="Msg_07_1">
+      <bpmn:incoming>Flow_07_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_14</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:exclusiveGateway id="GW07_Nachtrag" name="Nachtrag freigegeben?">
+      <bpmn:incoming>Flow_07_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_15</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_16</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Join_07" name="">
+      <bpmn:incoming>Flow_07_10</bpmn:incoming>
+      <bpmn:incoming>Flow_07_16</bpmn:incoming>
+      <bpmn:incoming>Flow_07_21</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_17</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T07_Endkontrolle" name="Endkontrolle durchführen und Prüfprotokoll erfassen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t07_endkontrolle" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_17</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_18</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW07_Qualitaet" name="Qualität in Ordnung?">
+      <bpmn:incoming>Flow_07_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_19</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_20</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T07_Nacharbeit" name="Nacharbeit durchführen">
+      <bpmn:incoming>Flow_07_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_21</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:serviceTask id="T07_Fertig" name="Auftragsstatus auf 'fertig' setzen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t07_fertig" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_07_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_07_22</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T07_Fertig_out_DataObjRef_07_4">
+        <bpmn:targetRef>DataObjRef_07_4</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="End_07" name="Reparatur abgeschlossen">
+      <bpmn:incoming>Flow_07_22</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_07_1" sourceRef="Start_07" targetRef="T07_Status" />
+    <bpmn:sequenceFlow id="Flow_07_2" sourceRef="T07_Status" targetRef="T07_Entnahme" />
+    <bpmn:sequenceFlow id="Flow_07_3" sourceRef="T07_Entnahme" targetRef="Merge_07" />
+    <bpmn:sequenceFlow id="Flow_07_4" sourceRef="Merge_07" targetRef="T07_Start" />
+    <bpmn:sequenceFlow id="Flow_07_5" sourceRef="T07_Start" targetRef="T07_Ausfuehren" />
+    <bpmn:sequenceFlow id="Flow_07_6" sourceRef="T07_Ausfuehren" targetRef="T07_Doku" />
+    <bpmn:sequenceFlow id="Flow_07_7" sourceRef="T07_Doku" targetRef="GW07_Weitere" />
+    <bpmn:sequenceFlow id="Flow_07_8" sourceRef="GW07_Weitere" targetRef="Merge_07" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=weitereSchritte</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_9" sourceRef="GW07_Weitere" targetRef="GW07_Zusatz" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(weitereSchritte)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_10" sourceRef="GW07_Zusatz" targetRef="Join_07" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(zusatzbefund)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_11" sourceRef="GW07_Zusatz" targetRef="T07_Nachtrag" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zusatzbefund</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_12" sourceRef="T07_Nachtrag" targetRef="T07_NachtragSenden" />
+    <bpmn:sequenceFlow id="Flow_07_13" sourceRef="T07_NachtragSenden" targetRef="T07_Entscheidung" />
+    <bpmn:sequenceFlow id="Flow_07_14" sourceRef="T07_Entscheidung" targetRef="GW07_Nachtrag" />
+    <bpmn:sequenceFlow id="Flow_07_15" sourceRef="GW07_Nachtrag" targetRef="Merge_07" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=nachtragFreigegeben</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_16" sourceRef="GW07_Nachtrag" targetRef="Join_07" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(nachtragFreigegeben)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_17" sourceRef="Join_07" targetRef="T07_Endkontrolle" />
+    <bpmn:sequenceFlow id="Flow_07_18" sourceRef="T07_Endkontrolle" targetRef="GW07_Qualitaet" />
+    <bpmn:sequenceFlow id="Flow_07_19" sourceRef="GW07_Qualitaet" targetRef="T07_Fertig" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=qualitaetOk</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_20" sourceRef="GW07_Qualitaet" targetRef="T07_Nacharbeit" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(qualitaetOk)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_07_21" sourceRef="T07_Nacharbeit" targetRef="Join_07" />
+    <bpmn:sequenceFlow id="Flow_07_22" sourceRef="T07_Fertig" targetRef="End_07" />
+    <bpmn:dataObjectReference id="DataObjRef_07_1" name="Reparatur-auftrag [in Reparatur]" dataObjectRef="DataObj_07_1" />
+    <bpmn:dataObject id="DataObj_07_1" />
+    <bpmn:dataObjectReference id="DataObjRef_07_2" name="Ersatzteil-Reservierung [entnommen]" dataObjectRef="DataObj_07_2" />
+    <bpmn:dataObject id="DataObj_07_2" />
+    <bpmn:dataObjectReference id="DataObjRef_07_3" name="Arbeitszeit-buchung" dataObjectRef="DataObj_07_3" />
+    <bpmn:dataObject id="DataObj_07_3" />
+    <bpmn:dataObjectReference id="DataObjRef_07_4" name="Reparatur-auftrag [fertig]" dataObjectRef="DataObj_07_4" />
+    <bpmn:dataObject id="DataObj_07_4" />
+    <bpmn:dataStoreReference id="DataStore_07_1" name="RepairFlow-Datenbank" />
+  </bpmn:process>
+  <bpmn:message id="Msg_07_1" name="Nachtragsentscheidung">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="Diagram_07">
+    <bpmndi:BPMNPlane id="Plane_07" bpmnElement="Collab_07">
+      <bpmndi:BPMNShape id="Part_07_Werkstatt_di" bpmnElement="Part_07_Werkstatt" isHorizontal="true">
+        <dc:Bounds x="120" y="250" width="3465" height="815" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_07_1_di" bpmnElement="Lane_07_1" isHorizontal="true">
+        <dc:Bounds x="150" y="250" width="3435" height="225" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_07_2_di" bpmnElement="Lane_07_2" isHorizontal="true">
+        <dc:Bounds x="150" y="475" width="3435" height="590" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Part_07_Kunde_di" bpmnElement="Part_07_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="3465" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_07_di" bpmnElement="Start_07">
+        <dc:Bounds x="227" y="594" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="190" y="636" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Status_di" bpmnElement="T07_Status">
+        <dc:Bounds x="370" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Entnahme_di" bpmnElement="T07_Entnahme">
+        <dc:Bounds x="560" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Merge_07_di" bpmnElement="Merge_07">
+        <dc:Bounds x="790" y="588" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Start_di" bpmnElement="T07_Start">
+        <dc:Bounds x="940" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Ausfuehren_di" bpmnElement="T07_Ausfuehren">
+        <dc:Bounds x="1130" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Doku_di" bpmnElement="T07_Doku">
+        <dc:Bounds x="1320" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW07_Weitere_di" bpmnElement="GW07_Weitere">
+        <dc:Bounds x="1550" y="588" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1500" y="554" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW07_Zusatz_di" bpmnElement="GW07_Zusatz">
+        <dc:Bounds x="1740" y="588" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1690" y="554" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Nachtrag_di" bpmnElement="T07_Nachtrag">
+        <dc:Bounds x="1890" y="802" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_NachtragSenden_di" bpmnElement="T07_NachtragSenden">
+        <dc:Bounds x="2080" y="292" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Entscheidung_di" bpmnElement="T07_Entscheidung">
+        <dc:Bounds x="2270" y="292" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW07_Nachtrag_di" bpmnElement="GW07_Nachtrag">
+        <dc:Bounds x="2500" y="308" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2450" y="274" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_07_di" bpmnElement="Join_07">
+        <dc:Bounds x="2690" y="588" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Endkontrolle_di" bpmnElement="T07_Endkontrolle">
+        <dc:Bounds x="2840" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW07_Qualitaet_di" bpmnElement="GW07_Qualitaet">
+        <dc:Bounds x="3070" y="588" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3020" y="554" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Nacharbeit_di" bpmnElement="T07_Nacharbeit">
+        <dc:Bounds x="3220" y="688" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Fertig_di" bpmnElement="T07_Fertig">
+        <dc:Bounds x="3220" y="572" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_07_di" bpmnElement="End_07">
+        <dc:Bounds x="3457" y="594" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3420" y="636" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_07_1_di" bpmnElement="DataObjRef_07_1">
+        <dc:Bounds x="469" y="487" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="345" y="499" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_07_2_di" bpmnElement="DataObjRef_07_2">
+        <dc:Bounds x="659" y="487" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="535" y="499" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_07_3_di" bpmnElement="DataObjRef_07_3">
+        <dc:Bounds x="1419" y="487" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1295" y="499" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_07_4_di" bpmnElement="DataObjRef_07_4">
+        <dc:Bounds x="3319" y="487" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3195" y="499" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_07_1_di" bpmnElement="DataStore_07_1">
+        <dc:Bounds x="335" y="1003" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="211" y="1015" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_07_1_di" bpmnElement="Flow_07_1">
+        <di:waypoint x="263" y="612" />
+        <di:waypoint x="370" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_2_di" bpmnElement="Flow_07_2">
+        <di:waypoint x="500" y="612" />
+        <di:waypoint x="560" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_3_di" bpmnElement="Flow_07_3">
+        <di:waypoint x="690" y="612" />
+        <di:waypoint x="790" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_4_di" bpmnElement="Flow_07_4">
+        <di:waypoint x="840" y="612" />
+        <di:waypoint x="940" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_5_di" bpmnElement="Flow_07_5">
+        <di:waypoint x="1070" y="612" />
+        <di:waypoint x="1130" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_6_di" bpmnElement="Flow_07_6">
+        <di:waypoint x="1260" y="612" />
+        <di:waypoint x="1320" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_7_di" bpmnElement="Flow_07_7">
+        <di:waypoint x="1450" y="612" />
+        <di:waypoint x="1550" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_8_di" bpmnElement="Flow_07_8">
+        <di:waypoint x="1575" y="638" />
+        <di:waypoint x="1575" y="698" />
+        <di:waypoint x="815" y="698" />
+        <di:waypoint x="815" y="638" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1582" y="648" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_9_di" bpmnElement="Flow_07_9">
+        <di:waypoint x="1600" y="612" />
+        <di:waypoint x="1740" y="612" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1606" y="588" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_10_di" bpmnElement="Flow_07_10">
+        <di:waypoint x="1790" y="612" />
+        <di:waypoint x="2690" y="612" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1796" y="588" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_11_di" bpmnElement="Flow_07_11">
+        <di:waypoint x="1765" y="638" />
+        <di:waypoint x="1765" y="842" />
+        <di:waypoint x="1890" y="842" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1772" y="648" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_12_di" bpmnElement="Flow_07_12">
+        <di:waypoint x="2020" y="842" />
+        <di:waypoint x="2145" y="842" />
+        <di:waypoint x="2145" y="372" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_13_di" bpmnElement="Flow_07_13">
+        <di:waypoint x="2210" y="332" />
+        <di:waypoint x="2270" y="332" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_14_di" bpmnElement="Flow_07_14">
+        <di:waypoint x="2400" y="332" />
+        <di:waypoint x="2500" y="332" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_15_di" bpmnElement="Flow_07_15">
+        <di:waypoint x="2525" y="358" />
+        <di:waypoint x="2525" y="928" />
+        <di:waypoint x="815" y="928" />
+        <di:waypoint x="815" y="638" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2532" y="368" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_16_di" bpmnElement="Flow_07_16">
+        <di:waypoint x="2550" y="332" />
+        <di:waypoint x="2715" y="332" />
+        <di:waypoint x="2715" y="588" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2556" y="308" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_17_di" bpmnElement="Flow_07_17">
+        <di:waypoint x="2740" y="612" />
+        <di:waypoint x="2840" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_18_di" bpmnElement="Flow_07_18">
+        <di:waypoint x="2970" y="612" />
+        <di:waypoint x="3070" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_19_di" bpmnElement="Flow_07_19">
+        <di:waypoint x="3120" y="612" />
+        <di:waypoint x="3220" y="612" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3126" y="588" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_20_di" bpmnElement="Flow_07_20">
+        <di:waypoint x="3095" y="638" />
+        <di:waypoint x="3095" y="728" />
+        <di:waypoint x="3220" y="728" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3102" y="648" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_21_di" bpmnElement="Flow_07_21">
+        <di:waypoint x="3285" y="768" />
+        <di:waypoint x="3285" y="813" />
+        <di:waypoint x="2715" y="813" />
+        <di:waypoint x="2715" y="638" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_22_di" bpmnElement="Flow_07_22">
+        <di:waypoint x="3350" y="612" />
+        <di:waypoint x="3457" y="612" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_07_1_di" bpmnElement="MsgFlow_07_1">
+        <di:waypoint x="2175" y="292" />
+        <di:waypoint x="2175" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2183" y="194" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_07_2_di" bpmnElement="MsgFlow_07_2">
+        <di:waypoint x="2365" y="115" />
+        <di:waypoint x="2365" y="292" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2373" y="194" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T07_Status_out_DataObjRef_07_1_di" bpmnElement="T07_Status_out_DataObjRef_07_1">
+        <di:waypoint x="475" y="572" />
+        <di:waypoint x="487" y="537" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T07_Entnahme_out_DataObjRef_07_2_di" bpmnElement="T07_Entnahme_out_DataObjRef_07_2">
+        <di:waypoint x="665" y="572" />
+        <di:waypoint x="677" y="537" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T07_Doku_out_DataObjRef_07_3_di" bpmnElement="T07_Doku_out_DataObjRef_07_3">
+        <di:waypoint x="1425" y="572" />
+        <di:waypoint x="1437" y="537" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T07_Fertig_out_DataObjRef_07_4_di" bpmnElement="T07_Fertig_out_DataObjRef_07_4">
+        <di:waypoint x="3325" y="572" />
+        <di:waypoint x="3337" y="537" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T07_Status_out_DataStore_07_1_di" bpmnElement="T07_Status_out_DataStore_07_1">
+        <di:waypoint x="395" y="652" />
+        <di:waypoint x="360" y="1003" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

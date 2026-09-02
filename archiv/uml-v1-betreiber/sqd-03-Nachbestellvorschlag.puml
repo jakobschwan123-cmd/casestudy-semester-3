@@ -1,0 +1,45 @@
+@startuml sqd-03-Nachbestellvorschlag
+title sqd : Nachbestellvorschlag bei Meldebestand + Lieferantenbestellung ausloesen
+participant ": Lagerbestand" as LB
+actor Disponent
+participant ": Ersatzteil" as ET
+participant ": Lieferantenbestellung" as LBest
+participant ": Bestellposition" as BPos
+participant ": Lieferant" as L
+
+LB -> LB : istMeldebestandUnterschritten()
+alt Meldebestand unterschritten
+    LB -> Disponent : Nachbestellvorschlag(ersatzteil, fehlmenge)
+    activate Disponent
+    Disponent -> ET : getVorzugslieferant()
+    ET --> Disponent : lieferant
+
+    opt Bestellwert ueber Freigabegrenze
+        Disponent -> Disponent : Freigabe der Werkstattleitung einholen
+    end
+
+    alt offene Bestellung beim Lieferanten vorhanden
+        Disponent -> LBest : fuegePositionHinzu(ersatzteil, menge)
+        activate LBest
+        LBest -> BPos : <<create>> Bestellposition(menge, einzelpreis)
+        LBest --> Disponent : bestellposition
+        deactivate LBest
+    else keine offene Bestellung
+        Disponent -> Disponent : loeseBestellungAus(lieferant)
+        Disponent -> LBest : <<create>> Lieferantenbestellung(lieferant)
+        activate LBest
+        LBest -> BPos : <<create>> Bestellposition(menge, einzelpreis)
+        LBest -> LBest : berechneBestellwert()
+        LBest -> LBest : uebermittle()
+        LBest -> L : bestaetigeBestellung(bestellung)
+        activate L
+        L --> LBest : liefertermin
+        deactivate L
+        LBest --> Disponent : BESTAETIGT, liefertermin
+        deactivate LBest
+    end
+    deactivate Disponent
+else Bestand ausreichend
+    LB -> LB : keine Aktion
+end
+@enduml

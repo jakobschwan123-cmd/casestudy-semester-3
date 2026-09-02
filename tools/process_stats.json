@@ -1,0 +1,286 @@
+[
+ {
+  "num": "01",
+  "slug": "sofortdiagnose",
+  "file": "p01-sofortdiagnose",
+  "name": "KI-Sofortdiagnose und Voranmeldung",
+  "lanes": [
+   "Service / Annahme",
+   "Ersatzteil-Disposition",
+   "Werkstattleitung"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 12,
+  "kinds": {
+   "service": 7,
+   "send": 3,
+   "receive": 1,
+   "businessRule": 1
+  },
+  "auto": 12,
+  "msgflows": 6,
+  "data": 6,
+  "start": "Anfrage eingegangen",
+  "end": "Sofortdiagnose abgeschlossen",
+  "doc": "Der Kunde laedt in der RepairFlow-App Foto, Video oder Tonaufnahme des defekten Geraets hoch. RepairFlow erstellt automatisch Diagnosevorschlag, Vorab-Kostenvoranschlag, prueft die Teileverfuegbarkeit ueber alle Filialen und schlaegt Filiale und Termin vor. Bestaetigt der Kunde, entsteht eine Voranmeldung mit vorreservierten Ersatzteilen."
+ },
+ {
+  "num": "02",
+  "slug": "auftragsannahme",
+  "file": "p02-auftragsannahme",
+  "name": "Auftragsannahme, Geräteregistrierung und Terminplanung",
+  "lanes": [
+   "Service / Annahme",
+   "Werkstattleitung"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 12,
+  "kinds": {
+   "service": 3,
+   "user": 6,
+   "manual": 2,
+   "send": 1
+  },
+  "auto": 4,
+  "msgflows": 2,
+  "data": 7,
+  "start": "Kunde erschienen",
+  "end": "Auftrag angenommen",
+  "doc": "Der Kunde bringt das Geraet in die Filiale. Daten aus einer Voranmeldung werden uebernommen, das Geraet registriert, der Reparaturauftrag angelegt und von der Werkstattleitung eingeplant (Kapazitaet, Techniker, Termin)."
+ },
+ {
+  "num": "03",
+  "slug": "fehlerdiagnose",
+  "file": "p03-fehlerdiagnose",
+  "name": "Fehlerdiagnose",
+  "lanes": [
+   "Service / Annahme",
+   "Techniker"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 11,
+  "kinds": {
+   "service": 3,
+   "user": 5,
+   "manual": 1,
+   "businessRule": 1,
+   "send": 1
+  },
+  "auto": 5,
+  "msgflows": 1,
+  "data": 4,
+  "start": "Auftrag eingeplant",
+  "end": "Diagnose abgeschlossen",
+  "doc": "Der Techniker prueft den KI-Diagnosevorschlag, fuehrt Funktionstest und Messung durch, dokumentiert den Fehlerbefund und legt den Ersatzteilbedarf fest. RepairFlow bewertet die Wirtschaftlichkeit der Reparatur."
+ },
+ {
+  "num": "04",
+  "slug": "kostenvoranschlag",
+  "file": "p04-kostenvoranschlag",
+  "name": "Kostenvoranschlag und Kundenfreigabe",
+  "lanes": [
+   "Service / Annahme",
+   "Techniker"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 12,
+  "kinds": {
+   "user": 3,
+   "service": 6,
+   "send": 2,
+   "call": 1
+  },
+  "auto": 8,
+  "msgflows": 4,
+  "data": 4,
+  "start": "Diagnose abgeschlossen",
+  "end": "KVA-Entscheidung verarbeitet",
+  "doc": "Aus dem Fehlerbefund entsteht der Kostenvoranschlag. RepairFlow sendet ihn an den Kunden und wartet auf Freigabe oder Ablehnung; bleibt die Reaktion aus, wird der KVA mit Erinnerung erneut gesendet."
+ },
+ {
+  "num": "05",
+  "slug": "ersatzteilreservierung",
+  "file": "p05-ersatzteilreservierung",
+  "name": "Ersatzteil-Verfügbarkeit und Reservierung",
+  "lanes": [
+   "Techniker",
+   "Ersatzteil-Disposition"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 13,
+  "kinds": {
+   "service": 8,
+   "subprocess": 1,
+   "user": 1,
+   "call": 1,
+   "businessRule": 1,
+   "send": 1
+  },
+  "auto": 10,
+  "msgflows": 1,
+  "data": 4,
+  "start": "KVA freigegeben",
+  "end": "Ersatzteile disponiert",
+  "doc": "Nach der KVA-Freigabe prueft RepairFlow je Ersatzteil den Bestand der eigenen und der anderen Filialen, reserviert oder fordert Umlagerungen an und markiert Fehlteile fuer die Bestellung. Unterschreitet ein Bestand den Meldebestand, entsteht ein Nachbestellvorschlag."
+ },
+ {
+  "num": "06",
+  "slug": "ersatzteilbestellung",
+  "file": "p06-ersatzteilbestellung",
+  "name": "Ersatzteil-Bestellung beim Lieferanten",
+  "lanes": [
+   "Werkstattleitung",
+   "Ersatzteil-Disposition",
+   "Service / Annahme"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Lieferant",
+   "Kunde"
+  ],
+  "activities": 13,
+  "kinds": {
+   "service": 4,
+   "user": 4,
+   "send": 2,
+   "receive": 2,
+   "call": 1
+  },
+  "auto": 8,
+  "msgflows": 4,
+  "data": 5,
+  "start": "Fehlteile gemeldet",
+  "end": "Ersatzteile eingegangen",
+  "doc": "Fehlteile werden zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Nach Auftragsbestaetigung und Wareneingang werden die Teile dem Auftrag zugeordnet; bei Verzoegerungen informiert RepairFlow den Kunden."
+ },
+ {
+  "num": "07",
+  "slug": "reparaturdurchfuehrung",
+  "file": "p07-reparaturdurchfuehrung",
+  "name": "Reparaturdurchführung und Arbeitszeiterfassung",
+  "lanes": [
+   "Service / Annahme",
+   "Techniker"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 11,
+  "kinds": {
+   "service": 2,
+   "user": 5,
+   "manual": 2,
+   "send": 1,
+   "receive": 1
+  },
+  "auto": 4,
+  "msgflows": 2,
+  "data": 5,
+  "start": "Ersatzteile verfügbar",
+  "end": "Reparatur abgeschlossen",
+  "doc": "Der Techniker entnimmt die reservierten Teile und arbeitet die Reparaturschritte mit Zeiterfassung ab. Zusatzbefunde fuehren zu einem Nachtrags-KVA, den der Kunde freigeben muss. Nach Endkontrolle wird der Auftrag auf 'fertig' gesetzt."
+ },
+ {
+  "num": "08",
+  "slug": "abholung",
+  "file": "p08-abholung",
+  "name": "Abholung, Rechnung und Zahlung",
+  "lanes": [
+   "Service / Annahme",
+   "Techniker"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 12,
+  "kinds": {
+   "service": 5,
+   "send": 3,
+   "manual": 2,
+   "user": 2
+  },
+  "auto": 8,
+  "msgflows": 4,
+  "data": 5,
+  "start": "Reparatur abgeschlossen",
+  "end": "Auftrag abgeschlossen",
+  "doc": "RepairFlow erstellt die Rechnung aus KVA und Arbeitszeiten und benachrichtigt den Kunden. Bei der Abholung werden Geraet und Rechnung uebergeben, die Zahlung erfasst und der Auftrag geschlossen."
+ },
+ {
+  "num": "09",
+  "slug": "reklamation",
+  "file": "p09-reklamation",
+  "name": "Reklamation und Gewährleistung",
+  "lanes": [
+   "Techniker",
+   "Service / Annahme",
+   "Werkstattleitung"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Kunde"
+  ],
+  "activities": 13,
+  "kinds": {
+   "user": 3,
+   "service": 3,
+   "manual": 2,
+   "businessRule": 1,
+   "send": 2,
+   "receive": 1,
+   "call": 1
+  },
+  "auto": 7,
+  "msgflows": 4,
+  "data": 4,
+  "start": "Mangel gemeldet",
+  "end": "Reklamation abgeschlossen",
+  "doc": "Meldet der Kunde nach der Abholung einen Mangel, wird die Reklamation dem Ursprungsauftrag zugeordnet, der Mangel geprueft und der Gewaehrleistungsfall bewertet. Je nach Ergebnis folgt kostenfreie Nacharbeit oder ein kostenpflichtiges Angebot."
+ },
+ {
+  "num": "10",
+  "slug": "retoure",
+  "file": "p10-retoure",
+  "name": "Ersatzteil-Retoure und Lieferanten-Reklamation",
+  "lanes": [
+   "Werkstattleitung",
+   "Ersatzteil-Disposition"
+  ],
+  "pools": [
+   "Werkstattbetrieb",
+   "Lieferant"
+  ],
+  "activities": 11,
+  "kinds": {
+   "user": 3,
+   "service": 4,
+   "send": 1,
+   "manual": 1,
+   "receive": 1,
+   "call": 1
+  },
+  "auto": 6,
+  "msgflows": 3,
+  "data": 3,
+  "start": "Mangelhaftes Teil festgestellt",
+  "end": "Retoure abgeschlossen",
+  "doc": "Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht."
+ }
+]

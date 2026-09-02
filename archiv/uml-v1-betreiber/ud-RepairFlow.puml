@@ -1,0 +1,68 @@
+@startuml ud-RepairFlow
+title ud : RepairFlow
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+' ===== Aktoren (= BPMN-Lanes/Pools) =====
+actor "Kunde" as Kunde
+actor "Serviceannahme" as Service
+actor "Techniker" as Techniker
+actor "Disponent" as Disponent
+actor "Werkstattleiter" as Leiter
+actor "Lieferant" as Lieferant <<extern>>
+
+rectangle "RepairFlow" {
+  usecase "Reparaturauftrag anlegen" as UC1
+  usecase "Diagnosebefund erfassen" as UC2
+  usecase "KVA erstellen" as UC3
+  usecase "KVA freigeben/ablehnen" as UC4
+  usecase "Ersatzteil-Verfuegbarkeit pruefen" as UC5
+  usecase "Ersatzteil reservieren" as UC6
+  usecase "Lieferantenbestellung ausloesen" as UC7
+  usecase "Wareneingang buchen" as UC8
+  usecase "Reparaturschritt/Arbeitszeit erfassen" as UC9
+  usecase "Auftrag fertigmelden + Kunde benachrichtigen" as UC10
+  usecase "Rechnung erstellen + Zahlung erfassen" as UC11
+  usecase "Reklamation bearbeiten" as UC12
+  usecase "Werkstatttermin planen + Techniker zuweisen" as UC13
+  usecase "Nachbestellvorschlag bei Meldebestand" as UC14
+}
+
+' ===== Mitwirkungen =====
+Kunde --> UC1
+Kunde --> UC4
+Kunde --> UC11
+Kunde --> UC12
+
+Service --> UC1
+Service --> UC11
+Service --> UC12
+
+Techniker --> UC2
+Techniker --> UC3
+Techniker --> UC9
+Techniker --> UC10
+
+Disponent --> UC5
+Disponent --> UC6
+Disponent --> UC7
+Disponent --> UC8
+Disponent --> UC14
+
+Leiter --> UC13
+Leiter --> UC12
+
+Lieferant --> UC7
+Lieferant --> UC8
+
+' ===== include / extend =====
+UC3 ..> UC2 : <<include>>
+UC6 ..> UC5 : <<include>>
+UC7 ..> UC6 : <<include>>
+UC11 ..> UC10 : <<include>>
+
+UC4 ..> UC1 : <<extend>>
+UC12 ..> UC11 : <<extend>>
+UC14 ..> UC5 : <<extend>>
+@enduml

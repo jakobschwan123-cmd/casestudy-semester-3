@@ -1,81 +1,83 @@
-@startuml RepairFlow-UseCase
+@startuml
 left to right direction
 skinparam packageStyle rectangle
+skinparam defaultFontName Arial
+skinparam usecaseFontSize 11
 skinparam actorStyle awesome
+skinparam nodesep 12
+skinparam ranksep 60
+title ud : RepairFlow – Use-Case-Diagramm
 
-' ===== Aktoren =====
 actor "Kunde" as Kunde
 actor "Techniker" as Techniker
 actor "Disponent" as Disponent
-actor "Werkstattleiter" as Leiter
-actor "Lieferant" as Lieferant <<extern>>
+actor "Werkstattleiter" as Werkstattleiter
+actor "Werkstattinhaber" as Werkstattinhaber
 
 rectangle "RepairFlow" {
-
-  ' --- Auftrag / Diagnose / KVA ---
-  usecase "Reparaturauftrag anlegen" as UC1
-  usecase "Diagnosebefund erfassen" as UC2
-  usecase "KVA erstellen" as UC3
-  usecase "KVA freigeben/ablehnen" as UC4
-
-  ' --- Ersatzteil-Beschaffung ---
-  usecase "Ersatzteil-Verfuegbarkeit pruefen" as UC5
-  usecase "Ersatzteil reservieren" as UC6
-  usecase "Lieferantenbestellung ausloesen" as UC7
-  usecase "Wareneingang buchen" as UC8
-  usecase "Nachbestellvorschlag bei Meldebestand" as UC14
-
-  ' --- Reparatur / Abschluss ---
-  usecase "Reparaturschritt/Arbeitszeit erfassen" as UC9
-  usecase "Auftrag fertigmelden + Kunde benachrichtigen" as UC10
-  usecase "Rechnung erstellen + Zahlung" as UC11
-  usecase "Reklamation bearbeiten" as UC12
-
-  ' --- Planung ---
-  usecase "Werkstatttermin planen + Techniker zuweisen" as UC13
+  rectangle "Kundenportal (App)" {
+    usecase "Sofortdiagnose anfordern" as UC01
+    usecase "Voranmeldung bestätigen" as UC02
+    usecase "KVA freigeben / ablehnen" as UC07
+  }
+  rectangle "Auftrag und Werkstatt" {
+    usecase "Reparaturauftrag anlegen" as UC03
+    usecase "Werkstatttermin planen und Techniker zuweisen" as UC17
+    usecase "Diagnosevorschlag prüfen" as UC04
+    usecase "Diagnosebefund erfassen" as UC05
+    usecase "KVA erstellen" as UC06
+    usecase "Reparaturschritt und Arbeitszeit erfassen" as UC13
+    usecase "Auftrag fertigmelden und Kunde benachrichtigen" as UC14
+    usecase "Rechnung erstellen und Zahlung erfassen" as UC15
+    usecase "Reklamation bearbeiten" as UC16
+  }
+  rectangle "Ersatzteil-Disposition" {
+    usecase "Ersatzteil-Verfügbarkeit prüfen" as UC08
+    usecase "Ersatzteil reservieren" as UC09
+    usecase "Lieferantenbestellung auslösen" as UC10
+    usecase "Wareneingang buchen" as UC11
+    usecase "Nachbestellvorschlag bei Meldebestand" as UC12
+  }
+  rectangle "Administration" {
+    usecase "Werkstattbetrieb und Filialen verwalten" as UC18
+  }
 }
 
-' ===== Aktor-Zuordnungen =====
-Kunde --> UC1
-Kunde --> UC4
-Kunde --> UC11
-Kunde --> UC12
+actor "Lieferant" as Lieferant <<extern>>
+actor "KI-Diagnosedienst" as KIDienst <<extern>>
 
-Techniker --> UC2
-Techniker --> UC3
-Techniker --> UC9
-Techniker --> UC10
+Kunde -- UC01
+Kunde -- UC02
+Kunde -- UC03
+Kunde -- UC07
+Kunde -- UC15
+Kunde -- UC16
+Techniker -- UC04
+Techniker -- UC05
+Techniker -- UC06
+Techniker -- UC13
+Techniker -- UC14
+Disponent -- UC08
+Disponent -- UC09
+Disponent -- UC10
+Disponent -- UC11
+Disponent -- UC12
+Werkstattleiter -- UC03
+Werkstattleiter -- UC15
+Werkstattleiter -- UC16
+Werkstattleiter -- UC17
+Werkstattinhaber -- UC18
+UC10 -- Lieferant
+UC11 -- Lieferant
+UC01 -- KIDienst
 
-Disponent --> UC5
-Disponent --> UC6
-Disponent --> UC7
-Disponent --> UC8
-Disponent --> UC14
-
-Leiter --> UC13
-Leiter --> UC11
-Leiter --> UC12
-
-Lieferant --> UC7
-Lieferant --> UC8
-
-' ===== include / extend =====
-' KVA-Erstellung stützt sich zwingend auf einen Diagnosebefund
-UC3 ..> UC2 : <<include>>
-' Vor der Reservierung wird immer die Verfügbarkeit geprüft
-UC6 ..> UC5 : <<include>>
-' Bestellung schließt die Reservierung des benötigten Teils ein
-UC7 ..> UC6 : <<include>>
-' Fertigmeldung enthält immer die Rechnungserstellung
-UC11 ..> UC10 : <<include>>
-
-' KVA-Freigabe ist ein bedingter Zwischenschritt des Auftrags
-UC4 ..> UC1 : <<extend>>
-' Bei fehlendem Teil erweitert die Bestellung die Reservierung
-UC7 ..> UC6 : <<extend>>
-' Reklamation kann den regulären Abschluss erweitern
-UC12 ..> UC11 : <<extend>>
-' Unterschreitet der Lagerbestand den Meldebestand, erweitert der Nachbestellvorschlag die Verfügbarkeitsprüfung
-UC14 ..> UC5 : <<extend>>
-
+UC01 ..> UC08 : <<include>>
+UC06 ..> UC05 : <<include>>
+UC09 ..> UC08 : <<include>>
+UC10 ..> UC09 : <<include>>
+UC15 ..> UC14 : <<include>>
+UC02 ..> UC01 : <<extend>>
+UC04 ..> UC05 : <<extend>>
+UC12 ..> UC08 : <<extend>>
+UC16 ..> UC15 : <<extend>>
 @enduml

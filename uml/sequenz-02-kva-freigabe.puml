@@ -1,0 +1,45 @@
+@startuml
+title sqd : UC07 KVA freigeben / ablehnen (mit Erinnerungsschleife)
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+actor Techniker
+participant ": Reparaturauftrag" as RA
+participant ": Kostenvoranschlag" as KVA
+participant ": KvaPosition" as POS
+actor Kunde
+
+Techniker -> KVA : <<create>>
+activate KVA
+loop je Arbeits- oder Ersatzteilposition
+    Techniker -> KVA : addPosition(p)
+    KVA -> POS : <<create>>
+    KVA -> POS : zwischensumme()
+    POS --> KVA : betrag
+end
+KVA -> KVA : berechneSumme()
+KVA --> Techniker : summe
+deactivate KVA
+
+Techniker -> RA : wechsleStatus(KVA_OFFEN)
+note right of RA : Status: KVA offen
+Techniker -> KVA : versendeAnKunde()
+activate KVA
+KVA -> Kunde : Kostenvoranschlag
+loop solange keine Reaktion (alle 3 Tage, max. 3x)
+    KVA -> Kunde : Erinnerung
+end
+alt Kunde gibt frei
+    Kunde -> KVA : freigeben()
+    KVA -> KVA : setzeStatus(FREIGEGEBEN)
+    KVA -> RA : wechsleStatus(FREIGEGEBEN)
+    note right of RA : Status: freigegeben\n-> Ersatzteil-Disposition (UC08/UC09)
+    KVA --> Kunde : Freigabe bestätigt
+else Kunde lehnt ab
+    Kunde -> KVA : ablehnen(grund)
+    KVA -> KVA : setzeStatus(ABGELEHNT)
+    KVA -> RA : wechsleStatus(ABGELEHNT)
+    note right of RA : Status: abgelehnt (Endzustand)
+    RA -> Kunde : benachrichtigeKunde("Bitte Gerät abholen")
+end
+deactivate KVA
+@enduml

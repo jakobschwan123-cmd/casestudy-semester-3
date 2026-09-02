@@ -1,0 +1,47 @@
+@startuml
+title sqd : UC16 Reklamation bearbeiten (Gewährleistungsentscheidung)
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+actor Kunde
+actor Techniker
+participant ": Reklamation" as REK
+participant ": Reparaturauftrag" as RA
+participant ": Rechnung" as RE
+participant ": Kostenvoranschlag" as KVA
+
+Kunde -> Techniker : Mangel melden (Auftrag, Beschreibung)
+Techniker -> REK : <<create>>
+activate REK
+REK -> RA : Ursprungsauftrag laden
+activate RA
+RA --> REK : Auftragsdaten, Reparaturdatum
+deactivate RA
+REK -> RE : Rechnung laden
+activate RE
+RE --> REK : rechnungsdatum
+deactivate RE
+REK -> REK : pruefeGewaehrleistung()
+
+alt innerhalb Gewährleistung
+    REK -> RA : <<create>> Nacharbeit (kostenfrei)
+    activate RA
+    RA -> RA : wechsleStatus(ANGENOMMEN)
+    note right of RA : neuer Zyklus, kostenfrei
+    RA --> REK : Nacharbeit angelegt
+    deactivate RA
+    REK -> Kunde : benachrichtigeKunde("kostenfreie Nacharbeit")
+else außerhalb Gewährleistung
+    REK -> Kunde : Angebot kostenpflichtige Reparatur
+    alt Kunde nimmt Angebot an
+        REK -> KVA : <<create>> Kostenvoranschlag
+        activate KVA
+        KVA --> REK : KVA erstellt
+        deactivate KVA
+        note right of REK : -> weiter mit UC07 KVA freigeben / ablehnen
+    else Kunde lehnt ab
+        REK -> REK : schliesseAb() [ohne Reparatur]
+    end
+end
+REK --> Techniker : Reklamation bearbeitet
+deactivate REK
+@enduml

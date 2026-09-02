@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_02" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:collaboration id="Collab_02">
+    <bpmn:documentation>Der Kunde bringt das Geraet in die Filiale. Daten aus einer Voranmeldung werden uebernommen, das Geraet registriert, der Reparaturauftrag angelegt und von der Werkstattleitung eingeplant (Kapazitaet, Techniker, Termin).</bpmn:documentation>
+    <bpmn:participant id="Part_02_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_02" />
+    <bpmn:participant id="Part_02_Kunde" name="Kunde" />
+    <bpmn:messageFlow id="MsgFlow_02_1" name="Gerät + Auftragswunsch" sourceRef="Part_02_Kunde" targetRef="Start_02" />
+    <bpmn:messageFlow id="MsgFlow_02_2" name="Annahmebeleg, Termin" sourceRef="T02_Beleg" targetRef="Part_02_Kunde" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_02" name="02 Auftragsannahme, Geräteregistrierung und Terminplanung" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_02">
+      <bpmn:lane id="Lane_02_1" name="Service / Annahme">
+        <bpmn:flowNodeRef>Start_02</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW02_Voranmeldung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Uebernehmen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Kundendaten</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_02a</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Geraet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Symptome</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Sicht</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Auftrag</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Beleg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Einlagern</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_02</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_02_2" name="Werkstattleitung">
+        <bpmn:flowNodeRef>T02_Auslastung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW02_Kapazitaet</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Umleiten</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Techniker</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T02_Termin</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_02b</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_02" name="Kunde erschienen">
+      <bpmn:outgoing>Flow_02_1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="Start_02_def" messageRef="Msg_02_1" />
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="GW02_Voranmeldung" name="Voranmeldung vorhanden?">
+      <bpmn:incoming>Flow_02_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_2</bpmn:outgoing>
+      <bpmn:outgoing>Flow_02_3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T02_Uebernehmen" name="Voranmeldungsdaten übernehmen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t02_uebernehmen" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_4</bpmn:outgoing>
+      <bpmn:property id="T02_Uebernehmen_prop_DataObjRef_02_1" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T02_Uebernehmen_in_DataObjRef_02_1">
+        <bpmn:sourceRef>DataObjRef_02_1</bpmn:sourceRef>
+        <bpmn:targetRef>T02_Uebernehmen_prop_DataObjRef_02_1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="T02_Kundendaten" name="Kundendaten erfassen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t02_kundendaten" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Join_02a" name="">
+      <bpmn:incoming>Flow_02_4</bpmn:incoming>
+      <bpmn:incoming>Flow_02_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T02_Geraet" name="Gerät registrieren">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t02_geraet" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_7</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T02_Geraet_out_DataObjRef_02_2">
+        <bpmn:targetRef>DataObjRef_02_2</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:userTask id="T02_Symptome" name="Symptome und Zubehör dokumentieren">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t02_symptome" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_7</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="T02_Sicht" name="Sichtprüfung durchführen">
+      <bpmn:incoming>Flow_02_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_9</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:serviceTask id="T02_Auftrag" name="Reparaturauftrag anlegen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t02_auftrag" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_9</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_10</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T02_Auftrag_out_DataObjRef_02_3">
+        <bpmn:targetRef>DataObjRef_02_3</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+      <bpmn:dataOutputAssociation id="T02_Auftrag_out_DataStore_02_1">
+        <bpmn:targetRef>DataStore_02_1</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T02_Auslastung" name="Werkstattauslastung prüfen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t02_auslastung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_11</bpmn:outgoing>
+      <bpmn:property id="T02_Auslastung_prop_DataStore_02_2" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T02_Auslastung_in_DataStore_02_2">
+        <bpmn:sourceRef>DataStore_02_2</bpmn:sourceRef>
+        <bpmn:targetRef>T02_Auslastung_prop_DataStore_02_2</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="GW02_Kapazitaet" name="Kapazität in Filiale frei?">
+      <bpmn:incoming>Flow_02_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_12</bpmn:outgoing>
+      <bpmn:outgoing>Flow_02_13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T02_Umleiten" name="Auftrag an andere Filiale umleiten">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t02_umleiten" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_16</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="T02_Techniker" name="Techniker zuweisen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t02_techniker" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_14</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="T02_Termin" name="Werkstatttermin festlegen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t02_termin" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_15</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T02_Termin_out_DataObjRef_02_4">
+        <bpmn:targetRef>DataObjRef_02_4</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+      <bpmn:dataOutputAssociation id="T02_Termin_out_DataStore_02_3">
+        <bpmn:targetRef>DataStore_02_3</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Join_02b" name="">
+      <bpmn:incoming>Flow_02_15</bpmn:incoming>
+      <bpmn:incoming>Flow_02_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_17</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="T02_Beleg" name="Annahmebeleg und Termin an Kunde senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t02_beleg" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02_17</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_18</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:manualTask id="T02_Einlagern" name="Gerät kennzeichnen und einlagern">
+      <bpmn:incoming>Flow_02_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_19</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="End_02" name="Auftrag angenommen">
+      <bpmn:incoming>Flow_02_19</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_02_1" sourceRef="Start_02" targetRef="GW02_Voranmeldung" />
+    <bpmn:sequenceFlow id="Flow_02_2" sourceRef="GW02_Voranmeldung" targetRef="T02_Uebernehmen" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=voranmeldungVorhanden</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_02_3" sourceRef="GW02_Voranmeldung" targetRef="T02_Kundendaten" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(voranmeldungVorhanden)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_02_4" sourceRef="T02_Uebernehmen" targetRef="Join_02a" />
+    <bpmn:sequenceFlow id="Flow_02_5" sourceRef="T02_Kundendaten" targetRef="Join_02a" />
+    <bpmn:sequenceFlow id="Flow_02_6" sourceRef="Join_02a" targetRef="T02_Geraet" />
+    <bpmn:sequenceFlow id="Flow_02_7" sourceRef="T02_Geraet" targetRef="T02_Symptome" />
+    <bpmn:sequenceFlow id="Flow_02_8" sourceRef="T02_Symptome" targetRef="T02_Sicht" />
+    <bpmn:sequenceFlow id="Flow_02_9" sourceRef="T02_Sicht" targetRef="T02_Auftrag" />
+    <bpmn:sequenceFlow id="Flow_02_10" sourceRef="T02_Auftrag" targetRef="T02_Auslastung" />
+    <bpmn:sequenceFlow id="Flow_02_11" sourceRef="T02_Auslastung" targetRef="GW02_Kapazitaet" />
+    <bpmn:sequenceFlow id="Flow_02_12" sourceRef="GW02_Kapazitaet" targetRef="T02_Techniker" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=kapazitaetFrei</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_02_13" sourceRef="GW02_Kapazitaet" targetRef="T02_Umleiten" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(kapazitaetFrei)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_02_14" sourceRef="T02_Techniker" targetRef="T02_Termin" />
+    <bpmn:sequenceFlow id="Flow_02_15" sourceRef="T02_Termin" targetRef="Join_02b" />
+    <bpmn:sequenceFlow id="Flow_02_16" sourceRef="T02_Umleiten" targetRef="Join_02b" />
+    <bpmn:sequenceFlow id="Flow_02_17" sourceRef="Join_02b" targetRef="T02_Beleg" />
+    <bpmn:sequenceFlow id="Flow_02_18" sourceRef="T02_Beleg" targetRef="T02_Einlagern" />
+    <bpmn:sequenceFlow id="Flow_02_19" sourceRef="T02_Einlagern" targetRef="End_02" />
+    <bpmn:dataObjectReference id="DataObjRef_02_1" name="Voranmeldung" dataObjectRef="DataObj_02_1" />
+    <bpmn:dataObject id="DataObj_02_1" />
+    <bpmn:dataObjectReference id="DataObjRef_02_2" name="Gerät" dataObjectRef="DataObj_02_2" />
+    <bpmn:dataObject id="DataObj_02_2" />
+    <bpmn:dataObjectReference id="DataObjRef_02_3" name="Reparatur-auftrag [angenommen]" dataObjectRef="DataObj_02_3" />
+    <bpmn:dataObject id="DataObj_02_3" />
+    <bpmn:dataObjectReference id="DataObjRef_02_4" name="Reparatur-auftrag [eingeplant]" dataObjectRef="DataObj_02_4" />
+    <bpmn:dataObject id="DataObj_02_4" />
+    <bpmn:dataStoreReference id="DataStore_02_1" name="RepairFlow-Datenbank" />
+    <bpmn:dataStoreReference id="DataStore_02_2" name="Technikerplan" />
+    <bpmn:dataStoreReference id="DataStore_02_3" name="Technikerplan" />
+  </bpmn:process>
+  <bpmn:message id="Msg_02_1" name="Gerät abgegeben">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="Diagram_02">
+    <bpmndi:BPMNPlane id="Plane_02" bpmnElement="Collab_02">
+      <bpmndi:BPMNShape id="Part_02_Werkstatt_di" bpmnElement="Part_02_Werkstatt" isHorizontal="true">
+        <dc:Bounds x="120" y="250" width="3085" height="840" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_02_1_di" bpmnElement="Lane_02_1" isHorizontal="true">
+        <dc:Bounds x="150" y="250" width="3055" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_02_2_di" bpmnElement="Lane_02_2" isHorizontal="true">
+        <dc:Bounds x="150" y="670" width="3055" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Part_02_Kunde_di" bpmnElement="Part_02_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="3085" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_02_di" bpmnElement="Start_02">
+        <dc:Bounds x="227" y="370" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="190" y="412" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW02_Voranmeldung_di" bpmnElement="GW02_Voranmeldung">
+        <dc:Bounds x="410" y="362" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="360" y="328" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Uebernehmen_di" bpmnElement="T02_Uebernehmen">
+        <dc:Bounds x="560" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Kundendaten_di" bpmnElement="T02_Kundendaten">
+        <dc:Bounds x="560" y="462" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_02a_di" bpmnElement="Join_02a">
+        <dc:Bounds x="790" y="362" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Geraet_di" bpmnElement="T02_Geraet">
+        <dc:Bounds x="940" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Symptome_di" bpmnElement="T02_Symptome">
+        <dc:Bounds x="1130" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Sicht_di" bpmnElement="T02_Sicht">
+        <dc:Bounds x="1320" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Auftrag_di" bpmnElement="T02_Auftrag">
+        <dc:Bounds x="1510" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Auslastung_di" bpmnElement="T02_Auslastung">
+        <dc:Bounds x="1700" y="768" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW02_Kapazitaet_di" bpmnElement="GW02_Kapazitaet">
+        <dc:Bounds x="1930" y="782" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1880" y="748" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Umleiten_di" bpmnElement="T02_Umleiten">
+        <dc:Bounds x="2080" y="882" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Techniker_di" bpmnElement="T02_Techniker">
+        <dc:Bounds x="2080" y="768" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Termin_di" bpmnElement="T02_Termin">
+        <dc:Bounds x="2270" y="768" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_02b_di" bpmnElement="Join_02b">
+        <dc:Bounds x="2500" y="782" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Beleg_di" bpmnElement="T02_Beleg">
+        <dc:Bounds x="2650" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T02_Einlagern_di" bpmnElement="T02_Einlagern">
+        <dc:Bounds x="2840" y="348" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_02_di" bpmnElement="End_02">
+        <dc:Bounds x="3077" y="370" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3040" y="412" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_1_di" bpmnElement="DataObjRef_02_1">
+        <dc:Bounds x="659" y="262" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="535" y="274" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_2_di" bpmnElement="DataObjRef_02_2">
+        <dc:Bounds x="1039" y="262" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="915" y="274" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_3_di" bpmnElement="DataObjRef_02_3">
+        <dc:Bounds x="1609" y="262" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1485" y="274" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_4_di" bpmnElement="DataObjRef_02_4">
+        <dc:Bounds x="2369" y="682" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2245" y="694" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_1_di" bpmnElement="DataStore_02_1">
+        <dc:Bounds x="1475" y="608" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1351" y="620" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_2_di" bpmnElement="DataStore_02_2">
+        <dc:Bounds x="1665" y="1028" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1541" y="1040" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_3_di" bpmnElement="DataStore_02_3">
+        <dc:Bounds x="2235" y="1028" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2111" y="1040" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_02_1_di" bpmnElement="Flow_02_1">
+        <di:waypoint x="263" y="388" />
+        <di:waypoint x="410" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_2_di" bpmnElement="Flow_02_2">
+        <di:waypoint x="460" y="388" />
+        <di:waypoint x="560" y="388" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="466" y="364" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_3_di" bpmnElement="Flow_02_3">
+        <di:waypoint x="435" y="412" />
+        <di:waypoint x="435" y="502" />
+        <di:waypoint x="560" y="502" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="442" y="422" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_4_di" bpmnElement="Flow_02_4">
+        <di:waypoint x="690" y="388" />
+        <di:waypoint x="790" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_5_di" bpmnElement="Flow_02_5">
+        <di:waypoint x="690" y="502" />
+        <di:waypoint x="815" y="502" />
+        <di:waypoint x="815" y="412" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_6_di" bpmnElement="Flow_02_6">
+        <di:waypoint x="840" y="388" />
+        <di:waypoint x="940" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_7_di" bpmnElement="Flow_02_7">
+        <di:waypoint x="1070" y="388" />
+        <di:waypoint x="1130" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_8_di" bpmnElement="Flow_02_8">
+        <di:waypoint x="1260" y="388" />
+        <di:waypoint x="1320" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_9_di" bpmnElement="Flow_02_9">
+        <di:waypoint x="1450" y="388" />
+        <di:waypoint x="1510" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_10_di" bpmnElement="Flow_02_10">
+        <di:waypoint x="1640" y="388" />
+        <di:waypoint x="1765" y="388" />
+        <di:waypoint x="1765" y="768" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_11_di" bpmnElement="Flow_02_11">
+        <di:waypoint x="1830" y="808" />
+        <di:waypoint x="1930" y="808" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_12_di" bpmnElement="Flow_02_12">
+        <di:waypoint x="1980" y="808" />
+        <di:waypoint x="2080" y="808" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1986" y="784" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_13_di" bpmnElement="Flow_02_13">
+        <di:waypoint x="1955" y="832" />
+        <di:waypoint x="1955" y="922" />
+        <di:waypoint x="2080" y="922" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1962" y="842" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_14_di" bpmnElement="Flow_02_14">
+        <di:waypoint x="2210" y="808" />
+        <di:waypoint x="2270" y="808" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_15_di" bpmnElement="Flow_02_15">
+        <di:waypoint x="2400" y="808" />
+        <di:waypoint x="2500" y="808" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_16_di" bpmnElement="Flow_02_16">
+        <di:waypoint x="2210" y="922" />
+        <di:waypoint x="2525" y="922" />
+        <di:waypoint x="2525" y="832" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_17_di" bpmnElement="Flow_02_17">
+        <di:waypoint x="2525" y="782" />
+        <di:waypoint x="2525" y="388" />
+        <di:waypoint x="2650" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_18_di" bpmnElement="Flow_02_18">
+        <di:waypoint x="2780" y="388" />
+        <di:waypoint x="2840" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_19_di" bpmnElement="Flow_02_19">
+        <di:waypoint x="2970" y="388" />
+        <di:waypoint x="3077" y="388" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_02_1_di" bpmnElement="MsgFlow_02_1">
+        <di:waypoint x="245" y="115" />
+        <di:waypoint x="245" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="253" y="232" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_02_2_di" bpmnElement="MsgFlow_02_2">
+        <di:waypoint x="2745" y="348" />
+        <di:waypoint x="2745" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2753" y="221" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Uebernehmen_in_DataObjRef_02_1_di" bpmnElement="T02_Uebernehmen_in_DataObjRef_02_1">
+        <di:waypoint x="677" y="312" />
+        <di:waypoint x="665" y="348" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Geraet_out_DataObjRef_02_2_di" bpmnElement="T02_Geraet_out_DataObjRef_02_2">
+        <di:waypoint x="1045" y="348" />
+        <di:waypoint x="1057" y="312" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Auftrag_out_DataObjRef_02_3_di" bpmnElement="T02_Auftrag_out_DataObjRef_02_3">
+        <di:waypoint x="1615" y="348" />
+        <di:waypoint x="1627" y="312" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Termin_out_DataObjRef_02_4_di" bpmnElement="T02_Termin_out_DataObjRef_02_4">
+        <di:waypoint x="2375" y="768" />
+        <di:waypoint x="2387" y="732" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Auftrag_out_DataStore_02_1_di" bpmnElement="T02_Auftrag_out_DataStore_02_1">
+        <di:waypoint x="1535" y="428" />
+        <di:waypoint x="1500" y="608" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Auslastung_in_DataStore_02_2_di" bpmnElement="T02_Auslastung_in_DataStore_02_2">
+        <di:waypoint x="1690" y="1028" />
+        <di:waypoint x="1725" y="848" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T02_Termin_out_DataStore_02_3_di" bpmnElement="T02_Termin_out_DataStore_02_3">
+        <di:waypoint x="2295" y="848" />
+        <di:waypoint x="2260" y="1028" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

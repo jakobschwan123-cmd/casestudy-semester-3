@@ -1,0 +1,30 @@
+@startuml
+title Systemkontext RepairFlow (Solution Provider, Pilotkunde FixWerk GmbH)
+skinparam defaultFontName Arial
+skinparam rectangleFontSize 12
+left to right direction
+actor "Kunde\n(Endkunde der Werkstatt)" as Kunde
+actor "Lieferant" as Lieferant
+rectangle "Werkstattbetrieb (Mandant), z. B. FixWerk GmbH" as WB {
+  actor "Service / Annahme" as Service
+  actor "Techniker" as Techniker
+  actor "Werkstattleitung" as Leitung
+  actor "Ersatzteil-Disposition" as Dispo
+}
+rectangle "RepairFlow-Plattform (SaaS)\nRepairFlow GmbH" as RF #EEF3FF {
+  rectangle "Kundenportal / App" as App
+  rectangle "Auftrags- und Werkstattmodul" as Auftrag
+  rectangle "Dispositionsmodul" as DispoM
+  rectangle "Abrechnung" as Abr
+}
+rectangle "KI-Diagnosedienst\n(externer Dienst)" as KI #FFF4E5
+rectangle "Buchhaltung / DATEV\n(außerhalb der Systemgrenze)" as DATEV #F5F5F5
+Kunde -- App : Sofortdiagnose, Voranmeldung,\nKVA-Freigabe, Status, Zahlung
+Service -- Auftrag
+Techniker -- Auftrag
+Leitung -- Auftrag
+Dispo -- DispoM
+App -- KI : Foto / Video / Ton
+DispoM -- Lieferant : Bestellung, Auftragsbestätigung,\nLieferung, Retoure
+Abr .. DATEV : Export (Schnittstelle)
+@enduml
