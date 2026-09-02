@@ -336,4 +336,4 @@ Methoden liegen bei der Klasse, die die dafür nötigen Daten **besitzt** (Infor
 
 ## Konsistenz zu den anderen Teilen
 
-Klassennamen, Rollen (Kunde, Techniker/Werkstatt, Ersatzteil-Disposition, Lieferant) und Statuswerte des `AuftragStatus`-Enum entsprechen exakt dem Zustandsautomaten und den 10 Geschäftsprozessen aus dem Fallstudien-Kontext, damit BPMN- (`repairflow-02-bpmn`), Use-Case- und Klassenmodell deckungsgleich bleiben.
+Klassennamen, Rollen (Kunde, Techniker/Werkstatt, Ersatzteil-Disposition, Lieferant) und Statuswerte des `AuftragStatus`-Enum entsprechen exakt dem Zustandsautomaten und den 10 Geschäftsprozessen aus dem Fallstudien-Kontext, damit BPMN- (`01-doku-bpmn`), Use-Case- und Klassenmodell deckungsgleich bleiben.

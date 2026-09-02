@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Office-Sperrdateien (entstehen beim Öffnen von .docx/.pptx)
+~$*.docx
+~$*.pptx
+.~lock.*#
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+
+# Obsidian
+.obsidian/
