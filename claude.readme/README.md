@@ -64,7 +64,7 @@ git diff
 
 ```bash
 git add .
-git commit -m "feat: add login validation"
+git commit -m "[T03 2026-09-02] feat: add login validation"
 ```
 
 6. Eigenen Branch auf GitHub pushen:
@@ -79,14 +79,60 @@ git push -u origin feature/meine-aufgabe
 
 ## Commit-Nachrichten
 
-Commit-Nachrichten sollen kurz, eindeutig und auf Englisch sein:
+Jede Commit-Nachricht beginnt mit dem Termin-Stempel, damit im Log sofort
+erkennbar ist, zu welchem Termin ein Stand entstanden ist:
 
 ```text
-feat: add customer entity
-fix: handle empty input
-docs: update project description
-refactor: simplify validation logic
-test: add service unit tests
+[T<nn> <JJJJ-MM-TT>] <typ>: <kurze beschreibung auf englisch>
+```
+
+Beispiele:
+
+```text
+[T03 2026-09-02] feat: add customer entity
+[T03 2026-09-02] docs: update class diagram
+[T04 2026-09-16] fix: handle empty input
+[T04 2026-09-16] refactor: simplify validation logic
+[T05 2026-09-30] test: add service unit tests
+```
+
+Regeln:
+
+- **Termin-Nummer** zweistellig (`T03`, nicht `T3`), aus der Termin-Tabelle unten.
+- **Datum** im Format `JJJJ-MM-TT` — das Datum des Termins, nicht das des Commits.
+  So gehören alle Commits eines Termins zusammen, auch wenn du abends nacharbeitest.
+- **Typ** aus: `feat`, `fix`, `docs`, `refactor`, `test`.
+- **Beschreibung** kurz, eindeutig und auf Englisch, Kleinbuchstaben, kein Punkt am Ende.
+
+Das aktuelle Datum bekommst du mit:
+
+```bash
+date +%F
+```
+
+### Termin-Tabelle
+
+Vom Team zu pflegen — beim ersten Commit eines neuen Termins hier eine Zeile ergänzen.
+
+| Termin | Datum | Schwerpunkt |
+|--------|------------|-------------|
+| T01 | _tbd_ | Projektgrundlagen, Repo-Setup |
+| T02 | _tbd_ | BPMN-Prozesse |
+| T03 | 2026-09-02 | Repo-Umstrukturierung, Use-Case-Korrektur |
+
+### Warum der Stempel, obwohl Git das Datum kennt
+
+Git speichert Autor- und Commit-Datum ohnehin (`git log --date=short`). Der Stempel
+macht die Zuordnung aber im `--oneline`-Log und in der GitHub-Commit-Liste direkt
+sichtbar und ordnet Nacharbeit dem richtigen Termin zu, statt dem Kalendertag:
+
+```bash
+git log --oneline
+```
+
+```text
+bf9b448 [T03 2026-09-02] refactor: reorganise repository into folders
+abaedfd [T02 2026-08-26] docs: update project description
 ```
 
 ## Pull-Request-Regeln

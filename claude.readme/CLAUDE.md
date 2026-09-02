@@ -68,5 +68,10 @@ Use-Case-Diagramms — nicht aufweichen.
 - Remote: `https://github.com/jakobschwan123-cmd/casestudy-semester-3.git`, Branch `main`.
 - **Keine Direkt-Commits auf `main`.** Branch + Pull Request, Review durch ein
   anderes Teammitglied. Details in [`README.md`](README.md).
-- Commit-Messages englisch, Conventional-Commit-Präfix (`feat:`, `fix:`, `docs:`,
-  `refactor:`, `test:`).
+- Commit-Messages englisch, mit Termin-Stempel und Conventional-Commit-Präfix:
+  `[T<nn> <JJJJ-MM-TT>] <typ>: <beschreibung>`, z. B.
+  `[T03 2026-09-02] docs: update class diagram`. Typen: `feat`, `fix`, `docs`,
+  `refactor`, `test`. Das Datum ist das **Termin**-Datum, nicht das Commit-Datum —
+  Nacharbeit gehört zum Termin, an dem die Aufgabe gestellt wurde. Termin-Nummern
+  und -Daten stehen in der Termin-Tabelle in [`README.md`](README.md); bei einem
+  neuen Termin dort zuerst eine Zeile ergänzen.
