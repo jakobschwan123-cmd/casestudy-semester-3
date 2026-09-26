@@ -37,7 +37,7 @@ alt Meldebestand unterschritten
         LBEST --> Disponent : bestellwert
         opt Bestellwert über Freigabegrenze
             Disponent -> Werkstattleiter : Freigabe anfordern
-            Werkstattleiter -> LBEST : gibBestellungFrei(b)
+            Werkstattleiter -> LBEST : freigeben()
         end
         Disponent -> LBEST : uebermittle()
         LBEST -> Lieferant : Bestellung senden

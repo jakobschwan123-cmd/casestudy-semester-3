@@ -5,41 +5,48 @@ skinparam sequenceMessageAlign center
 actor Kunde
 actor Techniker
 participant ": Reklamation" as REK
-participant ": Reparaturauftrag" as RA
+participant "ursprung : Reparaturauftrag" as RA
 participant ": Rechnung" as RE
-participant ": Kostenvoranschlag" as KVA
+participant "nacharbeit : Reparaturauftrag" as NA
+participant "neuauftrag : Reparaturauftrag" as NEU
 
 Kunde -> Techniker : Mangel melden (Auftrag, Beschreibung)
+create REK
 Techniker -> REK : <<create>>
 activate REK
-REK -> RA : Ursprungsauftrag laden
+REK -> RA : getRechnung()
 activate RA
-RA --> REK : Auftragsdaten, Reparaturdatum
+RA --> REK : rechnung
 deactivate RA
-REK -> RE : Rechnung laden
+REK -> RE : getRechnungsdatum()
 activate RE
 RE --> REK : rechnungsdatum
 deactivate RE
 REK -> REK : pruefeGewaehrleistung()
 
 alt innerhalb Gewährleistung
-    REK -> RA : <<create>> Nacharbeit (kostenfrei)
-    activate RA
-    RA -> RA : wechsleStatus(ANGENOMMEN)
-    note right of RA : neuer Zyklus, kostenfrei
-    RA --> REK : Nacharbeit angelegt
-    deactivate RA
-    REK -> Kunde : benachrichtigeKunde("kostenfreie Nacharbeit")
+    create NA
+    REK -> NA : <<create>> (kostenfrei)
+    activate NA
+    NA -> NA : wechsleStatus(ANGENOMMEN)
+    note right of NA : neuer Zyklus, kostenfrei
+    NA -> NA : benachrichtigeKunde("kostenfreie Nacharbeit")
+    NA -> Kunde : Nachricht "kostenfreie Nacharbeit"
+    NA --> REK : Nacharbeit angelegt
+    deactivate NA
 else außerhalb Gewährleistung
-    REK -> Kunde : Angebot kostenpflichtige Reparatur
+    REK -> Kunde : Angebot kostenpflichtige Nacharbeit
+    Kunde --> REK : Entscheidung
     alt Kunde nimmt Angebot an
-        REK -> KVA : <<create>> Kostenvoranschlag
-        activate KVA
-        KVA --> REK : KVA erstellt
-        deactivate KVA
-        note right of REK : -> weiter mit UC07 KVA freigeben / ablehnen
+        create NEU
+        REK -> NEU : <<create>> (kostenpflichtig)
+        activate NEU
+        NEU -> NEU : wechsleStatus(ANGENOMMEN)
+        note right of NEU : Nacharbeit zum angenommenen Angebot
+        NEU --> REK : Nacharbeit angelegt
+        deactivate NEU
     else Kunde lehnt ab
-        REK -> REK : schliesseAb() [ohne Reparatur]
+        REK -> REK : schliesseAb()
     end
 end
 REK --> Techniker : Reklamation bearbeitet

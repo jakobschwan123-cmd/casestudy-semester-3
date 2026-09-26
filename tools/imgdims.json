@@ -1,1 +1,110 @@
-{"/home/claude/v3/FINAL/uml/klassen-fokus-2-auftrag.png": [1449, 1185], "/home/claude/v3/FINAL/uml/sequenz-05-reklamation.png": [1228, 885], "/home/claude/v3/FINAL/uml/klassen-fokus-4-organisation.png": [1878, 630], "/home/claude/v3/FINAL/uml/sequenz-06-nachbestellvorschlag.png": [1238, 1011], "/home/claude/v3/FINAL/uml/systemkontext.png": [1316, 613], "/home/claude/v3/FINAL/uml/klassen-fokus-1-sofortdiagnose.png": [1347, 1013], "/home/claude/v3/FINAL/uml/sequenz-03-reservierung.png": [1124, 1098], "/home/claude/v3/FINAL/uml/zustand-reparaturauftrag.png": [1121, 1305], "/home/claude/v3/FINAL/uml/usecase.png": [1320, 1261], "/home/claude/v3/FINAL/uml/klassen-fokus-3-disposition.png": [1484, 1196], "/home/claude/v3/FINAL/uml/sequenz-01-sofortdiagnose.png": [1317, 1190], "/home/claude/v3/FINAL/uml/sequenz-02-kva-freigabe.png": [827, 1039], "/home/claude/v3/FINAL/uml/klassen.png": [3411, 2417], "/home/claude/v3/FINAL/uml/sequenz-04-fertigmeldung.png": [1112, 841], "/home/claude/v3/FINAL/bpmn/p09-reklamation.png": [7630, 2440], "/home/claude/v3/FINAL/bpmn/p03-fehlerdiagnose.png": [5730, 1870], "/home/claude/v3/FINAL/bpmn/p08-abholung.png": [7250, 1760], "/home/claude/v3/FINAL/bpmn/p02-auftragsannahme.png": [6490, 2260], "/home/claude/v3/FINAL/bpmn/p05-ersatzteilreservierung.png": [7630, 1990], "/home/claude/v3/FINAL/bpmn/p01-sofortdiagnose.png": [6870, 2320], "/home/claude/v3/FINAL/bpmn/p04-kostenvoranschlag.png": [6870, 1990], "/home/claude/v3/FINAL/bpmn/p07-reparaturdurchfuehrung.png": [7250, 2210], "/home/claude/v3/FINAL/bpmn/p10-retoure.png": [7630, 1690], "/home/claude/v3/FINAL/bpmn/p06-ersatzteilbestellung.png": [8390, 2520], "/home/claude/v3/FINAL/tools/pres/crop-01-links.png": [3091, 1740], "/home/claude/v3/FINAL/tools/pres/crop-04-mitte.png": [2835, 1493], "/home/claude/v3/FINAL/tools/pres/crop-05-links.png": [3319, 1120], "/home/claude/v3/FINAL/tools/uml2/klassen-fokus-2-auftrag.png": [1449, 1185], "/home/claude/v3/FINAL/tools/uml2/sequenz-05-reklamation.png": [1228, 885], "/home/claude/v3/FINAL/tools/uml2/klassen-fokus-4-organisation.png": [1878, 630], "/home/claude/v3/FINAL/tools/uml2/sequenz-06-nachbestellvorschlag.png": [1238, 1011], "/home/claude/v3/FINAL/tools/uml2/systemkontext.png": [1316, 613], "/home/claude/v3/FINAL/tools/uml2/klassen-fokus-1-sofortdiagnose.png": [1347, 1013], "/home/claude/v3/FINAL/tools/uml2/sequenz-03-reservierung.png": [1124, 1098], "/home/claude/v3/FINAL/tools/uml2/zustand-reparaturauftrag.png": [1121, 1305], "/home/claude/v3/FINAL/tools/uml2/usecase.png": [1320, 1261], "/home/claude/v3/FINAL/tools/uml2/klassen-fokus-3-disposition.png": [1484, 1196], "/home/claude/v3/FINAL/tools/uml2/sequenz-01-sofortdiagnose.png": [1317, 1190], "/home/claude/v3/FINAL/tools/uml2/sequenz-02-kva-freigabe.png": [827, 1039], "/home/claude/v3/FINAL/tools/uml2/klassen.png": [3411, 2417], "/home/claude/v3/FINAL/tools/uml2/sequenz-04-fertigmeldung.png": [1112, 841], "/home/claude/v3/FINAL/tools/png2/p09-reklamation.png": [7630, 2440], "/home/claude/v3/FINAL/tools/png2/p03-fehlerdiagnose.png": [5730, 1870], "/home/claude/v3/FINAL/tools/png2/p08-abholung.png": [7250, 1760], "/home/claude/v3/FINAL/tools/png2/p02-auftragsannahme.png": [6490, 2260], "/home/claude/v3/FINAL/tools/png2/p05-ersatzteilreservierung.png": [7630, 1990], "/home/claude/v3/FINAL/tools/png2/p01-sofortdiagnose.png": [6870, 2320], "/home/claude/v3/FINAL/tools/png2/p04-kostenvoranschlag.png": [6870, 1990], "/home/claude/v3/FINAL/tools/png2/p07-reparaturdurchfuehrung.png": [7250, 2210], "/home/claude/v3/FINAL/tools/png2/p10-retoure.png": [7630, 1690], "/home/claude/v3/FINAL/tools/png2/p06-ersatzteilbestellung.png": [8390, 2520], "/home/claude/v3/FINAL/tools/png2_15/p09-reklamation.png": [7630, 2440], "/home/claude/v3/FINAL/tools/png2_15/p03-fehlerdiagnose.png": [5730, 1870], "/home/claude/v3/FINAL/tools/png2_15/p08-abholung.png": [7250, 1760], "/home/claude/v3/FINAL/tools/png2_15/p02-auftragsannahme.png": [6490, 2260], "/home/claude/v3/FINAL/tools/png2_15/p05-ersatzteilreservierung.png": [7630, 1990], "/home/claude/v3/FINAL/tools/png2_15/p01-sofortdiagnose.png": [6870, 2320], "/home/claude/v3/FINAL/tools/png2_15/p04-kostenvoranschlag.png": [6870, 1990], "/home/claude/v3/FINAL/tools/png2_15/p07-reparaturdurchfuehrung.png": [7250, 2210], "/home/claude/v3/FINAL/tools/png2_15/p10-retoure.png": [7630, 1690], "/home/claude/v3/FINAL/tools/png2_15/p06-ersatzteilbestellung.png": [8390, 2520]}
+{
+"uml2/klassen-fokus-1-sofortdiagnose.png": [
+1257,
+1045
+],
+"uml2/klassen-fokus-2-auftrag.png": [
+1448,
+1201
+],
+"uml2/klassen-fokus-3-disposition.png": [
+1179,
+845
+],
+"uml2/klassen-fokus-4-organisation.png": [
+1878,
+630
+],
+"uml2/klassen.png": [
+3130,
+2729
+],
+"uml2/sequenz-01-sofortdiagnose.png": [
+1498,
+1290
+],
+"uml2/sequenz-02-kva-freigabe.png": [
+919,
+1083
+],
+"uml2/sequenz-03-reservierung.png": [
+1133,
+1057
+],
+"uml2/sequenz-04-fertigmeldung.png": [
+1102,
+809
+],
+"uml2/sequenz-05-reklamation.png": [
+1712,
+1035
+],
+"uml2/sequenz-06-nachbestellvorschlag.png": [
+1238,
+1011
+],
+"uml2/systemkontext.png": [
+1316,
+613
+],
+"uml2/usecase.png": [
+1320,
+1312
+],
+"uml2/zustand-reparaturauftrag.png": [
+823,
+1336
+],
+"png2_15/p01-sofortdiagnose.png": [
+5153,
+1740
+],
+"png2_15/p02-auftragsannahme.png": [
+5153,
+1613
+],
+"png2_15/p03-fehlerdiagnose.png": [
+4298,
+1485
+],
+"png2_15/p04-kostenvoranschlag.png": [
+5153,
+1493
+],
+"png2_15/p05-ersatzteilreservierung.png": [
+6293,
+1493
+],
+"png2_15/p06-ersatzteilbestellung.png": [
+7433,
+2063
+],
+"png2_15/p07-reparaturdurchfuehrung.png": [
+5438,
+1658
+],
+"png2_15/p08-abholung.png": [
+5723,
+1320
+],
+"png2_15/p09-reklamation.png": [
+6008,
+1830
+],
+"png2_15/p10-retoure.png": [
+4868,
+1268
+],
+"pres/crop-01-links.png": [
+3200,
+1938
+],
+"pres/crop-04-mitte.png": [
+3200,
+1645
+],
+"pres/crop-05-links.png": [
+3200,
+758
+]
+}

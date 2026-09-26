@@ -24,7 +24,7 @@ async function icon(name, color, size = 256) {
 }
 function imgSize(file) {
   const dims = JSON.parse(fs.readFileSync(path.join(HERE, 'imgdims.json'), 'utf8'));
-  return dims[path.resolve(HERE, file)];
+  return dims[path.relative(HERE, path.resolve(HERE, file))] || dims[path.resolve(HERE, file)];
 }
 function fit(file, maxW, maxH) {
   let [w, h] = imgSize(file) || [1000, 600];
@@ -93,14 +93,14 @@ function fit(file, maxW, maxH) {
     s.addText('Werkstatt-Management als SaaS-Plattform mit KI-Sofortdiagnose', { x: 0.6, y: 2.4, w: 7.5, h: 0.6, fontFace: FONT, fontSize: 20, color: 'CFE3E3', isTextBox: true, margin: 0 });
     s.addText('Fallstudie Systemanalyse · Methoden der WI · DHBW Karlsruhe', { x: 0.6, y: 3.3, w: 8, h: 0.4, fontFace: FONT, fontSize: 14, color: C.white, isTextBox: true, margin: 0 });
     s.addText('Kurs WWI25B4 · Gruppe 1: Maximilian Ewald, David Leismann, Kilian Platter, Nina Sattler, Jakob Schwan, Adrian Wenzler', { x: 0.6, y: 3.75, w: 8.6, h: 0.6, fontFace: FONT, fontSize: 12, color: 'CFE3E3', isTextBox: true, margin: 0 });
-    s.addText('Abschlusspräsentation · 27.10.2026 · Raum B458 (Termin bestätigen)', { x: 0.6, y: 4.35, w: 8.6, h: 0.4, fontFace: FONT, fontSize: 12, color: C.amber, isTextBox: true, margin: 0 });
+    s.addText('Abschlusspräsentation · 27.10.2026, 09:00 Uhr · Raum B458', { x: 0.6, y: 4.35, w: 8.6, h: 0.4, fontFace: FONT, fontSize: 12, color: C.amber, isTextBox: true, margin: 0 });
     iconCircle(s, 'FaTools', 8.0, 1.2, 1.0, C.amber);
   }
   // ---------------- 2 Agenda
   {
     const s = base('Agenda', { speaker: 'Nina' });
-    const items = [['1', 'Ausgangslage und Problem', 'Nina, David'], ['2', 'Das Startup RepairFlow und der Markt', 'Adrian'], ['3', 'Geschäftsprozesse (BPMN)', 'Maxi'],
-      ['4', 'Automatisierung und KI-Sofortdiagnose', 'Adrian'], ['5', 'Objektorientierte Analyse (UML)', 'Kilian'], ['6', 'Vorgehen und Projektmanagement', 'David'],
+    const items = [['1', 'Ausgangslage und Problem', 'David'], ['2', 'Das Startup RepairFlow und der Markt', 'Adrian'], ['3', 'Geschäftsprozesse (BPMN)', 'Maxi'],
+      ['4', 'Automatisierung und KI-Sofortdiagnose', 'Adrian'], ['5', 'Objektorientierte Analyse (UML)', 'Kilian, Jakob'], ['6', 'Vorgehen und Projektmanagement', 'David'],
       ['7', 'Herausforderungen und Fazit', 'Jakob, Nina']];
     items.forEach((it, i) => {
       const y = 1.15 + i * 0.47;
@@ -147,7 +147,7 @@ function fit(file, maxW, maxH) {
     bulletsBox(s, ['angenommen → in Diagnose → KVA offen → freigegeben | abgelehnt → Teile bestellt → in Reparatur → fertig → abgeholt',
       'Die zehn BPMN-Prozesse sind die Übergänge dieses Automaten.',
       'Das Klassendiagramm führt ihn als Attribut status : AuftragStatus.',
-      'Die Sequenzdiagramme markieren jeden Statuswechsel.',
+      'Die Sequenzdiagramme markieren die Statuswechsel, an denen sie beteiligt sind.',
       'Reklamation im Gewährleistungsfall startet einen neuen, kostenfreien Zyklus.'], 5.0, 1.3, 4.5, 3.7, 13);
   }
   // ---------------- 7 Prozesslandkarte
@@ -156,7 +156,7 @@ function fit(file, maxW, maxH) {
     const rows = [[{ text: 'Nr', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Prozess', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Pools', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Akt.', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'autom.', options: { bold: true, color: C.white, fill: { color: C.teal } } }]];
     for (const st of STATS) rows.push([st.num, st.name, st.pools.join(', '), String(st.activities), Math.round(100 * st.auto / st.activities) + ' %']);
     s.addTable(rows, { x: 0.5, y: 1.05, w: 6.3, colW: [0.4, 3.2, 1.6, 0.5, 0.6], fontFace: FONT, fontSize: 9.5, color: C.dark, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.31, valign: 'middle' });
-    stat(s, 7.1, 1.3, String(TOTAL_ACT), 'Aktivitäten, im Schnitt ' + (TOTAL_ACT / 10).toFixed(0) + ' je Diagramm', 2.3);
+    stat(s, 7.1, 1.3, String(TOTAL_ACT), 'Aktivitäten, im Schnitt ' + (TOTAL_ACT / 10).toFixed(1).replace('.', ',') + ' je Diagramm', 2.3);
     stat(s, 7.1, 2.9, Math.round(100 * TOTAL_AUTO / TOTAL_ACT) + ' %', 'davon führt RepairFlow ohne manuelle Arbeit aus', 2.3);
     s.addText('Prozesse 01 bis 08: durchgehende Auftragsreise · 09 und 10: Reklamation und Retoure', { x: 0.5, y: 4.75, w: 9, h: 0.3, fontFace: FONT, fontSize: 10, italic: true, color: C.grey, isTextBox: true, margin: 0 });
   }
@@ -166,7 +166,7 @@ function fit(file, maxW, maxH) {
     card(s, 0.5, 1.1, 4.35, 1.4, 'FaSitemap', 'Pools und Lanes', 'Pool = Unternehmen: Werkstattbetrieb (Mandant), Kunde und Lieferant als Empty Pools. Lanes = Rollen: Service, Techniker, Werkstattleitung, Disposition.');
     card(s, 5.15, 1.1, 4.35, 1.4, 'FaBolt', 'Automatisierung als Aktivitätstyp', 'Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive = Nachricht, User Task = Mensch mit RepairFlow, Manual = außerhalb.');
     card(s, 0.5, 2.65, 4.35, 1.4, 'FaExchangeAlt', 'Nachrichtenflüsse und Daten', 'Kommunikation mit Kunde und Lieferant nur als Nachrichtenfluss. Datenobjekte tragen Klassennamen mit Zustand, z. B. Reparaturauftrag [freigegeben].');
-    card(s, 5.15, 2.65, 4.35, 1.4, 'FaClipboardCheck', 'Ein Start, ein Ende, Linter sauber', 'Je Diagramm ein Start- und ein Endereignis. Camunda-8-Anreicherung: Task-Definitionen, Subscriptions, Timer, FEEL-Bedingungen. Problems-Panel: 0 Befunde.');
+    card(s, 5.15, 2.65, 4.35, 1.4, 'FaClipboardCheck', 'Ein Start, ein Ende, Linter sauber', 'Je Prozess ein Start- und ein Endereignis. Camunda-8-Anreicherung: Task-Definitionen, Subscriptions, Timer, FEEL-Bedingungen. Camunda-Linter: 0 Befunde.');
     picture(s, 'pres/crop-05-links.png', 0.5, 4.15, 9.0, 0.78, 'Ausschnitt Prozess 05: paralleler Mehrfach-Teilprozess je Ersatzteil');
   }
   // ---------------- 9 Prozess 01
@@ -179,7 +179,7 @@ function fit(file, maxW, maxH) {
   {
     const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maxi', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden statt einer separaten Nachricht, damit das Diagramm ohne Kreuzungen bleibt.' });
     picture(s, 'pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Mittlerer Teil: Senden, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife');
-    bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage keine Reaktion', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) als Call Activity auf; Ablehnung führt zur Diagnosepauschale und Abholaufforderung'], 0.5, 4.1, 9, 1.0, 11);
+    bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage verstrichen (Erinnerung)', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) als Call Activity auf; Ablehnung führt zur Diagnosepauschale und Abholaufforderung'], 0.5, 4.1, 9, 1.0, 11);
   }
   // ---------------- 11 Automatisierung + KI
   {
@@ -210,24 +210,24 @@ function fit(file, maxW, maxH) {
   // ---------------- 13 Klassen
   {
     const s = base('Klassendiagramm: 26 Klassen, ein Zustandsautomat', { speaker: 'Kilian', notes: 'Entwurfsentscheidungen: Reparaturauftrag als Aggregatwurzel, Lagerbestand je Filiale, Reservierung als eigene Klasse, Werkstattbetrieb als Mandant, Rollen als Unterklassen von Mitarbeiter, drei KI-Klassen.' });
-    picture(s, 'uml2/klassen-fokus-1-sofortdiagnose.png', 0.4, 1.05, 5.6, 4.1, 'Ausschnitt: Kundenkontakt und KI-Sofortdiagnose (vollständiges Diagramm in der Dokumentation)');
-    bulletsBox(s, ['Reparaturauftrag als Aggregatwurzel: Gerät, Befund, KVA und Reparaturschritte sind Kompositionen',
+    picture(s, 'uml2/klassen-fokus-1-sofortdiagnose.png', 0.4, 1.05, 5.6, 3.75, 'Ausschnitt: Kundenkontakt und KI-Sofortdiagnose (vollständiges Diagramm in der Dokumentation)');
+    bulletsBox(s, ['Reparaturauftrag als Aggregatwurzel: Befund, KVA und Reparaturschritte sind Kompositionen, das Gerät ist nur zugeordnet',
       'Lagerbestand als eigene Klasse zwischen Ersatzteil und Filiale: nur so geht filialübergreifende Verfügbarkeit',
       'ErsatzteilReservierung mit eigenem Lebenszyklus: vorreserviert, reserviert, entnommen, storniert',
-      'Werkstattbetrieb als Mandant; Rollen Techniker, Disponent, Werkstattleiter als Unterklassen von Mitarbeiter – wie die Lanes im BPMN',
+      'Werkstattbetrieb als Mandant; Rollen Techniker, Disponent, Werkstattleiter als Unterklassen von Mitarbeiter – wie die Lanes Techniker, Ersatzteil-Disposition und Werkstattleitung im BPMN',
       'Voranmeldung, Medienanhang, KIDiagnosevorschlag tragen die Sofortdiagnose'], 6.2, 1.2, 3.3, 3.9, 11.5);
   }
   // ---------------- 14 SD1
   {
     const s = base('Sequenzdiagramm SD1: Sofortdiagnose anfordern', { speaker: 'Kilian', notes: 'Lebenslinien sind Klassen, Botschaften sind Operationen. Fragmente: loop je Medienanhang, alt auswertbar/nicht, loop je Teil und Filiale, alt Bestätigung/Timer, opt Reservierung.' });
     picture(s, 'uml2/sequenz-01-sofortdiagnose.png', 0.4, 1.05, 6.4, 4.1);
-    bulletsBox(s, ['Voranmeldung lässt jeden Medienanhang analysieren (loop)', 'alt: Medien nicht auswertbar → Rückfrage; sonst KIDiagnosevorschlag und vorläufiger KVA', 'loop je Ersatzteil und Filiale über Lagerbestand', 'alt: Kunde bestätigt → opt Vorreservierung; sonst Timer → verwerfen', 'Alle Botschaften sind Operationen des Klassendiagramms'], 7.0, 1.2, 2.5, 3.9, 10.5);
+    bulletsBox(s, ['Voranmeldung lässt jeden Medienanhang analysieren, der KI-Diagnosedienst wertet aus (loop)', 'alt: Medien nicht auswertbar → Rückfrage; sonst KIDiagnosevorschlag und vorläufiger KVA', 'loop je Ersatzteil und Filiale über Lagerbestand', 'alt: Kunde bestätigt → opt Vorreservierung; sonst Timer → verwerfen', 'Alle Botschaften sind Operationen des Klassendiagramms'], 7.0, 1.2, 2.5, 3.9, 10.5);
   }
   // ---------------- 15 SD3
   {
     const s = base('Sequenzdiagramm SD3: Ersatzteil filialübergreifend reservieren', { speaker: 'Jakob', notes: 'Fachlicher Mehrwert der Disposition. Verschachteltes alt, loop über die anderen Filialen, opt Nachbestellvorschlag.' });
     picture(s, 'uml2/sequenz-03-reservierung.png', 0.4, 1.05, 6.4, 4.1);
-    bulletsBox(s, ['Erst der eigene Lagerbestand, dann loop über die anderen Filialen', 'Verschachteltes alt: lokal reservieren, extern reservieren mit Umlagerung oder Fehlteil melden (→ Prozess 06)', 'opt: Meldebestand unterschritten → Nachbestellvorschlag', 'Reservierung mindert den verfügbaren Bestand, entnommen wird erst beim Einbau'], 7.0, 1.2, 2.5, 3.9, 10.5);
+    bulletsBox(s, ['Erst der eigene Lagerbestand, dann loop über die anderen Filialen', 'Verschachteltes alt: lokal reservieren, extern reservieren mit Umlagerung oder ref auf UC10 Lieferantenbestellung (→ Prozess 06)', 'opt: Meldebestand unterschritten → ref auf UC12 Nachbestellvorschlag', 'Reservierung erhöht nur den reservierten Bestand, abgebucht wird erst bei der Entnahme'], 7.0, 1.2, 2.5, 3.9, 10.5);
   }
   // ---------------- 16 Vorgehen & PM
   {
@@ -240,14 +240,14 @@ function fit(file, maxW, maxH) {
     });
     card(s, 0.5, 1.95, 2.9, 3.1, 'FaUsers', 'Rollen', 'Projektleitung Nina (Stellvertretung und Backups David), Product Owner Adrian, Scrum Master und UML Kilian, BPMN Maxi, Qualität Jakob, Dokumanager: KI-Werkzeug Claude.');
     card(s, 3.55, 1.95, 2.9, 3.1, 'FaGitAlt', 'Zusammenarbeit', 'Scrum im Takt der vier Gruppentermine, Trello-Board mit einer Liste je Termin und einer Karte je Person und Aufgabe, Prüfung jedes Diagramms im Zweierteam, GitHub mit Branches, Pull Requests und Review.');
-    card(s, 6.6, 1.95, 2.9, 3.1, 'FaFlagCheckered', 'Meilensteine', '02.09. alle Diagramme erstellt und geprüft, 05.10. Korrekturen und Sequenzdiagramme, 15.10. Modelle, Doku und Folien fertig, 22.10. Generalprobe, 27.10. Präsentation, 13.11. Abgabe.');
+    card(s, 6.6, 1.95, 2.9, 3.1, 'FaFlagCheckered', 'Meilensteine', '02.09. alle Diagramme erstellt, Prüfung im Zweierteam verteilt, 05.10. Korrekturen und Sequenzdiagramme, 15.10. Modelle, Doku und Folien fertig, 22.10. Generalprobe, 27.10. Präsentation, 13.11. Abgabe.');
   }
   // ---------------- 17 Herausforderungen
   {
     const s = base('Herausforderungen und was wir gelernt haben', { speaker: 'Jakob' });
     card(s, 0.5, 1.1, 4.35, 1.9, 'FaBalanceScale', 'Perspektive klären', 'Werkstatt oder Softwareanbieter? Die Rückfrage des Dozenten hat uns zur klaren Entscheidung gezwungen: Solution Provider, FixWerk als Pilotkunde. Prozesse blieben, Texte und Klassenmodell zogen nach.');
     card(s, 5.15, 1.1, 4.35, 1.9, 'FaProjectDiagram', 'Drei Modelle, ein Vokabular', 'Datenobjekte, Klassen, Lebenslinien und Statuswerte müssen wortgleich sein. Eine gemeinsame Modellbeschreibung als Single Source of Truth hat die Abweichungen beseitigt.');
-    card(s, 0.5, 3.15, 4.35, 1.9, 'FaClipboardCheck', 'Engine-ready statt Fehlerliste', 'Der Camunda Modeler meldet für Camunda 8 fehlende technische Details als Fehler. Wir haben die Diagramme angereichert, bis das Problems-Panel leer war.');
+    card(s, 0.5, 3.15, 4.35, 1.9, 'FaClipboardCheck', 'Engine-ready statt Fehlerliste', 'Der Camunda Modeler meldet für Camunda 8 fehlende technische Details als Fehler. Wir haben die Diagramme angereichert, bis der Camunda-Linter (Regeln des Problems-Panels) keine Befunde mehr meldete.');
     card(s, 5.15, 3.15, 4.35, 1.9, 'FaLightbulb', 'Vision mit Absicherung', 'Die KI-Sofortdiagnose soll beeindrucken, aber glaubwürdig bleiben: klare Trennung von heute Machbarem und Vision, Vorschlag bleibt vorläufig.');
   }
   // ---------------- 18 Fazit
@@ -255,8 +255,8 @@ function fit(file, maxW, maxH) {
     const s = base('Fazit und Ausblick', { dark: true, speaker: 'Nina' });
     stat(s, 0.5, 1.2, '10', 'BPMN-Kollaborationsdiagramme, ' + TOTAL_ACT + ' Aktivitäten', 2.2);
     stat(s, 2.9, 1.2, '18', 'Use Cases, 7 Akteure', 2.2);
-    stat(s, 5.3, 1.2, '23', 'Klassen, 33 Assoziationen', 2.2);
-    stat(s, 7.7, 1.2, '5', 'Sequenzdiagramme + Zustandsdiagramm', 2.2);
+    stat(s, 5.3, 1.2, '26', 'Klassen, 35 Assoziationen', 2.2);
+    stat(s, 7.7, 1.2, '6', 'Sequenzdiagramme + Zustandsdiagramm', 2.2);
     s.addText([{ text: 'RepairFlow löst den Medienbruch aus Papier, Excel und Telefon und macht den Reparaturauftrag zum zentralen Zustandsautomaten. ', options: { breakLine: true } },
       { text: 'Der fachliche Mehrwert liegt in der filialübergreifenden Disposition und in der KI-Sofortdiagnose, die dem Kunden Klarheit gibt, bevor er die Werkstatt betritt.', options: { breakLine: true } },
       { text: 'Ausblick: Predictive Disposition (Bedarfsprognose je Filiale und Saison), Techniker-Copilot und digitale Geräteakte.', options: {} }],

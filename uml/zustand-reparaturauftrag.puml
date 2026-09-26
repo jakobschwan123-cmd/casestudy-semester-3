@@ -1,19 +1,34 @@
 @startuml
 title sd : Klasse Reparaturauftrag – Zustandsdiagramm
 skinparam defaultFontName Arial
+state "angenommen" as angenommen
+state "in Diagnose" as inDiagnose
+state "KVA offen" as kvaOffen
+state "freigegeben" as freigegeben
+state "abgelehnt" as abgelehnt
+state "Teile bestellt" as teileBestellt
+state "in Reparatur" as inReparatur
+state "fertig" as fertig
+state "abgeholt" as abgeholt
 [*] --> angenommen : Auftrag anlegen /\nwechsleStatus(ANGENOMMEN)
-angenommen --> inDiagnose : Techniker zugewiesen /\nwechsleStatus(IN_DIAGNOSE)
-inDiagnose --> kvaOffen : Diagnose abgeschlossen /\nKostenvoranschlag.versendeAnKunde()
-inDiagnose --> abgeholt : nicht reparierbar /\nbenachrichtigeKunde()
-kvaOffen --> freigegeben : Kunde.gibKvaFrei() /\nwechsleStatus(FREIGEGEBEN)
-kvaOffen --> abgelehnt : Kunde.lehneKvaAb() /\nwechsleStatus(ABGELEHNT)
+angenommen --> inDiagnose : Diagnose begonnen /\nwechsleStatus(IN_DIAGNOSE)
+inDiagnose --> kvaOffen : KVA versendet /\nwechsleStatus(KVA_OFFEN)
+inDiagnose --> abgelehnt : nicht reparierbar /\nwechsleStatus(ABGELEHNT)
+kvaOffen --> freigegeben : KVA freigegeben /\nwechsleStatus(FREIGEGEBEN)
+kvaOffen --> abgelehnt : KVA abgelehnt /\nwechsleStatus(ABGELEHNT)
 freigegeben --> teileBestellt : Fehlteile bestellt /\nwechsleStatus(TEILE_BESTELLT)
-freigegeben --> inReparatur : alle Teile reserviert
-teileBestellt --> inReparatur : Wareneingang gebucht /\nwechsleStatus(IN_REPARATUR)
-inReparatur --> kvaOffen : Zusatzbefund /\nNachtrags-KVA
-inReparatur --> fertig : fertigmelden()\n[alleSchritteAbgeschlossen()]
+freigegeben --> inReparatur : Reparatur begonnen\n[alle Teile reserviert] /\nwechsleStatus(IN_REPARATUR)
+teileBestellt --> inReparatur : Reparatur begonnen\n[Teile eingegangen] /\nwechsleStatus(IN_REPARATUR)
+inReparatur --> fertig : fertigmelden()\n[alleSchritteAbgeschlossen()] /\nwechsleStatus(FERTIG)
 fertig --> abgeholt : Übergabe und Zahlung /\nwechsleStatus(ABGEHOLT)
-abgelehnt --> abgeholt : Gerät abgeholt
-abgeholt --> angenommen : Reklamation (Gewährleistung) /\nNacharbeit anlegen
+abgelehnt --> abgeholt : Gerät abgeholt /\nwechsleStatus(ABGEHOLT)
 abgeholt --> [*]
+note right of inReparatur
+  Zusatzbefund: Nachtrags-KVA mit eigenem
+  KvaStatus; der Auftrag bleibt in Reparatur
+end note
+note bottom of abgeholt
+  Reklamation: neuer Reparaturauftrag
+  (Nacharbeit), kein Rücksprung
+end note
 @enduml

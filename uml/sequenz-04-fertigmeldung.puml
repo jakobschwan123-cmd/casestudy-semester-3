@@ -29,11 +29,8 @@ alt alle Schritte abgeschlossen
     activate RE
     RE --> RA : bruttobetrag
     deactivate RE
-    RA -> Kunde : benachrichtigeKunde("Gerät abholbereit")
-    opt Kunde hat Benachrichtigungskanal hinterlegt (E-Mail / SMS / App)
-        RA -> Kunde : Push-Nachricht über RepairFlow-App
-        Kunde --> RA : zugestellt
-    end
+    RA -> RA : benachrichtigeKunde("Gerät abholbereit")
+    RA -> Kunde : Nachricht "Gerät abholbereit"\n(über den hinterlegten Kanal: E-Mail / SMS / App)
     RA --> Techniker : fertiggemeldet
 else noch offene Schritte
     RA --> Techniker : offene Schritte (Anzahl)

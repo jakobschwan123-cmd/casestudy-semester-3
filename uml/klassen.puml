@@ -94,7 +94,7 @@ class Medienanhang {
   - aufnahmedatum : Date
   - auswertbar : boolean
   --
-  + analysieren() : KIDiagnosevorschlag
+  + analysieren() : boolean
 }
 class KIDiagnosevorschlag {
   - vorschlagsnummer : String
@@ -117,6 +117,7 @@ class Reparaturauftrag {
   + alleSchritteAbgeschlossen() : boolean
   + fertigmelden() : void
   + benachrichtigeKunde(text : String) : void
+  + getRechnung() : Rechnung
 }
 class Geraet {
   - seriennummer : String
@@ -184,6 +185,7 @@ class Lagerbestand {
   + pruefeVerfuegbarkeit(anzahl : int) : boolean
   + bucheZugang(anzahl : int) : void
   + bucheAbgang(anzahl : int) : void
+  + reserviere(anzahl : int) : void
   + istMeldebestandUnterschritten() : boolean
 }
 class ErsatzteilReservierung {
@@ -206,6 +208,7 @@ class Lieferantenbestellung {
   + uebermittle() : void
   + bucheWareneingang() : void
   + berechneBestellwert() : double
+  + freigeben() : void
 }
 class Bestellposition {
   - menge : int
@@ -221,6 +224,7 @@ class Rechnung {
   --
   + berechneBetrag() : double
   + erfasseZahlung(art : String) : void
+  + getRechnungsdatum() : Date
 }
 class Reklamation {
   - reklamationsnummer : String
@@ -293,21 +297,22 @@ Voranmeldung "1" *-down- "1..*" Medienanhang : enthält >
 Voranmeldung "1" *-down- "0..1" KIDiagnosevorschlag : führt zu >
 Voranmeldung "0..*" -- "1" Filiale : Wunschfiliale >
 Voranmeldung "0..1" -- "0..1" Reparaturauftrag : wird übernommen in >
-KIDiagnosevorschlag "1" -- "0..1" Kostenvoranschlag : erzeugt vorläufigen >
+KIDiagnosevorschlag "0..1" -- "0..1" Kostenvoranschlag : erzeugt vorläufigen >
 KIDiagnosevorschlag "0..*" -- "0..*" Ersatzteil : schlägt vor >
 Fehlerbefund "0..1" -- "0..1" KIDiagnosevorschlag : prüft >
-Reparaturauftrag "1" *-- "1" Geraet : betrifft >
+Reparaturauftrag "0..*" -- "1" Geraet : betrifft >
 Reparaturauftrag "0..*" -- "1" Filiale : bearbeitet in >
 Reparaturauftrag "0..*" -- "0..1" Techniker : zugewiesen an >
 Reparaturauftrag "1" *-- "0..1" Fehlerbefund : hat >
 Fehlerbefund "0..*" -- "1" Techniker : erstellt von >
-Reparaturauftrag "1" *-- "0..*" Kostenvoranschlag : hat >
+Reparaturauftrag "0..1" *-- "0..*" Kostenvoranschlag : hat >
 Kostenvoranschlag "1" *-down- "1..*" KvaPosition : besteht aus >
 KvaPosition "0..*" -- "0..1" Ersatzteil : referenziert >
 Reparaturauftrag "1" *-down- "0..*" Reparaturschritt : gliedert sich in >
 Reparaturschritt "1" *-down- "0..*" Arbeitszeitbuchung : erfasst >
 Arbeitszeitbuchung "0..*" -- "1" Techniker : gebucht von >
 Ersatzteil "1" -down- "0..*" Lagerbestand : geführt als >
+Ersatzteil "0..*" -- "0..1" Lieferant : Vorzugslieferant >
 Lagerbestand "0..*" -- "1" Filiale : liegt in >
 ErsatzteilReservierung "0..*" -- "1" Lagerbestand : reserviert auf >
 ErsatzteilReservierung "0..*" -- "0..1" Reparaturauftrag : für >

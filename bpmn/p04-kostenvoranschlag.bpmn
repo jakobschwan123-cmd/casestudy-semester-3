@@ -115,7 +115,7 @@
       <bpmn:outgoing>Flow_04_17</bpmn:outgoing>
       <bpmn:messageEventDefinition id="E04_Ablehnung_def" messageRef="Msg_04_2" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="E04_Timer" name="3 Tage keine Reaktion">
+    <bpmn:intermediateCatchEvent id="E04_Timer" name="3 Tage verstrichen">
       <bpmn:incoming>Flow_04_11</bpmn:incoming>
       <bpmn:outgoing>Flow_04_12</bpmn:outgoing>
       <bpmn:timerEventDefinition id="E04_Timer_def">
@@ -197,7 +197,7 @@
     <bpmn:sequenceFlow id="Flow_04_19" sourceRef="T04_Pauschale" targetRef="T04_Abholung" />
     <bpmn:sequenceFlow id="Flow_04_20" sourceRef="T04_Abholung" targetRef="Join_04" />
     <bpmn:sequenceFlow id="Flow_04_21" sourceRef="Join_04" targetRef="End_04" />
-    <bpmn:dataObjectReference id="DataObjRef_04_1" name="KVA-Position" dataObjectRef="DataObj_04_1" />
+    <bpmn:dataObjectReference id="DataObjRef_04_1" name="Kva-Position" dataObjectRef="DataObj_04_1" />
     <bpmn:dataObject id="DataObj_04_1" />
     <bpmn:dataObjectReference id="DataObjRef_04_2" name="Kosten-voranschlag" dataObjectRef="DataObj_04_2" />
     <bpmn:dataObject id="DataObj_04_2" />

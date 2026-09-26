@@ -12,8 +12,9 @@ Alles hier ist optional: Die abzugebenden Artefakte liegen fertig in `bpmn/`, `u
 | `doc.js` | Projektdokumentation mit docx-js; zwei Durchläufe: `node doc.js`, dann `python3 mktoc.py doku/Projektdokumentation.docx toc.json` (Seitenzahlen über LibreOffice/pdftotext), dann `node doc.js toc.json` |
 | `mktoc.py` | ermittelt die Seitenzahlen für das statische Inhaltsverzeichnis |
 | `pres.js` | Abschlusspräsentation mit pptxgenjs |
+| `pack_bpmn.py` | packt `abgabe/BPMN-WWI25B4-Gruppe1.zip` mit den Dateinamen nach Ablauf (`01-Sofortdiagnose.bpmn` …): `python3 tools/pack_bpmn.py` |
 | `process_stats.json` | Kennzahlen je Prozess (Aktivitäten, Automatisierungsgrad, Datenobjekte), von Doku und Präsentation gelesen |
 
-Die Skripte erwarten die Bilder unter `uml2/`, `png2/`, `png2_15/` und `pres/` relativ zum Skriptordner (so hießen die Arbeitsordner beim Bauen); beim Neubau entweder die Pfade in `doc.js`/`pres.js` anpassen oder Symlinks auf `../uml` und `../bpmn` setzen. `imgdims.json` (Bildgrößen) wird mit Pillow erzeugt.
+Die Skripte erwarten die Bilder unter `uml2/`, `png2/`, `png2_15/` und `pres/` relativ zum Skriptordner (so hießen die Arbeitsordner beim Bauen); beim Neubau entweder die Pfade in `doc.js`/`pres.js` anpassen oder Symlinks auf `../uml` und `../bpmn` setzen. `imgdims.json` (Bildgrößen, Schlüssel relativ zu `tools/`, z. B. `uml2/klassen.png`) wird mit Pillow erzeugt. `node doc.js` schreibt nach `tools/doku2/`, `node pres.js` nach `tools/praesi2/`; die fertigen Dateien danach nach `doku/` bzw. `praesi/` kopieren und mit LibreOffice als PDF exportieren. `process_stats.json` wird mit `python3 tools/mkstats.py` aus den BPMN-Dateien gezählt (Aktivitäten = alle Task-Typen, Aufruf-Aktivitäten und Teilprozesse; automatisiert = Service-, Sende-, Empfangs-, Geschäftsregel- und Skript-Aktivitäten).
 
 Abhängigkeiten: Python 3 mit Pillow und Playwright (Chromium), Node.js mit `bpmn-js`, `bpmnlint`, `bpmn-moddle`, `@camunda/linting`, `esbuild`, `docx`, `pptxgenjs`, `react-icons`, `sharp`; PlantUML (plantuml.jar, Java) mit Graphviz für die UML-Bilder; LibreOffice für die PDF-Exporte.

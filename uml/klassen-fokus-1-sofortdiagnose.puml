@@ -38,7 +38,7 @@ class Medienanhang {
   - aufnahmedatum : Date
   - auswertbar : boolean
   --
-  + analysieren() : KIDiagnosevorschlag
+  + analysieren() : boolean
 }
 class KIDiagnosevorschlag {
   - vorschlagsnummer : String
@@ -94,6 +94,7 @@ class Reparaturauftrag {
   + alleSchritteAbgeschlossen() : boolean
   + fertigmelden() : void
   + benachrichtigeKunde(text : String) : void
+  + getRechnung() : Rechnung
 }
 class Ersatzteil <<stammdaten>> {
   - artikelnummer : String
@@ -109,10 +110,10 @@ Voranmeldung "1" *-down- "1..*" Medienanhang : enthält >
 Voranmeldung "1" *-down- "0..1" KIDiagnosevorschlag : führt zu >
 Voranmeldung "0..*" -- "1" Filiale : Wunschfiliale >
 Voranmeldung "0..1" -- "0..1" Reparaturauftrag : wird übernommen in >
-KIDiagnosevorschlag "1" -- "0..1" Kostenvoranschlag : erzeugt vorläufigen >
+KIDiagnosevorschlag "0..1" -- "0..1" Kostenvoranschlag : erzeugt vorläufigen >
 KIDiagnosevorschlag "0..*" -- "0..*" Ersatzteil : schlägt vor >
 Reparaturauftrag "0..*" -- "1" Filiale : bearbeitet in >
-Reparaturauftrag "1" *-- "0..*" Kostenvoranschlag : hat >
+Reparaturauftrag "0..1" *-- "0..*" Kostenvoranschlag : hat >
 ErsatzteilReservierung "0..*" -- "0..1" Reparaturauftrag : für >
 ErsatzteilReservierung "0..*" -- "0..1" Voranmeldung : vorreserviert für >
 @enduml

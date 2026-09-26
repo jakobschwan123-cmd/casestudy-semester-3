@@ -5,7 +5,7 @@ Das Moodle-Archiv heißt `Fallstudie-WWI25B4-Gruppe1.zip` und enthält:
 | Datei | Quelle im Repo | Stand |
 |---|---|---|
 | Projekt-WWI25B4-Gruppe1.pdf | doku/Projektdokumentation.pdf (beim Packen umbenennen) | Entwurf, offene Stellen gelb markiert |
-| BPMN-WWI25B4-Gruppe1.zip | abgabe/ (aus bpmn/*.bpmn) | fertig, nach Nacharbeit im Modeler neu packen |
+| BPMN-WWI25B4-Gruppe1.zip | abgabe/ (aus bpmn/*.bpmn, Dateinamen `01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`) | Stand 26.09.2026, nach Nacharbeit im Modeler neu packen |
 | UML-WWI25B4-Gruppe1.vpp | aus Visual Paradigm (File → Save Project As) | offen, Kilian |
 | Praesentation-WWI25B4-Gruppe1.pdf | praesi/Abschlusspraesentation.pdf (beim Packen umbenennen) | Entwurf, Zuordnung der Vortragenden auf der letzten Folie |
 
@@ -17,6 +17,6 @@ cp praesi/Abschlusspraesentation.pdf /tmp/Praesentation-WWI25B4-Gruppe1.pdf
 zip -j Fallstudie-WWI25B4-Gruppe1.zip /tmp/Projekt-WWI25B4-Gruppe1.pdf abgabe/BPMN-WWI25B4-Gruppe1.zip <Pfad zur VPP> /tmp/Praesentation-WWI25B4-Gruppe1.pdf
 ```
 
-`BPMN-WWI25B4-Gruppe1.zip` enthält nur die zehn .bpmn-Dateien (XML-Export, wie im Ablauf gefordert); die PNG-Renderings liegen im Repository unter `bpmn/`. Nach der Nacharbeit im Camunda Modeler neu packen: `cd bpmn && zip ../abgabe/BPMN-WWI25B4-Gruppe1.zip p*.bpmn`.
+`BPMN-WWI25B4-Gruppe1.zip` enthält nur die zehn .bpmn-Dateien (XML-Export, wie im Ablauf gefordert); die PNG-Renderings liegen im Repository unter `bpmn/`. Die Dateinamen im ZIP folgen dem Ablauf („zweistellige Nummer und prägnanter Modellname", z. B. `01-Sofortdiagnose.bpmn`), nicht den Repository-Namen `p01-…`. Nach der Nacharbeit im Camunda Modeler neu packen (Windows, macOS, Linux): `python3 tools/pack_bpmn.py` im Repo-Wurzelordner; das Skript löscht das alte ZIP vorher.
 
 Jede Person lädt das vollständige Archiv selbst in Moodle hoch.

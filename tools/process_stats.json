@@ -49,10 +49,10 @@
   },
   "auto": 4,
   "msgflows": 2,
-  "data": 7,
+  "data": 6,
   "start": "Kunde erschienen",
   "end": "Auftrag angenommen",
-  "doc": "Der Kunde bringt das Geraet in die Filiale. Daten aus einer Voranmeldung werden uebernommen, das Geraet registriert, der Reparaturauftrag angelegt und von der Werkstattleitung eingeplant (Kapazitaet, Techniker, Termin)."
+  "doc": "Der Kunde bringt das Geraet in die Filiale. Daten aus einer Voranmeldung werden uebernommen, das Geraet registriert, der Reparaturauftrag angelegt und von der Werkstattleitung eingeplant (Kapazitaet, bei Bedarf Umleitung an eine andere Filiale, Techniker, Termin)."
  },
  {
   "num": "03",
@@ -77,7 +77,7 @@
   },
   "auto": 5,
   "msgflows": 1,
-  "data": 4,
+  "data": 5,
   "start": "Auftrag eingeplant",
   "end": "Diagnose abgeschlossen",
   "doc": "Der Techniker prueft den KI-Diagnosevorschlag, fuehrt Funktionstest und Messung durch, dokumentiert den Fehlerbefund und legt den Ersatzteilbedarf fest. RepairFlow bewertet die Wirtschaftlichkeit der Reparatur."
@@ -127,8 +127,8 @@
    "service": 8,
    "subprocess": 1,
    "user": 1,
-   "call": 1,
    "businessRule": 1,
+   "call": 1,
    "send": 1
   },
   "auto": 10,
@@ -136,7 +136,7 @@
   "data": 4,
   "start": "KVA freigegeben",
   "end": "Ersatzteile disponiert",
-  "doc": "Nach der KVA-Freigabe prueft RepairFlow je Ersatzteil den Bestand der eigenen und der anderen Filialen, reserviert oder fordert Umlagerungen an und markiert Fehlteile fuer die Bestellung. Unterschreitet ein Bestand den Meldebestand, entsteht ein Nachbestellvorschlag."
+  "doc": "Nach der KVA-Freigabe prueft RepairFlow je Ersatzteil den Bestand der eigenen und der anderen Filialen, reserviert oder fordert Umlagerungen an und markiert Fehlteile fuer die Bestellung. Unterschreitet ein Bestand den Meldebestand, entsteht ein Nachbestellvorschlag. Fehlteile werden ueber Prozess 06 bestellt."
  },
  {
   "num": "06",
@@ -165,8 +165,8 @@
   "msgflows": 4,
   "data": 5,
   "start": "Fehlteile gemeldet",
-  "end": "Ersatzteile eingegangen",
-  "doc": "Fehlteile werden zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Nach Auftragsbestaetigung und Wareneingang werden die Teile dem Auftrag zugeordnet; bei Verzoegerungen informiert RepairFlow den Kunden."
+  "end": "Bestellung abgeschlossen",
+  "doc": "Fehlteile werden zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Nach Auftragsbestaetigung und Wareneingang werden die Teile dem Auftrag zugeordnet; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess 10: Bei Ersatzlieferung werden die Teile zugeordnet, bei Gutschrift wird neu bestellt, solange das Teil noch benoetigt wird."
  },
  {
   "num": "07",
@@ -209,19 +209,20 @@
    "Werkstattbetrieb",
    "Kunde"
   ],
-  "activities": 12,
+  "activities": 13,
   "kinds": {
    "service": 5,
    "send": 3,
    "manual": 2,
-   "user": 2
+   "user": 2,
+   "receive": 1
   },
-  "auto": 8,
-  "msgflows": 4,
+  "auto": 9,
+  "msgflows": 5,
   "data": 5,
   "start": "Reparatur abgeschlossen",
   "end": "Auftrag abgeschlossen",
-  "doc": "RepairFlow erstellt die Rechnung aus KVA und Arbeitszeiten und benachrichtigt den Kunden. Bei der Abholung werden Geraet und Rechnung uebergeben, die Zahlung erfasst und der Auftrag geschlossen."
+  "doc": "RepairFlow erstellt die Rechnung aus KVA und Arbeitszeiten und benachrichtigt den Kunden. Bei der Abholung werden Geraet und Rechnung uebergeben und die Zahlung erfasst (bar/Karte sofort, auf Rechnung nach Zahlungseingang); danach wird der Auftrag geschlossen."
  },
  {
   "num": "09",
@@ -237,22 +238,22 @@
    "Werkstattbetrieb",
    "Kunde"
   ],
-  "activities": 13,
+  "activities": 14,
   "kinds": {
    "user": 3,
-   "service": 3,
+   "service": 4,
    "manual": 2,
    "businessRule": 1,
    "send": 2,
    "receive": 1,
    "call": 1
   },
-  "auto": 7,
+  "auto": 8,
   "msgflows": 4,
-  "data": 4,
+  "data": 5,
   "start": "Mangel gemeldet",
   "end": "Reklamation abgeschlossen",
-  "doc": "Meldet der Kunde nach der Abholung einen Mangel, wird die Reklamation dem Ursprungsauftrag zugeordnet, der Mangel geprueft und der Gewaehrleistungsfall bewertet. Je nach Ergebnis folgt kostenfreie Nacharbeit oder ein kostenpflichtiges Angebot."
+  "doc": "Meldet der Kunde nach der Abholung einen Mangel, wird die Reklamation dem Ursprungsauftrag zugeordnet, der Mangel geprueft und der Gewaehrleistungsfall bewertet. Je nach Ergebnis folgt kostenfreie Nacharbeit oder ein kostenpflichtiges Angebot; in beiden Faellen wird die Nacharbeit als neuer Reparaturauftrag angelegt."
  },
  {
   "num": "10",
@@ -267,20 +268,19 @@
    "Werkstattbetrieb",
    "Lieferant"
   ],
-  "activities": 11,
+  "activities": 10,
   "kinds": {
    "user": 3,
    "service": 4,
    "send": 1,
    "manual": 1,
-   "receive": 1,
-   "call": 1
+   "receive": 1
   },
   "auto": 6,
   "msgflows": 3,
   "data": 3,
   "start": "Mangelhaftes Teil festgestellt",
   "end": "Retoure abgeschlossen",
-  "doc": "Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht."
+  "doc": "Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht. Ob nach einer Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06."
  }
 ]

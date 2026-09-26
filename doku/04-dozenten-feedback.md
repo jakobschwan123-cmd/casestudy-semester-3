@@ -16,8 +16,8 @@ Folgt daraus: Entscheidung E-02 (Solution Provider, FixWerk als Pilotkunde). Umg
 
 ## Offene Fragen für das nächste Coaching
 
-- Reicht unser GitHub-Repo als Artefakt-Repository für BPMN, oder ist die Camunda Cloud Pflicht (der Ablauf nennt sie, die Installationsanleitung empfiehlt Git)?
+- ~~Reicht unser GitHub-Repo als Artefakt-Repository für BPMN?~~ Geklärt über den Ablauf: Die Modelle gehören in die vorbereiteten Unterordner der Camunda Cloud; Git nutzen wir zusätzlich (E-14).
 - Wechsel der Ansprechperson von Maximilian (Gruppeneinteilung) zu Nina (Projektleitung) mitteilen.
 - Zählt bei „durchschnittlich 10 Aktivitäten" pro Diagramm nur der ausmodellierte Pool oder alle Pools zusammen? (Unsere Diagramme haben 11 bis 13 Aktivitäten im Werkstatt-Pool, im Schnitt 12.)
 - Ist die Camunda-8-Anreicherung (Task-Definitionen, Subscriptions, FEEL-Bedingungen) erwünscht oder soll rein fachlich modelliert werden? Wir haben angereichert, damit das Problems-Panel leer ist.
-- Sind 23 Klassen und 18 Use Cases im Rahmen, oder soll das Modell für die Abgabe verkleinert werden?
+- Sind 26 Klassen und 18 Use Cases im Rahmen, oder soll das Modell für die Abgabe verkleinert werden?

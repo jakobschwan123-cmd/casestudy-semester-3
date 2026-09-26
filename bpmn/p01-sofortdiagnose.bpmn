@@ -131,7 +131,7 @@
       <bpmn:outgoing>Flow_01_17</bpmn:outgoing>
       <bpmn:messageEventDefinition id="E01_Bestaetigt_def" messageRef="Msg_01_3" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="E01_Timer" name="7 Tage keine Reaktion">
+    <bpmn:intermediateCatchEvent id="E01_Timer" name="7 Tage verstrichen">
       <bpmn:incoming>Flow_01_14</bpmn:incoming>
       <bpmn:outgoing>Flow_01_15</bpmn:outgoing>
       <bpmn:timerEventDefinition id="E01_Timer_def">
@@ -213,7 +213,7 @@
     <bpmn:dataObject id="DataObj_01_3" />
     <bpmn:dataObjectReference id="DataObjRef_01_4" name="Voranmeldung" dataObjectRef="DataObj_01_4" />
     <bpmn:dataObject id="DataObj_01_4" />
-    <bpmn:dataObjectReference id="DataObjRef_01_5" name="Ersatzteil-Reservierung" dataObjectRef="DataObj_01_5" />
+    <bpmn:dataObjectReference id="DataObjRef_01_5" name="Ersatzteil-Reservierung [vorreserviert]" dataObjectRef="DataObj_01_5" />
     <bpmn:dataObject id="DataObj_01_5" />
     <bpmn:dataStoreReference id="DataStore_01_1" name="RepairFlow-Datenbank" />
   </bpmn:process>

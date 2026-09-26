@@ -4,7 +4,7 @@ Quelle aller Namen ist `tools/umlmodel.py`. Daraus entstehen das Klassendiagramm
 
 | Datei | Inhalt |
 |---|---|
-| modell.xmi | XMI 2.1 (UML 2.x) mit Klassenmodell (26 Klassen, 7 Aufzählungen, 34 Assoziationen) und Anwendungsfallmodell (18 Use Cases, 7 Akteure, include/extend) zum Import in Visual Paradigm |
+| modell.xmi | XMI 2.1 (UML 2.x) mit Klassenmodell (26 Klassen, 7 Aufzählungen, 35 Assoziationen) und Anwendungsfallmodell (18 Use Cases, 7 Akteure, 4 include, 5 extend) zum Import in Visual Paradigm |
 | klassen.puml / .png | vollständiges Klassendiagramm |
 | klassen-fokus-1…4-*.puml / .png | vier Ausschnitte für Doku und Präsentation (Sofortdiagnose, Auftrag, Disposition, Organisation/Rollen) |
 | usecase.puml / .png | Use-Case-Diagramm |
@@ -20,11 +20,13 @@ Quelle aller Namen ist `tools/umlmodel.py`. Daraus entstehen das Klassendiagramm
 4. **Use-Case-Diagramm anlegen:** neues Use Case Diagram „ud RepairFlow", Systemgrenze „RepairFlow" zeichnen, Use Cases aus dem Model Explorer hineinziehen, Akteure links (primär) und rechts (Lieferant, KI-Diagnosedienst). include/extend kommen aus dem Modell mit.
 5. **Sequenzdiagramme als Unterdiagramme:** im Use-Case-Diagramm den Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram. So verlangt es der Ablauf („Verfeinerungsdiagramm"). Je Use Case eines: UC01 Sofortdiagnose anfordern (SD1), UC07 KVA freigeben / ablehnen (SD2), UC09 Ersatzteil reservieren (SD3), UC14 Auftrag fertigmelden und Kunde benachrichtigen (SD4), UC16 Reklamation bearbeiten (SD5), UC12 Nachbestellvorschlag bei Meldebestand (SD6, zusammen mit UC10). Lebenslinien: Akteure als Actor, Objekte als „: Klassenname" mit der Klasse aus dem Modell verknüpfen (dann bietet VP die Operationen zur Auswahl an). Fragmente alt/opt/loop wie in den PNGs.
 6. Optional: Zustandsdiagramm „sd Reparaturauftrag" als Unterdiagramm der Klasse Reparaturauftrag.
-7. Nach jeder Sitzung Commit in den Teamwork-Server und zusätzlich File → Save Project As als lokale Sicherung `UML-WWI25B4-Gruppe1.vpp` (die Datei kommt so in die Abgabe).
+7. Die Stereotypen «mandant» (Werkstattbetrieb) und «stammdaten» (Filiale, Lieferant, Ersatzteil) überträgt die XMI nicht; in VP von Hand setzen. Die extend-Beziehungen kommen ohne Extension Points; bei Bedarf in VP ergänzen.
+8. Wer das XMI schon vor dem 26.09.2026 importiert hat: neu importieren (einfacher) oder die Änderungen aus `doku/03-entscheidungen.md`, E-15, von Hand nachziehen (neue Operationen, Multiplizitäten, Assoziation Ersatzteil–Lieferant, UC10 extend UC09, Akteurzuordnung).
+9. Nach jeder Sitzung Commit in den Teamwork-Server und zusätzlich File → Save Project As als lokale Sicherung `UML-WWI25B4-Gruppe1.vpp` (die Datei kommt so in die Abgabe).
 
 ## Herkunft
 
-Das Modell ist die Zusammenführung aus dem Solution-Provider-Entwurf (Claude/David) und Kilians V2: Die Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter`, `Kunde.meldeMangel()` und SD6 stammen aus V2 (`/Users/david/CLAUDE/V2/uml`), siehe `doku/05-vergleich-und-zusammenfuehrung.md`.
+Das Modell ist die Zusammenführung aus dem Solution-Provider-Entwurf (Claude/David) und Kilians V2: Die Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter`, `Kunde.meldeMangel()` und SD6 stammen aus Kilians früherem UML-Paket (`archiv/uml-v1-betreiber/`), siehe `doku/05-vergleich-und-zusammenfuehrung.md`. Am 26.09.2026 wurde das Modell geprüft und korrigiert (Botschaften = Operationen, Multiplizitäten, Akteurzuordnung, Zustandsdiagramm; Details in `doku/03-entscheidungen.md`, E-15).
 
 ## Namensregeln
 

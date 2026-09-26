@@ -70,7 +70,7 @@ CLASSES = [
       ("+", "inAuftragUebernehmen", "", "Reparaturauftrag")]),
     ("Medienanhang", False, None,
      [("-", "dateiname", "String"), ("-", "typ", "MedienTyp"), ("-", "aufnahmedatum", "Date"), ("-", "auswertbar", "boolean")],
-     [("+", "analysieren", "", "KIDiagnosevorschlag")]),
+     [("+", "analysieren", "", "boolean")]),
     ("KIDiagnosevorschlag", False, None,
      [("-", "vorschlagsnummer", "String"), ("-", "wahrscheinlicheUrsache", "String"), ("-", "konfidenz", "double"),
       ("-", "geschaetzterAufwandMin", "int"), ("-", "bestaetigt", "boolean")],
@@ -80,7 +80,8 @@ CLASSES = [
      [("-", "auftragsnummer", "String"), ("-", "eingangsdatum", "Date"), ("-", "status", "AuftragStatus"),
       ("-", "werkstatttermin", "Date")],
      [("+", "wechsleStatus", "neu : AuftragStatus", "void"), ("+", "alleSchritteAbgeschlossen", "", "boolean"),
-      ("+", "fertigmelden", "", "void"), ("+", "benachrichtigeKunde", "text : String", "void")]),
+      ("+", "fertigmelden", "", "void"), ("+", "benachrichtigeKunde", "text : String", "void"),
+      ("+", "getRechnung", "", "Rechnung")]),
     ("Geraet", False, None,
      [("-", "seriennummer", "String"), ("-", "hersteller", "String"), ("-", "modell", "String"), ("-", "typ", "GeraeteTyp")],
      []),
@@ -110,7 +111,8 @@ CLASSES = [
     ("Lagerbestand", False, None,
      [("-", "menge", "int"), ("-", "reserviert", "int"), ("-", "meldebestand", "int")],
      [("+", "pruefeVerfuegbarkeit", "anzahl : int", "boolean"), ("+", "bucheZugang", "anzahl : int", "void"),
-      ("+", "bucheAbgang", "anzahl : int", "void"), ("+", "istMeldebestandUnterschritten", "", "boolean")]),
+      ("+", "bucheAbgang", "anzahl : int", "void"), ("+", "reserviere", "anzahl : int", "void"),
+      ("+", "istMeldebestandUnterschritten", "", "boolean")]),
     ("ErsatzteilReservierung", False, None,
      [("-", "reservierungsnummer", "String"), ("-", "menge", "int"), ("-", "datum", "Date"),
       ("-", "status", "ReservierungStatus")],
@@ -119,14 +121,16 @@ CLASSES = [
      [("-", "bestellnummer", "String"), ("-", "bestelldatum", "Date"), ("-", "liefertermin", "Date"),
       ("-", "status", "BestellStatus")],
      [("+", "addPosition", "teil : Ersatzteil, menge : int", "void"), ("+", "uebermittle", "", "void"),
-      ("+", "bucheWareneingang", "", "void"), ("+", "berechneBestellwert", "", "double")]),
+      ("+", "bucheWareneingang", "", "void"), ("+", "berechneBestellwert", "", "double"),
+      ("+", "freigeben", "", "void")]),
     ("Bestellposition", False, None,
      [("-", "menge", "int"), ("-", "einzelpreis", "double")],
      [("+", "positionswert", "", "double")]),
     ("Rechnung", False, None,
      [("-", "rechnungsnummer", "String"), ("-", "rechnungsdatum", "Date"), ("-", "bruttobetrag", "double"),
       ("-", "zahlungStatus", "ZahlungStatus")],
-     [("+", "berechneBetrag", "", "double"), ("+", "erfasseZahlung", "art : String", "void")]),
+     [("+", "berechneBetrag", "", "double"), ("+", "erfasseZahlung", "art : String", "void"),
+      ("+", "getRechnungsdatum", "", "Date")]),
     ("Reklamation", False, None,
      [("-", "reklamationsnummer", "String"), ("-", "datum", "Date"), ("-", "grund", "String"),
       ("-", "istGewaehrleistung", "boolean")],
@@ -147,21 +151,22 @@ ASSOCIATIONS = [
     ("Voranmeldung", "1", "comp", "KIDiagnosevorschlag", "0..1", "führt zu"),
     ("Voranmeldung", "0..*", "assoc", "Filiale", "1", "Wunschfiliale"),
     ("Voranmeldung", "0..1", "assoc", "Reparaturauftrag", "0..1", "wird übernommen in"),
-    ("KIDiagnosevorschlag", "1", "assoc", "Kostenvoranschlag", "0..1", "erzeugt vorläufigen"),
+    ("KIDiagnosevorschlag", "0..1", "assoc", "Kostenvoranschlag", "0..1", "erzeugt vorläufigen"),
     ("KIDiagnosevorschlag", "0..*", "assoc", "Ersatzteil", "0..*", "schlägt vor"),
     ("Fehlerbefund", "0..1", "assoc", "KIDiagnosevorschlag", "0..1", "prüft"),
-    ("Reparaturauftrag", "1", "comp", "Geraet", "1", "betrifft"),
+    ("Reparaturauftrag", "0..*", "assoc", "Geraet", "1", "betrifft"),
     ("Reparaturauftrag", "0..*", "assoc", "Filiale", "1", "bearbeitet in"),
     ("Reparaturauftrag", "0..*", "assoc", "Techniker", "0..1", "zugewiesen an"),
     ("Reparaturauftrag", "1", "comp", "Fehlerbefund", "0..1", "hat"),
     ("Fehlerbefund", "0..*", "assoc", "Techniker", "1", "erstellt von"),
-    ("Reparaturauftrag", "1", "comp", "Kostenvoranschlag", "0..*", "hat"),
+    ("Reparaturauftrag", "0..1", "comp", "Kostenvoranschlag", "0..*", "hat"),
     ("Kostenvoranschlag", "1", "comp", "KvaPosition", "1..*", "besteht aus"),
     ("KvaPosition", "0..*", "assoc", "Ersatzteil", "0..1", "referenziert"),
     ("Reparaturauftrag", "1", "comp", "Reparaturschritt", "0..*", "gliedert sich in"),
     ("Reparaturschritt", "1", "comp", "Arbeitszeitbuchung", "0..*", "erfasst"),
     ("Arbeitszeitbuchung", "0..*", "assoc", "Techniker", "1", "gebucht von"),
     ("Ersatzteil", "1", "assoc", "Lagerbestand", "0..*", "geführt als"),
+    ("Ersatzteil", "0..*", "assoc", "Lieferant", "0..1", "Vorzugslieferant"),
     ("Lagerbestand", "0..*", "assoc", "Filiale", "1", "liegt in"),
     ("ErsatzteilReservierung", "0..*", "assoc", "Lagerbestand", "1", "reserviert auf"),
     ("ErsatzteilReservierung", "0..*", "assoc", "Reparaturauftrag", "0..1", "für"),
@@ -207,20 +212,20 @@ USECASES = [  # (id, name)
 ]
 
 ACTOR_UC = [
-    ("Kunde", ["UC01", "UC02", "UC03", "UC07", "UC15", "UC16"]),
-    ("Techniker", ["UC04", "UC05", "UC06", "UC13", "UC14"]),
+    ("Kunde", ["UC01", "UC02", "UC03", "UC07", "UC14", "UC15", "UC16"]),
+    ("Techniker", ["UC04", "UC05", "UC06", "UC07", "UC13", "UC14", "UC16"]),
     ("Disponent", ["UC08", "UC09", "UC10", "UC11", "UC12"]),
-    ("Werkstattleiter", ["UC03", "UC15", "UC16", "UC17"]),
+    ("Werkstattleiter", ["UC03", "UC10", "UC15", "UC16", "UC17"]),
     ("Werkstattinhaber", ["UC18"]),
     ("Lieferant", ["UC10", "UC11"]),
     ("KIDienst", ["UC01"]),
 ]
 
 INCLUDES = [  # (base, included)
-    ("UC01", "UC08"), ("UC06", "UC05"), ("UC09", "UC08"), ("UC10", "UC09"), ("UC15", "UC14"),
+    ("UC01", "UC08"), ("UC06", "UC05"), ("UC09", "UC08"), ("UC15", "UC14"),
 ]
 EXTENDS = [  # (extension, extended)
-    ("UC02", "UC01"), ("UC04", "UC05"), ("UC12", "UC08"), ("UC16", "UC15"),
+    ("UC02", "UC01"), ("UC04", "UC05"), ("UC10", "UC09"), ("UC12", "UC08"), ("UC16", "UC15"),
 ]
 
 # ----------------------------------------------------------------------------- PlantUML
@@ -400,6 +405,17 @@ def xmi():
             A('        <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="%s" name="%s"/>' % (nid("lit"), lit))
         A('      </packagedElement>')
     vis_map = {"-": "private", "+": "public", "#": "protected"}
+
+    def param(pn, direction, tid, multi):
+        # List<X>-Typen: Multiplizität 0..* am Parameter, sonst zeigt VP nach dem Import nur X
+        if multi:
+            A('          <ownedParameter xmi:type="uml:Parameter" xmi:id="%s" name="%s" direction="%s" type="%s">' % (nid("par"), pn, direction, tid))
+            A('            <lowerValue xmi:type="uml:LiteralInteger" xmi:id="%s" value="0"/>' % nid("lv"))
+            A('            <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="%s" value="*"/>' % nid("uv"))
+            A('          </ownedParameter>')
+        else:
+            A('          <ownedParameter xmi:type="uml:Parameter" xmi:id="%s" name="%s" direction="%s" type="%s"/>' % (nid("par"), pn, direction, tid))
+
     for name, abstract, stereo, attrs, ops in CLASSES:
         A('      <packagedElement xmi:type="uml:Class" xmi:id="class_%s" name="%s"%s>' % (name, name, ' isAbstract="true"' if abstract else ""))
         for sub, sup in GENERALIZATIONS:
@@ -422,10 +438,10 @@ def xmi():
                 for p in params.split(","):
                     pn, pt = [x.strip() for x in p.split(":")]
                     tid, multi = type_id(pt)
-                    A('          <ownedParameter xmi:type="uml:Parameter" xmi:id="%s" name="%s" direction="in" type="%s"/>' % (nid("par"), pn, tid))
+                    param(pn, "in", tid, multi)
             if ret and ret != "void":
                 tid, multi = type_id(ret)
-                A('          <ownedParameter xmi:type="uml:Parameter" xmi:id="%s" name="return" direction="return" type="%s"/>' % (nid("par"), tid))
+                param("return", "return", tid, multi)
             A('        </ownedOperation>')
         A('      </packagedElement>')
 

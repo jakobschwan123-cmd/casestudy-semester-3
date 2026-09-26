@@ -25,7 +25,7 @@ note right of RA : Status: KVA offen
 Techniker -> KVA : versendeAnKunde()
 activate KVA
 KVA -> Kunde : Kostenvoranschlag
-loop solange keine Reaktion (alle 3 Tage, max. 3x)
+loop solange keine Reaktion (Erinnerung alle 3 Tage)
     KVA -> Kunde : Erinnerung
 end
 alt Kunde gibt frei
@@ -38,8 +38,9 @@ else Kunde lehnt ab
     Kunde -> KVA : ablehnen(grund)
     KVA -> KVA : setzeStatus(ABGELEHNT)
     KVA -> RA : wechsleStatus(ABGELEHNT)
-    note right of RA : Status: abgelehnt (Endzustand)
-    RA -> Kunde : benachrichtigeKunde("Bitte Gerät abholen")
+    note right of RA : Status: abgelehnt\n(Gerät wird unrepariert abgeholt)
+    KVA -> RA : benachrichtigeKunde("Bitte Gerät abholen")
+    RA -> Kunde : Nachricht "Bitte Gerät abholen"
 end
 deactivate KVA
 @enduml

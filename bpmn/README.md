@@ -1,6 +1,6 @@
 # BPMN-Modelle (Geschäftsprozessanalyse)
 
-Zehn Kollaborationsdiagramme im BPMN-2.0-Format, erstellt für den **Camunda Modeler (Camunda 8)**. Dateiname = `p` + zweistellige Nummer + Prozessname in Kleinbuchstaben ohne Umlaute (Repo-Konvention, `claude.readme/CLAUDE.md`); das PNG mit gleichem Basisnamen liegt daneben.
+Zehn Kollaborationsdiagramme im BPMN-2.0-Format, erstellt für den **Camunda Modeler (Camunda 8)**. Dateiname = `p` + zweistellige Nummer + Prozessname in Kleinbuchstaben ohne Umlaute (Repo-Konvention, `claude.readme/CLAUDE.md`); das PNG mit gleichem Basisnamen liegt daneben. Für Abgabe und Camunda Cloud gilt der Ablauf: zweistellige Nummer + prägnanter Modellname (`01-Sofortdiagnose` … `10-Retoure`); `python3 tools/pack_bpmn.py` erzeugt das Abgabe-ZIP mit diesen Namen.
 
 | Datei | Prozess | Pools |
 |---|---|---|
@@ -22,25 +22,26 @@ Die PNG-Dateien (bpmn-js-Rendering, 2-fach) sind Bildexporte für Doku und Präs
 - Pool = Unternehmen: „Werkstattbetrieb (Pilotkunde FixWerk GmbH)" mit dem ausmodellierten Prozess, „Kunde" und „Lieferant" als Empty Pools (Black Box). Kommunikation nach außen nur über Nachrichtenflüsse.
 - Lanes = Rollen im Werkstattbetrieb: Service / Annahme, Techniker, Werkstattleitung, Ersatzteil-Disposition. Keine Lane für die Software.
 - Automatisierung steckt im Aktivitätstyp: Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive Task = Nachricht über RepairFlow, User Task = Mensch mit RepairFlow-Oberfläche, Manual Task = außerhalb der Software.
-- Je Diagramm ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
-- Datenobjekte tragen die Klassennamen des Klassendiagramms (mit Zustand in eckigen Klammern). Datenspeicher: „RepairFlow-Datenbank" (Aufträge, Bestände), „Technikerplan" (Prozess 02, Kapazität und Termine) und „Buchhaltung (DATEV-Export)" (Prozess 08, Übergabe an die Buchhaltung außerhalb der Systemgrenze) – die beiden letzten aus Kilians V2 übernommen.
+- Je Diagramm (Prozessebene) ein Start- und ein Endereignis; eingebettete Teilprozesse (p05) haben ihr eigenes Start-/Endereignis. Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
+- Datenobjekte tragen die Klassennamen des Klassendiagramms (Bindestrich nur als Zeilenumbruch, z. B. „Kosten-voranschlag"), der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung (AuftragStatus, KvaStatus, ReservierungStatus, BestellStatus, ZahlungStatus). Datenspeicher: „RepairFlow-Datenbank" (Aufträge, Bestände), „Technikerplan" (Prozess 02, Kapazität und Termine) und „Buchhaltung (DATEV-Export)" (Prozess 08, Übergabe an die Buchhaltung außerhalb der Systemgrenze) – die beiden letzten aus Kilians V2 übernommen.
 - Camunda-8-Anreicherung, damit das Problems-Panel leer bleibt: `zeebe:taskDefinition` an Service-/Send-/Business-Rule-Tasks, `zeebe:userTask` + Formular-ID an User Tasks, Message-Subscriptions mit Correlation Key, ISO-Dauern an Timern, FEEL-Bedingungen an allen XOR-Ausgängen, `zeebe:calledElement` an Call Activities, `zeebe:loopCharacteristics` am Mehrfach-Teilprozess.
 
-## Prüfstand (02.09.2026, Stand FINAL)
+## Prüfstand (26.09.2026, nach den Korrekturen aus E-15)
 
-- `@camunda/linting` (derselbe Linter wie im Camunda Modeler, Konfiguration Camunda 8.7): 0 Befunde in allen zehn Dateien.
+- `@camunda/linting` (Regeln des Problems-Panels im Camunda Modeler, Camunda 8): 0 Befunde in allen zehn Dateien. Geprüft per Skript, nicht im Modeler selbst.
 - `bpmnlint` (recommended): 0 Befunde.
 - Import mit bpmn-js: 0 Warnungen.
-- Aktivitäten: 120 gesamt, im Schnitt 12,0 je Diagramm, 60 % automatisiert.
+- Aktivitäten: 121 gesamt, im Schnitt 12,1 je Diagramm, 74 davon automatisiert (61 %); 32 Nachrichtenflüsse, 48 Datenobjekte und -speicher (`python3 tools/mkstats.py` zählt nach und schreibt `tools/process_stats.json`).
+- Korrigiert am 26.09.: P02 (Umleitung an andere Filiale mit Techniker und Termin), P05 (Reservierungen und Meldebestand immer, danach Fehlteilbestellung), P03 (Status „abgelehnt" bei Totalschaden), P06 (nach Retoure: Ersatz zuordnen oder neu bestellen), P08 (Zahlungseingang bei Rechnung), P09 (Nacharbeitsauftrag, Aufrufname), P10 (ohne „07 Reparatur fortsetzen"); Details in `doku/03-entscheidungen.md`, E-15.
 
 ## Aufgaben für Maxi (BPMN-Verantwortlicher)
 
 1. Jede Datei im Camunda Modeler öffnen (Camunda 8), Problems-Panel prüfen, einmal speichern (dann steht der Modeler als Exporter in der Datei).
 2. Layout gegenlesen: Beschriftungen, Kreuzungen, Lane-Höhen. Bei Bedarf Elemente verschieben, die Semantik bleibt unberührt.
 3. Fachlich prüfen, ob Bezeichnungen und Reihenfolgen zum Verständnis der Gruppe passen. Änderungen bitte auch in `doku/03-entscheidungen.md` bzw. in der Doku nachziehen, wenn sie Namen betreffen.
-4. Falls der Dozent die Camunda Cloud als Repository verlangt: die zehn Dateien dort in die vorbereiteten Unterordner hochladen (Frage steht in `doku/04-dozenten-feedback.md`).
-5. Für die Abgabe: `abgabe/BPMN-WWI25B4-Gruppe1.zip` neu packen, falls sich Dateien geändert haben.
+4. Die zehn Dateien in die vorbereiteten Unterordner der Camunda Cloud hochladen (Pflicht laut Ablauf), Namen `01-Sofortdiagnose` … `10-Retoure`.
+5. Für die Abgabe: `python3 tools/pack_bpmn.py` ausführen, falls sich Dateien geändert haben (erzeugt `abgabe/BPMN-WWI25B4-Gruppe1.zip` mit den Ablauf-Namen).
 
 Die Diagramme wurden aus einer strukturierten Prozessspezifikation erzeugt (`tools/diagrams.py`, Generator `tools/bpmngen.py`). Wer die Rohfassung neu erzeugen will: siehe `tools/README.md`.
 
-Kilians V2-Fassung (Camunda 7, Betreiber-Perspektive, `isExecutable="false"`) liegt unter `/Users/david/CLAUDE/V2/bpmn` und ist nicht Teil dieses Stands; Begründung in `doku/05-vergleich-und-zusammenfuehrung.md`.
+Kilians frühere Fassung (Camunda 7, Betreiber-Perspektive, `isExecutable="false"`) liegt unter `archiv/alte-versionen/bpmn/` und ist nicht Teil dieses Stands; Begründung in `doku/05-vergleich-und-zusammenfuehrung.md`.

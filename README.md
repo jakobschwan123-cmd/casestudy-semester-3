@@ -1,55 +1,69 @@
-# FINAL – zusammengeführter Stand der Fallstudie RepairFlow (WWI25B4, Gruppe 1)
+# RepairFlow – Fallstudie Systemanalyse (WWI25B4, Gruppe 1)
 
-Stand: 02.09.2026. Dieser Ordner ist die Zusammenführung aus zwei parallel entstandenen Entwürfen:
+Stand: 26.09.2026. Zusammengeführter Stand der Fallstudie RepairFlow
+(Solution-Provider-Perspektive mit KI-Sofortdiagnose, BPMN für Camunda 8).
+Was aus welchem der beiden ursprünglichen Entwürfe übernommen wurde und warum,
+steht in `doku/05-vergleich-und-zusammenfuehrung.md`; die Korrekturen der
+Gesamtprüfung vom 26.09.2026 in `doku/03-entscheidungen.md` (E-15).
 
-- **Kilians V2** (`/Users/david/CLAUDE/V2`): Betreiber-Perspektive (FixWerk GmbH), Camunda 7, ohne KI-Feature, mit Sprint-/Trello-Plan und echten Terminen.
-- **Claude/David** (`casestudy-semester-3`, Ordner `bpmn/`, `uml/`, `doku/`, `praesentation/`): Solution-Provider-Perspektive mit KI-Sofortdiagnose (Dozentenfeedback), Camunda 8, Linter ohne Befund.
+## Repository-Stand
 
-Was aus welchem Entwurf übernommen wurde und warum, steht in `doku/05-vergleich-und-zusammenfuehrung.md`. Die Ordnerstruktur folgt dem neuen `main` von Jakob (`bpmn/`, `uml/`, `doku/`, `praesi/`, `claude.readme/`), damit der Stand ohne Umbenennen ins Repository kann.
+Der Merge auf `main` ist erledigt. Kilians erste Betreiber-Fassung liegt zur
+Nachvollziehbarkeit unter `archiv/uml-v1-betreiber/` bzw.
+`archiv/alte-versionen/`; nichts davon geht in die Abgabe.
+
+Prüfstand 26.09.2026: `@camunda/linting` (Camunda 8) und `bpmnlint`
+(recommended) melden für alle zehn BPMN-Dateien 0 Befunde; alle PlantUML-Quellen
+bestehen die Syntaxprüfung; `uml/modell.xmi` ist wohlgeformt, alle Referenzen
+lösen auf.
 
 ## Inhalt
 
 | Ordner | Inhalt | Abgabekriterium |
 |---|---|---|
-| `bpmn/` | 10 Kollaborationsdiagramme `p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` (Camunda 8, Linter 0 Befunde) + PNG mit gleichem Basisnamen, `README.md` | 10 Prozesse, Ø 12,0 Aktivitäten, 60 % automatisiert |
-| `uml/` | `klassen.puml/.png` (26 Klassen), vier Fokus-Ausschnitte, `usecase.puml/.png` (18 Use Cases), `sequenz-01…06`, `zustand-reparaturauftrag`, `systemkontext`, `modell.xmi` für Visual Paradigm, `README.md` | ≥ 10 UCs, ≥ 10 Klassen, 5 Sequenzdiagramme (wir haben 6) |
-| `doku/` | `Projektdokumentation.docx/.pdf` (37 Seiten, offene Stellen gelb markiert), Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, Vergleichsnotiz, Protokollvorlage | Projektdokumentation |
-| `praesi/` | `Abschlusspraesentation.pptx/.pdf` (20 Folien, Notizen, Vortragende je Folie) | Präsentation |
-| `abgabe/` | `BPMN-WWI25B4-Gruppe1.zip` (bpmn + png), Anleitung für das Moodle-Archiv | Abgabeformat |
+| `bpmn/` | 10 Kollaborationsdiagramme `p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` (Camunda 8) + PNG mit gleichem Basisnamen, `README.md` | 10 Prozesse, 121 Aktivitäten (Ø 12,1), 61 % automatisiert |
+| `uml/` | `klassen.puml/.png` (26 Klassen, 35 Assoziationen), vier Fokus-Ausschnitte, `usecase.puml/.png` (18 Use Cases), `sequenz-01…06`, `zustand-reparaturauftrag`, `systemkontext`, `modell.xmi` für Visual Paradigm, `README.md` | ≥ 10 UCs, ≥ 10 Klassen, 5 Sequenzdiagramme (wir haben 6) |
+| `doku/` | `Projektdokumentation.docx/.pdf` (offene Stellen gelb markiert), Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, Vergleichsnotiz, Protokolle | Projektdokumentation |
+| `praesi/` | `Abschlusspraesentation.pptx/.pdf` (20 Folien, Vortragende je Folie) | Präsentation |
+| `abgabe/` | `BPMN-WWI25B4-Gruppe1.zip` (die zehn BPMN-Dateien, benannt nach Ablauf: `01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`) + Anleitung für das Moodle-Archiv | Abgabeformat |
 | `tools/` | Generatoren (BPMN, UML, Doku, Präsentation), Linter-Skript | – |
-| `claude.readme/` | Jakobs Team-/Git-Regeln (`README.md`) und ein aktualisierter `CLAUDE.md` mit den Fakten dieses Stands | – |
+| `claude.readme/` | Team-/Git-Regeln (`README.md`) und `CLAUDE.md` (Konventionen für KI-Assistenten) | – |
+| `archiv/` | ersetzte Vorfassungen, nur zur Nachvollziehbarkeit | – |
 
-## So kommt der Stand ins Repository (David)
+## Bereits entschieden (02.09.2026, E-13)
 
-Jakob hat `main` am 02.09.2026 umgebaut (Commits `bf9b448`, `3f437f3`); dort liegen noch Kilians V1-Dateien (`bpmn/p01.bpmn` …, `uml/klassen.puml` mit 18 Klassen, Betreiber-Doku). Der eigene Klon ist dahinter. Vorgehen:
+1. **Rollen**: Nina Projektleitung, David stellvertretende Projektleitung/Backups,
+   Adrian Product Owner, Kilian Scrum Master + UML, Maxi BPMN, Jakob Qualität.
+2. **Präsentationstermin**: 27.10.2026, 09:00, B458 (laut `Allgemeines.docx`);
+   22.10. = Generalprobe.
+3. **Sprint-Takt**: Gruppentermine 02.09., 05.10., 15.10., 22.10.; Trello-Board
+   mit einer Liste je Termin.
 
-```bash
-cd casestudy-semester-3
-git fetch origin
-git switch -c feature/final-merge origin/main          # auf Jakobs neuem main aufsetzen
-git rm -r --quiet bpmn uml doku praesi                  # V1-Stand entfernen (bleibt in der Historie)
-cp -R /Users/david/CLAUDE/FINAL/{bpmn,uml,doku,praesi,abgabe,tools} .
-cp /Users/david/CLAUDE/FINAL/claude.readme/CLAUDE.md claude.readme/CLAUDE.md
-cp /Users/david/CLAUDE/FINAL/README.md README-FINAL.md   # oder Inhalt in README.md übernehmen
-git add -A
-git commit -m "[T03 2026-09-02] feat: merge solution-provider artefacts with v2 pm content"
-git push -u origin feature/final-merge
-```
+## Nächste Schritte (bis zum Gruppentermin 05.10.2026)
 
-Dann Pull Request auf `main`, Review durch Jakob (Qualitätsmanager). Die alten Ordner `praesentation/`, `docs/`, `archiv/` aus dem eigenen Klon nicht mitnehmen, sie sind hier in `praesi/` und `doku/` aufgegangen.
+| # | Aufgabe | Verantwortlich | Status |
+|---|---|---|---|
+| 1 | Korrekturen vom 26.09. (E-15) in der Gruppe bestätigen – betrifft BPMN 02, 03, 05, 06, 08, 09, 10 und das UML-Modell | alle, Abnahme Adrian | offen |
+| 2 | Alle zehn BPMN im Camunda Modeler (Camunda 8) öffnen, Problems-Panel prüfen, speichern; in die vorbereiteten Unterordner der Camunda Cloud hochladen (Namen `01-Sofortdiagnose` … `10-Retoure`); danach `abgabe/BPMN-WWI25B4-Gruppe1.zip` neu packen (`abgabe/README.md`) | Maxi | offen – die Dateien tragen noch `exporter="RepairFlow BPMN Generator"` |
+| 3 | `uml/modell.xmi` in Visual Paradigm importieren, Klassen- und Use-Case-Diagramm aufziehen, die Sequenzdiagramme als Unterdiagramme der Use Cases anlegen, `UML-WWI25B4-Gruppe1.vpp` sichern und einchecken (Anleitung: `uml/README.md`). Wer vor dem 26.09. schon importiert hat: neu importieren oder die Änderungen aus E-15 von Hand nachziehen | Kilian | offen – `.vpp` fehlt im Repo (Pflicht-Abgabedatei) |
+| 4 | Trello-Board anlegen; Screenshot in Doku 4.3 und auf Präsentations-Folie 16 einfügen | Kilian / Jakob | offen |
+| 5 | Dozent informieren: Ansprechperson Maximilian → Nina; Termine 05.10./15.10./22.10. gegen Rapla prüfen | Nina | offen |
+| 6 | Doku: echte Sprint-Ergebnisse, Beiträge je Person und Trello-Screenshot ergänzen, Kapitel 6/7 nach der Präsentation, PDF neu erzeugen | Nina / Kilian | teilweise offen (gelb markierte Stellen) |
+| 7 | Präsentation: Trello-Screenshot Folie 16, Sprechernotizen ergänzen, PDF-Export | Jakob | offen |
 
-Kilians UML-Paket der Betreiber-Variante (22 Klassen, eigenes XMI) liegt unter `archiv/uml-v1-betreiber/` und ist durch `uml/` ersetzt.
+## Offene Entscheidungen (siehe `doku/03-entscheidungen.md`)
 
-## Am Gruppentermin 02.09. entschieden (E-13)
+- **E-07**: Adrian (Product Owner) und die Gruppe bestätigen Perspektive (E-02),
+  KI-Gimmick (E-03), Prozessliste (E-05) und die Korrekturen aus E-15.
+- **E-14**: Dozent informieren (Ansprechperson, Termine).
+- **Zuständigkeit BPMN 09/10**: Drei Dokumente weisen die Prüfung unterschiedlich
+  zu (Maxi vs. Jakob) – in der Review-Runde klären und in `03-entscheidungen.md`
+  festhalten (siehe `doku/protokolle/2026-09-02-review-bpmn-09-10.md`).
 
-1. **Rollen**: Nina Projektleitung, David stellvertretende Projektleitung/Backups, Adrian Product Owner, Kilian Scrum Master + UML, Maxi BPMN, Jakob Qualität. Doku, Folien und READMEs sind darauf umgestellt.
-2. **Präsentationstermin**: 27.10.2026, 09:00, B458 (laut `Allgemeines.docx`); 22.10. = Generalprobe.
-3. **Sprint-Takt**: Trello-Board mit einer Liste je Termin (02.09., 05.10., 15.10., 22.10., 27.10., 13.11.), eine Karte je Person und Aufgabe, Teampartner als Prüfer.
+## Hinweis zur Abgabe
 
-## Noch offen
-
-1. **Perspektive und KI-Feature** (E-02/E-03) von Adrian als Product Owner bestätigen lassen.
-2. **Dozent informieren**: Ansprechperson Nina statt Maximilian; Camunda Cloud Pflicht oder Git ausreichend.
-3. **UML-WWI25B4-Gruppe1.vpp**: `uml/modell.xmi` in Visual Paradigm importieren (Kilian), Sequenzdiagramme als Unterdiagramme anlegen, Commit auf den Teamwork-Server.
-4. **BPMN im Camunda Modeler** öffnen, prüfen, speichern (Maxi), dann Camunda Cloud und `abgabe/BPMN-WWI25B4-Gruppe1.zip` neu packen.
-5. Doku: Trello-Screenshot, Kapitel 6/7 nach der Präsentation.
+Die vier Abgabedateien (`Projekt-…pdf`, `BPMN-…zip`, `UML-…vpp`,
+`Praesentation-…pdf`) und das Gesamtarchiv `Fallstudie-WWI25B4-Gruppe1.zip`
+werden nach der Präsentation gepackt (Anleitung: `abgabe/README.md`).
+Frist: 13.11.2026, 23:59 Uhr über Moodle. Jede Person lädt das vollständige
+Archiv selbst hoch.

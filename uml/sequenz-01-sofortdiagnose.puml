@@ -11,6 +11,7 @@ participant ": Kostenvoranschlag" as KVA
 participant ": Lagerbestand" as LB
 participant ": ErsatzteilReservierung" as RES
 participant ": Filiale" as FIL
+actor "KI-Diagnosedienst" as KIDienst
 
 Kunde -> VA : <<create>> erstellen(medien, symptome)
 activate VA
@@ -18,11 +19,14 @@ VA -> MA : <<create>>
 loop je Medienanhang
     VA -> MA : analysieren()
     activate MA
-    MA --> VA : auswertbar / KIDiagnosevorschlag
+    MA -> KIDienst : Medien auswerten
+    KIDienst --> MA : Ergebnis
+    MA --> VA : auswertbar
     deactivate MA
 end
 alt Medien nicht auswertbar
-    VA --> Kunde : bessereAufnahmeAnfordern()
+    VA -> VA : bessereAufnahmeAnfordern()
+    VA --> Kunde : Aufforderung: bessere Aufnahme
 else Medien auswertbar
     VA -> KI : <<create>>
     VA -> KI : erzeugeVorabKva()
@@ -51,7 +55,7 @@ else Medien auswertbar
         opt Teile verfügbar
             VA -> RES : <<create>> reserviere()
             activate RES
-            RES -> LB : bucheAbgang(anzahl)
+            RES -> LB : reserviere(anzahl)
             RES --> VA : Status VORRESERVIERT
             deactivate RES
         end

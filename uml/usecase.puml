@@ -50,19 +50,23 @@ Kunde -- UC01
 Kunde -- UC02
 Kunde -- UC03
 Kunde -- UC07
+Kunde -- UC14
 Kunde -- UC15
 Kunde -- UC16
 Techniker -- UC04
 Techniker -- UC05
 Techniker -- UC06
+Techniker -- UC07
 Techniker -- UC13
 Techniker -- UC14
+Techniker -- UC16
 Disponent -- UC08
 Disponent -- UC09
 Disponent -- UC10
 Disponent -- UC11
 Disponent -- UC12
 Werkstattleiter -- UC03
+Werkstattleiter -- UC10
 Werkstattleiter -- UC15
 Werkstattleiter -- UC16
 Werkstattleiter -- UC17
@@ -74,10 +78,10 @@ UC01 -- KIDienst
 UC01 ..> UC08 : <<include>>
 UC06 ..> UC05 : <<include>>
 UC09 ..> UC08 : <<include>>
-UC10 ..> UC09 : <<include>>
 UC15 ..> UC14 : <<include>>
 UC02 ..> UC01 : <<extend>>
 UC04 ..> UC05 : <<extend>>
+UC10 ..> UC09 : <<extend>>
 UC12 ..> UC08 : <<extend>>
 UC16 ..> UC15 : <<extend>>
 @enduml

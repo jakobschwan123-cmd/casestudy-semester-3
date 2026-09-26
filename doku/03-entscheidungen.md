@@ -6,13 +6,23 @@ Jede Entscheidung, die mehr als eine Person betrifft, kommt hier rein: was entsc
 
 ### E-07 Bestätigung von E-02, E-03, E-05 und E-08 durch die Gruppe
 
-David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: die Zuordnung der Vortragenden (`02-team-und-rollen.md`) und ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt.
+David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, und die Korrekturen aus E-15.
 
 ### E-14 Bestätigung durch den Dozenten
 
-Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Camunda Cloud als Pflicht-Repository oder Git ausreichend; Gruppentermine 05.10., 15.10., 22.10. gegen Rapla prüfen.
+Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Gruppentermine 05.10., 15.10., 22.10. gegen Rapla prüfen. Zur Camunda Cloud: Der Ablauf verlangt die Ablage der BPMN-Modelle „in die vorbereiteten Unterordner im Camunda Cloud Repository"; wir laden deshalb hoch, ohne auf eine Antwort zu warten (Git bleibt zusätzlich die Arbeitsgrundlage).
 
 ## Entschieden
+
+### E-15 Korrekturen nach Gesamtprüfung (26.09.2026)
+
+Datum: 26.09.2026 (Kilian, Prüfung mit KI-Unterstützung gegen Ablauf und Vorlesung; Bestätigung durch die Gruppe siehe E-07).
+Entscheidung und Auswirkung (umgesetzt in `tools/diagrams.py`, `tools/umlmodel.py`, `uml/*.puml`, neu erzeugt):
+- **BPMN, fachliche Fehler behoben:** P02 – nach „Auftrag an andere Filiale umleiten" werden jetzt auch Techniker und Termin festgelegt (vorher ging der Umleitungspfad ohne Termin direkt zum Annahmebeleg). P05 – „Reservierungen bestätigen" und die Meldebestandsprüfung laufen immer, erst danach werden Fehlteile über Prozess 06 bestellt (vorher entfielen beide, sobald ein Fehlteil vorhanden war). P06 – nach einer Retoure (Prozess 10) entscheidet P06: Ersatz geliefert → Teile dem Auftrag zuordnen; Gutschrift und Teil weiterhin benötigt → neu beim Lieferanten bestellen (Schleife in P06); sonst Ende ohne Teile. Das Endereignis heißt deshalb „Bestellung abgeschlossen" statt „Ersatzteile eingegangen" (vorher meldete P06 nach jeder Retoure „Ersatzteile eingegangen", auch ohne Teile). P08 – bei Zahlung auf Rechnung wartet der Prozess auf den Zahlungseingang, bevor die Zahlung verbucht wird (vorher wurde „Rechnung [bezahlt]" ohne Zahlung gesetzt); die Nachrichtenflüsse gehen nur noch von der obersten Zeile aus. P09 – die Nacharbeit wird als neuer Reparaturauftrag angelegt („Nacharbeitsauftrag anlegen", Datenobjekt „Reparatur-auftrag [angenommen]"), passend zu SD5 und Zustandsdiagramm. P10 – der Aufruf „07 Reparatur fortsetzen" ist entfallen (er hätte auch bei Gutschrift, also ohne Teil, die Reparatur fortgesetzt); P10 wickelt nur noch die Retoure ab. P03 – „Auftragsstatus auf 'abgelehnt' setzen" mit Datenobjekt „Reparatur-auftrag [abgelehnt]" statt „Auftrag als nicht reparierbar schließen" (Übergang in Diagnose → abgelehnt im Zustandsdiagramm).
+- **BPMN, Konsistenz:** Datenobjekt „Reparatur-auftrag [eingeplant]" entfernt (EINGEPLANT ist kein Wert von AuftragStatus); „Gerät" → „Geraet", „KVA-Position" → „Kva-Position" (Klassennamen); Reservierungen mit Status [vorreserviert]/[reserviert]; Timer im Partizip Perfekt („3/5/7 Tage verstrichen"); Aufruf in P09 heißt wie in P06 „10 Retoure abwickeln". Konvention präzisiert: ein Start- und ein Endereignis je Prozessebene, eingebettete Teilprozesse haben ihr eigenes (der p05-Befund vom 02.09. war ein False Positive).
+- **BPMN, Abgabe:** Die Dateien im ZIP heißen nach Ablauf „zweistellige Nummer + prägnanter Modellname" (`01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`); im Repository bleiben die Namen `p01-…` (E-11).
+- **UML:** Botschaften in SD1, SD2, SD4, SD5, SD6 sind jetzt Operationen der Empfängerklasse (Regel „Botschaft = Operation"); SD3 und SD5 ohne Freitext-Botschaften, SD5 mit getrennten Lebenslinien für Ursprungs-, Nacharbeits- und Neuauftrag; KI-Diagnosedienst in SD1. Klassenmodell: neue Operationen `Reparaturauftrag.getRechnung()`, `Rechnung.getRechnungsdatum()`, `Lieferantenbestellung.freigeben()`, `Lagerbestand.reserviere(anzahl)`; `Medienanhang.analysieren()` liefert `boolean`; Multiplizitäten KIDiagnosevorschlag–Kostenvoranschlag 0..1:0..1 und Reparaturauftrag◆Kostenvoranschlag 0..1 (Vorab-KVA existiert vor dem Auftrag); Reparaturauftrag–Geraet ist Assoziation statt Komposition; neue Assoziation Ersatzteil–Lieferant „Vorzugslieferant" (35 Assoziationen). Use Cases: UC10 erweitert UC09 (extend statt include); Akteurzuordnung an die Sequenzdiagramme angepasst (Kunde–UC14, Techniker–UC07/UC16, Werkstattleiter–UC10). Zustandsdiagramm: Zustandsnamen wortgleich zu AuftragStatus, jeder Übergang mit `wechsleStatus(…)`, „nicht reparierbar" führt nach abgelehnt, Reklamation startet einen neuen Auftrag statt eines Rücksprungs, kein Übergang „in Reparatur → KVA offen" mehr (der Nachtrags-KVA hat seinen eigenen KvaStatus, der Auftrag bleibt in Reparatur – wie in P07). XMI: `List<…>`-Parameter mit Multiplizität 0..*.
+Begründung: Aufgabenstellung (syntaktisch korrekte, vollständige Modelle) und Vorlesung (Kap. 4 Best Practices, Kap. 5 Konsistenzregeln).
 
 ### E-13 Rollenverteilung, Präsentationstermin und Gruppentermine
 
@@ -32,7 +42,7 @@ Datum: 02.09.2026 (David, vorläufig bis Bestätigung durch die Gruppe, siehe E-
 Entscheidung: Wir sind das Startup RepairFlow, das Werkstätten eine Software- und Workflow-Lösung als SaaS anbietet. Die FixWerk GmbH (vier Filialen) ist unser Pilot- und Referenzkunde, an dem die Prozesse analysiert wurden.
 Begründung: Echtes Startup-Szenario; Mitbewerber sind greifbar (Fahrrad: fixdesk, RO App, Repero, MCA Bike; Elektronik: RepairDesk, RepairShopr); das Gimmick ist ein Produkt-Feature; die Frage „warum kauft ihr keine fertige Werkstattsoftware?" stellt sich nicht.
 Verworfen: Betreiber-Perspektive (FixWerk führt ein eigenes System ein): schwacher Startup-Charakter, Mitbewerber wären andere Werkstätten.
-Auswirkung (umgesetzt): Texte in Doku und Präsentation; im Klassendiagramm `Werkstattbetrieb` (Mandant) über `Filiale` und `Techniker`; Use Case UC18 Werkstattbetrieb und Filialen verwalten mit Akteur Werkstattinhaber; Kapitel Markt und Wettbewerb in der Doku.
+Auswirkung (umgesetzt): Texte in Doku und Präsentation; im Klassendiagramm `Werkstattbetrieb` (Mandant) über `Filiale` und `Mitarbeiter`; Use Case UC18 Werkstattbetrieb und Filialen verwalten mit Akteur Werkstattinhaber; Kapitel Markt und Wettbewerb in der Doku.
 
 ### E-03 Gimmick: KI-Sofortdiagnose
 
@@ -74,13 +84,13 @@ Datum: 02.09.2026 (Claude/David).
 Entscheidung: Pool = Unternehmen (Werkstattbetrieb, Kunde, Lieferant), Lanes = Rollen im Werkstattbetrieb (Service / Annahme, Techniker, Werkstattleitung, Ersatzteil-Disposition). Keine „System-Lane": Computer sind laut Vorlesung keine Ressource. RepairFlow wird über die Aktivitätstypen sichtbar: automatisierte Aktivität (Service Task) = RepairFlow erledigt den Schritt allein, Benutzer-Aktivität = Mensch mit RepairFlow-Oberfläche, sendende/empfangende Aktivität = Nachricht über RepairFlow an Kunde oder Lieferant, Geschäftsregel-Aktivität = KI- oder Regelentscheidung, manuelle Aktivität = außerhalb der Systemgrenze (physische Reparatur, Übergabe). Kunde und Lieferant sind Empty Pools (Black Box) mit Nachrichtenflüssen. Je Diagramm ein Start- und ein Endereignis (Best Practice aus der Vorlesung), Ereignisse im Partizip Perfekt („Auftrag angenommen"), Aktivitäten als Verb mit Objekt („Kundendaten erfassen"). Datenobjekte tragen Klassennamen aus dem Klassendiagramm, ggf. mit Zustand in eckigen Klammern; RepairFlow-Datenbank als Datenspeicher.
 Ergänzung 02.09.2026: Die Diagramme sind für Camunda 8 „engine-ready" angereichert (Task-Definitionen, Message-Subscriptions, Timer-Dauern, FEEL-Bedingungen, Formular-IDs), damit das Problems-Panel des Camunda Modelers leer bleibt. Loops enthalten immer einen Wartezustand (User Task, Receive Task oder Timer), weil der Camunda-Linter sonst eine Endlosschleife meldet.
 
-### E-08 Ablagestruktur im Repository
+### E-08 Ablagestruktur im Repository (ersetzt durch E-11)
 
 Datum: 02.09.2026 (Claude/David, vorläufig, siehe E-07).
 Entscheidung: `bpmn/` (Diagramme + PNG), `uml/` (PlantUML, PNG, XMI), `doku/` (docx + PDF), `praesentation/` (pptx + PDF), `abgabe/` (ZIPs für Moodle), `tools/` (Generatoren), `docs/` (Doku des Teams), `archiv/repairflow-v1/` (erste Fassung der Projektgrundlagen). Dateinamen der Abgabe nach Ablauf: `Projekt-WWI25B4-Gruppe1.pdf`, `BPMN-WWI25B4-Gruppe1.zip`, `UML-WWI25B4-Gruppe1.vpp`, `Praesentation-WWI25B4-Gruppe1.pdf`.
 Begründung: Ein Ordner je Artefakttyp, Verantwortliche sind in der README zugeordnet, die Abgabenamen stehen früh fest.
 
-### E-09 Umfang der UML-Modelle
+### E-09 Umfang der UML-Modelle (überholt durch E-10 und E-15: 26 Klassen, 35 Assoziationen, sechs Sequenzdiagramme)
 
 Datum: 02.09.2026 (Claude/David, vorläufig).
 Entscheidung: 18 Use Cases in vier Bereichen mit sieben Akteuren (davon zwei sekundär: Lieferant, KI-Diagnosedienst); 23 Klassen mit sieben Aufzählungen; Sequenzdiagramme zu UC01, UC07, UC09, UC14 und UC16; zusätzlich ein Zustandsdiagramm für Reparaturauftrag.
@@ -89,7 +99,7 @@ Begründung: Die Mindestanforderungen (10 UCs, 10 Klassen, 5 SDs) sind deutlich 
 ### E-10 Zusammenführung der beiden Entwürfe (Kilian V2 und Claude/David)
 
 Datum: 02.09.2026 (Claude/David, vorläufig bis Bestätigung durch die Gruppe).
-Entscheidung: Basis ist der Solution-Provider-Entwurf mit KI-Sofortdiagnose (Camunda 8, Linter ohne Befund). Aus Kilians V2 übernommen: Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter` und `Kunde.meldeMangel()` im Klassendiagramm (jetzt 26 Klassen, 34 Assoziationen), Datenspeicher `Technikerplan` (P02) und `Buchhaltung (DATEV-Export)` (P08), Sequenzdiagramm SD6 Nachbestellvorschlag, Doku-Kapitel 3.3 Qualitätssicherung und 4 Projektmanagement (Scrum, Sprintplan, Trello, Git-Regeln), Abschnitt 5.4 Konsistenz, KI-Nutzungshinweis.
+Entscheidung: Basis ist der Solution-Provider-Entwurf mit KI-Sofortdiagnose (Camunda 8, Linter ohne Befund). Aus Kilians V2 übernommen: Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter` und `Kunde.meldeMangel()` im Klassendiagramm (jetzt 26 Klassen, 34 Assoziationen; seit E-15: 35), Datenspeicher `Technikerplan` (P02) und `Buchhaltung (DATEV-Export)` (P08), Sequenzdiagramm SD6 Nachbestellvorschlag, Doku-Kapitel 3.3 Qualitätssicherung und 4 Projektmanagement (Scrum, Sprintplan, Trello, Git-Regeln), Abschnitt 5.4 Konsistenz, KI-Nutzungshinweis.
 Begründung: siehe `05-vergleich-und-zusammenfuehrung.md`. Beide Entwürfe haben Stärken; die Zusammenführung erhält das Dozentenfeedback (Perspektive, Gimmick) und ergänzt das, was bei uns Platzhalter war (Projektmanagement).
 Auswirkung: E-09 ist überholt (26 Klassen, sechs Sequenzdiagramme statt fünf), E-08 wird durch E-11 ersetzt.
 
@@ -98,11 +108,11 @@ Auswirkung: E-09 ist überholt (26 Klassen, sechs Sequenzdiagramme statt fünf),
 Datum: 02.09.2026 (Jakob per Commit `bf9b448`/`3f437f3`, von Claude/David übernommen).
 Entscheidung: Ordner `bpmn/`, `uml/`, `doku/`, `praesi/`, `claude.readme/` (dazu `abgabe/` und `tools/` aus E-08). Dateinamen ohne Umlaute und ohne Projekt-Präfix; Quelle und Bild mit gleichem Basisnamen (`klassen.puml` ↔ `klassen.png`, `p01-sofortdiagnose.bpmn` ↔ `p01-sofortdiagnose.png`). Commit-Nachrichten mit Termin-Stempel `[T<nn> <JJJJ-MM-TT>] <typ>: <beschreibung>` (T03 = 02.09.2026), kein direkter Commit auf `main`, Pull Request mit Review. Team-Doku (`docs/`) wandert nach `doku/`.
 Begründung: Ein Layout für alle; Jakobs Struktur ist bereits auf `main`, die Konventionen stehen in `claude.readme/README.md`.
-Auswirkung: Kilians V1-Dateien auf `main` (`bpmn/p01.bpmn` …, `uml/klassen.puml` mit 18 Klassen, `doku/00…04-*.md`) werden durch diesen Stand ersetzt (Vorgehen in `README.md` des FINAL-Ordners).
+Auswirkung (umgesetzt): Der Merge auf `main` ist erledigt; Kilians V1-Dateien (`bpmn/p01.bpmn` …, `uml/klassen.puml` mit 18 Klassen, alte Doku) liegen unter `archiv/alte-versionen/`, sein UML-Paket der Betreiber-Variante unter `archiv/uml-v1-betreiber/`.
 
 ### E-12 Vorgehensmodell und Sprintplan
 
 Datum: 02.09.2026 (Kilian in V2, von Claude/David in Doku Kapitel 4 übernommen; Termine vorläufig, siehe E-13).
-Entscheidung: Scrum mit Product Owner (Adrian), Scrum Master (Kilian) und Projektleitung (Nina) als Ansprechpartnerin des Dozenten; Sprint-Takt = Gruppentermine. Sprint 0 (02.09.) Setup und Konventionen, Sprint 1 (03.09.–05.10.) Erstfassung aller Modelle, Sprint 2 (05.10.–15.10.) Review und Verhalten (Sequenz-/Zustandsdiagramm), Sprint 3 (15.10.–22.10.) Freeze und Generalprobe, Abschluss 27.10. Präsentation und 13.11. Abgabe. Trello-Board „RepairFlow – Fallstudie SYAN WWI25B4 G1" mit Listen Info & Regeln, Product Backlog, Sprint 0–3, Abschluss, In Arbeit, Review/QA, Done.
+Entscheidung: Scrum mit Product Owner (Adrian), Scrum Master (Kilian) und Projektleitung (Nina) als Ansprechpartnerin des Dozenten; Sprint-Takt = Gruppentermine. Ursprünglich Sprint 0 (02.09.) bis Sprint 3; durch E-13 ersetzt durch die Zählung der Doku (Kapitel 4.2): Sprint 1 (02.09.) Setup und Konventionen, Sprint 2 (03.09.–05.10.) Korrekturen und Verhalten, Sprint 3 (06.10.–15.10.) Fertigstellung, Sprint 4 (16.10.–22.10.) Freeze und Generalprobe; Abschluss 27.10. Präsentation und 13.11. Abgabe. Trello-Board „RepairFlow – Fallstudie SYAN WWI25B4 G1" mit einer Liste je Termin (02.09., 05.10., 15.10., 22.10., 27.10., 13.11.) sowie Product Backlog, In Arbeit, Review/QA, Done.
 Begründung: Der Ablauf verlangt ein Kapitel Projektmanagement; Kilians Plan ist konkret und passt zu den Rollen.
 

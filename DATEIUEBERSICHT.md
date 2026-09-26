@@ -1,14 +1,14 @@
 # Dateiübersicht – RepairFlow (Fallstudie Systemanalyse, WWI25B4 Gruppe 1)
 
-Stand 02.09.2026. Diese Datei erklärt jede Datei im Repository: wo sie liegt, wie sie heißt, wofür sie da ist und wer sie pflegt. Ordnerstruktur = Jakobs `main` (`bpmn/`, `uml/`, `doku/`, `praesi/`, `abgabe/`, `tools/`, `archiv/`, `claude.readme/`).
+Stand 26.09.2026. Diese Datei erklärt jede Datei im Repository: wo sie liegt, wie sie heißt, wofür sie da ist und wer sie pflegt. Ordnerstruktur = Jakobs `main` (`bpmn/`, `uml/`, `doku/`, `praesi/`, `abgabe/`, `tools/`, `archiv/`, `claude.readme/`).
 
 ## Wurzelverzeichnis
 
 | Datei | Wofür | Pflege |
 |---|---|---|
-| `README.md` | Einstieg: was der Stand ist, wie er entstanden ist (Zusammenführung der zwei Entwürfe), wie er per Branch `feature/final-merge` ins Repo kommt, was entschieden und was noch offen ist | David |
+| `README.md` | Einstieg: was der Stand ist, wie er entstanden ist (Zusammenführung der zwei Entwürfe, Merge auf `main` erledigt), Prüfstand, was entschieden und was als Nächstes zu tun ist | David |
 | `DATEIUEBERSICHT.md` | diese Datei | Claude / Kilian |
-| `.gitignore` | schließt macOS-/Windows-Metadaten (`._*`, `.DS_Store`, `Thumbs.db`), Build-Zwischenstände der Generatoren und Transfer-ZIPs vom Commit aus | Jakob |
+| `.gitignore` | schließt macOS-Metadaten (`.DS_Store`, `.AppleDouble`, `.LSOverride`), `Thumbs.db`, Office-Sperrdateien, Editor-/IDE-Dateien, `.obsidian/` und Python-Zwischenstände (`__pycache__/`) vom Commit aus | Jakob |
 
 ## `bpmn/` – Geschäftsprozessmodelle (Abgabekriterium: 10 Kollaborationsdiagramme)
 
@@ -26,7 +26,7 @@ Dateiname = `p` + zweistellige Nummer + Prozessname, keine Umlaute. Quelle ist i
 | `p08-abholung.bpmn/.png` | Abholung, Rechnung und Zahlung (DATEV-Übergabe) | Kunde, Werkstattbetrieb (Service/Annahme, Techniker) |
 | `p09-reklamation.bpmn/.png` | Reklamation und Gewährleistung | Kunde, Werkstattbetrieb (Techniker, Service/Annahme, Werkstattleitung) |
 | `p10-retoure.bpmn/.png` | Ersatzteil-Retoure und Lieferanten-Reklamation | Werkstattbetrieb (Werkstattleitung, Disposition), Lieferant |
-| `README.md` | Konventionen (Pool = Unternehmen, Lanes = Rollen, Aktivitätstypen, Datenobjekte), Prüfstand (Linter 0 Befunde, Ø 12,0 Aktivitäten), Aufgaben für Maxi (im Camunda Modeler öffnen, speichern, Camunda Cloud) | Maxi |
+| `README.md` | Konventionen (Pool = Unternehmen, Lanes = Rollen, Aktivitätstypen, Datenobjekte), Prüfstand (Linter 0 Befunde, Ø 12,1 Aktivitäten), Aufgaben für Maxi (im Camunda Modeler öffnen, speichern, Camunda Cloud) | Maxi |
 
 Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modeler öffnen, Problems-Panel prüfen, speichern, in die Camunda Cloud laden.
 
@@ -36,8 +36,8 @@ Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modele
 
 | Datei | Wofür |
 |---|---|
-| `usecase.puml/.png` | Use-Case-Diagramm `ud : RepairFlow` – 18 Use Cases, 7 Akteure, include/extend, Systemgrenze |
-| `klassen.puml/.png` | Vollständiges Klassendiagramm `cd : RepairFlow` – 26 Klassen, 7 Enums, 34 Assoziationen |
+| `usecase.puml/.png` | Use-Case-Diagramm `ud : RepairFlow` – 18 Use Cases, 7 Akteure, 4 include, 5 extend, Systemgrenze |
+| `klassen.puml/.png` | Vollständiges Klassendiagramm `cd : RepairFlow` – 26 Klassen, 7 Enums, 35 Assoziationen |
 | `klassen-fokus-1-sofortdiagnose.puml/.png` | Ausschnitt Kundenkontakt und KI-Sofortdiagnose (in Doku und Folien) |
 | `klassen-fokus-2-auftrag.puml/.png` | Ausschnitt Auftragsabwicklung (in der Doku) |
 | `klassen-fokus-3-disposition.puml/.png` | Ausschnitt Ersatzteil-Disposition |
@@ -59,16 +59,17 @@ Verantwortlich: **Kilian** (UML). Nächster Schritt: `UML-WWI25B4-Gruppe1.vpp` i
 
 | Datei | Wofür |
 |---|---|
-| `Projektdokumentation.docx` | Die Projektdokumentation (Word): Titelseite mit Kurs, Gruppe, Namen; Kapitel 1 Mitglieder und Rollen, 2 Projekt, 3 Vorgehen, 4 Projektmanagement, 5 Artefakte, 6 Probleme, 7 Feedback, Anhang A Abgabestruktur, Anhang B die zehn BPMN-Diagramme. 24 Seiten Haupttext + 10 Seiten Anhang. Offene Stellen sind gelb als `[Gruppe: …]` markiert (Trello-Screenshot, echte Sprint-Ergebnisse, Kapitel 6/7 nach der Präsentation). Wird bei der Abgabe zu `Projekt-WWI25B4-Gruppe1.pdf` |
+| `Projektdokumentation.docx` | Die Projektdokumentation (Word): Titelseite mit Kurs, Gruppe, Namen; Kapitel 1 Mitglieder und Rollen, 2 Projekt, 3 Vorgehen, 4 Projektmanagement, 5 Artefakte, 6 Probleme, 7 Feedback, Anhang A Abgabestruktur, Anhang B die zehn BPMN-Diagramme. Titelseite, Haupttext mit Anhang A, Anhang B mit je einer Seite pro BPMN-Diagramm. Offene Stellen sind gelb als `[Gruppe: …]` markiert (Trello-Screenshot, echte Sprint-Ergebnisse, Kapitel 6/7 nach der Präsentation). Wird bei der Abgabe zu `Projekt-WWI25B4-Gruppe1.pdf` |
 | `Projektdokumentation.pdf` | PDF-Export der Word-Datei (nach jeder Änderung neu erzeugen) |
 | `00-uebersicht.md` | Inhaltsverzeichnis des Ordners `doku/` |
 | `01-projektkontext.md` | Fachliche Fakten: Szenario FixWerk, Perspektive Solution Provider, Prozessliste, Systemgrenze, Zustandsautomat – Nachschlagewerk für alle |
 | `02-team-und-rollen.md` | Rollen (Stand 02.09.: Nina PL, David Stellvertretung/Backups, Adrian PO, Kilian SM + UML, Maxi BPMN, Jakob QM), Zweierteams, Sprecherzuordnung der Präsentation, Präsentationstermin |
-| `03-entscheidungen.md` | Entscheidungslog E-01 … E-14: was, wann, warum, Auswirkung. Offene Entscheidungen stehen oben |
+| `03-entscheidungen.md` | Entscheidungslog E-01 … E-15: was, wann, warum, Auswirkung. Offene Entscheidungen stehen oben |
 | `04-dozenten-feedback.md` | Rückmeldungen des Dozenten (Perspektive klären, KI-Gimmick) und offene Fragen fürs nächste Coaching |
 | `05-vergleich-und-zusammenfuehrung.md` | Warum der Solution-Provider-Entwurf die Basis ist und was aus Kilians Betreiber-Entwurf übernommen wurde |
 | `protokolle/_vorlage.md` | Vorlage für Sprint-Protokolle |
 | `protokolle/2026-09-02-sprint1.md` | Protokoll des ersten Gruppentermins (Entscheidungen, Aufgaben je Person, offene Punkte, Retrospektive – zwei Stellen vom Team zu füllen) |
+| `protokolle/2026-09-02-review-bpmn-09-10.md` | QM-Review BPMN 09 + 10 (Jakob), mit Nachtrag vom 26.09.2026 (p05-Befund war False Positive) |
 
 Verantwortlich: **Claude** (Dokumanager) über Kilian/David; Kapitel 4 und Protokolle: **Kilian** (Scrum Master), Abgabe-PDF: **Nina**.
 
@@ -76,7 +77,7 @@ Verantwortlich: **Claude** (Dokumanager) über Kilian/David; Kapitel 4 und Proto
 
 | Datei | Wofür |
 |---|---|
-| `Abschlusspraesentation.pptx` | 20 Folien mit Sprechernotizen. Sprecherzuordnung: Nina 1–2 und 18–19, David 3 und 16, Adrian 4–6 und 11, Maxi 7–10, Kilian 12–14, Jakob 15 und 17; Folie 20 = Pflichtangabe „wer verantwortet welchen Beitrag". Folie 16 enthält eine rote Stelle für den Trello-Screenshot |
+| `Abschlusspraesentation.pptx` | 20 Folien (Sprechernotizen teilweise nur mit der Angabe der Vortragenden). Sprecherzuordnung: Nina 1–2 und 18–19, David 3 und 16, Adrian 4–6 und 11, Maxi 7–10, Kilian 12–14, Jakob 15 und 17; Folie 20 = Pflichtangabe „wer verantwortet welchen Beitrag". Für den Trello-Screenshot muss auf Folie 16 noch Platz geschaffen werden |
 | `Abschlusspraesentation.pdf` | PDF-Export; wird bei der Abgabe zu `Praesentation-WWI25B4-Gruppe1.pdf` |
 
 Verantwortlich: **Jakob** (Folien), jede Person für den eigenen Block.
@@ -85,7 +86,7 @@ Verantwortlich: **Jakob** (Folien), jede Person für den eigenen Block.
 
 | Datei | Wofür |
 |---|---|
-| `BPMN-WWI25B4-Gruppe1.zip` | Die zehn `.bpmn`-Dateien als XML-Export (nur XML, keine Bilder). Nach der Nacharbeit im Camunda Modeler neu packen: `cd bpmn && zip ../abgabe/BPMN-WWI25B4-Gruppe1.zip p*.bpmn` |
+| `BPMN-WWI25B4-Gruppe1.zip` | Die zehn `.bpmn`-Dateien als XML-Export (nur XML, keine Bilder). Dateinamen im ZIP nach Ablauf (`01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`). Nach der Nacharbeit im Camunda Modeler neu packen: `python3 tools/pack_bpmn.py` |
 | `README.md` | Anleitung, wie das Gesamtarchiv `Fallstudie-WWI25B4-Gruppe1.zip` gebaut wird (Doku-PDF, BPMN-ZIP, VPP, Präsentations-PDF, jeweils mit den vorgeschriebenen Dateinamen) |
 
 Noch nicht vorhanden: `UML-WWI25B4-Gruppe1.vpp` (Kilian, aus Visual Paradigm) und das Gesamtarchiv (Nina, nach der Präsentation).
@@ -98,6 +99,8 @@ Damit wurden die Rohartefakte erzeugt. Nur anfassen, wenn man etwas neu bauen wi
 |---|---|
 | `diagrams.py` + `bpmngen.py` | Prozessinhalte (diagrams.py) und BPMN-XML-Generator mit Layout (bpmngen.py) → `bpmn/*.bpmn` |
 | `render.py` | rendert `.bpmn` mit bpmn-js zu PNG |
+| `mkstats.py` | zählt die Kennzahlen der BPMN-Dateien und schreibt `process_stats.json` |
+| `pack_bpmn.py` | packt `abgabe/BPMN-WWI25B4-Gruppe1.zip` mit den Dateinamen nach Ablauf |
 | `lint.mjs` | Prüfung mit dem Camunda-Linter |
 | `umlmodel.py` | Single Source of Truth für Klassen, Operationen, Use Cases → `uml/klassen*.puml`, `uml/usecase.puml`, `uml/modell.xmi` |
 | `doc.js` + `mktoc.py` | erzeugen `doku/Projektdokumentation.docx` (zwei Durchläufe wegen Inhaltsverzeichnis) |
@@ -112,6 +115,7 @@ Damit wurden die Rohartefakte erzeugt. Nur anfassen, wenn man etwas neu bauen wi
 | Ordner | Wofür |
 |---|---|
 | `uml-v1-betreiber/` | Kilians erstes UML-Paket (Betreiber-Perspektive, 22 Klassen, eigenes XMI, README). Ersetzt durch `uml/`; nichts davon in die Abgabe |
+| `alte-versionen/` | frühere Fassungen von BPMN (`p01.bpmn` …, Camunda 7), UML, Doku und Präsentation. Ersetzt; nichts davon in die Abgabe |
 
 ## `claude.readme/` – Regeln für Team und KI-Assistenten
 
@@ -123,7 +127,7 @@ Damit wurden die Rohartefakte erzeugt. Nur anfassen, wenn man etwas neu bauen wi
 ## Was fehlt noch bis zur Abgabe
 
 1. `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm (Kilian) – Pflicht.
-2. Alle zehn BPMN einmal im Camunda Modeler geöffnet und gespeichert, in die Camunda Cloud geladen (Maxi); danach `abgabe/BPMN-WWI25B4-Gruppe1.zip` neu packen.
+2. Alle zehn BPMN einmal im Camunda Modeler geöffnet und gespeichert, in die Camunda Cloud geladen (Maxi); danach `python3 tools/pack_bpmn.py`.
 3. Doku: Trello-Screenshot in Kapitel 4.3, Kapitel 6/7 nach der Präsentation, PDF neu exportieren und als `Projekt-WWI25B4-Gruppe1.pdf` ins Gesamtarchiv (Nina).
 4. Präsentation: Trello-Screenshot auf Folie 16, PDF-Export als `Praesentation-WWI25B4-Gruppe1.pdf`.
-5. Dozent informieren: Ansprechperson Nina, Frage Camunda Cloud vs. Git.
+5. Dozent informieren: Ansprechperson Nina. Die Camunda Cloud ist laut Ablauf Pflichtablage (E-14).

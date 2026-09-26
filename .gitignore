@@ -15,3 +15,10 @@
 
 # Obsidian
 .obsidian/
+
+# Python-Zwischenstände der Generatoren
+__pycache__/
+*.pyc
+
+# Windows
+Thumbs.db

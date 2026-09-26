@@ -15,9 +15,9 @@ Unser Beispiel: **RepairFlow**, ein Software-Startup (Solution Provider), das We
 - 10 BPMN-2.0-Kollaborationsdiagramme mit durchschnittlich 10 Aktivitäten, vollständig und syntaktisch korrekt
 - Beteiligte Ressourcen als Pools/Lanes, außerdem Datenobjekte und Datenspeicher
 - Werkzeug: Camunda Modeler (Camunda 8, BPMN diagram) oder bpmn.io
-- Diagrammnamen mit zweistelliger Nummer und prägnantem Namen: `01-Sofortdiagnose`, `02-Auftragsannahme` usw.
+- Diagrammnamen mit zweistelliger Nummer und prägnantem Namen: `01-Sofortdiagnose`, `02-Auftragsannahme` usw. (so heißen die Dateien im Abgabe-ZIP und in der Camunda Cloud; im Repository `p01-sofortdiagnose.bpmn` usw., E-11/E-15)
 - Abgabe als ZIP aller exportierten Diagramme (XML)
-- Artefakt-Repository: Der Ablauf nennt die Camunda Cloud mit separatem How-To, die Installationsanleitung empfiehlt stattdessen ein selbst gehostetes Git-Repository. Wir nutzen dieses GitHub-Repo. Beim nächsten Coaching klären, ob das reicht.
+- Artefakt-Repository: Der Ablauf verlangt die Ablage in den vorbereiteten Unterordnern der Camunda Cloud; die Installationsanleitung empfiehlt zusätzlich Git für die Teamarbeit. Wir nutzen beides (Git als Arbeitsgrundlage, Camunda Cloud als Pflichtablage).
 
 ### Automatisierungspotential
 
@@ -53,7 +53,7 @@ Das Fallstudien-Portfolio ist Teil des Moduls „Methoden der WI" und wird 50:50
 
 - 2 Stunden Kickoff, 23 Stunden Arbeit in den Kleingruppen, 3 Stunden Abschlusspräsentation
 - Regelmäßiges Coaching in Präsenz, meist im Planspiel-Labor oder in Gruppenräumen
-- Abschlusspräsentation: laut Ablauf „Mitte Oktober 2026“, laut `Allgemeines.docx` (Moodle, Quelle Kilian) **27.10.2026, 09:00 Uhr, Raum B458**; Kilian vermutet den 22.10. – klären (E-13)
+- Abschlusspräsentation: laut Ablauf „Mitte Oktober 2026“, laut `Allgemeines.docx` (Moodle, Quelle Kilian) **27.10.2026, 09:00 Uhr, Raum B458** (entschieden in E-13; der 22.10. ist die Generalprobe)
 - Gruppentermine (Angabe Kilian, je 4:15 h): 02.09., 05.10., 15.10., 22.10.2026; Sprintplan in der Doku, Kapitel 4
 - **Abgabe: bis 13.11.2026, 23:59 Uhr** über den Moodle-Upload-Link (genauer Termin laut Moodle). Pro Person muss eine individuelle, archivierbare Version der vollständigen Prüfungsleistung in Moodle liegen.
 
@@ -91,7 +91,7 @@ Download über camunda.com/de/download/modeler, beim Start „Camunda 8 → BPMN
 
 ### Git
 
-Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Schriftliche. Regeln stehen in der README im Hauptverzeichnis (Branches, Pull Requests, Commit-Messages, Definition of Done).
+Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Schriftliche. Regeln stehen in `claude.readme/README.md` (Branches, Pull Requests, Commit-Messages, Definition of Done).
 
 ## Fachliche Konventionen für alle Artefakte
 
@@ -100,20 +100,20 @@ Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `tools/umlmodel.py`
 - Pools: Werkstattbetrieb (Pilotkunde FixWerk GmbH) · Kunde · Lieferant; Lanes: Service / Annahme · Techniker · Werkstattleitung · Ersatzteil-Disposition
 - Zustandsautomat `Reparaturauftrag`: angenommen → in Diagnose → KVA offen → freigegeben | abgelehnt → Teile bestellt → in Reparatur → fertig → abgeholt
 - Prozesse: 01 KI-Sofortdiagnose und Voranmeldung · 02 Auftragsannahme, Geräteregistrierung und Terminplanung · 03 Fehlerdiagnose · 04 Kostenvoranschlag und Kundenfreigabe · 05 Ersatzteil-Verfügbarkeit und Reservierung · 06 Ersatzteil-Bestellung beim Lieferanten · 07 Reparaturdurchführung und Arbeitszeiterfassung · 08 Abholung, Rechnung und Zahlung · 09 Reklamation und Gewährleistung · 10 Ersatzteil-Retoure und Lieferanten-Reklamation
-- Klassen (23): Person (abstrakt), Kunde, Techniker, Werkstattbetrieb, Filiale, Lieferant, Voranmeldung, Medienanhang, KIDiagnosevorschlag, Reparaturauftrag, Geraet, Fehlerbefund, Kostenvoranschlag, KvaPosition, Reparaturschritt, Arbeitszeitbuchung, Ersatzteil, Lagerbestand, ErsatzteilReservierung, Lieferantenbestellung, Bestellposition, Rechnung, Reklamation
+- Klassen (26): Person (abstrakt), Mitarbeiter (abstrakt), Techniker, Disponent, Werkstattleiter, Kunde, Werkstattbetrieb, Filiale, Lieferant, Voranmeldung, Medienanhang, KIDiagnosevorschlag, Reparaturauftrag, Geraet, Fehlerbefund, Kostenvoranschlag, KvaPosition, Reparaturschritt, Arbeitszeitbuchung, Ersatzteil, Lagerbestand, ErsatzteilReservierung, Lieferantenbestellung, Bestellposition, Rechnung, Reklamation
 - Use Cases (18): UC01 Sofortdiagnose anfordern · UC02 Voranmeldung bestätigen · UC03 Reparaturauftrag anlegen · UC04 Diagnosevorschlag prüfen · UC05 Diagnosebefund erfassen · UC06 KVA erstellen · UC07 KVA freigeben / ablehnen · UC08 Ersatzteil-Verfügbarkeit prüfen · UC09 Ersatzteil reservieren · UC10 Lieferantenbestellung auslösen · UC11 Wareneingang buchen · UC12 Nachbestellvorschlag bei Meldebestand · UC13 Reparaturschritt und Arbeitszeit erfassen · UC14 Auftrag fertigmelden und Kunde benachrichtigen · UC15 Rechnung erstellen und Zahlung erfassen · UC16 Reklamation bearbeiten · UC17 Werkstatttermin planen und Techniker zuweisen · UC18 Werkstattbetrieb und Filialen verwalten
-- Sequenzdiagramme: SD1 UC01 · SD2 UC07 · SD3 UC09 · SD4 UC14 · SD5 UC16
+- Sequenzdiagramme: SD1 UC01 · SD2 UC07 · SD3 UC09 · SD4 UC14 · SD5 UC16 · SD6 UC12/UC10
 
-## Stand der Artefakte (02.09.2026, nach Zusammenführung mit Kilians V2)
+## Stand der Artefakte (26.09.2026, nach der Gesamtprüfung, E-15)
 
 | Artefakt | Stand | Nächster Schritt |
 |---|---|---|
-| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 120 Aktivitäten (Ø 12,0), 60 % automatisiert, Camunda-Linter (8.7) und bpmnlint ohne Befund, PNG je Datei | David: im Camunda Modeler öffnen, Layout gegenlesen, speichern; ggf. Camunda Cloud |
-| Use-Case-Diagramm `uml/usecase.*` | 18 UCs, 7 Akteure, auch in `uml/modell.xmi` | Maxi: XMI in VP importieren, Diagramm anlegen, ins VP-Repository committen |
-| Klassendiagramm `uml/klassen.*` + 4 Fokus-Ausschnitte | 26 Klassen (mit Mitarbeiter-Hierarchie aus V2), 7 Enums, 34 Assoziationen | Maxi: in VP anlegen (Anleitung `uml/README.md`) |
-| Sequenzdiagramme `uml/sequenz-01…06.*` | 6 Stück (SD6 Nachbestellvorschlag aus V2), konsistent zum Klassendiagramm | Maxi: in VP als Unterdiagramme der Use Cases zeichnen |
+| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 121 Aktivitäten (Ø 12,1), 61 % automatisiert, Camunda-Linter und bpmnlint ohne Befund, PNG je Datei | Maxi (Prüfung verteilt laut Sprint-1-Protokoll): im Camunda Modeler öffnen, Problems-Panel prüfen, speichern; Camunda Cloud |
+| Use-Case-Diagramm `uml/usecase.*` | 18 UCs, 7 Akteure, auch in `uml/modell.xmi` | Kilian: XMI in VP importieren, Diagramm anlegen, ins VP-Repository committen |
+| Klassendiagramm `uml/klassen.*` + 4 Fokus-Ausschnitte | 26 Klassen (mit Mitarbeiter-Hierarchie aus V2), 7 Enums, 35 Assoziationen | Kilian: in VP anlegen (Anleitung `uml/README.md`) |
+| Sequenzdiagramme `uml/sequenz-01…06.*` | 6 Stück (SD6 Nachbestellvorschlag aus V2), Botschaften = Operationen der Empfängerklasse (geprüft 26.09.) | Kilian: in VP als Unterdiagramme der Use Cases zeichnen |
 | Zustandsdiagramm `uml/zustand-reparaturauftrag.*` | PlantUML/PNG (Zusatz) | optional in VP |
-| Projektdokumentation `doku/Projektdokumentation.docx/.pdf` | 37 Seiten (25 Haupttext + Anhang), Kapitel 4 mit Sprintplan/Trello aus V2, gelb markierte Stellen brauchen Input der Gruppe | alle: Platzhalter füllen, Jakob: Review |
+| Projektdokumentation `doku/Projektdokumentation.docx/.pdf` | Haupttext (Kapitel 1–7) plus Anhang A (Abgabestruktur) und Anhang B (BPMN-Diagramme), Kapitel 4 mit Sprintplan/Trello aus V2, gelb markierte Stellen brauchen Input der Gruppe | alle: Platzhalter füllen, Jakob: Review |
 | Präsentation `praesi/Abschlusspraesentation.pptx/.pdf` | 20 Folien mit Notizen und Vortragenden (Vorschlag), Termin 27.10. auf der Titelfolie | Gruppe: Zuordnung und Termin bestätigen, Probevortrag |
 | Abgabe-ZIP | `abgabe/BPMN-WWI25B4-Gruppe1.zip` liegt bereit, VPP fehlt noch | Nina: Ende Oktober zusammenstellen |
-| Trello-Board | Plan in Kilians `RepairFlowProjektplanSprintsTrello.md` (V2) | Kilian: Board anlegen, Karten aus dem Plan übernehmen |
+| Trello-Board | Plan in Doku Kapitel 4.2/4.3 | Kilian: Board anlegen, Karten aus dem Plan übernehmen |

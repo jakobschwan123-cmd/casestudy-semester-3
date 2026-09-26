@@ -35,6 +35,7 @@ class Reparaturauftrag {
   + alleSchritteAbgeschlossen() : boolean
   + fertigmelden() : void
   + benachrichtigeKunde(text : String) : void
+  + getRechnung() : Rechnung
 }
 class Geraet {
   - seriennummer : String
@@ -94,6 +95,7 @@ class Rechnung {
   --
   + berechneBetrag() : double
   + erfasseZahlung(art : String) : void
+  + getRechnungsdatum() : Date
 }
 class Reklamation {
   - reklamationsnummer : String
@@ -105,11 +107,11 @@ class Reklamation {
   + schliesseAb() : void
 }
 Kunde "1" -down- "0..*" Reparaturauftrag : beauftragt >
-Reparaturauftrag "1" *-- "1" Geraet : betrifft >
+Reparaturauftrag "0..*" -- "1" Geraet : betrifft >
 Reparaturauftrag "0..*" -- "0..1" Techniker : zugewiesen an >
 Reparaturauftrag "1" *-- "0..1" Fehlerbefund : hat >
 Fehlerbefund "0..*" -- "1" Techniker : erstellt von >
-Reparaturauftrag "1" *-- "0..*" Kostenvoranschlag : hat >
+Reparaturauftrag "0..1" *-- "0..*" Kostenvoranschlag : hat >
 Kostenvoranschlag "1" *-down- "1..*" KvaPosition : besteht aus >
 Reparaturauftrag "1" *-down- "0..*" Reparaturschritt : gliedert sich in >
 Reparaturschritt "1" *-down- "0..*" Arbeitszeitbuchung : erfasst >

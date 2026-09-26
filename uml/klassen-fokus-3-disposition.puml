@@ -29,6 +29,7 @@ class Lagerbestand {
   + pruefeVerfuegbarkeit(anzahl : int) : boolean
   + bucheZugang(anzahl : int) : void
   + bucheAbgang(anzahl : int) : void
+  + reserviere(anzahl : int) : void
   + istMeldebestandUnterschritten() : boolean
 }
 class ErsatzteilReservierung {
@@ -51,6 +52,7 @@ class Lieferantenbestellung {
   + uebermittle() : void
   + bucheWareneingang() : void
   + berechneBestellwert() : double
+  + freigeben() : void
 }
 class Bestellposition {
   - menge : int
@@ -75,6 +77,7 @@ class Reparaturauftrag {
   + alleSchritteAbgeschlossen() : boolean
   + fertigmelden() : void
   + benachrichtigeKunde(text : String) : void
+  + getRechnung() : Rechnung
 }
 class Filiale <<stammdaten>> {
   - filialnummer : String
@@ -86,6 +89,7 @@ class Filiale <<stammdaten>> {
 }
 Reparaturauftrag "0..*" -- "1" Filiale : bearbeitet in >
 Ersatzteil "1" -down- "0..*" Lagerbestand : geführt als >
+Ersatzteil "0..*" -- "0..1" Lieferant : Vorzugslieferant >
 Lagerbestand "0..*" -- "1" Filiale : liegt in >
 ErsatzteilReservierung "0..*" -- "1" Lagerbestand : reserviert auf >
 ErsatzteilReservierung "0..*" -- "0..1" Reparaturauftrag : für >
