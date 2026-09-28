@@ -156,14 +156,14 @@ function fit(file, maxW, maxH) {
     const rows = [[{ text: 'Nr', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Prozess', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Pools', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Akt.', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'autom.', options: { bold: true, color: C.white, fill: { color: C.teal } } }]];
     for (const st of STATS) rows.push([st.num, st.name, st.pools.join(', '), String(st.activities), Math.round(100 * st.auto / st.activities) + ' %']);
     s.addTable(rows, { x: 0.5, y: 1.05, w: 6.3, colW: [0.4, 3.2, 1.6, 0.5, 0.6], fontFace: FONT, fontSize: 9.5, color: C.dark, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.31, valign: 'middle' });
-    stat(s, 7.1, 1.3, String(TOTAL_ACT), 'Aktivitäten, im Schnitt ' + (TOTAL_ACT / 10).toFixed(1).replace('.', ',') + ' je Diagramm', 2.3);
+    stat(s, 7.1, 1.3, String(TOTAL_ACT), 'Aktivitäten im Werkstatt-Pool, im Schnitt ' + (TOTAL_ACT / 10).toFixed(1).replace('.', ',') + ' je Diagramm', 2.3);
     stat(s, 7.1, 2.9, Math.round(100 * TOTAL_AUTO / TOTAL_ACT) + ' %', 'davon führt RepairFlow ohne manuelle Arbeit aus', 2.3);
     s.addText('Prozesse 01 bis 08: durchgehende Auftragsreise · 09 und 10: Reklamation und Retoure', { x: 0.5, y: 4.75, w: 9, h: 0.3, fontFace: FONT, fontSize: 10, italic: true, color: C.grey, isTextBox: true, margin: 0 });
   }
   // ---------------- 8 Konventionen
   {
-    const s = base('So lesen sich unsere BPMN-Diagramme', { speaker: 'Maxi', notes: 'Regeln aus der Vorlesung: Pool = Unternehmen, Lane = Rolle, keine Lane für Software. Automatisierung zeigt der Aktivitätstyp.' });
-    card(s, 0.5, 1.1, 4.35, 1.4, 'FaSitemap', 'Pools und Lanes', 'Pool = Unternehmen: Werkstattbetrieb (Mandant), Kunde und Lieferant als Empty Pools. Lanes = Rollen: Service, Techniker, Werkstattleitung, Disposition.');
+    const s = base('So lesen sich unsere BPMN-Diagramme', { speaker: 'Maxi', notes: 'Regeln aus der Vorlesung: Pool = Unternehmen, Lane = Rolle, keine Lane für Software. Automatisierung zeigt der Aktivitätstyp. Der Kunde hat einen eigenen, nicht ausführbaren Ablauf (z. B. Foto aufnehmen, Anfrage senden, KVA freigeben), der Lieferant bleibt Black Box.' });
+    card(s, 0.5, 1.1, 4.35, 1.4, 'FaSitemap', 'Pools und Lanes', 'Pool = Unternehmen: Werkstattbetrieb (Mandant), Kunde mit eigenem Ablauf, Lieferant als Black Box. Lanes = Rollen: Service, Techniker, Werkstattleitung, Disposition.');
     card(s, 5.15, 1.1, 4.35, 1.4, 'FaBolt', 'Automatisierung als Aktivitätstyp', 'Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive = Nachricht, User Task = Mensch mit RepairFlow, Manual = außerhalb.');
     card(s, 0.5, 2.65, 4.35, 1.4, 'FaExchangeAlt', 'Nachrichtenflüsse und Daten', 'Kommunikation mit Kunde und Lieferant nur als Nachrichtenfluss. Datenobjekte tragen Klassennamen mit Zustand, z. B. Reparaturauftrag [freigegeben].');
     card(s, 5.15, 2.65, 4.35, 1.4, 'FaClipboardCheck', 'Ein Start, ein Ende, Linter sauber', 'Je Prozess ein Start- und ein Endereignis. Camunda-8-Anreicherung: Task-Definitionen, Subscriptions, Timer, FEEL-Bedingungen. Camunda-Linter: 0 Befunde.');
@@ -172,13 +172,13 @@ function fit(file, maxW, maxH) {
   // ---------------- 9 Prozess 01
   {
     const s = base('Prozess 01: KI-Sofortdiagnose und Voranmeldung', { speaker: 'Maxi', notes: 'Message-Start aus der App, Medienprüfung mit Rückfrageschleife, KI als Business Rule Task, Vorab-KVA, Verfügbarkeit über alle Filialen, Terminvorschlag, ereignisbasiertes Gateway: Bestätigung oder 7-Tage-Timer.' });
-    picture(s, 'pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Linker Teil des Diagramms: Anfrage, Medienprüfung mit Rückfrage, KI-Diagnosevorschlag, Vorab-KVA, Verfügbarkeit');
-    bulletsBox(s, ['Auslöser: Nachricht aus der App mit Foto, Video oder Ton', 'Rückfrageschleife bei nicht auswertbaren Medien', 'KI-Diagnosevorschlag als Geschäftsregel-Aktivität, danach Vorab-KVA, Verfügbarkeitsprüfung und Terminvorschlag', 'Warten auf Bestätigung oder 7-Tage-Timer, dann Voranmeldung mit Vorreservierung'], 0.5, 4.15, 9, 1.0, 11);
+    picture(s, 'pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Aufnahme und Anfrage, Medienprüfung mit Rückfrage an den Kunden, KI-Diagnosevorschlag, Vorab-KVA');
+    bulletsBox(s, ['Kunde: Foto, Video oder Ton aufnehmen und in der App senden; Auslöser für die Werkstatt ist diese Nachricht','Rückfrageschleife bei nicht auswertbaren Medien', 'KI-Diagnosevorschlag als Geschäftsregel-Aktivität, danach Vorab-KVA, Verfügbarkeitsprüfung und Terminvorschlag', 'Warten auf Bestätigung oder 7-Tage-Timer, dann Voranmeldung mit Vorreservierung'], 0.5, 4.15, 9, 1.0, 11);
   }
   // ---------------- 10 Prozess 04
   {
     const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maxi', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden statt einer separaten Nachricht, damit das Diagramm ohne Kreuzungen bleibt.' });
-    picture(s, 'pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Mittlerer Teil: Senden, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife');
+    picture(s, 'pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Kunde prüft und entscheidet, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife');
     bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage verstrichen (Erinnerung)', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) als Call Activity auf; Ablehnung führt zur Diagnosepauschale und Abholaufforderung'], 0.5, 4.1, 9, 1.0, 11);
   }
   // ---------------- 11 Automatisierung + KI

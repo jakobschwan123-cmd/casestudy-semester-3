@@ -40,6 +40,7 @@ class Node:
         self.lane, self.col, self.row = lane, col, row
         self.kw = kw
         self.parent = kw.get("parent")           # enclosing subprocess id
+        self.pool = kw.get("pool")               # None = Werkstatt pool, else name of a modelled partner pool
         self.cx = self.cy = None
         self.w, self.h = self.size()
 
@@ -74,14 +75,16 @@ class Node:
 
 
 class Diagram:
-    def __init__(self, num, name, lanes, pools_top=(), pools_bottom=(), doc=""):
+    def __init__(self, num, name, lanes, pools_top=(), pools_bottom=(), doc="", shift=0):
         self.num, self.name, self.doc = num, name, doc
+        self.shift = shift         # column offset for all Werkstatt nodes (room for partner steps on the left)
+        self.partners = []         # partner pools that are modelled with their own process (not a black box)
         self.lanes = list(lanes)
         self.pools_top, self.pools_bottom = list(pools_top), list(pools_bottom)
         self.nodes = {}
         self.order = []
         self.flows = []            # (src, tgt, name, cond, loop, kw)
-        self.msgs = []             # (src, tgt, name)  src/tgt: node id or pool name
+        self.msgs = []             # (src, tgt, name, snap)  src/tgt: node id or pool name
         self.datas = []            # dict(node, name, dir, pos)
         self.stores = []           # dict(node, name, dir)
         self.messages = {}         # message name -> id
@@ -91,16 +94,36 @@ class Diagram:
     # ---- building -------------------------------------------------------
     def node(self, id, kind, name, lane, col, row=0, **kw):
         assert id not in self.nodes, id
-        n = Node(id, kind, name, lane, col, row, **kw)
+        n = Node(id, kind, name, lane, col + self.shift, row, **kw)
         self.nodes[id] = n
         self.order.append(id)
         return n
 
+    def partner(self, pool):
+        """Model the pool `pool` (one of pools_top/pools_bottom) with its own, non-executable process."""
+        assert pool in self.pools_top + self.pools_bottom, pool
+        self.partners.append(pool)
+
+    def pnode(self, pool, id, kind, name, col, row=0, **kw):
+        """Flow node inside a modelled partner pool (absolute column, no shift, no lanes)."""
+        assert pool in self.partners, pool
+        assert id not in self.nodes, id
+        n = Node(id, kind, name, None, col, row, pool=pool, **kw)
+        self.nodes[id] = n
+        self.order.append(id)
+        return n
+
+    def geo(self, n):
+        """Row geometry (top, strip, rows) of the lane or partner pool that holds node n."""
+        return self.partner_geo[n.pool] if n.pool else self.lane_geo[n.lane]
+
     def flow(self, src, tgt, name=None, cond=None, loop=False, **kw):
         self.flows.append((src, tgt, name, cond, loop, kw))
 
-    def msg(self, src, tgt, name):
-        self.msgs.append((src, tgt, name))
+    def msg(self, src, tgt, name, snap=True):
+        # snap=False: node <-> node flow keeps the task attach point (centre + 30) and jogs
+        # between the pools, e.g. when a sequence flow already enters the task at the event's x
+        self.msgs.append((src, tgt, name, snap))
 
     def data(self, node, name, dir="out", pos=None):
         self.datas.append(dict(node=node, name=name, dir=dir, pos=pos))
@@ -119,7 +142,8 @@ class Diagram:
         lane_has_bottom = [False] * L
         lane_has_loop = [False] * L
         for n in self.nodes.values():
-            lane_rows[n.lane] = max(lane_rows[n.lane], n.row + 1)
+            if n.pool is None:
+                lane_rows[n.lane] = max(lane_rows[n.lane], n.row + 1)
         for d in self.datas:
             n = self.nodes[d["node"]]
             pos = d["pos"] or ("top" if n.row == 0 else "bottom")
@@ -130,13 +154,26 @@ class Diagram:
                 lane_has_bottom[n.lane] = True
         for s in self.stores:
             lane_has_bottom[self.nodes[s["node"]].lane] = True
+        partner_rows = {p: 0 for p in self.partners}
+        partner_loop = {p: False for p in self.partners}
+        for n in self.nodes.values():
+            if n.pool:
+                partner_rows[n.pool] = max(partner_rows[n.pool], n.row + 1)
         for (src, tgt, name, cond, loop, kw) in self.flows:
             if loop:
-                lane_has_loop[self.nodes[src].lane] = True
-                lane_has_loop[self.nodes[tgt].lane] = True
+                for nn in (self.nodes[src], self.nodes[tgt]):
+                    if nn.pool:
+                        partner_loop[nn.pool] = True
+                    else:
+                        lane_has_loop[nn.lane] = True
+
+        def pool_height(p):
+            if p not in self.partners:
+                return EMPTY_POOL_H
+            return TOP_STRIP_PLAIN + max(partner_rows[p], 1) * ROW_H + BOTTOM_PAD + (LOOP_PAD if partner_loop[p] else 0)
 
         # vertical layout of lanes
-        pool_top = POOL_GAP + (EMPTY_POOL_H + POOL_GAP) * len(self.pools_top) if self.pools_top else 60
+        pool_top = POOL_GAP + sum(pool_height(p) + POOL_GAP for p in self.pools_top) if self.pools_top else 60
         self.pool_top = pool_top
         y = pool_top
         self.lane_geo = []
@@ -156,8 +193,23 @@ class Diagram:
         self.pool_w = cx_of(maxcol) + 110 - POOL_X
         self.pool_right = POOL_X + self.pool_w
 
+        # pools above / below the Werkstatt pool (black box or modelled partner)
+        self.pool_geo = {}
+        self.partner_geo = {}
+        y = POOL_GAP - 40
+        for p in self.pools_top:
+            self.pool_geo[p] = dict(x=POOL_X, y=y, w=self.pool_w, h=pool_height(p))
+            y += pool_height(p) + POOL_GAP
+        y = self.pool_bottom + POOL_GAP
+        for p in self.pools_bottom:
+            self.pool_geo[p] = dict(x=POOL_X, y=y, w=self.pool_w, h=pool_height(p))
+            y += pool_height(p) + POOL_GAP
+        for p in self.partners:
+            g = self.pool_geo[p]
+            self.partner_geo[p] = dict(top=g["y"], h=g["h"], strip=TOP_STRIP_PLAIN, rows=partner_rows[p])
+
         for n in self.nodes.values():
-            g = self.lane_geo[n.lane]
+            g = self.geo(n)
             n.cx = cx_of(n.col)
             n.cy = g["top"] + g["strip"] + ROW_H / 2 + n.row * ROW_H
 
@@ -170,15 +222,6 @@ class Diagram:
                 y1 = min(k.top for k in kids) - SUB_PAD_TOP
                 y2 = max(k.bottom for k in kids) + SUB_PAD_BOTTOM
                 n.cx, n.cy, n.w, n.h = (x1 + x2) / 2, (y1 + y2) / 2, x2 - x1, y2 - y1
-
-        # empty pools
-        self.pool_geo = {}
-        for i, p in enumerate(self.pools_top):
-            self.pool_geo[p] = dict(x=POOL_X, y=POOL_GAP + i * (EMPTY_POOL_H + POOL_GAP) - 40,
-                                    w=self.pool_w, h=EMPTY_POOL_H)
-        for i, p in enumerate(self.pools_bottom):
-            self.pool_geo[p] = dict(x=POOL_X, y=self.pool_bottom + POOL_GAP + i * (EMPTY_POOL_H + POOL_GAP),
-                                    w=self.pool_w, h=EMPTY_POOL_H)
 
         # data objects / stores
         for d in self.datas:
@@ -207,7 +250,7 @@ class Diagram:
             return [(s.right, s.cy), (t.cx, s.cy), (t.cx, t.top if t.cy > s.cy else t.bottom)]
         if loop:
             if loop >= 3:
-                g = self.lane_geo[max(s.lane, t.lane)]
+                g = self.geo(s) if s.pool else self.lane_geo[max(s.lane, t.lane)]
                 yl = g["top"] + g["strip"] + max(g["rows"], 1) * ROW_H + 28
             else:
                 yl = max(s.cy, t.cy) + ROW_H / 2 + 28 + (loop - 1) * 30
@@ -264,11 +307,16 @@ class Diagram:
         A('    <bpmn:documentation>%s</bpmn:documentation>' % escape(self.doc))
         A('    <bpmn:participant id="%s" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="%s" />' % (part_main, pid))
         pool_ids = {}
+        partner_pid = {}
         for p in self.pools_top + self.pools_bottom:
             pool_ids[p] = "Part_%s_%s" % (num, p)
-            A('    <bpmn:participant id="%s" name="%s" />' % (pool_ids[p], escape(p)))
+            if p in self.partners:
+                partner_pid[p] = "Proc_%s_%s" % (num, p)
+                A('    <bpmn:participant id="%s" name="%s" processRef="%s" />' % (pool_ids[p], escape(p), partner_pid[p]))
+            else:
+                A('    <bpmn:participant id="%s" name="%s" />' % (pool_ids[p], escape(p)))
         mf_ids = []
-        for i, (src, tgt, name) in enumerate(self.msgs):
+        for i, (src, tgt, name, snap) in enumerate(self.msgs):
             mid = "MsgFlow_%s_%d" % (num, i + 1)
             s = pool_ids.get(src, src)
             t = pool_ids.get(tgt, tgt)
@@ -283,7 +331,7 @@ class Diagram:
             A('      <bpmn:lane id="Lane_%s_%d" name="%s">' % (num, li + 1, escape(lname)))
             for nid in self.order:
                 n = self.nodes[nid]
-                if n.lane == li and n.parent is None:
+                if n.pool is None and n.lane == li and n.parent is None:
                     A('        <bpmn:flowNodeRef>%s</bpmn:flowNodeRef>' % nid)
             A('      </bpmn:lane>')
         A('    </bpmn:laneSet>')
@@ -299,7 +347,7 @@ class Diagram:
 
         # message flow attachment for message events / receive tasks
         msg_by_node = {}
-        for (src, tgt, name) in self.msgs:
+        for (src, tgt, name, _snap) in self.msgs:
             if tgt in self.nodes:
                 msg_by_node[tgt] = name
 
@@ -331,14 +379,16 @@ class Diagram:
                 attrs += ' triggeredByEvent="false"'
             lines.append('%s<bpmn:%s %s>' % (sp, tag, attrs))
             ext = []
-            if k in ("service", "send", "businessRule"):
+            if n.pool:
+                pass
+            elif k in ("service", "send", "businessRule"):
                 ext.append('<zeebe:taskDefinition type="%s" />' % n.kw.get("type", "repairflow." + n.id.lower()))
-            if k == "user":
+            if k == "user" and not n.pool:
                 ext.append('<zeebe:userTask />')
                 ext.append('<zeebe:formDefinition formId="form-%s" />' % n.id.lower())
             if k == "call":
                 ext.append('<zeebe:calledElement processId="%s" propagateAllChildVariables="false" />' % n.kw.get("called", "Proc_00"))
-            if k in ("end", "throw") and n.kw.get("trigger") == "message":
+            if k in ("end", "throw") and n.kw.get("trigger") == "message" and not n.pool:
                 ext.append('<zeebe:taskDefinition type="%s" />' % n.kw.get("type", "repairflow." + n.id.lower()))
             if ext:
                 lines.append('%s  <bpmn:extensionElements>' % sp)
@@ -398,10 +448,10 @@ class Diagram:
 
         for nid in self.order:
             n = self.nodes[nid]
-            if n.parent is None:
+            if n.parent is None and n.pool is None:
                 X.extend(node_xml(n, 4))
         for i, (src, tgt, fname, cond, loop, kw) in enumerate(self.flows):
-            if self.nodes[src].parent is None:
+            if self.nodes[src].parent is None and self.nodes[src].pool is None:
                 A(flow_xml(i, src, tgt, fname, cond, kw, 4))
         for d in self.datas:
             A('    <bpmn:dataObjectReference id="%s" name="%s" dataObjectRef="%s" />' % (d["id"], escape(d["name"]), d["obj"]))
@@ -414,6 +464,18 @@ class Diagram:
             A('    </bpmn:textAnnotation>')
             A('    <bpmn:association id="Assoc_%s_%d" associationDirection="None" sourceRef="%s" targetRef="Note_%s_%d" />' % (num, ai + 1, nid, num, ai + 1))
         A('  </bpmn:process>')
+
+        # ---------------- partner processes (documented, not executable)
+        for p in self.partners:
+            A('  <bpmn:process id="%s" name="%s" isExecutable="false">' % (partner_pid[p], escape(p)))
+            for nid in self.order:
+                n = self.nodes[nid]
+                if n.pool == p:
+                    X.extend(node_xml(n, 4))
+            for i, (src, tgt, fname, cond, loop, kw) in enumerate(self.flows):
+                if self.nodes[src].pool == p:
+                    A(flow_xml(i, src, tgt, fname, cond, kw, 4))
+            A('  </bpmn:process>')
 
         # ---------------- messages
         for mname, mid in self.messages.items():
@@ -459,11 +521,17 @@ class Diagram:
             t_ = self.nodes[tgt]
             if abs(cx_ - dx_) < 1:
                 t_.kw["_vtop" if cy_ < dy_ else "_vbottom"] = True
-        for (src, tgt, name) in self.msgs:
-            nid = tgt if src in self.pool_geo else src
-            pool = src if src in self.pool_geo else tgt
-            n_ = self.nodes[nid]
-            n_.kw["_mtop" if self.pool_geo[pool]["y"] < n_.cy else "_mbottom"] = True
+        for (src, tgt, name, _snap) in self.msgs:
+            if src in self.pool_geo or tgt in self.pool_geo:
+                nid = tgt if src in self.pool_geo else src
+                pool = src if src in self.pool_geo else tgt
+                n_ = self.nodes[nid]
+                n_.kw["_mtop" if self.pool_geo[pool]["y"] < n_.cy else "_mbottom"] = True
+            else:
+                a_, b_ = self.nodes[src], self.nodes[tgt]
+                upper, lower = (a_, b_) if a_.cy < b_.cy else (b_, a_)
+                upper.kw["_mbottom"] = True
+                lower.kw["_mtop"] = True
         shape(part_main, POOL_X, self.pool_top, self.pool_w, self.pool_h, ' isHorizontal="true"')
         for li, g in enumerate(self.lane_geo):
             shape("Lane_%s_%d" % (num, li + 1), POOL_X + HEADER, g["top"], self.pool_w - HEADER, g["h"], ' isHorizontal="true"')
@@ -534,8 +602,38 @@ class Diagram:
             edge(flow_ids[i], pts, label)
 
         # message flows
-        mf_count = {}
-        for i, (src, tgt, name) in enumerate(self.msgs):
+        def attach_x(n, other):
+            # tasks: slightly right of centre (sequence flows enter at the centre); events/gateways: centre
+            if n.kind in TASK_TYPES:
+                return n.cx + 30
+            return n.cx
+
+        for i, (src, tgt, name, snap) in enumerate(self.msgs):
+            if src in self.nodes and tgt in self.nodes:   # node in partner pool <-> node in Werkstatt pool
+                a_, b_ = self.nodes[src], self.nodes[tgt]
+                xa, xb = attach_x(a_, b_), attach_x(b_, a_)
+                down = a_.cy < b_.cy
+                ya = a_.bottom if down else a_.top
+                yb = b_.top if down else b_.bottom
+                if not snap:
+                    pass
+                elif b_.left < xa < b_.right:
+                    xb = xa
+                elif a_.left < xb < a_.right:
+                    xa = xb
+                if abs(xa - xb) < 1:
+                    pts = [(xa, ya), (xb, yb)]
+                else:
+                    # jog in the gap between the two pools
+                    pa = self.pool_geo[a_.pool] if a_.pool else None
+                    pb = self.pool_geo[b_.pool] if b_.pool else None
+                    pg = pa or pb
+                    ym = (pg["y"] + pg["h"] + POOL_GAP / 2) if pg["y"] < self.pool_top else (pg["y"] - POOL_GAP / 2)
+                    pts = [(xa, ya), (xa, ym), (xb, ym), (xb, yb)]
+                (x1, y1), (x2, y2) = pts[0], pts[-1]
+                ly = (y1 + y2) / 2 - 10
+                edge(mf_ids[i], pts, (min(x1, x2) + 8, ly, 130, 20))
+                continue
             if src in self.pool_geo:      # from empty pool to node
                 g = self.pool_geo[src]
                 n = self.nodes[tgt]
@@ -578,5 +676,6 @@ class Diagram:
         A('</bpmn:definitions>')
         return "\n".join(X) + "\n"
 
-    def activity_count(self):
-        return sum(1 for n in self.nodes.values() if n.kind in TASK_TYPES or n.kind == "subprocess")
+    def activity_count(self, pool=None):
+        """Activities of the Werkstatt pool (pool=None) or of a modelled partner pool."""
+        return sum(1 for n in self.nodes.values() if n.pool == pool and (n.kind in TASK_TYPES or n.kind == "subprocess"))

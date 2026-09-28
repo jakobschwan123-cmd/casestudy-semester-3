@@ -39,7 +39,8 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   `usecase.puml`, `modell.xmi`); für die Prozesse `tools/diagrams.py`. Änderungen
   dort zuerst, dann Bilder, Doku und Folien nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
-  ausmodellierten Prozess, `Kunde` und `Lieferant` als Empty Pools. **Lanes (4)
+  ausmodellierten Prozess, `Kunde` mit eigenem nicht ausführbarem Prozess (E-16),
+  `Lieferant` als Empty Pool. **Lanes (4)
   = Rollen:** `Service / Annahme`, `Techniker`, `Werkstattleitung`,
   `Ersatzteil-Disposition`. Keine Lane für die Software; Automatisierung steckt
   im Aktivitätstyp (E-06). Im Klassenmodell sind die Rollen die Unterklassen von
@@ -49,12 +50,13 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   `in Reparatur` → `fertig` → `abgeholt`. Diese Statuswerte sind auch das
   `AuftragStatus`-Enum im Klassendiagramm.
 - **BPMN-Dateien sind Camunda-8-Modelle** (`executionPlatform="Camunda Cloud"`,
-  `isExecutable="true"`), angereichert mit `zeebe:taskDefinition`, `zeebe:userTask`
+  Werkstatt-Prozess `isExecutable="true"`, Kunden-Prozess `isExecutable="false"`
+  ohne Anreicherung), angereichert mit `zeebe:taskDefinition`, `zeebe:userTask`
   + Formular-ID, Message-Subscriptions, ISO-Timern und FEEL-Bedingungen, damit das
   Problems-Panel des Camunda Modelers leer bleibt. Beim Bearbeiten im Modeler
   diese Anreicherung nicht entfernen; nach Änderungen `@camunda/linting` und
   `bpmnlint` laufen lassen (`tools/lint.mjs` für den Camunda-Linter, `npx bpmnlint` mit
-  `{"extends": "bpmnlint:recommended"}`); danach `python3 tools/mkstats.py`. Je Diagramm (Prozessebene) genau ein Start-
+  `{"extends": "bpmnlint:recommended"}`); danach `python3 tools/check_layout.py bpmn` und `python3 tools/mkstats.py`. Je Diagramm (Prozessebene) genau ein Start-
   und ein Endereignis (eingebettete Teilprozesse haben ihr eigenes), Ereignisse im Partizip Perfekt, Aktivitäten Verb + Objekt.
 - **Werkzeuge:** BPMN in **Camunda Modeler (Camunda 8)**, UML in **Visual
   Paradigm 18** (Import über `uml/modell.xmi`). Die `.puml`-Dateien liefern

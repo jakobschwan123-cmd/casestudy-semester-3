@@ -99,7 +99,8 @@ Damit wurden die Rohartefakte erzeugt. Nur anfassen, wenn man etwas neu bauen wi
 |---|---|
 | `diagrams.py` + `bpmngen.py` | Prozessinhalte (diagrams.py) und BPMN-XML-Generator mit Layout (bpmngen.py) → `bpmn/*.bpmn` |
 | `render.py` | rendert `.bpmn` mit bpmn-js zu PNG |
-| `mkstats.py` | zählt die Kennzahlen der BPMN-Dateien und schreibt `process_stats.json` |
+| `mkstats.py` | zählt die Kennzahlen der BPMN-Dateien (Werkstatt-Pool, Kunden-Pool getrennt) und schreibt `process_stats.json` |
+| `check_layout.py` | prüft die BPMN-Dateien auf Flüsse, die durch fremde Elemente oder deckungsgleich laufen: `python3 tools/check_layout.py bpmn` |
 | `pack_bpmn.py` | packt `abgabe/BPMN-WWI25B4-Gruppe1.zip` mit den Dateinamen nach Ablauf |
 | `lint.mjs` | Prüfung mit dem Camunda-Linter |
 | `umlmodel.py` | Single Source of Truth für Klassen, Operationen, Use Cases → `uml/klassen*.puml`, `uml/usecase.puml`, `uml/modell.xmi` |

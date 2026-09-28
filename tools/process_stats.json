@@ -21,6 +21,12 @@
    "businessRule": 1
   },
   "auto": 12,
+  "kunde_activities": 5,
+  "kunde_kinds": {
+   "manual": 1,
+   "send": 3,
+   "user": 1
+  },
   "msgflows": 6,
   "data": 6,
   "start": "Anfrage eingegangen",
@@ -48,6 +54,12 @@
    "send": 1
   },
   "auto": 4,
+  "kunde_activities": 3,
+  "kunde_kinds": {
+   "manual": 1,
+   "send": 1,
+   "receive": 1
+  },
   "msgflows": 2,
   "data": 6,
   "start": "Kunde erschienen",
@@ -76,6 +88,10 @@
    "send": 1
   },
   "auto": 5,
+  "kunde_activities": 1,
+  "kunde_kinds": {
+   "manual": 1
+  },
   "msgflows": 1,
   "data": 5,
   "start": "Auftrag eingeplant",
@@ -103,6 +119,11 @@
    "call": 1
   },
   "auto": 8,
+  "kunde_activities": 3,
+  "kunde_kinds": {
+   "user": 1,
+   "send": 2
+  },
   "msgflows": 4,
   "data": 4,
   "start": "Diagnose abgeschlossen",
@@ -132,6 +153,10 @@
    "send": 1
   },
   "auto": 10,
+  "kunde_activities": 1,
+  "kunde_kinds": {
+   "manual": 1
+  },
   "msgflows": 1,
   "data": 4,
   "start": "KVA freigegeben",
@@ -162,6 +187,10 @@
    "call": 1
   },
   "auto": 8,
+  "kunde_activities": 1,
+  "kunde_kinds": {
+   "manual": 1
+  },
   "msgflows": 4,
   "data": 5,
   "start": "Fehlteile gemeldet",
@@ -190,6 +219,11 @@
    "receive": 1
   },
   "auto": 4,
+  "kunde_activities": 2,
+  "kunde_kinds": {
+   "user": 1,
+   "send": 1
+  },
   "msgflows": 2,
   "data": 5,
   "start": "Ersatzteile verfügbar",
@@ -218,6 +252,12 @@
    "receive": 1
   },
   "auto": 9,
+  "kunde_activities": 5,
+  "kunde_kinds": {
+   "manual": 2,
+   "send": 2,
+   "user": 1
+  },
   "msgflows": 5,
   "data": 5,
   "start": "Reparatur abgeschlossen",
@@ -249,6 +289,11 @@
    "call": 1
   },
   "auto": 8,
+  "kunde_activities": 3,
+  "kunde_kinds": {
+   "send": 2,
+   "manual": 1
+  },
   "msgflows": 4,
   "data": 5,
   "start": "Mangel gemeldet",
@@ -277,6 +322,8 @@
    "receive": 1
   },
   "auto": 6,
+  "kunde_activities": 0,
+  "kunde_kinds": {},
   "msgflows": 3,
   "data": 3,
   "start": "Mangelhaftes Teil festgestellt",

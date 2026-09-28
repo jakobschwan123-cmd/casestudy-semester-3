@@ -108,7 +108,7 @@ Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `tools/umlmodel.py`
 
 | Artefakt | Stand | Nächster Schritt |
 |---|---|---|
-| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 121 Aktivitäten (Ø 12,1), 61 % automatisiert, Camunda-Linter und bpmnlint ohne Befund, PNG je Datei | Maxi (Prüfung verteilt laut Sprint-1-Protokoll): im Camunda Modeler öffnen, Problems-Panel prüfen, speichern; Camunda Cloud |
+| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 121 Aktivitäten im Werkstatt-Pool (Ø 12,1), 61 % automatisiert, Kunde mit eigenem Ablauf (E-16, +24 Aktivitäten), Camunda-Linter und bpmnlint ohne Befund, PNG je Datei | Maxi (Prüfung verteilt laut Sprint-1-Protokoll): im Camunda Modeler öffnen, Problems-Panel prüfen, speichern; Camunda Cloud |
 | Use-Case-Diagramm `uml/usecase.*` | 18 UCs, 7 Akteure, auch in `uml/modell.xmi` | Kilian: XMI in VP importieren, Diagramm anlegen, ins VP-Repository committen |
 | Klassendiagramm `uml/klassen.*` + 4 Fokus-Ausschnitte | 26 Klassen (mit Mitarbeiter-Hierarchie aus V2), 7 Enums, 35 Assoziationen | Kilian: in VP anlegen (Anleitung `uml/README.md`) |
 | Sequenzdiagramme `uml/sequenz-01…06.*` | 6 Stück (SD6 Nachbestellvorschlag aus V2), Botschaften = Operationen der Empfängerklasse (geprüft 26.09.) | Kilian: in VP als Unterdiagramme der Use Cases zeichnen |
