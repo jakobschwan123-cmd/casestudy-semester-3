@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_02" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02" targetNamespace="http://repairflow.example/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_02">
     <bpmn:documentation>Der Kunde bringt das Geraet in die Filiale. Daten aus einer Voranmeldung werden uebernommen, das Geraet registriert, der Reparaturauftrag angelegt und von der Werkstattleitung eingeplant (Kapazitaet, bei Bedarf Umleitung an eine andere Filiale, Techniker, Termin).</bpmn:documentation>
     <bpmn:participant id="Part_02_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_02" />
@@ -166,10 +166,10 @@
       <bpmn:incoming>Flow_02_23</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_02_5" sourceRef="Start_02" targetRef="GW02_Voranmeldung" />
-    <bpmn:sequenceFlow id="Flow_02_6" sourceRef="GW02_Voranmeldung" targetRef="T02_Uebernehmen" name="ja">
+    <bpmn:sequenceFlow id="Flow_02_6" name="ja" sourceRef="GW02_Voranmeldung" targetRef="T02_Uebernehmen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=voranmeldungVorhanden</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_02_7" sourceRef="GW02_Voranmeldung" targetRef="T02_Kundendaten" name="nein">
+    <bpmn:sequenceFlow id="Flow_02_7" name="nein" sourceRef="GW02_Voranmeldung" targetRef="T02_Kundendaten">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(voranmeldungVorhanden)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_02_8" sourceRef="T02_Uebernehmen" targetRef="Join_02a" />
@@ -180,10 +180,10 @@
     <bpmn:sequenceFlow id="Flow_02_13" sourceRef="T02_Sicht" targetRef="T02_Auftrag" />
     <bpmn:sequenceFlow id="Flow_02_14" sourceRef="T02_Auftrag" targetRef="T02_Auslastung" />
     <bpmn:sequenceFlow id="Flow_02_15" sourceRef="T02_Auslastung" targetRef="GW02_Kapazitaet" />
-    <bpmn:sequenceFlow id="Flow_02_16" sourceRef="GW02_Kapazitaet" targetRef="Join_02b" name="ja">
+    <bpmn:sequenceFlow id="Flow_02_16" name="ja" sourceRef="GW02_Kapazitaet" targetRef="Join_02b">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=kapazitaetFrei</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_02_17" sourceRef="GW02_Kapazitaet" targetRef="T02_Umleiten" name="nein">
+    <bpmn:sequenceFlow id="Flow_02_17" name="nein" sourceRef="GW02_Kapazitaet" targetRef="T02_Umleiten">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(kapazitaetFrei)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_02_18" sourceRef="T02_Umleiten" targetRef="Join_02b" />
@@ -194,7 +194,7 @@
     <bpmn:sequenceFlow id="Flow_02_23" sourceRef="T02_Einlagern" targetRef="End_02" />
     <bpmn:dataObjectReference id="DataObjRef_02_1" name="Voranmeldung" dataObjectRef="DataObj_02_1" />
     <bpmn:dataObject id="DataObj_02_1" />
-    <bpmn:dataObjectReference id="DataObjRef_02_2" name="Geraet" dataObjectRef="DataObj_02_2" />
+    <bpmn:dataObjectReference id="DataObjRef_02_2" name="Gerät" dataObjectRef="DataObj_02_2" />
     <bpmn:dataObject id="DataObj_02_2" />
     <bpmn:dataObjectReference id="DataObjRef_02_3" name="Reparatur-auftrag [angenommen]" dataObjectRef="DataObj_02_3" />
     <bpmn:dataObject id="DataObj_02_3" />
@@ -243,14 +243,11 @@
       <bpmndi:BPMNShape id="Part_02_Werkstatt_di" bpmnElement="Part_02_Werkstatt" isHorizontal="true">
         <dc:Bounds x="120" y="360" width="3655" height="785" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_02_1_di" bpmnElement="Lane_02_1" isHorizontal="true">
-        <dc:Bounds x="150" y="360" width="3625" height="420" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_02_2_di" bpmnElement="Lane_02_2" isHorizontal="true">
         <dc:Bounds x="150" y="780" width="3625" height="365" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Part_02_Kunde_di" bpmnElement="Part_02_Kunde" isHorizontal="true">
-        <dc:Bounds x="120" y="55" width="3655" height="170" />
+      <bpmndi:BPMNShape id="Lane_02_1_di" bpmnElement="Lane_02_1" isHorizontal="true">
+        <dc:Bounds x="150" y="360" width="3625" height="420" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_02_di" bpmnElement="Start_02">
         <dc:Bounds x="607" y="480" width="36" height="36" />
@@ -258,7 +255,7 @@
           <dc:Bounds x="570" y="522" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW02_Voranmeldung_di" bpmnElement="GW02_Voranmeldung">
+      <bpmndi:BPMNShape id="GW02_Voranmeldung_di" bpmnElement="GW02_Voranmeldung" isMarkerVisible="true">
         <dc:Bounds x="790" y="472" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="740" y="438" width="150" height="27" />
@@ -270,7 +267,7 @@
       <bpmndi:BPMNShape id="T02_Kundendaten_di" bpmnElement="T02_Kundendaten">
         <dc:Bounds x="940" y="572" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Join_02a_di" bpmnElement="Join_02a">
+      <bpmndi:BPMNShape id="Join_02a_di" bpmnElement="Join_02a" isMarkerVisible="true">
         <dc:Bounds x="1170" y="472" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T02_Geraet_di" bpmnElement="T02_Geraet">
@@ -288,7 +285,7 @@
       <bpmndi:BPMNShape id="T02_Auslastung_di" bpmnElement="T02_Auslastung">
         <dc:Bounds x="2080" y="822" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW02_Kapazitaet_di" bpmnElement="GW02_Kapazitaet">
+      <bpmndi:BPMNShape id="GW02_Kapazitaet_di" bpmnElement="GW02_Kapazitaet" isMarkerVisible="true">
         <dc:Bounds x="2310" y="838" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2260" y="804" width="150" height="27" />
@@ -297,7 +294,7 @@
       <bpmndi:BPMNShape id="T02_Umleiten_di" bpmnElement="T02_Umleiten">
         <dc:Bounds x="2460" y="938" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Join_02b_di" bpmnElement="Join_02b">
+      <bpmndi:BPMNShape id="Join_02b_di" bpmnElement="Join_02b" isMarkerVisible="true">
         <dc:Bounds x="2690" y="838" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T02_Techniker_di" bpmnElement="T02_Techniker">
@@ -318,27 +315,6 @@
           <dc:Bounds x="3610" y="522" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Start_di" bpmnElement="K02_Start">
-        <dc:Bounds x="227" y="120" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="190" y="162" width="110" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Bringen_di" bpmnElement="K02_Bringen">
-        <dc:Bounds x="370" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Abgeben_di" bpmnElement="K02_Abgeben">
-        <dc:Bounds x="560" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Beleg_di" bpmnElement="K02_Beleg">
-        <dc:Bounds x="3220" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_End_di" bpmnElement="K02_End">
-        <dc:Bounds x="3457" y="120" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3420" y="162" width="110" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_02_1_di" bpmnElement="DataObjRef_02_1">
         <dc:Bounds x="1039" y="372" width="36" height="50" />
         <bpmndi:BPMNLabel>
@@ -348,7 +324,7 @@
       <bpmndi:BPMNShape id="DataObjRef_02_2_di" bpmnElement="DataObjRef_02_2">
         <dc:Bounds x="1419" y="372" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1295" y="384" width="120" height="27" />
+          <dc:Bounds x="1361" y="387" width="28" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_02_3_di" bpmnElement="DataObjRef_02_3">
@@ -375,22 +351,6 @@
           <dc:Bounds x="2871" y="1095" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_02_1_di" bpmnElement="Flow_02_1">
-        <di:waypoint x="263" y="138" />
-        <di:waypoint x="370" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_2_di" bpmnElement="Flow_02_2">
-        <di:waypoint x="500" y="138" />
-        <di:waypoint x="560" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_3_di" bpmnElement="Flow_02_3">
-        <di:waypoint x="690" y="138" />
-        <di:waypoint x="3220" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_4_di" bpmnElement="Flow_02_4">
-        <di:waypoint x="3350" y="138" />
-        <di:waypoint x="3457" y="138" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02_5_di" bpmnElement="Flow_02_5">
         <di:waypoint x="643" y="498" />
         <di:waypoint x="790" y="498" />
@@ -485,19 +445,45 @@
         <di:waypoint x="3540" y="498" />
         <di:waypoint x="3647" y="498" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_02_1_di" bpmnElement="MsgFlow_02_1">
-        <di:waypoint x="625" y="178" />
-        <di:waypoint x="625" y="480" />
+      <bpmndi:BPMNShape id="Part_02_Kunde_di" bpmnElement="Part_02_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="3655" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Start_di" bpmnElement="K02_Start">
+        <dc:Bounds x="227" y="120" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="633" y="318" width="130" height="20" />
+          <dc:Bounds x="190" y="162" width="110" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Bringen_di" bpmnElement="K02_Bringen">
+        <dc:Bounds x="370" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Abgeben_di" bpmnElement="K02_Abgeben">
+        <dc:Bounds x="560" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Beleg_di" bpmnElement="K02_Beleg">
+        <dc:Bounds x="3220" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_End_di" bpmnElement="K02_End">
+        <dc:Bounds x="3457" y="120" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3420" y="162" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_02_1_di" bpmnElement="Flow_02_1">
+        <di:waypoint x="263" y="138" />
+        <di:waypoint x="370" y="138" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_02_2_di" bpmnElement="MsgFlow_02_2">
-        <di:waypoint x="3315" y="458" />
-        <di:waypoint x="3315" y="178" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3323" y="308" width="130" height="20" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_02_2_di" bpmnElement="Flow_02_2">
+        <di:waypoint x="500" y="138" />
+        <di:waypoint x="560" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_3_di" bpmnElement="Flow_02_3">
+        <di:waypoint x="690" y="138" />
+        <di:waypoint x="3220" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_4_di" bpmnElement="Flow_02_4">
+        <di:waypoint x="3350" y="138" />
+        <di:waypoint x="3457" y="138" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T02_Uebernehmen_in_DataObjRef_02_1_di" bpmnElement="T02_Uebernehmen_in_DataObjRef_02_1">
         <di:waypoint x="1057" y="422" />
@@ -522,6 +508,20 @@
       <bpmndi:BPMNEdge id="T02_Termin_out_DataStore_02_3_di" bpmnElement="T02_Termin_out_DataStore_02_3">
         <di:waypoint x="3055" y="902" />
         <di:waypoint x="3020" y="1083" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_02_1_di" bpmnElement="MsgFlow_02_1">
+        <di:waypoint x="625" y="178" />
+        <di:waypoint x="625" y="480" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="630" y="276" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_02_2_di" bpmnElement="MsgFlow_02_2">
+        <di:waypoint x="3315" y="458" />
+        <di:waypoint x="3315" y="178" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3321" y="286" width="78" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
