@@ -1,6 +1,6 @@
 # Projektkontext: Fallstudie Systemanalyse
 
-Quellen: Ablauf-Fallstudie 2026-2 (Stand 07.07.2026), Installationsanleitung BPMN (18.07.2026), Installationsanleitung Visual Paradigm (23.07.2026), Gruppeneinteilung WWI25B4. Stand dieser Datei: 02.09.2026.
+Quellen: Ablauf-Fallstudie 2026-2 (Stand 07.07.2026), Installationsanleitung BPMN (18.07.2026), Installationsanleitung Visual Paradigm (23.07.2026), Gruppeneinteilung WWI25B4; aktuelle Termine und Gruppenbeschluss E-21. Stand dieser Datei: 05.10.2026.
 
 ## Aufgabe
 
@@ -33,7 +33,7 @@ Einen Aspekt im Prozessumfeld festlegen, der durch eine spezielle Software autom
 
 ### Abschlusspräsentation (10 %, Einzelbewertung)
 
-- Letzter Termin Mitte Oktober, 15 bis 20 Minuten im Plenum
+- Abschlusspräsentation am 27.10.2026, 09:00 Uhr, Raum B458 (E-13), 15 bis 20 Minuten im Plenum; Generalprobe am 22.10.
 - Alle Gruppenmitglieder wirken mit; der PDF-Export enthält, wer welchen Beitrag verantwortet
 
 ### Projektdokumentation (5 %, Gruppenbewertung)
@@ -98,7 +98,7 @@ Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Sch
 Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `uml/klassen.puml`, `uml/usecase.puml` und `bpmn/README.md`).
 
 - Pools: Werkstattbetrieb (Pilotkunde FixWerk GmbH) · Kunde · Lieferant; Lanes: Service / Annahme · Techniker · Werkstattleitung · Ersatzteil-Disposition
-- Zustandsautomat `Reparaturauftrag`: angenommen → in Diagnose → KVA offen → freigegeben | abgelehnt → Teile bestellt → in Reparatur → fertig → abgeholt
+- Zustände von `Reparaturauftrag`: angenommen, in Diagnose, KVA offen, freigegeben, abgelehnt, Teile bestellt, in Reparatur, fertig, abgeholt. Ohne Fehlteile entfällt „Teile bestellt“; ein Nacharbeitsauftrag beginnt ohne erneute Diagnose und KVA. Eine erfolglose zweite Nacharbeit führt in P07 von „in Reparatur“ nach „abgelehnt“ (E-19).
 - Prozesse: 01 KI-Sofortdiagnose und Voranmeldung · 02 Auftragsannahme, Geräteregistrierung und Terminplanung · 03 Fehlerdiagnose · 04 Kostenvoranschlag und Kundenfreigabe · 05 Ersatzteil-Verfügbarkeit und Reservierung · 06 Ersatzteil-Bestellung beim Lieferanten · 07 Reparaturdurchführung und Arbeitszeiterfassung · 08 Abholung, Rechnung und Zahlung · 09 Reklamation und Gewährleistung · 10 Ersatzteil-Retoure und Lieferanten-Reklamation
 - Klassen (27): Person (abstrakt), Mitarbeiter (abstrakt), Servicemitarbeiter, Techniker, Disponent, Werkstattleiter, Kunde, Werkstattbetrieb, Filiale, Lieferant, Voranmeldung, Medienanhang, KIDiagnosevorschlag, Reparaturauftrag, Geraet, Fehlerbefund, Kostenvoranschlag, KvaPosition, Reparaturschritt, Arbeitszeitbuchung, Ersatzteil, Lagerbestand, ErsatzteilReservierung, Lieferantenbestellung, Bestellposition, Rechnung, Reklamation
 - Use Cases (19): UC01 Sofortdiagnose anfordern · UC02 Voranmeldung bestätigen · UC03 Reparaturauftrag anlegen · UC04 Diagnosevorschlag prüfen · UC05 Diagnosebefund erfassen · UC06 KVA erstellen · UC07 KVA freigeben / ablehnen · UC08 Ersatzteil-Verfügbarkeit prüfen · UC09 Ersatzteile disponieren und reservieren · UC10 Lieferantenbestellung auslösen · UC11 Wareneingang buchen · UC12 Nachbestellvorschlag erzeugen · UC13 Reparaturschritt und Arbeitszeit erfassen · UC14 Auftrag fertigmelden · UC15 Abholung und Abrechnung abwickeln · UC16 Reklamation bearbeiten · UC17 Werkstatttermin planen und Techniker zuweisen · UC18 Werkstattbetrieb und Filialen verwalten · UC19 Retoure abwickeln
