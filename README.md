@@ -29,7 +29,6 @@ RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätt
 | `UML-WWI25B4-Gruppe1.vpp` in Visual Paradigm erstellen und in `uml/` einchecken | Kilian, David |
 | Alle zehn BPMN im Camunda Modeler öffnen, prüfen, speichern und die PNGs neu exportieren | Maximilian |
 | E-19 (P07/P08) und E-20 (P05/P06) bestätigen | alle |
-| Nach E-20: PNGs `p05`/`p06` (Camunda Modeler) sowie `sequenz-03`, `sequenz-06`, `usecase` (PlantUML) neu exportieren; Kennzahlen in Doku und Folien auf 131 Aktivitäten (Ø 13,1) | Maximilian, David |
 | Gelb markierte Stellen in der Projektdokumentation füllen | Nina, Zulieferung alle |
 | QA-Checkliste anwenden | Jakob |
 | Generalprobe am 22.10., Präsentation am 27.10.2026, 09:00, B458 | alle |
