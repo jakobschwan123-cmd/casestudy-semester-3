@@ -15,8 +15,8 @@
   ],
   "activities": 12,
   "kinds": {
-   "service": 8,
    "send": 3,
+   "service": 8,
    "businessRule": 1
   },
   "auto": 12,
@@ -136,32 +136,32 @@
   "file": "p05-ersatzteilreservierung",
   "name": "Ersatzteil-Verfügbarkeit und Reservierung",
   "lanes": [
-   "Techniker",
+   "Service / Annahme",
    "Ersatzteil-Disposition"
   ],
   "pools": [
    "Werkstattbetrieb",
    "Kunde"
   ],
-  "activities": 13,
+  "activities": 14,
   "kinds": {
-   "service": 8,
+   "service": 9,
    "subprocess": 1,
    "user": 1,
    "businessRule": 1,
    "send": 1,
    "call": 1
   },
-  "auto": 10,
+  "auto": 11,
   "kunde_activities": 1,
   "kunde_kinds": {
    "manual": 1
   },
   "msgflows": 1,
-  "data": 4,
+  "data": 5,
   "start": "KVA freigegeben",
   "end": "Ersatzteile disponiert",
-  "doc": "Nach der KVA-Freigabe prueft RepairFlow je Ersatzteil den Bestand der eigenen und der anderen Filialen, reserviert oder fordert Umlagerungen an und markiert Fehlteile fuer die Bestellung. Unterschreitet ein Bestand den Meldebestand, entsteht ein Nachbestellvorschlag. Der Kunde erhaelt den voraussichtlichen Reparaturbeginn; Fehlteile und Nachbestellvorschlaege werden ueber Prozess 06 bestellt."
+  "doc": "Nach der KVA-Freigabe prueft RepairFlow je Ersatzteil den Bestand der eigenen und der anderen Filialen, reserviert Teile, fordert Umlagerungen an und markiert Fehlteile fuer die Bestellung. Unterschreitet ein Bestand den Meldebestand, entsteht ein Nachbestellvorschlag; er bleibt im Status Vorschlag und wird mit der naechsten Bestellung in Prozess 06 gebuendelt, ohne die Reparatur aufzuhalten. Der Kunde erhaelt den voraussichtlichen Reparaturbeginn; nur Fehlteile werden direkt ueber Prozess 06 bestellt."
  },
  {
   "num": "06",
@@ -181,21 +181,20 @@
   "activities": 14,
   "kinds": {
    "service": 5,
-   "user": 4,
-   "send": 2,
-   "receive": 2,
+   "user": 5,
+   "send": 3,
    "call": 1
   },
-  "auto": 9,
+  "auto": 8,
   "kunde_activities": 1,
   "kunde_kinds": {
    "manual": 1
   },
-  "msgflows": 4,
+  "msgflows": 5,
   "data": 7,
   "start": "Bestellbedarf gemeldet",
   "end": "Bestellung abgeschlossen",
-  "doc": "Fehlteile und Nachbestellvorschlaege werden zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Kann der Lieferant nicht liefern, wird die Bestellung storniert und ein alternativer Lieferant gesucht. Nach Auftragsbestaetigung und Wareneingang werden die Teile dem Auftrag zugeordnet; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess 10: Bei Ersatzlieferung werden die Teile zugeordnet, bei Gutschrift wird neu bestellt, solange das Teil noch benoetigt wird."
+  "doc": "Fehlteile eines Reparaturauftrags werden zusammen mit offenen Nachbestellvorschlaegen zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Kommt binnen 3 Tagen keine Auftragsbestaetigung oder kann der Lieferant nicht liefern, wird die Bestellung storniert und ein alternativer Lieferant gesucht. Bleibt die Lieferung 14 Tage aus, wird sie angemahnt. Nach dem Wareneingang werden die Fehlteile dem Auftrag zugeordnet, Nachbestellteile gehen ins Lager; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess 10: Eine Ersatzlieferung wird vor der Zuordnung geprueft, bei Gutschrift wird neu bestellt, solange das Teil noch benoetigt wird."
  },
  {
   "num": "07",

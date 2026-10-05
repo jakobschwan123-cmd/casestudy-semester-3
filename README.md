@@ -23,7 +23,7 @@ lösen auf.
 
 | Ordner | Inhalt | Abgabekriterium |
 |---|---|---|
-| `bpmn/` | 10 Kollaborationsdiagramme `p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` (Camunda 8) + PNG mit gleichem Basisnamen, `README.md` | 10 Prozesse, 125 Aktivitäten im Werkstatt-Pool (Ø 12,5), 62 % automatisiert, Kunde mit eigenem Ablauf |
+| `bpmn/` | 10 Kollaborationsdiagramme `p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` (Camunda 8) + PNG mit gleichem Basisnamen, `README.md` | 10 Prozesse, 126 Aktivitäten im Werkstatt-Pool (Ø 12,6), 61 % automatisiert, Kunde mit eigenem Ablauf |
 | `uml/` | `klassen.puml/.png` (ein vollständiges Klassendiagramm mit 27 Klassen und 36 Assoziationen), `usecase.puml/.png` (19 Use Cases, 8 Akteure), `sequenz-01…06`, `zustand-reparaturauftrag`, `systemkontext`, `modell.xmi` für Visual Paradigm, `README.md` | ≥ 10 UCs, ≥ 10 Klassen, 5 Sequenzdiagramme (wir haben 6) |
 | `doku/` | `Projektdokumentation.docx/.pdf` (offene Stellen gelb markiert), Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, Vergleichsnotiz, Protokolle | Projektdokumentation |
 | `praesi/` | `Abschlusspraesentation.pptx/.pdf` (20 Folien, Vortragende je Folie) | Präsentation |

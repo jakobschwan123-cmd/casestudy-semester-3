@@ -26,7 +26,7 @@ Dateiname = `p` + zweistellige Nummer + Prozessname, keine Umlaute. Quelle ist i
 | `p08-abholung.bpmn/.png` | Abholung, Rechnung und Zahlung (DATEV-Übergabe) | Kunde, Werkstattbetrieb (Service/Annahme, Techniker) |
 | `p09-reklamation.bpmn/.png` | Reklamation und Gewährleistung | Kunde, Werkstattbetrieb (Techniker, Service/Annahme, Werkstattleitung) |
 | `p10-retoure.bpmn/.png` | Ersatzteil-Retoure und Lieferanten-Reklamation | Werkstattbetrieb (Werkstattleitung, Disposition), Lieferant |
-| `README.md` | Konventionen (Pool = Unternehmen, Lanes = Rollen, Aktivitätstypen, Datenobjekte), Prüfstand (Linter und Layout-Prüfung 0 Befunde, Ø 12,5 Aktivitäten), Aufgaben für Maxi (im Camunda Modeler öffnen, speichern, Camunda Cloud) | Maxi |
+| `README.md` | Konventionen (Pool = Unternehmen, Lanes = Rollen, Aktivitätstypen, Datenobjekte), Prüfstand (Linter und Layout-Prüfung 0 Befunde, Ø 12,6 Aktivitäten), Aufgaben für Maxi (im Camunda Modeler öffnen, speichern, Camunda Cloud) | Maxi |
 
 Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modeler öffnen, Problems-Panel prüfen, speichern, in die Camunda Cloud laden.
 

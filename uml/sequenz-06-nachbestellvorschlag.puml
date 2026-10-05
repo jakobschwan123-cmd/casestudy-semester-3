@@ -1,6 +1,6 @@
 @startuml
 ' BPMN: p06-ersatzteilbestellung.bpmn
-' BPMN-Nodes: T06_Buendeln T06_Lieferant T06_Bestellung GW06_Grenze T06_Freigabe T06_Senden T06_AB GW06_Lieferbar T06_Storno T06_Alternative GW06_Alt T06_Termin GW06_Verzoegert T06_KundeInfo T06_Lieferung T06_Wareneingang GW06_Mangelfrei T06_Retoure GW06_Ersatz GW06_Bedarf T06_Zuordnen
+' BPMN-Nodes: T06_Buendeln T06_Lieferant T06_Bestellung GW06_Grenze T06_Freigabe T06_Senden GW06_AB E06_AB E06_ABTimer GW06_Lieferbar T06_Storno T06_Alternative GW06_Alt T06_Termin GW06_Verzoegert T06_KundeInfo GW06_Lief E06_Lieferung E06_LiefTimer T06_Mahnen T06_Wareneingang GW06_Mangelfrei T06_Retoure GW06_Ersatz T06_ErsatzPruefen GW06_Bedarf T06_Zuordnen
 title sqd : UC10 Lieferantenbestellung auslösen (BPMN 06)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
@@ -17,7 +17,7 @@ actor Lieferant
 actor Servicemitarbeiter as SM
 actor Kunde
 
-note over Disponent, RA : Vorbedingung: Fehlteile oder Nachbestellvorschläge aus BPMN 05.\nUC12 entsteht bei der Meldebestandsprüfung, nicht erst hier.
+note over Disponent, RA : Vorbedingung: Fehlteile aus BPMN 05; offene Nachbestellvorschläge werden mitgebündelt.\nUC12 entsteht bei der Meldebestandsprüfung, nicht erst hier.
 ref over Disponent, RA : Bestellbedarf bündeln (T06_Buendeln)\nKundeninformation aus BPMN 05 ist bereits erfolgt.
 loop erster Lieferant oder verfügbarer alternativer Lieferant
     Disponent -> ET : getVorzugslieferant()
@@ -39,6 +39,7 @@ loop erster Lieferant oder verfügbarer alternativer Lieferant
     Disponent -> BEST : uebermittle()
     BEST -> Lieferant : Bestellung
     Lieferant --> BEST : Auftragsbestätigung (bestätigt, lieferbar, Liefertermin)
+    note over Disponent, Lieferant : Ohne Auftragsbestätigung binnen 3 Tagen (E06_ABTimer) wie „nicht lieferbar“.
     alt bestätigt und lieferbar
         Disponent -> BEST : bestaetige(liefertermin)
         opt auftragsbezogene Fehlteile
@@ -48,9 +49,10 @@ loop erster Lieferant oder verfügbarer alternativer Lieferant
             SM -> RA : benachrichtigeKunde("neuer Liefertermin")
             RA -> Kunde : Verzögerungsinformation mit Liefertermin
         end
+        note over Disponent, Lieferant : Nach 14 Tagen ohne Lieferung anmahnen und weiter warten (T06_Mahnen).
         ref over Disponent, BEST, Lieferant : UC11 Lieferung empfangen, Wareneingang prüfen und buchen\nBei Mangel: BPMN 10 / UC19 Retoure abwickeln
         alt mangelfreie Lieferung oder Ersatz geliefert
-            note over BEST, RA : Teile dem Auftrag zuordnen (T06_Zuordnen)
+            note over BEST, RA : Ersatzlieferung zuerst prüfen (T06_ErsatzPruefen);\nFehlteile dem Auftrag zuordnen (T06_Zuordnen)
             break Bestellung abgeschlossen
                 note over Disponent : Keine weitere Bestellung
             end
@@ -61,7 +63,7 @@ loop erster Lieferant oder verfügbarer alternativer Lieferant
                 note over BEST : Bestellbedarf beendet
             end
         end
-    else nicht bestätigt oder nicht lieferbar
+    else nicht bestätigt, nicht lieferbar oder keine Auftragsbestätigung
         Disponent -> BEST : storniere()
         alt alternativer Lieferant verfügbar
             note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Alt -> Merge_06)

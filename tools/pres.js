@@ -227,7 +227,7 @@ function fit(file, maxW, maxH) {
   {
     const s = base('Sequenzdiagramm SD3: Ersatzteile disponieren', { speaker: 'Jakob', notes: 'BPMN 05: parallele Teileprüfung; Fehlteile zunächst markieren. Reservierungen bestätigen, Meldebestand prüfen, Kunde informieren, erst danach bestellen.' });
     picture(s, 'uml/sequenz-03-reservierung.png', 0.4, 1.05, 6.4, 4.1);
-    bulletsBox(s, ['Erst der eigene Lagerbestand, dann loop über die anderen Filialen', 'Je Teil: lokal reservieren, Umlagerung oder Fehlteil markieren; parallele Teileprüfung', 'Danach Reservierungen bestätigen und Meldebestand prüfen (UC12)', 'Kunde über Reparaturbeginn informieren; erst danach Bestellung bei Bedarf (UC10)'], 7.0, 1.2, 2.5, 3.9, 10.5);
+    bulletsBox(s, ['Erst der eigene Lagerbestand, dann loop über die anderen Filialen', 'Je Teil: lokal reservieren, Umlagerung oder Fehlteil markieren; parallele Teileprüfung', 'Danach Reservierungen bestätigen und Meldebestand prüfen (UC12)', 'Kunde über Reparaturbeginn informieren; danach Bestellung nur bei Fehlteilen (UC10)'], 7.0, 1.2, 2.5, 3.9, 10.5);
   }
   // ---------------- 16 Vorgehen & PM
   {
