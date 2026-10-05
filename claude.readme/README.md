@@ -119,6 +119,7 @@ Vom Team zu pflegen — beim ersten Commit eines neuen Termins hier eine Zeile e
 | T01 | _tbd_ | Projektgrundlagen, Repo-Setup |
 | T02 | _tbd_ | BPMN-Prozesse |
 | T03 | 2026-09-02 | Repo-Umstrukturierung, Use-Case-Korrektur |
+| T04 | 2026-10-05 | BPMN-Beschriftungen korrigiert; UML-Abgleich gegen BPMN, ein vollständiges Klassendiagramm |
 
 ### Warum der Stempel, obwohl Git das Datum kennt
 

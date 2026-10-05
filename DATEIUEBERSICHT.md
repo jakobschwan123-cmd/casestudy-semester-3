@@ -36,18 +36,14 @@ Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modele
 
 | Datei | Wofür |
 |---|---|
-| `usecase.puml/.png` | Use-Case-Diagramm `ud : RepairFlow` – 19 Use Cases, 8 Akteure, 3 include, 5 extend, Systemgrenze |
-| `klassen.puml/.png` | Vollständiges Klassendiagramm `cd : RepairFlow` – 27 Klassen, 7 Enums, 36 Assoziationen |
-| `klassen-fokus-1-sofortdiagnose.puml/.png` | Ausschnitt Kundenkontakt und KI-Sofortdiagnose (in Doku und Folien) |
-| `klassen-fokus-2-auftrag.puml/.png` | Ausschnitt Auftragsabwicklung (in der Doku) |
-| `klassen-fokus-3-disposition.puml/.png` | Ausschnitt Ersatzteil-Disposition |
-| `klassen-fokus-4-organisation.puml/.png` | Ausschnitt Mandant, Filialen und Rollen |
+| `usecase.puml/.png` | Use-Case-Diagramm `ud : RepairFlow` – 19 Use Cases, 8 Akteure, 2 include, 6 bedingte extend, Systemgrenze |
+| `klassen.puml/.png` | Einziges vollständiges Klassendiagramm `cd : RepairFlow` – 27 Klassen, 7 Enums, 36 Assoziationen |
 | `sequenz-01-sofortdiagnose.puml/.png` | SD1 zu UC01 Sofortdiagnose anfordern |
 | `sequenz-02-kva-freigabe.puml/.png` | SD2 zu UC07 KVA freigeben/ablehnen |
-| `sequenz-03-reservierung.puml/.png` | SD3 zu UC09 Ersatzteil reservieren (filialübergreifend) |
-| `sequenz-04-fertigmeldung.puml/.png` | SD4 zu UC14 Auftrag fertigmelden und Kunde benachrichtigen |
+| `sequenz-03-reservierung.puml/.png` | SD3 zu UC09 Ersatzteile disponieren und reservieren (filialübergreifend) |
+| `sequenz-04-fertigmeldung.puml/.png` | SD4 zu UC14 Auftrag fertigmelden; Benachrichtigung gehört zu P08/UC15 |
 | `sequenz-05-reklamation.puml/.png` | SD5 zu UC16 Reklamation bearbeiten |
-| `sequenz-06-nachbestellvorschlag.puml/.png` | SD6 zu UC10 Lieferantenbestellung auslösen, mit `ref` auf UC12 (sechstes SD, Bonus) |
+| `sequenz-06-nachbestellvorschlag.puml/.png` | SD6 zu UC10 Lieferantenbestellung auslösen, Bestellbedarf aus UC12; `ref` auf UC11/UC19 (sechstes SD, Bonus) |
 | `zustand-reparaturauftrag.puml/.png` | Zustandsdiagramm `stm : Reparaturauftrag` (Bonus; der Zustandsautomat, der alle Modelle verbindet) |
 | `systemkontext.puml/.png` | Systemkontext-Skizze für Doku Kapitel 2.4 |
 | `modell.xmi` | Klassen- und Use-Case-Modell als XMI 2.1 für **Visual Paradigm** (Project → Import → XMI) |
@@ -72,6 +68,7 @@ Verantwortlich: **Kilian** (UML). Nächster Schritt: `UML-WWI25B4-Gruppe1.vpp` i
 | `protokolle/2026-09-02-review-bpmn-09-10.md` | QM-Review BPMN 09 + 10 (Jakob), mit Nachtrag vom 26.09.2026 (p05-Befund war False Positive) |
 | `protokolle/2026-10-05-komplettcheck.md` | Komplettcheck aller Modelle und Texte vom 05.10.2026 (KI-gestützt): Befundliste mit Fundstellen, Schwere und Stand der Umsetzung (E-17) |
 | `protokolle/2026-10-05-todo.md` / `.docx` | Was die Gruppe noch tun MUSS (Stand 05.10.2026): Pflichtaufgaben mit Verantwortlichen und Terminen, Befehle zum Aktualisieren, was schon erledigt ist |
+| `protokolle/2026-10-05-uml-bpmn-abgleich.md` | Erneuter Abgleich aller 19 Use Cases und sechs Sequenzdiagramme mit BPMN, Korrekturen E-18 und Prüfgrenzen |
 | `qa-checkliste.md` | Definition of Done als Checkliste für BPMN, UML, Doku und Präsentation (Entwurf für Jakob, 05.10.2026) |
 
 Verantwortlich: **Claude** (Dokumanager) über Kilian/David; Kapitel 4 und Protokolle: **Kilian** (Scrum Master), Abgabe-PDF: **Nina**.
@@ -106,7 +103,8 @@ Damit wurden die Rohartefakte erzeugt. Nur anfassen, wenn man etwas neu bauen wi
 | `check_layout.py` | prüft die BPMN-Dateien auf Flüsse, die durch fremde Elemente oder deckungsgleich laufen: `python3 tools/check_layout.py bpmn` |
 | `pack_bpmn.py` | packt `abgabe/BPMN-WWI25B4-Gruppe1.zip` mit den Dateinamen nach Ablauf |
 | `lint.mjs` | Prüfung mit dem Camunda-Linter |
-| `umlmodel.py` | Single Source of Truth für Klassen, Operationen, Use Cases → `uml/klassen*.puml`, `uml/usecase.puml`, `uml/modell.xmi` |
+| `umlmodel.py` | Single Source of Truth für Klassen, Operationen, Use Cases → `uml/klassen.puml`, `uml/usecase.puml`, `uml/modell.xmi` |
+| `check_uml.py` | Prüft ein aktives Klassendiagramm, Generatorstand, UML-Operationen, Statuswerte, BPMN-Anker und XMI-Referenzen |
 | `doc.js` + `mktoc.py` | erzeugen `doku/Projektdokumentation.docx` (zwei Durchläufe wegen Inhaltsverzeichnis) |
 | `pres.js` | erzeugt `praesi/Abschlusspraesentation.pptx` |
 | `process_stats.json` | Kennzahlen je Prozess (Aktivitäten, Automatisierungsgrad), von Doku und Folien gelesen |

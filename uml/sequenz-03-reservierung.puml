@@ -1,55 +1,59 @@
 @startuml
-title sqd : UC09 Ersatzteil reservieren (filialübergreifend)
+' BPMN: p05-ersatzteilreservierung.bpmn
+' BPMN-Nodes: T05_Teileliste Sub_05 S05_Eigen GW05_Eigen S05_Reservieren S05_Andere GW05_Andere S05_Umlagerung S05_Fehlteil T05_Bestaetigen T05_Meldebestand GW05_Meldebestand T05_Nachbestellung T05_Beginn T05_Info GW05_Bedarf T05_Bestellen
+title sqd : UC09 Ersatzteile disponieren und reservieren (BPMN 05)
 skinparam defaultFontName Arial
-skinparam sequenceMessageAlign center
+skinparam sequenceMessageAlign left
+skinparam maxMessageSize 160
+hide footbox
+
 actor Disponent
 participant ": Reparaturauftrag" as RA
 participant ": Kostenvoranschlag" as KVA
 participant "eigen : Lagerbestand" as LB
 participant "andere : Lagerbestand" as AL
 participant ": ErsatzteilReservierung" as RES
+actor Techniker
+actor Kunde
 
 Disponent -> KVA : getPositionen()
-activate KVA
 KVA --> Disponent : List<KvaPosition>
-deactivate KVA
-
-loop je benötigtes Ersatzteil
+par je benötigtem Ersatzteil (parallele Mehrfachinstanz Sub_05)
     Disponent -> LB : pruefeVerfuegbarkeit(anzahl)
-    activate LB
     LB --> Disponent : verfuegbar
-    deactivate LB
     alt eigener Bestand ausreichend
-        create RES
         Disponent -> RES : <<create>> reserviere()
-        activate RES
         RES -> LB : reserviere(anzahl)
-        RES --> Disponent : Status RESERVIERT
-        deactivate RES
     else eigener Bestand nicht ausreichend
-        loop je andere Filiale, bis Bedarf gedeckt
+        loop je anderer Filiale bis Bestand gefunden
             Disponent -> AL : pruefeVerfuegbarkeit(anzahl)
-            activate AL
             AL --> Disponent : verfuegbar
-            deactivate AL
         end
         alt in anderer Filiale verfügbar
+            note over Disponent, AL : Umlagerung anfordern (S05_Umlagerung)
             Disponent -> RES : <<create>> reserviere()
-            activate RES
             RES -> AL : reserviere(anzahl)
-            RES --> Disponent : Status RESERVIERT (Umlagerung angefordert)
-            deactivate RES
         else nirgends verfügbar
-            ref over Disponent, RA : UC10 Lieferantenbestellung auslösen
+            Disponent -> RA : markiereFehlteil(teil, menge)
+            note right of RA : Noch keine Bestellung innerhalb der Teileprüfung
         end
     end
+end
+Disponent -> RA : bestaetigeReservierungen()
+loop je betroffenem Lagerbestand nach Abschluss der Teileprüfung
     Disponent -> LB : istMeldebestandUnterschritten()
-    activate LB
     LB --> Disponent : true / false
-    deactivate LB
-    opt Meldebestand unterschritten
-        ref over Disponent, LB : UC12 Nachbestellvorschlag bei Meldebestand
+    opt Meldebestand unterschritten (UC12)
+        Disponent -> LB : erzeugeNachbestellvorschlag()
+        LB --> Disponent : Lieferantenbestellung [Vorschlag]
     end
 end
-note right of RA : Status bleibt freigegeben; bei Fehlteilen\nsetzt UC10 den Status Teile bestellt
+Techniker -> RA : ermittleReparaturbeginn()
+RA --> Techniker : voraussichtlicher Reparaturbeginn
+Techniker -> RA : benachrichtigeKunde("voraussichtlicher Reparaturbeginn")
+RA -> Kunde : voraussichtlicher Reparaturbeginn
+opt Fehlteile vorhanden oder Nachbestellvorschlag erzeugt
+    ref over Disponent, RA : BPMN 06 / UC10 Lieferantenbestellung auslösen\nErst nach der Kundeninformation (T05_Info -> GW05_Bedarf)
+end
+note over Disponent, RA : Reservierung verändert nur den reservierten Bestand.\nStatus TEILE_BESTELLT erst nach bestätigter Bestellung in BPMN 06.
 @enduml

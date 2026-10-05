@@ -1,110 +1,94 @@
 {
-"uml2/klassen-fokus-1-sofortdiagnose.png": [
-1250,
-1075
-],
-"uml2/klassen-fokus-2-auftrag.png": [
-1530,
-1234
-],
-"uml2/klassen-fokus-3-disposition.png": [
-1140,
-935
-],
-"uml2/klassen-fokus-4-organisation.png": [
-2265,
-645
-],
-"uml2/klassen.png": [
-3658,
-2851
-],
-"uml2/sequenz-01-sofortdiagnose.png": [
-1418,
-1330
-],
-"uml2/sequenz-02-kva-freigabe.png": [
-981,
-1073
-],
-"uml2/sequenz-03-reservierung.png": [
-975,
-979
-],
-"uml2/sequenz-04-fertigmeldung.png": [
-1011,
-779
-],
-"uml2/sequenz-05-reklamation.png": [
-1845,
-1349
-],
-"uml2/sequenz-06-nachbestellvorschlag.png": [
-1238,
-1151
-],
-"uml2/systemkontext.png": [
-1216,
-785
-],
-"uml2/usecase.png": [
-1109,
-1393
-],
-"uml2/zustand-reparaturauftrag.png": [
-933,
-1379
-],
-"png2_15/p01-sofortdiagnose.png": [
-6863,
-2505
-],
-"png2_15/p02-auftragsannahme.png": [
-5723,
-1778
-],
-"png2_15/p03-fehlerdiagnose.png": [
-4868,
-1568
-],
-"png2_15/p04-kostenvoranschlag.png": [
-5153,
-2115
-],
-"png2_15/p05-ersatzteilreservierung.png": [
-6293,
-1658
-],
-"png2_15/p06-ersatzteilbestellung.png": [
-7433,
-2400
-],
-"png2_15/p07-reparaturdurchfuehrung.png": [
-5723,
-1995
-],
-"png2_15/p08-abholung.png": [
-8288,
-2258
-],
-"png2_15/p09-reklamation.png": [
-6578,
-2250
-],
-"png2_15/p10-retoure.png": [
-4868,
-1440
-],
-"pres/crop-01-links.png": [
-3200,
-1547
-],
-"pres/crop-04-mitte.png": [
-3200,
-1349
-],
-"pres/crop-05-links.png": [
-3200,
-758
-]
+  "uml/klassen.png": [
+    3088,
+    2873
+  ],
+  "uml/sequenz-01-sofortdiagnose.png": [
+    1406,
+    1834
+  ],
+  "uml/sequenz-02-kva-freigabe.png": [
+    880,
+    1340
+  ],
+  "uml/sequenz-03-reservierung.png": [
+    1274,
+    1334
+  ],
+  "uml/sequenz-04-fertigmeldung.png": [
+    628,
+    812
+  ],
+  "uml/sequenz-05-reklamation.png": [
+    1313,
+    1525
+  ],
+  "uml/sequenz-06-nachbestellvorschlag.png": [
+    1581,
+    1765
+  ],
+  "uml/systemkontext.png": [
+    1216,
+    785
+  ],
+  "uml/usecase.png": [
+    1590,
+    1747
+  ],
+  "uml/zustand-reparaturauftrag.png": [
+    933,
+    1379
+  ],
+  "bpmn/p01-sofortdiagnose.png": [
+    9150,
+    3340
+  ],
+  "bpmn/p02-auftragsannahme.png": [
+    7630,
+    2370
+  ],
+  "bpmn/p03-fehlerdiagnose.png": [
+    6490,
+    2090
+  ],
+  "bpmn/p04-kostenvoranschlag.png": [
+    6870,
+    2820
+  ],
+  "bpmn/p05-ersatzteilreservierung.png": [
+    8390,
+    2210
+  ],
+  "bpmn/p06-ersatzteilbestellung.png": [
+    9910,
+    3200
+  ],
+  "bpmn/p07-reparaturdurchfuehrung.png": [
+    7630,
+    2660
+  ],
+  "bpmn/p08-abholung.png": [
+    11050,
+    3010
+  ],
+  "bpmn/p09-reklamation.png": [
+    8770,
+    3000
+  ],
+  "bpmn/p10-retoure.png": [
+    6490,
+    1920
+  ],
+  "tools/pres/crop-01-links.png": [
+    3200,
+    1547
+  ],
+  "tools/pres/crop-04-mitte.png": [
+    3200,
+    1349
+  ],
+  "tools/pres/crop-05-links.png": [
+    3200,
+    758
+  ]
 }

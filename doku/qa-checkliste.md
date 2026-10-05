@@ -22,6 +22,9 @@ Entwurf vom 05.10.2026 für Jakob (Qualitätsmanager), abgeleitet aus Doku Kapit
 
 ## UML
 
+- [ ] Genau ein aktives vollständiges Klassendiagramm (`uml/klassen.puml/.png`), keine Fokusvarianten
+- [ ] `python3 tools/check_uml.py` ohne Befund; fachlichen BPMN-Abgleich aus E-18 mitprüfen
+
 - [ ] Jede Botschaft an eine Klassen-Lebenslinie ist eine Operation dieser Klasse (`tools/umlmodel.py`)
 - [ ] Jede Lebenslinie ist eine Klasse oder ein Akteur des Modells; ref-Fragmente verweisen auf existierende Use Cases
 - [ ] include/extend-Richtung stimmt (Basis → inkludiert, erweiternd → Basis) und ist fachlich begründet

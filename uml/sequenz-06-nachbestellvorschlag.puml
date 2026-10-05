@@ -1,55 +1,75 @@
 @startuml
-title sqd : UC10 Lieferantenbestellung auslösen (ausgelöst durch UC12 Nachbestellvorschlag oder Fehlteile)
+' BPMN: p06-ersatzteilbestellung.bpmn
+' BPMN-Nodes: T06_Buendeln T06_Lieferant T06_Bestellung GW06_Grenze T06_Freigabe T06_Senden T06_AB GW06_Lieferbar T06_Storno T06_Alternative GW06_Alt T06_Termin GW06_Verzoegert T06_KundeInfo T06_Lieferung T06_Wareneingang GW06_Mangelfrei T06_Retoure GW06_Ersatz GW06_Bedarf T06_Zuordnen
+title sqd : UC10 Lieferantenbestellung auslösen (BPMN 06)
 skinparam defaultFontName Arial
-skinparam sequenceMessageAlign center
-participant ": Lagerbestand" as LB
+skinparam sequenceMessageAlign left
+skinparam maxMessageSize 160
+hide footbox
+
 actor Disponent
 participant ": Ersatzteil" as ET
-participant ": Lieferantenbestellung" as LBEST
-participant ": Bestellposition" as BPOS
+participant ": Lieferantenbestellung" as BEST
+participant ": Bestellposition" as POS
 participant ": Reparaturauftrag" as RA
-actor Werkstattleiter
+actor Werkstattleiter as WL
 actor Lieferant
+actor Servicemitarbeiter as SM
+actor Kunde
 
-ref over LB, Disponent : UC12 Nachbestellvorschlag erzeugen\n(bucheAbgang, istMeldebestandUnterschritten)
-alt Bestellbedarf (Nachbestellvorschlag oder Fehlteil)
-    LB -> LBEST : <<create>> (status = VORSCHLAG)
-    LB -> Disponent : Bestellbedarf (Ersatzteil, Menge)
-    activate Disponent
+note over Disponent, RA : Vorbedingung: Fehlteile oder Nachbestellvorschläge aus BPMN 05.\nUC12 entsteht bei der Meldebestandsprüfung, nicht erst hier.
+ref over Disponent, RA : Bestellbedarf bündeln (T06_Buendeln)\nKundeninformation aus BPMN 05 ist bereits erfolgt.
+loop erster Lieferant oder verfügbarer alternativer Lieferant
     Disponent -> ET : getVorzugslieferant()
-    activate ET
-    ET --> Disponent : lieferant
-    deactivate ET
-    alt offene Bestellung beim Lieferanten vorhanden
-        note over LBEST : Vorschlag wird in die offene\nBestellung übernommen
-        Disponent -> LBEST : addPosition(teil, menge)
-        activate LBEST
-        LBEST -> BPOS : <<create>>
-        LBEST --> Disponent : Position ergänzt
-        deactivate LBEST
-    else keine offene Bestellung
-        Disponent -> Disponent : loeseBestellungAus(lieferant)
-        activate LBEST
-        Disponent -> LBEST : addPosition(teil, menge)
-        LBEST -> BPOS : <<create>>
-        LBEST -> LBEST : berechneBestellwert()
-        LBEST --> Disponent : bestellwert
-        opt Bestellwert über Freigabegrenze
-            Disponent -> Werkstattleiter : Freigabe anfordern
-            Werkstattleiter -> LBEST : freigeben()
-        end
-        Disponent -> LBEST : uebermittle()
-        LBEST -> Lieferant : Bestellung senden
-        Lieferant --> LBEST : Auftragsbestätigung (Liefertermin)
-        LBEST --> Disponent : Status BESTAETIGT, liefertermin
-        deactivate LBEST
-        opt Fehlteil eines Reparaturauftrags
+    ET --> Disponent : Lieferantenvorschlag
+    note over Disponent, Lieferant : Disponent wählt Lieferanten; nach Storno einen alternativen.
+    Disponent -> Disponent : loeseBestellungAus(lieferant)
+    Disponent -> BEST : <<create>> (status = OFFEN)
+    loop je gebündelter Bestellposition
+        Disponent -> BEST : addPosition(teil, menge)
+        BEST -> POS : <<create>>
+    end
+    Disponent -> BEST : berechneBestellwert()
+    BEST --> Disponent : bestellwert
+    opt bestellwert > freigabegrenze
+        Disponent -> WL : Bestellfreigabe anfordern
+        WL -> WL : gibBestellungFrei(b)
+        WL -> BEST : freigeben()
+    end
+    Disponent -> BEST : uebermittle()
+    BEST -> Lieferant : Bestellung
+    Lieferant --> BEST : Auftragsbestätigung (bestätigt, lieferbar, Liefertermin)
+    alt bestätigt und lieferbar
+        Disponent -> BEST : bestaetige(liefertermin)
+        opt auftragsbezogene Fehlteile
             Disponent -> RA : wechsleStatus(TEILE_BESTELLT)
-            note right of RA : Status: Teile bestellt
+        end
+        opt Reparatur verzögert
+            SM -> RA : benachrichtigeKunde("neuer Liefertermin")
+            RA -> Kunde : Verzögerungsinformation mit Liefertermin
+        end
+        ref over Disponent, BEST, Lieferant : UC11 Lieferung empfangen, Wareneingang prüfen und buchen\nBei Mangel: BPMN 10 / UC19 Retoure abwickeln
+        alt mangelfreie Lieferung oder Ersatz geliefert
+            note over BEST, RA : Teile dem Auftrag zuordnen (T06_Zuordnen)
+            break Bestellung abgeschlossen
+                note over Disponent : Keine weitere Bestellung
+            end
+        else kein Ersatz und Teil weiterhin benötigt
+            note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Bedarf -> Merge_06)
+        else kein Ersatz und Teil nicht mehr benötigt
+            break Bestellung ohne Teilezuordnung abgeschlossen
+                note over BEST : Bestellbedarf beendet
+            end
+        end
+    else nicht bestätigt oder nicht lieferbar
+        Disponent -> BEST : storniere()
+        alt alternativer Lieferant verfügbar
+            note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Alt -> Merge_06)
+        else kein alternativer Lieferant verfügbar
+            break Bestellung ohne Lieferung abgeschlossen
+                note over BEST, RA : Kein Status TEILE_BESTELLT aus dieser Bestellung
+            end
         end
     end
-    deactivate Disponent
-else kein Bestellbedarf
-    note over LB : keine Aktion
 end
 @enduml

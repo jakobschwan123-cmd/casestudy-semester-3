@@ -1,62 +1,60 @@
 @startuml
-title sqd : UC16 Reklamation bearbeiten (Gewährleistungsentscheidung)
+' BPMN: p09-reklamation.bpmn
+' BPMN-Nodes: T09_Erfassen T09_Zuordnen T09_Annehmen T09_Pruefen T09_Bewerten GW09_Gewaehr T09_Freigeben T09_Angebot T09_Entscheidung GW09_Angebot T09_Abgelehnt T09_Auftrag T09_Info T09_Reparatur GW09_Teil T09_Retoure T09_Abholung T09_Abschluss
+title sqd : UC16 Reklamation bearbeiten (BPMN 09)
 skinparam defaultFontName Arial
-skinparam sequenceMessageAlign center
+skinparam sequenceMessageAlign left
+skinparam maxMessageSize 160
+hide footbox
+
 actor Kunde
 actor Servicemitarbeiter as SM
 participant ": Reklamation" as REK
 participant "ursprung : Reparaturauftrag" as RA
 participant ": Rechnung" as RE
-actor Werkstattleiter
+actor Techniker
+actor Werkstattleiter as WL
 participant "nacharbeit : Reparaturauftrag" as NA
-participant "neuauftrag : Reparaturauftrag" as NEU
 
 Kunde -> Kunde : meldeMangel(a, beschreibung)
 Kunde -> SM : Mangelmeldung (Auftrag, Beschreibung)
 SM -> SM : erfasseReklamation(a, grund)
-create REK
 SM -> REK : <<create>>
-activate REK
 REK -> RA : getRechnung()
-activate RA
 RA --> REK : rechnung
-deactivate RA
 REK -> RE : getRechnungsdatum()
-activate RE
 RE --> REK : rechnungsdatum
-deactivate RE
-REK -> REK : pruefeGewaehrleistung()
-
-alt innerhalb Gewährleistung
-    REK -> Werkstattleiter : Gewährleistungsfall zur Freigabe
-    Werkstattleiter -> Werkstattleiter : entscheideReklamation(r)
-    Werkstattleiter -> REK : legeNacharbeitAn(kostenfrei = true)
-    create NA
-    REK -> NA : <<create>> (kostenfrei = true)
-    activate NA
-    NA -> NA : wechsleStatus(ANGENOMMEN)
-    note right of NA : neuer Zyklus (UC03), kostenfrei;\nDurchführung in UC13/UC14, Übergabe in UC15
-    NA -> NA : benachrichtigeKunde("kostenfreie Nacharbeit")
-    NA -> Kunde : Nachricht "kostenfreie Nacharbeit"
-    NA --> REK : Nacharbeit angelegt
-    deactivate NA
-else außerhalb Gewährleistung
-    REK -> Kunde : Angebot kostenpflichtige Nacharbeit
-    Kunde --> REK : Entscheidung
-    alt Kunde nimmt Angebot an
-        REK -> REK : legeNacharbeitAn(kostenfrei = false)
-        create NEU
-        REK -> NEU : <<create>> (kostenfrei = false)
-        activate NEU
-        NEU -> NEU : wechsleStatus(ANGENOMMEN)
-        note right of NEU : Nacharbeit zum angenommenen Angebot
-        NEU --> REK : Nacharbeit angelegt
-        deactivate NEU
-    else Kunde lehnt ab
-        note over REK : keine Nacharbeit, Gerät wird\nunrepariert abgeholt (UC15)
+Kunde -> SM : Gerät zur Prüfung abgeben
+note over SM, Techniker : Gerät annehmen und Mangel dokumentieren (T09_Annehmen)
+Techniker -> Techniker : pruefeMangel(r)
+Techniker -> REK : pruefeGewaehrleistung()
+REK --> Techniker : istGewaehrleistung
+alt Gewährleistungsfall
+    Techniker -> WL : kostenfreie Nacharbeit zur Freigabe
+    WL -> WL : entscheideReklamation(r)
+    WL --> Techniker : kostenfreie Nacharbeit freigegeben
+else kein Gewährleistungsfall
+    SM -> Kunde : kostenpflichtiges Angebot
+    Kunde --> SM : Annahme / Ablehnung
+    alt Angebot angenommen
+        note over REK : kostenpflichtige Nacharbeit freigegeben
+    else Angebot abgelehnt
+        SM -> REK : ablehnen()
+        note over REK, NA : Kein Nacharbeitsauftrag und keine Reparatur
     end
 end
-REK -> REK : schliesseAb()
-REK --> SM : Reklamation bearbeitet
-deactivate REK
+opt Gewährleistung freigegeben oder Angebot angenommen
+    Techniker -> REK : legeNacharbeitAn(kostenfrei)
+    REK -> NA : <<create>> (kostenfrei)
+    NA -> NA : wechsleStatus(ANGENOMMEN)
+    SM -> NA : benachrichtigeKunde("Nacharbeit: kostenfrei / zum Angebot")
+    NA -> Kunde : Nacharbeit angekündigt
+    ref over Techniker, NA : BPMN 07 / UC13 und UC14\nNacharbeit durchführen: IN_REPARATUR -> FERTIG
+    opt Lieferantenteil defekt
+        ref over Techniker, NA : BPMN 10 / UC19 Retoure abwickeln
+    end
+end
+ref over Kunde, SM, RA, NA : BPMN 08 / UC15 Abholung und Abrechnung abwickeln\nAuch nach abgelehntem Angebot, dann ohne Nacharbeit
+SM -> REK : schliesseAb()
+REK --> SM : Reklamation abgeschlossen
 @enduml

@@ -1,8 +1,12 @@
 @startuml
-title sqd : UC01 Sofortdiagnose anfordern (KI-Sofortdiagnose mit Vorab-KVA und Vorreservierung)
+' BPMN: p01-sofortdiagnose.bpmn
+' BPMN-Nodes: T01_Voranmeldung T01_Medien GW01_Auswertbar T01_Rueckfrage E01_Neu E01_Timer1 T01_KI T01_VorabKVA T01_Verfuegbarkeit T01_Termin T01_Senden E01_Bestaetigt E01_Abgelehnt E01_Timer T01_Verwerfen T01_Markieren T01_Reservieren T01_Bestaetigung
+title sqd : UC01 Sofortdiagnose anfordern (BPMN 01)
 skinparam defaultFontName Arial
-skinparam sequenceMessageAlign center
-skinparam maxMessageSize 200
+skinparam sequenceMessageAlign left
+skinparam maxMessageSize 160
+hide footbox
+
 actor Kunde
 participant ": Voranmeldung" as VA
 participant ": Medienanhang" as MA
@@ -15,54 +19,62 @@ actor "KI-Diagnosedienst" as KIDienst
 
 Kunde -> VA : <<create>> erstellen(medien, symptome)
 activate VA
-VA -> MA : <<create>>
 loop je Medienanhang
     VA -> MA : analysieren()
-    activate MA
-    MA -> KIDienst : Medien auswerten
-    KIDienst --> MA : Ergebnis
     MA --> VA : auswertbar
-    deactivate MA
 end
-alt Medien nicht auswertbar
+loop solange Medien nicht auswertbar
     VA -> VA : bessereAufnahmeAnfordern()
-    VA --> Kunde : Aufforderung: bessere Aufnahme
-else Medien auswertbar
-    VA -> KI : <<create>>
-    VA -> KI : erzeugeVorabKva()
-    activate KI
-    KI -> KVA : <<create>> (status = VORLAEUFIG)
-    KI -> KVA : addPosition(p)
-    KI -> KVA : berechneSumme()
-    KVA --> KI : summe
-    KI --> VA : Kostenvoranschlag [vorläufig]
-    deactivate KI
-    VA -> KI : getBenoetigteTeile()
-    KI --> VA : List<Ersatzteil>
-    loop je benötigtes Ersatzteil, je Filiale
-        VA -> LB : pruefeVerfuegbarkeit(anzahl)
-        activate LB
-        LB --> VA : verfuegbar
-        deactivate LB
-    end
-    VA -> FIL : getFreieTermine(ab)
-    activate FIL
-    FIL --> VA : List<Date>
-    deactivate FIL
-    VA --> Kunde : Diagnosevorschlag, Vorab-KVA, Terminvorschlag
-    alt Kunde bestätigt innerhalb 7 Tagen
-        Kunde -> VA : bestaetigen()
-        opt Teile verfügbar
-            VA -> RES : <<create>> vorreserviere()
-            activate RES
-            RES -> LB : reserviere(anzahl)
-            RES --> VA : Status VORRESERVIERT
-            deactivate RES
+    VA -> Kunde : Rückfrage: bessere Aufnahme senden
+    alt neue Aufnahme innerhalb 7 Tagen erhalten
+        Kunde -> VA : speichereMedien(medien)
+        loop je nachgereichtem Medienanhang
+            VA -> MA : analysieren()
+            MA --> VA : auswertbar
         end
-        VA --> Kunde : Voranmeldebestätigung
-    else keine Reaktion (Timer)
+    else 7 Tage ohne neue Aufnahme
         VA -> VA : verwerfen()
+        break Voranmeldung verworfen (E01_Timer1)
+            note over VA : Keine KI-Auswertung und keine Reservierung
+        end
     end
+end
+VA -> KI : <<create>>
+VA -> KI : auswerten(medien)
+KI -> KIDienst : auswertbare Medien und Symptome
+KIDienst --> KI : Diagnosevorschlag
+VA -> KI : erzeugeVorabKva()
+KI -> KVA : <<create>> (status = VORLAEUFIG)
+loop je Arbeits- oder Ersatzteilposition
+    KI -> KVA : addPosition(p)
+end
+KI -> KVA : berechneSumme()
+KVA --> KI : summe
+KI --> VA : Kostenvoranschlag [vorläufig]
+VA -> KI : getBenoetigteTeile()
+KI --> VA : List<Ersatzteil>
+loop je benötigtem Ersatzteil und je Filiale
+    VA -> LB : pruefeVerfuegbarkeit(anzahl)
+    LB --> VA : verfuegbar
+end
+loop je möglicher Filiale
+    VA -> FIL : getAuslastung(von, bis)
+    FIL --> VA : auslastung
+    VA -> FIL : getFreieTermine(ab)
+    FIL --> VA : List<Date>
+end
+VA -> Kunde : Diagnosevorschlag, Vorab-KVA, Filiale und Termin
+alt Kunde bestätigt innerhalb 7 Tagen (UC02)
+    Kunde -> VA : bestaetigen()
+    loop je verfügbarem Ersatzteil
+        VA -> RES : <<create>> vorreserviere()
+        RES -> LB : reserviere(anzahl)
+    end
+    VA -> Kunde : Bestätigung der Voranmeldung
+else Kunde lehnt Termin ab
+    Kunde -> VA : verwerfen()
+else 7 Tage ohne Entscheidung
+    VA -> VA : verwerfen()
 end
 deactivate VA
 @enduml
