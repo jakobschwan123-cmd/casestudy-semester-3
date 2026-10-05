@@ -14,6 +14,19 @@ Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Gruppentermin
 
 ## Entschieden
 
+### E-19 Logikfehler in Prozess 07 und 08 (05.10.2026)
+
+Datum: 05.10.2026 (Jakob, Prüfung mit KI-Unterstützung; Bestätigung durch die Gruppe siehe E-07).
+Befund: P08 hatte zwei Warteschleifen ohne Ausstieg (Abhol-Erinnerung mit wiederholter Lagergebühr, Mahnung), entgegen E-17; der Nachrichtenfluss „Mahnung" endete an der Sende-Aktivität „Rechnungsbetrag überweisen" des Kunden. In P07 gab es für einen freigegebenen Nachtrag keine Disposition der zusätzlichen Ersatzteile, und der Nachtrag bekam bei Ablehnung oder Timeout keinen KvaStatus.
+Entscheidung und Auswirkung (umgesetzt in `tools/diagrams.py`, BPMN, PNG, ZIP und `tools/process_stats.json` neu erzeugt):
+- **P07:** Freigegebener Nachtrag → Call Activity „05 Ersatzteile disponieren" → zurück vor „Reservierte Ersatzteile entnehmen". Ablehnung und 3-Tage-Timer laufen über „Nachtrag auf 'abgelehnt' setzen" (Datenobjekt „Kosten-voranschlag [abgelehnt]") in die Endkontrolle.
+- **P08 Abholung:** Gateway „Anzahl Erinnerungen?": < 3 erneut benachrichtigen, = 3 Lagergebühr aufnehmen und benachrichtigen, > 3 „Verwertung des Geräts einleiten". Die Lagergebühr fällt damit nur einmal an.
+- **P08 Zahlung:** Gateway „Dritte Mahnung erfolglos?" nach dem 14-Tage-Timer: nein → Mahnung senden, ja → „Forderung an Inkasso übergeben". Verwertung und Inkasso enden über Merges im einzigen Endereignis „Auftrag abgeschlossen" (Konvention aus E-15). Die Mahnung geht als Nachrichtenfluss an den Kunden-Pool, da der Kunde sie zu keinem festen Zeitpunkt seines Ablaufs erhält.
+- **P07 Nacharbeit:** Die Schleife Endkontrolle → Nacharbeit war unbegrenzt. Jetzt prüft „Zweite Nacharbeit erfolglos?“: nein → Nacharbeit, ja → „Auftragsstatus auf 'abgelehnt' setzen“ (Datenobjekt „Reparatur-auftrag [abgelehnt]“), danach über einen Merge zum einzigen Ende; die Rückgabe läuft wie bei jedem abgelehnten Auftrag über Prozess 08. Zustandsdiagramm: neuer Übergang in Reparatur → abgelehnt.
+- `tools/bpmngen.py`: Beschriftung nach links abgehender Flüsse links vom Gateway statt darüber (betrifft nur P08).
+Kennzahlen: 130 Aktivitäten im Werkstatt-Pool (Ø 13,0), 79 automatisiert (61 %), 26 beim Kunden, 39 Nachrichtenflüsse, 59 Datenobjekte und -speicher. `uml/zustand-reparaturauftrag.png` ist noch nicht neu gerendert (PlantUML fehlte). Projektdokumentation und Folien enthalten noch die Zahlen und Bilder aus E-17 und müssen neu erzeugt werden.
+Offen für die Gruppe (15.10.): Fristen (vierte Erinnerung bis zur Verwertung, drei Mahnungen bis Inkasso) und ob AuftragStatus einen Wert für verwertete Geräte braucht.
+
 ### E-18 Ein Klassendiagramm und erneuter UML-Abgleich mit BPMN (05.10.2026)
 
 Datum: 05.10.2026 (David, auf seinen Arbeitsauftrag hin mit KI-Unterstützung umgesetzt; Teamreview über Pull Request).

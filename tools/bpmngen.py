@@ -608,8 +608,8 @@ class Diagram:
             label = None
             if fname:
                 (x1, y1), (x2, y2) = pts[0], pts[1]
-                if abs(y1 - y2) < 1:      # horizontal first segment
-                    label = (x1 + 6, y1 - 24, 60, 18)
+                if abs(y1 - y2) < 1:      # horizontal first segment (leftwards: label left of the source)
+                    label = (x1 + 6 if x2 > x1 else x1 - 66, y1 - 24, 60, 18)
                 elif len(pts) > 2 and abs(pts[2][1] - y2) < 1:
                     # vertical first segment followed by a horizontal one: label at the corner, next to the target row
                     label = (x2 + 8, y2 - 22, 60, 18)

@@ -20,6 +20,7 @@ freigegeben --> teileBestellt : Fehlteile bestellt /\nwechsleStatus(TEILE_BESTEL
 freigegeben --> inReparatur : Reparatur begonnen\n[alle Teile reserviert] /\nwechsleStatus(IN_REPARATUR)
 teileBestellt --> inReparatur : Reparatur begonnen\n[Teile eingegangen] /\nwechsleStatus(IN_REPARATUR)
 angenommen --> inReparatur : Nacharbeit begonnen\n[kostenfrei oder Angebot angenommen] /\nwechsleStatus(IN_REPARATUR)
+inReparatur --> abgelehnt : zweite Nacharbeit\nerfolglos /\nwechsleStatus(ABGELEHNT)
 inReparatur --> fertig : fertigmelden()\n[alleSchritteAbgeschlossen()\nund Endkontrolle bestanden] /\nwechsleStatus(FERTIG)
 fertig --> abgeholt : Übergabe und Zahlung /\nwechsleStatus(ABGEHOLT)
 abgelehnt --> abgeholt : Gerät unrepariert abgeholt\n(Diagnosepauschale) /\nwechsleStatus(ABGEHOLT)
