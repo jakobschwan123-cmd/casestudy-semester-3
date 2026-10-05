@@ -20,6 +20,6 @@ Ort/Format: Gruppentermin in Präsenz
 | `UML-WWI25B4-Gruppe1.vpp`: Use-Case- und Klassendiagramm, SD1 und SD3; danach `.vpp` in `uml/` einchecken | Kilian |
 | Sequenzdiagramme SD2, SD4, SD5, SD6 in Visual Paradigm | David |
 | Alle zehn BPMN im Camunda Modeler öffnen, Problems-Panel prüfen, speichern, PNGs neu exportieren | Maximilian |
-| E-19 mit der Gruppe bestätigen (Fristen bis Verwertung und Inkasso, Status für verwertete Geräte) und in `03-entscheidungen.md` eintragen | Adrian |
+| E-19 und E-20 mit der Gruppe bestätigen (Fristen bis Verwertung, Inkasso und Storno nach Lieferungs-Mahnung; Status für verwertete Geräte) und in `03-entscheidungen.md` eintragen | Adrian |
 | QA-Checkliste finalisieren, Pull Requests mergen | Jakob |
 | Platzhalter in der Doku füllen (Kapitel 1 Beiträge je Person, 3.3, 4.3, 6, 7); KI-Angabe für den Moodle-Upload formulieren | Nina, Zulieferung alle |

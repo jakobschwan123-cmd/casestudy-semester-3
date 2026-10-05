@@ -12,8 +12,8 @@
     1340
   ],
   "uml/sequenz-03-reservierung.png": [
-    1274,
-    1334
+    1303,
+    1305
   ],
   "uml/sequenz-04-fertigmeldung.png": [
     628,
@@ -24,16 +24,16 @@
     1525
   ],
   "uml/sequenz-06-nachbestellvorschlag.png": [
-    1581,
-    1765
+    1283,
+    1733
   ],
   "uml/systemkontext.png": [
     1216,
     785
   ],
   "uml/usecase.png": [
-    1590,
-    1747
+    1634,
+    1311
   ],
   "uml/zustand-reparaturauftrag.png": [
     1051,
@@ -56,11 +56,11 @@
     2820
   ],
   "bpmn/p05-ersatzteilreservierung.png": [
-    8390,
+    8770,
     2210
   ],
   "bpmn/p06-ersatzteilbestellung.png": [
-    9910,
+    12190,
     3200
   ],
   "bpmn/p07-reparaturdurchfuehrung.png": [
