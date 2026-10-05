@@ -1,6 +1,6 @@
 @startuml
 ' BPMN: p05-ersatzteilreservierung.bpmn
-' BPMN-Nodes: T05_Teileliste Sub_05 S05_Eigen GW05_Eigen S05_Reservieren S05_Andere GW05_Andere S05_Umlagerung S05_Fehlteil T05_Bestaetigen T05_Meldebestand GW05_Meldebestand T05_Nachbestellung T05_Beginn T05_Info GW05_Bedarf T05_Bestellen
+' BPMN-Nodes: T05_Teileliste Sub_05 S05_Eigen GW05_Eigen S05_Reservieren S05_Andere GW05_Andere S05_ResAndere S05_Umlagerung S05_Fehlteil T05_Bestaetigen T05_Meldebestand GW05_Meldebestand T05_Nachbestellung T05_Beginn T05_Info GW05_Fehlteile T05_Bestellen
 title sqd : UC09 Ersatzteile disponieren und reservieren (BPMN 05)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
@@ -13,7 +13,7 @@ participant ": Kostenvoranschlag" as KVA
 participant "eigen : Lagerbestand" as LB
 participant "andere : Lagerbestand" as AL
 participant ": ErsatzteilReservierung" as RES
-actor Techniker
+actor Servicemitarbeiter as SM
 actor Kunde
 
 Disponent -> KVA : getPositionen()
@@ -30,9 +30,9 @@ par je benötigtem Ersatzteil (parallele Mehrfachinstanz Sub_05)
             AL --> Disponent : verfuegbar
         end
         alt in anderer Filiale verfügbar
-            note over Disponent, AL : Umlagerung anfordern (S05_Umlagerung)
             Disponent -> RES : <<create>> reserviere()
             RES -> AL : reserviere(anzahl)
+            note over Disponent, AL : Umlagerung anfordern (S05_Umlagerung)
         else nirgends verfügbar
             Disponent -> RA : markiereFehlteil(teil, menge)
             note right of RA : Noch keine Bestellung innerhalb der Teileprüfung
@@ -48,12 +48,13 @@ loop je betroffenem Lagerbestand nach Abschluss der Teileprüfung
         LB --> Disponent : Lieferantenbestellung [Vorschlag]
     end
 end
-Techniker -> RA : ermittleReparaturbeginn()
-RA --> Techniker : voraussichtlicher Reparaturbeginn
-Techniker -> RA : benachrichtigeKunde("voraussichtlicher Reparaturbeginn")
+SM -> RA : ermittleReparaturbeginn()
+RA --> SM : voraussichtlicher Reparaturbeginn
+SM -> RA : benachrichtigeKunde("voraussichtlicher Reparaturbeginn")
 RA -> Kunde : voraussichtlicher Reparaturbeginn
-opt Fehlteile vorhanden oder Nachbestellvorschlag erzeugt
-    ref over Disponent, RA : BPMN 06 / UC10 Lieferantenbestellung auslösen\nErst nach der Kundeninformation (T05_Info -> GW05_Bedarf)
+opt Fehlteile vorhanden
+    ref over Disponent, RA : BPMN 06 / UC10 Lieferantenbestellung auslösen\nErst nach der Kundeninformation (T05_Info -> GW05_Fehlteile)
 end
+note over Disponent, LB : Ein Nachbestellvorschlag allein löst keine Bestellung aus;\ner bleibt im Status VORSCHLAG und wird in BPMN 06 mitgebündelt.
 note over Disponent, RA : Reservierung verändert nur den reservierten Bestand.\nStatus TEILE_BESTELLT erst nach bestätigter Bestellung in BPMN 06.
 @enduml

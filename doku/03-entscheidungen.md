@@ -6,13 +6,28 @@ Jede Entscheidung, die mehr als eine Person betrifft, kommt hier rein: was entsc
 
 ### E-07 Bestätigung von E-02, E-03, E-05 und E-11 durch die Gruppe
 
-David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur (E-08, ersetzt durch E-11) festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, die Korrekturen aus E-15, der ausmodellierte Kunden-Pool aus E-16 und die Korrekturen des Komplettchecks aus E-17 (Abholung über Prozess 08, Schleifen-Ausstiege, Lagergebühr und Mahnung, Akteur Servicemitarbeiter, UC19 Retoure).
+David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur (E-08, ersetzt durch E-11) festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, die Korrekturen aus E-15, der ausmodellierte Kunden-Pool aus E-16 und die Korrekturen des Komplettchecks aus E-17 (Abholung über Prozess 08, Schleifen-Ausstiege, Lagergebühr und Mahnung, Akteur Servicemitarbeiter, UC19 Retoure) sowie der UML-Abgleich aus E-18, die Logik-Korrekturen in P07/P08 aus E-19 und die Überarbeitung von P05 und P06 aus E-20.
 
 ### E-14 Bestätigung durch den Dozenten
 
 Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Gruppentermine 05.10., 15.10., 22.10. gegen Rapla prüfen. Zur Camunda Cloud: Der Ablauf verlangt die Ablage der BPMN-Modelle „in die vorbereiteten Unterordner im Camunda Cloud Repository"; wir laden deshalb hoch, ohne auf eine Antwort zu warten (Git bleibt zusätzlich die Arbeitsgrundlage).
 
 ## Entschieden
+
+### E-20 Überarbeitung von Prozess 05 und 06 (05.10.2026)
+
+Datum: 05.10.2026 (David, umgesetzt mit KI-Unterstützung in `tools/diagrams.py`, nur `p05` und `p06` neu erzeugt; Bestätigung durch die Gruppe siehe E-07).
+Entscheidung und Auswirkung:
+- **Lagernachschub hält die Reparatur nicht mehr auf:** P05 ruft „06 Ersatzteile bestellen" nur noch auf, wenn Fehlteile vorhanden sind (vorher auch bei reinem Nachbestellvorschlag; als Call Activity wartete P05 dann bis zur Lieferung, und P07 startete erst danach). Der Nachbestellvorschlag bleibt im Status Vorschlag und wird in P06 mit der nächsten Bestellung gebündelt. In P06 werden nur die Fehlteile dem Reparaturauftrag zugeordnet („Fehlteile dem Reparaturauftrag zuordnen"), Nachbestellteile gehen über den Wareneingang ins Lager.
+- **P05 Lanes:** „Voraussichtlichen Reparaturbeginn ermitteln" und „Kunde über Reparaturbeginn informieren" liegen in der Lane Service / Annahme statt Techniker (Befund B8 aus dem Komplettcheck; der Techniker hatte in P05 keine Tätigkeit, Vorlesung 4-14, 4-64). Die Lane Techniker entfällt in P05.
+- **P05 Teilprozess:** „Umlagerung anfordern und Teil reservieren" ist in „Teil in anderer Filiale reservieren" (Service Task) und „Umlagerung anfordern" (User Task) geteilt (ein Verb + Objekt je Aktivität, Vorlesung 4-21). Gateway heißt „Meldebestand unterschritten?" (vorher mit Trennstrich), Gateway „Bestellbedarf vorhanden?" heißt „Fehlteile vorhanden?". „Meldebestand prüfen" liest jetzt das Datenobjekt Lagerbestand.
+- **P06 Warten mit Ausstieg:** Statt der Empfangsaktivitäten wartet P06 an ereignisbasierten Gateways (Vorlesung 4-36): Auftragsbestätigung oder „3 Tage verstrichen" (dann Storno und alternativer Lieferant wie bei „nicht lieferbar"); Lieferung oder „14 Tage verstrichen" (dann „Lieferung anmahnen" und erneut warten). Offen für die Gruppe: Nach wie vielen Mahnungen wird storniert?
+- **P06 Ersatzlieferung prüfen:** Nach der Retoure (P10) wird eine Ersatzlieferung erst geprüft („Ersatzlieferung prüfen"), bevor die Teile zugeordnet werden (Befund B12, P06-Teil). Der P10-Teil von B12 („Ersatzlieferung buchen" ohne Empfang) ist offen.
+- **P06 Benennung:** „Liefertermin hinterlegen und Status 'Teile bestellt' setzen" heißt „Liefertermin hinterlegen"; der Statuswechsel steht im Datenobjekt „Reparatur-auftrag [Teile bestellt]".
+- **UML nachgezogen:** SD3 – Reparaturbeginn und Kundeninformation durch den Servicemitarbeiter statt Techniker, Bestellung nur „opt Fehlteile vorhanden", Hinweis zum Nachbestellvorschlag, BPMN-Anker `GW05_Fehlteile`/`S05_ResAndere`. SD6 – Vorbedingung, Timeout der Auftragsbestätigung, Mahnung, Prüfung der Ersatzlieferung, BPMN-Anker auf die neuen Elemente. Use Cases (`tools/umlmodel.py`, neu erzeugt): Servicemitarbeiter statt Techniker an UC09; extend UC10 → UC09 mit Bedingung „Fehlteile vorhanden". Texte in `tools/doc.js` und `tools/pres.js` angepasst. `tools/check_uml.py` ohne Befund (109 BPMN-Anker).
+Kennzahlen nach E-19 und E-20 zusammen (mit `tools/mkstats.py`): 131 Aktivitäten im Werkstatt-Pool (Ø 13,1), 79 automatisiert (60 %), 26 Aktivitäten beim Kunden, 40 Nachrichtenflüsse, 60 Datenobjekte und -speicher. Layout-Prüfung 0 Befunde.
+Noch offen: `@camunda/linting`/`bpmnlint` für P05/P06; PNG-Export von `p05`/`p06` (bpmn-js) sowie `sequenz-03`, `sequenz-06` und `usecase` (PlantUML); danach Doku und Folien neu erzeugen (Kennzahlen, Texte). Auf diesem Rechner fehlten Node.js und ein lauffähiges Java.
+Begründung: Fachliche Lücke (Reparatur wartete auf Lagernachschub), Warteschritte ohne Ausstieg, Konsistenz mit P06 (Kundeninfo in Service / Annahme) und Vorlesung (4-14, 4-21, 4-36, 4-64).
 
 ### E-19 Logikfehler in Prozess 07 und 08 (05.10.2026)
 

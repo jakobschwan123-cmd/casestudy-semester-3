@@ -237,8 +237,8 @@ USECASES = [  # (id, name)
 
 ACTOR_UC = [
     ("Kunde", ["UC01", "UC02", "UC03", "UC07", "UC09", "UC10", "UC15", "UC16"]),
-    ("Techniker", ["UC03", "UC04", "UC05", "UC06", "UC09", "UC13", "UC14", "UC16", "UC19"]),
-    ("Servicemitarbeiter", ["UC03", "UC06", "UC07", "UC10", "UC15", "UC16"]),
+    ("Techniker", ["UC03", "UC04", "UC05", "UC06", "UC13", "UC14", "UC16", "UC19"]),
+    ("Servicemitarbeiter", ["UC03", "UC06", "UC07", "UC09", "UC10", "UC15", "UC16"]),
     ("Disponent", ["UC08", "UC09", "UC10", "UC11", "UC12", "UC19"]),
     ("Werkstattleiter", ["UC10", "UC16", "UC17", "UC19"]),
     ("Werkstattinhaber", ["UC18"]),
@@ -255,7 +255,7 @@ EXTENDS = [  # (extension, extended)
 ]
 EXTEND_CONDITIONS = {
     ("UC02", "UC01"): "Kunde bestätigt Voranmeldung",
-    ("UC10", "UC09"): "Fehlteile oder Nachbestellvorschlag",
+    ("UC10", "UC09"): "Fehlteile vorhanden",
     ("UC12", "UC09"): "Meldebestand unterschritten",
     ("UC03", "UC16"): "Nacharbeit freigegeben oder Angebot angenommen",
     ("UC19", "UC11"): "Lieferung mangelhaft",
