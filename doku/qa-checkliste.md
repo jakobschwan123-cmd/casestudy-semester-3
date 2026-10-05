@@ -44,14 +44,17 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 
 ## Prüfstand 05.10.2026
 
-Geprüft von Jakob (mit KI-Unterstützung) auf `main` nach PR #4: das Abgleich-Protokoll `archiv/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md` gegen die aktuellen BPMN-Dateien und PNGs, dazu die Bildstände. Die automatische UML-Prüfung (`archiv/tools/check_uml.py`) läuft ohne Befund (109 BPMN-Anker).
+Geprüft von Jakob (mit KI-Unterstützung) auf `main` nach PR #4: das Abgleich-Protokoll `archiv/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md` gegen die damaligen BPMN-Dateien und PNGs, dazu die Bildstände. Die automatische UML-Prüfung (`archiv/tools/check_uml.py`) lief für diesen Stand ohne Befund (109 BPMN-Anker).
+
+Aktualisierung nach PR #6 (`main` auf `cc329e1`): Q4 und Q5 sind erledigt. Alle 20 Diagrammbilder der Projektdokumentation entsprechen den aktuellen PNGs im Repository. Beim Dokumentationsabgleich wurde außerdem der oben abgeschnittene Use-Case-Export aus der unveränderten `.puml` vollständig neu gerendert (Q8). Die Kennzahlen wurden aus den aktuellen BPMN-XML nachgezählt: 131 Werkstatt-Aktivitäten, davon 79 automatisiert, sowie 26 Kundenaktivitäten. Q1 bis Q3 bleiben offen; zusätzlich ist der fehlende Empfang einer Ersatzlieferung in P10 zu klären (B12, siehe offene Frage zu E-20). Die abschließende Prüfung im Camunda Modeler und die VPP-Datei stehen weiterhin aus.
 
 | Nr. | Befund | Wer |
 |---|---|---|
 | Q1 | P06: Die Warteschleife Lieferung → „14 Tage verstrichen" → „Lieferung anmahnen" hat keinen Ausstieg (verstößt gegen „jede Warteschleife mit Ausstieg"). Grenze und Folge (Storno, alternativer Lieferant) festlegen, siehe offene Frage zu E-20. | Maximilian, David |
 | Q2 | SD4 (UC14): Die Schleife „Endkontrolle bis Qualität in Ordnung" kennt den Abbruch nach der zweiten erfolglosen Nacharbeit nicht (P07 `GW07_Grenze`, `T07_Abbruch`, Zustandsdiagramm in Reparatur → abgelehnt, E-19). | David (SD4 in VP) |
 | Q3 | SD4: Der ref auf UC13 nennt für einen freigegebenen Nachtrag nur „weitere Schritte"; seit E-19 werden die Teile vorher über P05 disponiert (`T07_Teile`). | David |
-| Q4 | PNGs veraltet: `bpmn/p05-…png` und `bpmn/p06-…png` (Stand vor E-20); `uml/sequenz-03-…png`, `uml/sequenz-06-…png`, `uml/usecase.png` (älter als ihre `.puml`). | Maximilian (BPMN), David (UML) |
-| Q5 | Projektdokumentation nennt 130 Aktivitäten; nach E-20 sind es 131 (Ø 13,1). Folien prüfen. | Nina |
+| Q4 | Erledigt durch PR #6: PNGs von P05/P06, SD3/SD6 und Use-Case-Diagramm aktualisiert; die Bilder in der Projektdokumentation stimmen mit den eingecheckten PNGs überein. | erledigt |
+| Q5 | Erledigt durch PR #6: Doku und Folien nennen 131 Aktivitäten (Ø 13,1). Die Aktivitäten der Doku wurden erneut gegen die aktuellen BPMN-XML geprüft. | erledigt |
 | Q6 | Protokoll vom UML-Abgleich ist durch E-19/E-20 teilweise überholt: `GW05_Bedarf`, `T06_AB`, `T06_Lieferung` gibt es nicht mehr (jetzt `GW05_Fehlteile`, `GW06_AB`/`E06_AB`/`E06_ABTimer`, `E06_Lieferung`); UC09 jetzt mit Servicemitarbeiter statt Techniker, UC10 nur bei Fehlteilen; neue Pfade in P07/P08 (Abbruch, Verwertung, Inkasso) fehlen in der Tabelle. Die UML-Quellen sind für P05/P06 bereits nachgezogen; das Protokoll bleibt als archivierter Stand, kein Handlungsbedarf außer Q2/Q3. | – |
 | Q7 | Zuständigkeit BPMN 09/10 ist durch E-21 geklärt (Maximilian, BPMN inklusive 09/10). | erledigt |
+| Q8 | Erledigt beim Dokumentationsabgleich: Das Use-Case-PNG war oben abgeschnitten. Vollständiger Neu-Export mit PlantUML 1.2026.8 aus der unveränderten Quelle, mit allen acht Akteuren; PNG im Repository und Bild in der Doku ersetzt. | erledigt |
