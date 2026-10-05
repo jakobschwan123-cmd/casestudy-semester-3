@@ -1,11 +1,12 @@
 @startuml
+!pragma layout smetana
 skinparam classAttributeIconSize 0
 skinparam defaultFontName Arial
 skinparam classFontSize 11
 skinparam nodesep 25
 skinparam ranksep 45
 hide circle
-title cd : RepairFlow – Klassendiagramm
+title cd : RepairFlow – einziges vollständiges Klassendiagramm
 
 abstract class Person {
   # name : String
@@ -35,6 +36,7 @@ class Techniker {
   --
   + pruefeDiagnosevorschlag(v : KIDiagnosevorschlag) : boolean
   + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
+  + pruefeMangel(r : Reklamation) : boolean
   + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
 }
 class Servicemitarbeiter {
@@ -88,6 +90,7 @@ class Voranmeldung {
   - bestaetigt : boolean
   --
   + erstellen(medien : List<Medienanhang>, symptome : String) : void
+  + speichereMedien(medien : List<Medienanhang>) : void
   + bestaetigen() : void
   + verwerfen() : void
   + bessereAufnahmeAnfordern() : void
@@ -108,6 +111,7 @@ class KIDiagnosevorschlag {
   - geschaetzterAufwandMin : int
   - bestaetigt : boolean
   --
+  + auswerten(medien : List<Medienanhang>) : void
   + erzeugeVorabKva() : Kostenvoranschlag
   + getBenoetigteTeile() : List<Ersatzteil>
   + bestaetigen(t : Techniker) : void
@@ -118,11 +122,16 @@ class Reparaturauftrag {
   - status : AuftragStatus
   - werkstatttermin : Date
   - kostenfrei : boolean
+  - endkontrolleBestanden : boolean
   --
   + wechsleStatus(neu : AuftragStatus) : void
   + alleSchritteAbgeschlossen() : boolean
   + fertigmelden() : void
   + benachrichtigeKunde(text : String) : void
+  + markiereFehlteil(teil : Ersatzteil, menge : int) : void
+  + bestaetigeReservierungen() : void
+  + ermittleReparaturbeginn() : Date
+  + erfasseEndkontrolle(bestanden : boolean) : void
   + getRechnung() : Rechnung
 }
 class Geraet {
@@ -144,6 +153,7 @@ class Kostenvoranschlag {
   - erstelldatum : Date
   - gueltigBis : Date
   - status : KvaStatus
+  - erinnerungen : int
   --
   + addPosition(p : KvaPosition) : void
   + getPositionen() : List<KvaPosition>
@@ -151,6 +161,7 @@ class Kostenvoranschlag {
   + versendeAnKunde() : void
   + freigeben() : void
   + ablehnen(grund : String) : void
+  + protokolliereErinnerung() : void
   + setzeStatus(s : KvaStatus) : void
 }
 class KvaPosition {
@@ -192,6 +203,7 @@ class Lagerbestand {
   + bucheAbgang(anzahl : int) : void
   + reserviere(anzahl : int) : void
   + istMeldebestandUnterschritten() : boolean
+  + erzeugeNachbestellvorschlag() : Lieferantenbestellung
 }
 class ErsatzteilReservierung {
   - reservierungsnummer : String
@@ -217,6 +229,7 @@ class Lieferantenbestellung {
   + berechneBestellwert() : double
   + freigeben() : void
   + storniere() : void
+  + bestaetige(liefertermin : Date) : void
   + meldeRetoure(grund : String) : void
 }
 class Bestellposition {
@@ -240,9 +253,11 @@ class Reklamation {
   - datum : Date
   - grund : String
   - istGewaehrleistung : boolean
+  - abgelehnt : boolean
   --
   + pruefeGewaehrleistung() : boolean
   + legeNacharbeitAn(kostenfrei : boolean) : Reparaturauftrag
+  + ablehnen() : void
   + schliesseAb() : void
 }
 package "Aufzählungen" {

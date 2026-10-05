@@ -1,4 +1,5 @@
 @startuml
+!pragma layout smetana
 left to right direction
 skinparam packageStyle rectangle
 skinparam defaultFontName Arial
@@ -17,75 +18,88 @@ actor "Werkstattinhaber" as Werkstattinhaber
 
 rectangle "RepairFlow" {
   rectangle "Kundenportal (App)" {
-    usecase "Sofortdiagnose anfordern" as UC01
-    usecase "Voranmeldung bestätigen" as UC02
-    usecase "KVA freigeben / ablehnen" as UC07
+    usecase "UC01\nSofortdiagnose anfordern" as UC01
+    usecase "UC02\nVoranmeldung bestätigen" as UC02
+    usecase "UC07\nKVA freigeben / ablehnen" as UC07
   }
   rectangle "Auftrag und Werkstatt" {
-    usecase "Reparaturauftrag anlegen" as UC03
-    usecase "Werkstatttermin planen und Techniker zuweisen" as UC17
-    usecase "Diagnosevorschlag prüfen" as UC04
-    usecase "Diagnosebefund erfassen" as UC05
-    usecase "KVA erstellen" as UC06
-    usecase "Reparaturschritt und Arbeitszeit erfassen" as UC13
-    usecase "Auftrag fertigmelden und Kunde benachrichtigen" as UC14
-    usecase "Rechnung erstellen und Zahlung erfassen" as UC15
-    usecase "Reklamation bearbeiten" as UC16
+    usecase "UC03\nReparaturauftrag anlegen" as UC03
+    usecase "UC17\nWerkstatttermin planen und Techniker zuweisen" as UC17
+    usecase "UC04\nDiagnosevorschlag prüfen" as UC04
+    usecase "UC05\nDiagnosebefund erfassen" as UC05
+    usecase "UC06\nKVA erstellen" as UC06
+    usecase "UC13\nReparaturschritt und Arbeitszeit erfassen" as UC13
+    usecase "UC14\nAuftrag fertigmelden" as UC14
+    usecase "UC15\nAbholung und Abrechnung abwickeln" as UC15
+    usecase "UC16\nReklamation bearbeiten" as UC16
   }
   rectangle "Ersatzteil-Disposition" {
-    usecase "Ersatzteil-Verfügbarkeit prüfen" as UC08
-    usecase "Ersatzteil reservieren" as UC09
-    usecase "Lieferantenbestellung auslösen" as UC10
-    usecase "Wareneingang buchen" as UC11
-    usecase "Nachbestellvorschlag erzeugen" as UC12
-    usecase "Retoure abwickeln" as UC19
+    usecase "UC08\nErsatzteil-Verfügbarkeit prüfen" as UC08
+    usecase "UC09\nErsatzteile disponieren und reservieren" as UC09
+    usecase "UC10\nLieferantenbestellung auslösen" as UC10
+    usecase "UC11\nWareneingang buchen" as UC11
+    usecase "UC12\nNachbestellvorschlag erzeugen" as UC12
+    usecase "UC19\nRetoure abwickeln" as UC19
   }
   rectangle "Administration" {
-    usecase "Werkstattbetrieb und Filialen verwalten" as UC18
+    usecase "UC18\nWerkstattbetrieb und Filialen verwalten" as UC18
   }
 }
 
 actor "Lieferant" as Lieferant <<extern>>
 actor "KI-Diagnosedienst" as KIDienst <<extern>>
 
-Kunde -- UC01
-Kunde -- UC02
-Kunde -- UC03
-Kunde -- UC07
-Kunde -- UC14
-Kunde -- UC15
-Kunde -- UC16
-Techniker -- UC04
-Techniker -- UC05
-Techniker -- UC06
-Techniker -- UC13
-Techniker -- UC14
-Techniker -- UC16
-Servicemitarbeiter -- UC03
-Servicemitarbeiter -- UC07
-Servicemitarbeiter -- UC15
-Servicemitarbeiter -- UC16
-Disponent -- UC08
-Disponent -- UC09
-Disponent -- UC10
-Disponent -- UC11
-Disponent -- UC12
-Disponent -- UC19
-Werkstattleiter -- UC10
-Werkstattleiter -- UC16
-Werkstattleiter -- UC17
-Werkstattinhaber -- UC18
-UC10 -- Lieferant
-UC11 -- Lieferant
-UC19 -- Lieferant
-UC01 -- KIDienst
+Kunde -right- UC01
+Kunde -right- UC02
+Kunde -right- UC03
+Kunde -right- UC07
+Kunde -right- UC09
+Kunde -right- UC10
+Kunde -right- UC15
+Kunde -right- UC16
+Techniker -right- UC03
+Techniker -right- UC04
+Techniker -right- UC05
+Techniker -right- UC06
+Techniker -right- UC09
+Techniker -right- UC13
+Techniker -right- UC14
+Techniker -right- UC16
+Techniker -right- UC19
+Servicemitarbeiter -right- UC03
+Servicemitarbeiter -right- UC06
+Servicemitarbeiter -right- UC07
+Servicemitarbeiter -right- UC10
+Servicemitarbeiter -right- UC15
+Servicemitarbeiter -right- UC16
+Disponent -right- UC08
+Disponent -right- UC09
+Disponent -right- UC10
+Disponent -right- UC11
+Disponent -right- UC12
+Disponent -right- UC19
+Werkstattleiter -right- UC10
+Werkstattleiter -right- UC16
+Werkstattleiter -right- UC17
+Werkstattleiter -right- UC19
+Werkstattinhaber -right- UC18
+UC10 -right- Lieferant
+UC11 -right- Lieferant
+UC19 -right- Lieferant
+UC01 -right- KIDienst
+Kunde -[hidden]down- Servicemitarbeiter
+Servicemitarbeiter -[hidden]down- Techniker
+Techniker -[hidden]down- Disponent
+Disponent -[hidden]down- Werkstattleiter
+Werkstattleiter -[hidden]down- Werkstattinhaber
+KIDienst -[hidden]down- Lieferant
 
 UC01 ..> UC08 : <<include>>
 UC09 ..> UC08 : <<include>>
-UC16 ..> UC03 : <<include>>
-UC02 ..> UC01 : <<extend>>
-UC04 ..> UC05 : <<extend>>
-UC10 ..> UC09 : <<extend>>
-UC12 ..> UC09 : <<extend>>
-UC19 ..> UC11 : <<extend>>
+UC02 ..> UC01 : <<extend>>\n[Kunde bestätigt Voranmeldung]
+UC10 ..> UC09 : <<extend>>\n[Fehlteile oder Nachbestellvorschlag]
+UC12 ..> UC09 : <<extend>>\n[Meldebestand unterschritten]
+UC03 ..> UC16 : <<extend>>\n[Nacharbeit freigegeben oder Angebot angenommen]
+UC19 ..> UC11 : <<extend>>\n[Lieferung mangelhaft]
+UC19 ..> UC16 : <<extend>>\n[Lieferantenteil defekt]
 @enduml

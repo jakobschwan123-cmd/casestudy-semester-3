@@ -37,6 +37,7 @@ CLASSES = [
      [("-", "qualifikation", "String")],
      [("+", "pruefeDiagnosevorschlag", "v : KIDiagnosevorschlag", "boolean"),
       ("+", "erfasseBefund", "a : Reparaturauftrag", "Fehlerbefund"),
+      ("+", "pruefeMangel", "r : Reklamation", "boolean"),
       ("+", "bucheArbeitszeit", "s : Reparaturschritt, dauer : int", "Arbeitszeitbuchung")]),
     ("Servicemitarbeiter", False, None,
      [],
@@ -71,6 +72,7 @@ CLASSES = [
      [("-", "voranmeldungsnummer", "String"), ("-", "erstelltAm", "Date"), ("-", "gueltigBis", "Date"),
       ("-", "symptombeschreibung", "String"), ("-", "wunschtermin", "Date"), ("-", "bestaetigt", "boolean")],
      [("+", "erstellen", "medien : List<Medienanhang>, symptome : String", "void"),
+      ("+", "speichereMedien", "medien : List<Medienanhang>", "void"),
       ("+", "bestaetigen", "", "void"), ("+", "verwerfen", "", "void"),
       ("+", "bessereAufnahmeAnfordern", "", "void"),
       ("+", "inAuftragUebernehmen", "", "Reparaturauftrag")]),
@@ -80,13 +82,19 @@ CLASSES = [
     ("KIDiagnosevorschlag", False, None,
      [("-", "vorschlagsnummer", "String"), ("-", "wahrscheinlicheUrsache", "String"), ("-", "konfidenz", "double"),
       ("-", "geschaetzterAufwandMin", "int"), ("-", "bestaetigt", "boolean")],
-     [("+", "erzeugeVorabKva", "", "Kostenvoranschlag"), ("+", "getBenoetigteTeile", "", "List<Ersatzteil>"),
+     [("+", "auswerten", "medien : List<Medienanhang>", "void"),
+      ("+", "erzeugeVorabKva", "", "Kostenvoranschlag"), ("+", "getBenoetigteTeile", "", "List<Ersatzteil>"),
       ("+", "bestaetigen", "t : Techniker", "void")]),
     ("Reparaturauftrag", False, None,
      [("-", "auftragsnummer", "String"), ("-", "eingangsdatum", "Date"), ("-", "status", "AuftragStatus"),
-      ("-", "werkstatttermin", "Date"), ("-", "kostenfrei", "boolean")],
+      ("-", "werkstatttermin", "Date"), ("-", "kostenfrei", "boolean"),
+      ("-", "endkontrolleBestanden", "boolean")],
      [("+", "wechsleStatus", "neu : AuftragStatus", "void"), ("+", "alleSchritteAbgeschlossen", "", "boolean"),
       ("+", "fertigmelden", "", "void"), ("+", "benachrichtigeKunde", "text : String", "void"),
+      ("+", "markiereFehlteil", "teil : Ersatzteil, menge : int", "void"),
+      ("+", "bestaetigeReservierungen", "", "void"),
+      ("+", "ermittleReparaturbeginn", "", "Date"),
+      ("+", "erfasseEndkontrolle", "bestanden : boolean", "void"),
       ("+", "getRechnung", "", "Rechnung")]),
     ("Geraet", False, None,
      [("-", "seriennummer", "String"), ("-", "hersteller", "String"), ("-", "modell", "String"), ("-", "typ", "GeraeteTyp")],
@@ -96,10 +104,11 @@ CLASSES = [
      [("+", "istReparaturLohnend", "", "boolean")]),
     ("Kostenvoranschlag", False, None,
      [("-", "kvaNummer", "String"), ("-", "erstelldatum", "Date"), ("-", "gueltigBis", "Date"),
-      ("-", "status", "KvaStatus")],
+      ("-", "status", "KvaStatus"), ("-", "erinnerungen", "int")],
      [("+", "addPosition", "p : KvaPosition", "void"), ("+", "getPositionen", "", "List<KvaPosition>"),
       ("+", "berechneSumme", "", "double"), ("+", "versendeAnKunde", "", "void"),
       ("+", "freigeben", "", "void"), ("+", "ablehnen", "grund : String", "void"),
+      ("+", "protokolliereErinnerung", "", "void"),
       ("+", "setzeStatus", "s : KvaStatus", "void")]),
     ("KvaPosition", False, None,
      [("-", "bezeichnung", "String"), ("-", "menge", "int"), ("-", "einzelpreis", "double")],
@@ -118,7 +127,8 @@ CLASSES = [
      [("-", "menge", "int"), ("-", "reserviert", "int"), ("-", "meldebestand", "int")],
      [("+", "pruefeVerfuegbarkeit", "anzahl : int", "boolean"), ("+", "bucheZugang", "anzahl : int", "void"),
       ("+", "bucheAbgang", "anzahl : int", "void"), ("+", "reserviere", "anzahl : int", "void"),
-      ("+", "istMeldebestandUnterschritten", "", "boolean")]),
+      ("+", "istMeldebestandUnterschritten", "", "boolean"),
+      ("+", "erzeugeNachbestellvorschlag", "", "Lieferantenbestellung")]),
     ("ErsatzteilReservierung", False, None,
      [("-", "reservierungsnummer", "String"), ("-", "menge", "int"), ("-", "datum", "Date"),
       ("-", "status", "ReservierungStatus")],
@@ -130,6 +140,7 @@ CLASSES = [
      [("+", "addPosition", "teil : Ersatzteil, menge : int", "void"), ("+", "uebermittle", "", "void"),
       ("+", "bucheWareneingang", "", "void"), ("+", "berechneBestellwert", "", "double"),
       ("+", "freigeben", "", "void"), ("+", "storniere", "", "void"),
+      ("+", "bestaetige", "liefertermin : Date", "void"),
       ("+", "meldeRetoure", "grund : String", "void")]),
     ("Bestellposition", False, None,
      [("-", "menge", "int"), ("-", "einzelpreis", "double")],
@@ -141,9 +152,9 @@ CLASSES = [
       ("+", "getRechnungsdatum", "", "Date")]),
     ("Reklamation", False, None,
      [("-", "reklamationsnummer", "String"), ("-", "datum", "Date"), ("-", "grund", "String"),
-      ("-", "istGewaehrleistung", "boolean")],
+      ("-", "istGewaehrleistung", "boolean"), ("-", "abgelehnt", "boolean")],
      [("+", "pruefeGewaehrleistung", "", "boolean"), ("+", "legeNacharbeitAn", "kostenfrei : boolean", "Reparaturauftrag"),
-      ("+", "schliesseAb", "", "void")]),
+      ("+", "ablehnen", "", "void"), ("+", "schliesseAb", "", "void")]),
 ]
 
 GENERALIZATIONS = [("Kunde", "Person"), ("Mitarbeiter", "Person"),
@@ -211,13 +222,13 @@ USECASES = [  # (id, name)
     ("UC06", "KVA erstellen"),
     ("UC07", "KVA freigeben / ablehnen"),
     ("UC08", "Ersatzteil-Verfügbarkeit prüfen"),
-    ("UC09", "Ersatzteil reservieren"),
+    ("UC09", "Ersatzteile disponieren und reservieren"),
     ("UC10", "Lieferantenbestellung auslösen"),
     ("UC11", "Wareneingang buchen"),
     ("UC12", "Nachbestellvorschlag erzeugen"),
     ("UC13", "Reparaturschritt und Arbeitszeit erfassen"),
-    ("UC14", "Auftrag fertigmelden und Kunde benachrichtigen"),
-    ("UC15", "Rechnung erstellen und Zahlung erfassen"),
+    ("UC14", "Auftrag fertigmelden"),
+    ("UC15", "Abholung und Abrechnung abwickeln"),
     ("UC16", "Reklamation bearbeiten"),
     ("UC17", "Werkstatttermin planen und Techniker zuweisen"),
     ("UC18", "Werkstattbetrieb und Filialen verwalten"),
@@ -225,22 +236,31 @@ USECASES = [  # (id, name)
 ]
 
 ACTOR_UC = [
-    ("Kunde", ["UC01", "UC02", "UC03", "UC07", "UC14", "UC15", "UC16"]),
-    ("Techniker", ["UC04", "UC05", "UC06", "UC13", "UC14", "UC16"]),
-    ("Servicemitarbeiter", ["UC03", "UC07", "UC15", "UC16"]),
+    ("Kunde", ["UC01", "UC02", "UC03", "UC07", "UC09", "UC10", "UC15", "UC16"]),
+    ("Techniker", ["UC03", "UC04", "UC05", "UC06", "UC09", "UC13", "UC14", "UC16", "UC19"]),
+    ("Servicemitarbeiter", ["UC03", "UC06", "UC07", "UC10", "UC15", "UC16"]),
     ("Disponent", ["UC08", "UC09", "UC10", "UC11", "UC12", "UC19"]),
-    ("Werkstattleiter", ["UC10", "UC16", "UC17"]),
+    ("Werkstattleiter", ["UC10", "UC16", "UC17", "UC19"]),
     ("Werkstattinhaber", ["UC18"]),
     ("Lieferant", ["UC10", "UC11", "UC19"]),
     ("KIDienst", ["UC01"]),
 ]
 
 INCLUDES = [  # (base, included)
-    ("UC01", "UC08"), ("UC09", "UC08"), ("UC16", "UC03"),
+    ("UC01", "UC08"), ("UC09", "UC08"),
 ]
 EXTENDS = [  # (extension, extended)
-    ("UC02", "UC01"), ("UC04", "UC05"), ("UC10", "UC09"), ("UC12", "UC09"), ("UC19", "UC11"),
+    ("UC02", "UC01"), ("UC10", "UC09"), ("UC12", "UC09"),
+    ("UC03", "UC16"), ("UC19", "UC11"), ("UC19", "UC16"),
 ]
+EXTEND_CONDITIONS = {
+    ("UC02", "UC01"): "Kunde bestätigt Voranmeldung",
+    ("UC10", "UC09"): "Fehlteile oder Nachbestellvorschlag",
+    ("UC12", "UC09"): "Meldebestand unterschritten",
+    ("UC03", "UC16"): "Nacharbeit freigegeben oder Angebot angenommen",
+    ("UC19", "UC11"): "Lieferung mangelhaft",
+    ("UC19", "UC16"): "Lieferantenteil defekt",
+}
 
 # ----------------------------------------------------------------------------- PlantUML
 
@@ -277,22 +297,21 @@ HINTS = {("Werkstattbetrieb", "Filiale"), ("Kunde", "Voranmeldung"), ("Kunde", "
          ("Kostenvoranschlag", "KvaPosition")}
 
 
-def class_puml(subset=None, title="cd : RepairFlow – Klassendiagramm", enums=True):
-    """Full class diagram (subset=None) or a focus diagram containing only the given classes."""
-    names = [c[0] for c in CLASSES] if subset is None else list(subset)
+def class_puml():
+    """The single complete class diagram, including all operations and relationships."""
+    names = [c[0] for c in CLASSES]
     by = {c[0]: c for c in CLASSES}
-    L = ["@startuml", "skinparam classAttributeIconSize 0", "skinparam defaultFontName Arial",
+    L = ["@startuml", "!pragma layout smetana", "skinparam classAttributeIconSize 0", "skinparam defaultFontName Arial",
          "skinparam classFontSize 11", "skinparam nodesep 25", "skinparam ranksep 45", "hide circle",
-         "title %s" % title, ""]
-    for nme in names:
-        L += class_body(*by[nme], indent="")
-    if enums and subset is None:
-        L.append('package "Aufzählungen" {')
-        for e, lits in ENUMS.items():
-            L.append("  enum %s {" % e)
-            L += ["    " + x for x in lits]
-            L.append("  }")
-        L.append("}")
+         "title cd : RepairFlow – einziges vollständiges Klassendiagramm", ""]
+    for name in names:
+        L += class_body(*by[name], indent="")
+    L.append('package "Aufzählungen" {')
+    for e, lits in ENUMS.items():
+        L.append("  enum %s {" % e)
+        L += ["    " + x for x in lits]
+        L.append("  }")
+    L.append("}")
     for sub, sup in GENERALIZATIONS:
         if sub in names and sup in names:
             L.append("%s <|-- %s" % (sup, sub))
@@ -309,23 +328,9 @@ def class_puml(subset=None, title="cd : RepairFlow – Klassendiagramm", enums=T
         else:
             arrow = "..>"
         L.append('%s "%s" %s "%s" %s : %s >' % (a, ma, arrow, mb, b, name))
-    if subset is None:
-        L.append("Werkstattbetrieb -[hidden]right- Kunde")
-        L.append("Reklamation -[hidden]down- AuftragStatus")
+    L += ["Werkstattbetrieb -[hidden]right- Kunde", "Reklamation -[hidden]down- AuftragStatus"]
     L.append("@enduml")
     return "\n".join(L) + "\n"
-
-
-FOCUS = {
-    "klassen-fokus-1-sofortdiagnose": ("cd : Fokus 1 – Kundenkontakt und KI-Sofortdiagnose",
-        ["Kunde", "Voranmeldung", "Medienanhang", "KIDiagnosevorschlag", "Kostenvoranschlag", "ErsatzteilReservierung", "Filiale", "Reparaturauftrag", "Ersatzteil"]),
-    "klassen-fokus-2-auftrag": ("cd : Fokus 2 – Auftragsabwicklung",
-        ["Kunde", "Techniker", "Reparaturauftrag", "Geraet", "Fehlerbefund", "Kostenvoranschlag", "KvaPosition", "Reparaturschritt", "Arbeitszeitbuchung", "Rechnung", "Reklamation"]),
-    "klassen-fokus-3-disposition": ("cd : Fokus 3 – Ersatzteil-Disposition",
-        ["Disponent", "Ersatzteil", "Lagerbestand", "ErsatzteilReservierung", "Lieferantenbestellung", "Bestellposition", "Lieferant", "Reparaturauftrag", "Filiale"]),
-    "klassen-fokus-4-organisation": ("cd : Fokus 4 – Mandant, Filialen und Rollen",
-        ["Person", "Kunde", "Mitarbeiter", "Techniker", "Servicemitarbeiter", "Disponent", "Werkstattleiter", "Werkstattbetrieb", "Filiale"]),
-}
 
 
 UC_GROUPS = [
@@ -339,7 +344,7 @@ RIGHT_ACTORS = ["Lieferant", "KIDienst"]
 
 def usecase_puml():
     names = dict(USECASES)
-    L = ["@startuml", "left to right direction", "skinparam packageStyle rectangle",
+    L = ["@startuml", "!pragma layout smetana", "left to right direction", "skinparam packageStyle rectangle",
          "skinparam defaultFontName Arial", "skinparam usecaseFontSize 11", "skinparam actorStyle awesome",
          "skinparam nodesep 12", "skinparam ranksep 60",
          "title ud : RepairFlow – Use-Case-Diagramm", ""]
@@ -352,7 +357,7 @@ def usecase_puml():
     for gname, ucs in UC_GROUPS:
         L.append('  rectangle "%s" {' % gname)
         for u in ucs:
-            L.append('    usecase "%s" as %s' % (names[u], u))
+            L.append('    usecase "%s\\n%s" as %s' % (u, names[u], u))
         L.append("  }")
     L.append("}")
     L.append("")
@@ -363,14 +368,17 @@ def usecase_puml():
     for aid, ucs in ACTOR_UC:
         for u in ucs:
             if aid in RIGHT_ACTORS:
-                L.append("%s -- %s" % (u, aid))
+                L.append("%s -right- %s" % (u, aid))
             else:
-                L.append("%s -- %s" % (aid, u))
+                L.append("%s -right- %s" % (aid, u))
+    L += ["Kunde -[hidden]down- Servicemitarbeiter", "Servicemitarbeiter -[hidden]down- Techniker",
+          "Techniker -[hidden]down- Disponent", "Disponent -[hidden]down- Werkstattleiter",
+          "Werkstattleiter -[hidden]down- Werkstattinhaber", "KIDienst -[hidden]down- Lieferant"]
     L.append("")
     for base, inc in INCLUDES:
         L.append("%s ..> %s : <<include>>" % (base, inc))
     for ext, base in EXTENDS:
-        L.append("%s ..> %s : <<extend>>" % (ext, base))
+        L.append("%s ..> %s : <<extend>>\\n[%s]" % (ext, base, EXTEND_CONDITIONS[(ext, base)]))
     L.append("@enduml")
     return "\n".join(L) + "\n"
 
@@ -493,12 +501,19 @@ def xmi():
     A('      </packagedElement>')
     for uid, un in USECASES:
         A('      <packagedElement xmi:type="uml:UseCase" xmi:id="uc_%s" name="%s" subject="subject_RepairFlow">' % (uid, escape(un)))
+        for ext, base in EXTENDS:
+            if base == uid:
+                A('        <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="ep_%s_%s" name="%s"/>' % (base, ext, escape(EXTEND_CONDITIONS[(ext, base)])))
         for base, inc in INCLUDES:
             if base == uid:
                 A('        <include xmi:type="uml:Include" xmi:id="%s" addition="uc_%s"/>' % (nid("inc"), inc))
         for ext, base in EXTENDS:
             if ext == uid:
-                A('        <extend xmi:type="uml:Extend" xmi:id="%s" extendedCase="uc_%s"/>' % (nid("ext"), base))
+                A('        <extend xmi:type="uml:Extend" xmi:id="%s" extendedCase="uc_%s" extensionLocation="ep_%s_%s">' % (nid("ext"), base, base, ext))
+                A('          <condition xmi:type="uml:Constraint" xmi:id="%s">' % nid("guard"))
+                A('            <specification xmi:type="uml:LiteralString" xmi:id="%s" value=%s/>' % (nid("spec"), quoteattr(EXTEND_CONDITIONS[(ext, base)])))
+                A('          </condition>')
+                A('        </extend>')
         A('      </packagedElement>')
     for aid, ucs in ACTOR_UC:
         for u in ucs:
@@ -520,8 +535,6 @@ if __name__ == "__main__":
     os.makedirs(out, exist_ok=True)
     # Dateinamen nach Repo-Konvention (claude.readme/CLAUDE.md): kein Projekt-Präfix, PNG und PUML mit gleichem Basisnamen
     open(os.path.join(out, "klassen.puml"), "w", encoding="utf-8").write(class_puml())
-    for fn, (title, subset) in FOCUS.items():
-        open(os.path.join(out, "%s.puml" % fn), "w", encoding="utf-8").write(class_puml(subset, title))
     open(os.path.join(out, "usecase.puml"), "w", encoding="utf-8").write(usecase_puml())
     open(os.path.join(out, "modell.xmi"), "w", encoding="utf-8").write(xmi())
     print("classes:", len(CLASSES), "enums:", len(ENUMS), "associations:", len(ASSOCIATIONS), "usecases:", len(USECASES), "actors:", len(ACTORS))

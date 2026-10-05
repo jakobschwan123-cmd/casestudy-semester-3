@@ -14,6 +14,23 @@ Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Gruppentermin
 
 ## Entschieden
 
+### E-18 Ein Klassendiagramm und erneuter UML-Abgleich mit BPMN (05.10.2026)
+
+Datum: 05.10.2026 (David, auf seinen Arbeitsauftrag hin mit KI-Unterstützung umgesetzt; Teamreview über Pull Request).
+Grundlage sind die zehn vorhandenen BPMN-Dateien unter `bpmn/`. Prüfprotokoll mit Element-IDs und vollständiger Zuordnung: `doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`.
+
+- **Genau ein aktives Klassendiagramm:** `uml/klassen.puml/.png` enthält alle 27 Klassen, 7 Aufzählungen und 36 Assoziationen. Die vier Fokusdiagramme entfallen; Generator, Verweise, Doku und Folien verwenden nur das vollständige Diagramm. Historische Modelle im Archiv bleiben als Vorgeschichte erkennbar.
+- **Use Cases:** UC09 heißt „Ersatzteile disponieren und reservieren", UC14 „Auftrag fertigmelden", UC15 „Abholung und Abrechnung abwickeln". Die Kundennachricht gehört zu P08/UC15. Nacharbeitsauftrag UC03 erweitert UC16 nur bei Freigabe oder angenommenem Angebot; die bisherige unbedingte include-Beziehung entfällt. UC19 erweitert sowohl UC11 (mangelhafte Lieferung) als auch UC16 (defektes Lieferantenteil). UC10 erweitert UC09 bei Fehlteilen **oder** Nachbestellvorschlag. UC04 bleibt eigenständig: P03 hat vor der Befunderfassung keine optionale Verzweigung zur Prüfung des KI-Vorschlags. Akteure wurden an die tatsächlichen Rollen und Nachrichten in BPMN angeglichen. Stand: 19 Use Cases, 8 Akteure, 2 include, 6 bedingte extend; Bedingungen und Erweiterungspunkte auch in der XMI.
+- **SD1:** Medienqualität vor KI-Auswertung; Schleife für neue Aufnahmen mit Sieben-Tage-Abbruch; Terminablehnung und Entscheidungstimeout getrennt; Vorreservierung nur nach Bestätigung.
+- **SD2:** Positionen und Preise vor Serviceprüfung; drei Fristabläufe gemäß P04; echte Ablehnung und systemseitiger Timeout getrennt; Folgeprozesse 05 bzw. 08 als ref.
+- **SD3:** parallele Teileprüfung, Fehlteile zunächst markieren; danach Reservierungen bestätigen, Meldebestand prüfen, Reparaturbeginn ermitteln und Kunde informieren; erst anschließend Bestellung auslösen.
+- **SD4:** keine Kundennachricht und keine Rechnung; abgeschlossene Reparaturschritte sowie bestandene Endkontrolle als Bedingungen; Nacharbeit mit erneuter Endkontrolle und Verweis auf Nachtrags-KVA in UC13.
+- **SD5:** Techniker für Mangelprüfung und Anlage der Nacharbeit; Geräteannahme, Angebotsablehnung ohne neuen Auftrag, Reparatur, gegebenenfalls Retoure und in allen Pfaden Abholung vor Reklamationsabschluss.
+- **SD6:** Bestellbedarf aus P05 bündeln; Lieferant wählen, Bestellung anlegen, gegebenenfalls freigeben; nur bestätigte und lieferbare Bestellung setzt „Teile bestellt". Storno, alternative Lieferanten, Verzögerungsinformation und Wareneingang/Retoure mit bedarfsabhängiger Neubestellung sind abgebildet. Der bislang gezeigte Pfad „offene Bestellung ergänzen" entfällt, da P06 ihn nicht enthält.
+- **Operationsmodell:** benötigte Operationen für Mediennachreichung, KI-Auswertung, Erinnerung, Fehlteile, Reservierungsbestätigung, Reparaturbeginn, Endkontrolle, Bestellbestätigung und Reklamationsablehnung ergänzt; PNGs und XMI aus den Quellen neu erzeugt. `tools/check_uml.py` prüft den Generatorstand, Operationsaufrufe, Statuswerte, BPMN-Anker und XMI-Referenzen.
+
+Die Änderungen setzen den Arbeitsauftrag um. Ein Import und das Speichern des verpflichtenden `.vpp`-Projekts in Visual Paradigm sowie das Teamreview bleiben gesonderte Arbeitsschritte; dieser Abgleich bestätigt sie nicht.
+
 ### E-17 Korrekturen nach dem Komplettcheck (05.10.2026)
 
 Datum: 05.10.2026 (Kilian, Prüfung mit KI-Unterstützung gegen Ablauf und Vorlesung; Bestätigung durch die Gruppe siehe E-07). Vollständige Befundliste: `doku/protokolle/2026-10-05-komplettcheck.md`.
@@ -137,4 +154,3 @@ Auswirkung (umgesetzt): Der Merge auf `main` ist erledigt; Kilians V1-Dateien (`
 Datum: 02.09.2026 (Kilian in V2, von Claude/David in Doku Kapitel 4 übernommen; Termine vorläufig, siehe E-13).
 Entscheidung: Scrum mit Product Owner (Adrian), Scrum Master (Kilian) und Projektleitung (Nina) als Ansprechpartnerin des Dozenten; Sprint-Takt = Gruppentermine. Ursprünglich Sprint 0 (02.09.) bis Sprint 3; durch E-13 ersetzt durch die Zählung der Doku (Kapitel 4.2): Sprint 1 (02.09.) Setup und Konventionen, Sprint 2 (03.09.–05.10.) Korrekturen und Verhalten, Sprint 3 (06.10.–15.10.) Fertigstellung, Sprint 4 (16.10.–22.10.) Freeze und Generalprobe; Abschluss 27.10. Präsentation und 13.11. Abgabe. Trello-Board „RepairFlow – Fallstudie SYAN WWI25B4 G1" mit einer Liste je Termin (02.09., 05.10., 15.10., 22.10., 27.10., 13.11.) sowie Product Backlog, In Arbeit, Review/QA, Done.
 Begründung: Der Ablauf verlangt ein Kapitel Projektmanagement; Kilians Plan ist konkret und passt zu den Rollen.
-

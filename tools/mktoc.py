@@ -1,10 +1,14 @@
 """2-pass TOC: build docx (pass 1, entries only) -> PDF -> page numbers -> toc.json -> build again."""
-import json, subprocess, re, sys, os
+import json, subprocess, re, sys, os, tempfile
+from pathlib import Path
 docx = sys.argv[1]; out_toc = sys.argv[2]
-entries = json.load(open('toc_entries.json'))
-subprocess.run(['soffice','--headless','--convert-to','pdf','--outdir','/tmp/tocpass', docx], check=True, capture_output=True)
-pdf = '/tmp/tocpass/' + os.path.basename(docx).replace('.docx','.pdf')
-txt = subprocess.run(['pdftotext','-layout',pdf,'-'], capture_output=True, text=True).stdout
+entries = json.load(open(Path(docx).parent / 'toc_entries.json'))
+with tempfile.TemporaryDirectory(prefix='repairflow-toc-') as build:
+    office = os.environ.get('REPAIRFLOW_SOFFICE', 'soffice')
+    subprocess.run([office, '-env:UserInstallation=' + Path(build, 'profile').as_uri(), '--headless',
+                    '--convert-to', 'pdf', '--outdir', build, docx], check=True, capture_output=True)
+    pdf = str(Path(build, Path(docx).with_suffix('.pdf').name))
+    txt = subprocess.run(['pdftotext','-layout',pdf,'-'], check=True, capture_output=True, text=True).stdout
 pages = txt.split('\f')
 # page numbering starts at 1 on the TOC page (section 2); title page is unnumbered
 # find TOC page index: first page that contains 'Inhaltsverzeichnis'

@@ -7,8 +7,8 @@ const ReactDOMServer = require('react-dom/server');
 const sharp = require('sharp');
 const Fa = require('react-icons/fa');
 
-const HERE = __dirname;
-const STATS = JSON.parse(fs.readFileSync(path.join(HERE, 'process_stats.json'), 'utf8'));
+const HERE = path.resolve(__dirname, '..');
+const STATS = JSON.parse(fs.readFileSync(path.join(HERE, 'tools', 'process_stats.json'), 'utf8'));
 const TOTAL_ACT = STATS.reduce((a, s) => a + s.activities, 0);
 const TOTAL_AUTO = STATS.reduce((a, s) => a + s.auto, 0);
 
@@ -23,7 +23,7 @@ async function icon(name, color, size = 256) {
   return 'image/png;base64,' + buf.toString('base64');
 }
 function imgSize(file) {
-  const dims = JSON.parse(fs.readFileSync(path.join(HERE, 'imgdims.json'), 'utf8'));
+  const dims = JSON.parse(fs.readFileSync(path.join(HERE, 'tools', 'imgdims.json'), 'utf8'));
   return dims[path.relative(HERE, path.resolve(HERE, file))] || dims[path.resolve(HERE, file)];
 }
 function fit(file, maxW, maxH) {
@@ -129,7 +129,7 @@ function fit(file, maxW, maxH) {
       'Zielkunden: unabhängige Werkstätten und kleine Ketten mit 2 bis 10 Filialen im DACH-Raum.',
       'Geschäftsmodell: monatliches Abo je Filiale, Stufen Basis und Pro (Disposition und KI-Sofortdiagnose).',
       'Pilotkunde FixWerk GmbH: an ihren Prozessen haben wir die Plattform entworfen.'], 0.5, 1.15, 4.3, 3.9, 13);
-    picture(s, 'uml2/systemkontext.png', 5.0, 1.15, 4.5, 3.6, 'Systemkontext: Plattform, Mandant, Kunde, Lieferant, KI-Dienst');
+    picture(s, 'uml/systemkontext.png', 5.0, 1.15, 4.5, 3.6, 'Systemkontext: Plattform, Mandant, Kunde, Lieferant, KI-Dienst');
   }
   // ---------------- 5 Markt
   {
@@ -143,7 +143,7 @@ function fit(file, maxW, maxH) {
   // ---------------- 6 Zustandsautomat
   {
     const s = base('Der Reparaturauftrag als Zustandsautomat', { speaker: 'Adrian', notes: 'Der Automat ist der gemeinsame Nenner aller Modelle: BPMN-Prozesse sind seine Übergänge, das Klassendiagramm führt ihn als Attribut status, die Sequenzdiagramme markieren die Wechsel.' });
-    picture(s, 'uml2/zustand-reparaturauftrag.png', 0.5, 1.05, 4.2, 4.0);
+    picture(s, 'uml/zustand-reparaturauftrag.png', 0.5, 1.05, 4.2, 4.0);
     bulletsBox(s, ['angenommen → in Diagnose → KVA offen → freigegeben | abgelehnt → Teile bestellt → in Reparatur → fertig → abgeholt',
       'Die zehn BPMN-Prozesse sind die Übergänge dieses Automaten.',
       'Das Klassendiagramm führt ihn als Attribut status : AuftragStatus.',
@@ -167,18 +167,18 @@ function fit(file, maxW, maxH) {
     card(s, 5.15, 1.1, 4.35, 1.4, 'FaBolt', 'Automatisierung als Aktivitätstyp', 'Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive = Nachricht, User Task = Mensch mit RepairFlow, Manual = außerhalb.');
     card(s, 0.5, 2.65, 4.35, 1.4, 'FaExchangeAlt', 'Nachrichtenflüsse und Daten', 'Kommunikation mit Kunde und Lieferant nur als Nachrichtenfluss. Datenobjekte tragen Klassennamen mit Zustand, z. B. Reparaturauftrag [freigegeben].');
     card(s, 5.15, 2.65, 4.35, 1.4, 'FaClipboardCheck', 'Ein Start, ein Ende, Linter sauber', 'Je Prozess ein Start- und ein Endereignis. Camunda-8-Anreicherung: Task-Definitionen, Subscriptions, Timer, FEEL-Bedingungen. Camunda-Linter: 0 Befunde.');
-    picture(s, 'pres/crop-05-links.png', 0.5, 4.15, 9.0, 0.78, 'Ausschnitt Prozess 05: paralleler Mehrfach-Teilprozess je Ersatzteil');
+    picture(s, 'tools/pres/crop-05-links.png', 0.5, 4.15, 9.0, 0.78, 'Ausschnitt Prozess 05: paralleler Mehrfach-Teilprozess je Ersatzteil');
   }
   // ---------------- 9 Prozess 01
   {
     const s = base('Prozess 01: KI-Sofortdiagnose und Voranmeldung', { speaker: 'Maxi', notes: 'Message-Start aus der App, Voranmeldung wird sofort angelegt, Medienprüfung mit Rückfrage (Antwort oder 7-Tage-Timer), KI als Business Rule Task, Vorab-KVA, Verfügbarkeit über alle Filialen, Terminvorschlag, ereignisbasiertes Gateway: Bestätigung, Ablehnung oder 7-Tage-Timer.' });
-    picture(s, 'pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Aufnahme und Anfrage, Voranmeldung anlegen, Medienprüfung mit Rückfrage an den Kunden, KI-Diagnosevorschlag, Vorab-KVA');
+    picture(s, 'tools/pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Aufnahme und Anfrage, Voranmeldung anlegen, Medienprüfung mit Rückfrage an den Kunden, KI-Diagnosevorschlag, Vorab-KVA');
     bulletsBox(s, ['Kunde: Foto, Video oder Ton aufnehmen und in der App senden; RepairFlow legt daraus sofort die Voranmeldung an', 'Rückfrage bei nicht auswertbaren Medien: neue Aufnahme oder nach 7 Tagen verwerfen', 'KI-Diagnosevorschlag als Geschäftsregel-Aktivität, danach Vorab-KVA, Verfügbarkeitsprüfung und Terminvorschlag', 'Warten auf Bestätigung (Vorreservierung), Ablehnung oder 7-Tage-Timer (Voranmeldung verwerfen)'], 0.5, 4.15, 9, 1.0, 11);
   }
   // ---------------- 10 Prozess 04
   {
     const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maxi', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden; nach der dritten Erinnerung gilt der KVA als abgelehnt. Abgelehnte Aufträge gehen über Prozess 08 mit Diagnosepauschale zur Abholung.' });
-    picture(s, 'pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Kunde prüft und entscheidet, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife mit Ausstieg nach der dritten Erinnerung');
+    picture(s, 'tools/pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Kunde prüft und entscheidet, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife mit Ausstieg nach der dritten Erinnerung');
     bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage verstrichen (Erinnerung, höchstens dreimal)', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) auf; Ablehnung setzt den Auftrag auf „abgelehnt" und ruft Prozess 08 (Abholung mit Diagnosepauschale) auf'], 0.5, 4.1, 9, 1.0, 11);
   }
   // ---------------- 11 Automatisierung + KI
@@ -200,17 +200,17 @@ function fit(file, maxW, maxH) {
   // ---------------- 12 Use Cases
   {
     const s = base('Use-Case-Diagramm: was RepairFlow leistet', { speaker: 'Kilian', notes: '19 Use Cases in vier Bereichen, acht Akteure (je Lane ein Akteur). include = immer, extend = bedingt.' });
-    picture(s, 'uml2/usecase.png', 0.4, 1.05, 5.6, 4.1);
+    picture(s, 'uml/usecase.png', 0.4, 1.05, 5.6, 4.1);
     bulletsBox(s, ['19 Use Cases in vier Bereichen: Kundenportal, Auftrag und Werkstatt, Ersatzteil-Disposition, Administration',
       'Primäre Akteure: Kunde, Servicemitarbeiter, Techniker, Disponent, Werkstattleiter, Werkstattinhaber',
       'Sekundär und extern: Lieferant, KI-Diagnosedienst',
-      '«include» für Pflicht-Teilschritte, z. B. Ersatzteil reservieren → Ersatzteil-Verfügbarkeit prüfen',
+      '«include» für Pflicht-Teilschritte, z. B. Ersatzteile disponieren → Ersatzteil-Verfügbarkeit prüfen',
       '«extend» für bedingtes Verhalten, z. B. Voranmeldung bestätigen → Sofortdiagnose anfordern'], 6.2, 1.2, 3.3, 3.9, 11.5);
   }
   // ---------------- 13 Klassen
   {
-    const s = base('Klassendiagramm: 27 Klassen, ein Zustandsautomat', { speaker: 'Kilian', notes: 'Entwurfsentscheidungen: Reparaturauftrag als Aggregatwurzel, Lagerbestand je Filiale, Reservierung als eigene Klasse, Werkstattbetrieb als Mandant, Rollen als Unterklassen von Mitarbeiter, drei KI-Klassen.' });
-    picture(s, 'uml2/klassen-fokus-1-sofortdiagnose.png', 0.4, 1.05, 5.6, 3.75, 'Ausschnitt: Kundenkontakt und KI-Sofortdiagnose (vollständiges Diagramm in Anhang C der Dokumentation)');
+    const s = base('Klassendiagramm: ein vollständiges Modell', { speaker: 'Kilian', notes: 'Entwurfsentscheidungen: Reparaturauftrag als Aggregatwurzel, Lagerbestand je Filiale, Reservierung als eigene Klasse, Werkstattbetrieb als Mandant, Rollen als Unterklassen von Mitarbeiter, drei KI-Klassen.' });
+    picture(s, 'uml/klassen.png', 0.4, 1.05, 5.6, 3.75, 'Ein vollständiges Diagramm mit 27 Klassen (Anhang C der Dokumentation)');
     bulletsBox(s, ['Reparaturauftrag als Aggregatwurzel: Befund und Reparaturschritte sind Kompositionen; KVA und Gerät sind nur zugeordnet (Vorab-KVA entsteht vor dem Auftrag)',
       'Lagerbestand als eigene Klasse zwischen Ersatzteil und Filiale: nur so geht filialübergreifende Verfügbarkeit',
       'ErsatzteilReservierung mit eigenem Lebenszyklus: vorreserviert, reserviert, entnommen, storniert',
@@ -219,15 +219,15 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 14 SD1
   {
-    const s = base('Sequenzdiagramm SD1: Sofortdiagnose anfordern', { speaker: 'Kilian', notes: 'Lebenslinien sind Klassen, Botschaften sind Operationen. Fragmente: loop je Medienanhang, alt auswertbar/nicht, loop je Teil und Filiale, alt Bestätigung/Timer, opt Vorreservierung. Die Voranmeldung entsteht wie in Prozess 01 direkt mit der Anfrage.' });
-    picture(s, 'uml2/sequenz-01-sofortdiagnose.png', 0.4, 1.05, 6.4, 4.1);
-    bulletsBox(s, ['Voranmeldung lässt jeden Medienanhang analysieren, der KI-Diagnosedienst wertet aus (loop)', 'alt: Medien nicht auswertbar → Rückfrage; sonst KIDiagnosevorschlag und vorläufiger KVA', 'loop je Ersatzteil und Filiale über Lagerbestand', 'alt: Kunde bestätigt → opt Vorreservierung; sonst Timer → verwerfen', 'Alle Botschaften sind Operationen des Klassendiagramms'], 7.0, 1.2, 2.5, 3.9, 10.5);
+    const s = base('Sequenzdiagramm SD1: Sofortdiagnose anfordern', { speaker: 'Kilian', notes: 'BPMN 01: Medien nachreichen oder nach sieben Tagen verwerfen; KI erst nach Medienprüfung. Bestätigung, Terminablehnung und Timeout getrennt. Klassenbotschaften sind Operationen.' });
+    picture(s, 'uml/sequenz-01-sofortdiagnose.png', 0.4, 1.05, 6.4, 4.1);
+    bulletsBox(s, ['Medienqualität prüfen; nur auswertbare Medien an den KI-Dienst senden', 'Rückfrage mit Nachreichung; nach 7 Tagen ohne neue Aufnahme abbrechen', 'loop je Ersatzteil und Filiale über Lagerbestand', 'Bestätigung → verfügbare Teile vorreservieren; Ablehnung oder 7-Tage-Timer → verwerfen', 'Klassenbotschaften verwenden Operationen des Klassendiagramms'], 7.0, 1.2, 2.5, 3.9, 10.5);
   }
   // ---------------- 15 SD3
   {
-    const s = base('Sequenzdiagramm SD3: Ersatzteil filialübergreifend reservieren', { speaker: 'Jakob', notes: 'Fachlicher Mehrwert der Disposition. Verschachteltes alt, loop über die anderen Filialen, opt Nachbestellvorschlag.' });
-    picture(s, 'uml2/sequenz-03-reservierung.png', 0.4, 1.05, 6.4, 4.1);
-    bulletsBox(s, ['Erst der eigene Lagerbestand, dann loop über die anderen Filialen', 'Verschachteltes alt: lokal reservieren, extern reservieren mit Umlagerung oder ref auf UC10 Lieferantenbestellung (→ Prozess 06)', 'opt: Meldebestand unterschritten → ref auf UC12 Nachbestellvorschlag', 'Reservierung erhöht nur den reservierten Bestand, abgebucht wird erst bei der Entnahme'], 7.0, 1.2, 2.5, 3.9, 10.5);
+    const s = base('Sequenzdiagramm SD3: Ersatzteile disponieren', { speaker: 'Jakob', notes: 'BPMN 05: parallele Teileprüfung; Fehlteile zunächst markieren. Reservierungen bestätigen, Meldebestand prüfen, Kunde informieren, erst danach bestellen.' });
+    picture(s, 'uml/sequenz-03-reservierung.png', 0.4, 1.05, 6.4, 4.1);
+    bulletsBox(s, ['Erst der eigene Lagerbestand, dann loop über die anderen Filialen', 'Je Teil: lokal reservieren, Umlagerung oder Fehlteil markieren; parallele Teileprüfung', 'Danach Reservierungen bestätigen und Meldebestand prüfen (UC12)', 'Kunde über Reparaturbeginn informieren; erst danach Bestellung bei Bedarf (UC10)'], 7.0, 1.2, 2.5, 3.9, 10.5);
   }
   // ---------------- 16 Vorgehen & PM
   {
@@ -285,7 +285,7 @@ function fit(file, maxW, maxH) {
     s.addText('Zuordnung nach der Rollenverteilung vom Gruppentermin 02.09.2026.', { x: 0.5, y: 4.5, w: 9, h: 0.3, fontFace: FONT, fontSize: 10, italic: true, color: C.grey, isTextBox: true, margin: 0 });
   }
 
-  const out = path.join(HERE, 'praesi2', 'Abschlusspraesentation.pptx');
+  const out = path.join(HERE, 'praesi', 'Abschlusspraesentation.pptx');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   await pres.writeFile({ fileName: out });
   console.log('written', out, 'slides', slideNo);

@@ -26,7 +26,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 |----------|-----------|-----|-----|
 | BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 12,5; Linter und Layout-Prüfung 0 Befunde) | `bpmn/p01-…p10-*.bpmn` |
 | Use-Case-Diagramm | ≥ 10 Use Cases | 19 (8 Akteure) | `uml/usecase.puml` |
-| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | `uml/klassen.puml`, Ausschnitte `klassen-fokus-1..4-*.puml` |
+| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `uml/klassen.puml` |
 | Sequenzdiagramme | 5 | 6 | `uml/sequenz-01..06-*.puml` |
 | Zustandsdiagramm (Zusatz) | – | 1 | `uml/zustand-reparaturauftrag.puml` |
 
@@ -35,7 +35,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 - **Namens-Konsistenz über alle Artefakte.** Rollen/Pools, Klassennamen,
   Use-Case-Namen und Statuswerte sind über Doku, BPMN, Use-Case-, Klassen- und
   Sequenzdiagramme **wortgleich** zu halten. Single Source of Truth für Klassen,
-  Operationen und Use Cases ist `tools/umlmodel.py` (erzeugt `klassen*.puml`,
+  Operationen und Use Cases ist `tools/umlmodel.py` (erzeugt ausschließlich `klassen.puml`,
   `usecase.puml`, `modell.xmi`); für die Prozesse `tools/diagrams.py`. Änderungen
   dort zuerst, dann Bilder, Doku und Folien nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
@@ -99,3 +99,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   Nacharbeit gehört zum Termin, an dem die Aufgabe gestellt wurde. Termin-Nummern
   und -Daten stehen in der Termin-Tabelle in [`README.md`](README.md); bei einem
   neuen Termin dort zuerst eine Zeile ergänzen.
+
+## UML-Abgleich E-18 (05.10.2026)
+
+Aktiv gibt es genau ein Klassendiagramm (`uml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Prüfprotokoll: `doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`; Strukturprüfung: `python3 tools/check_uml.py`.
