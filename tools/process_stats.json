@@ -209,24 +209,25 @@
    "Werkstattbetrieb",
    "Kunde"
   ],
-  "activities": 10,
+  "activities": 13,
   "kinds": {
-   "service": 2,
+   "service": 4,
    "user": 5,
    "manual": 2,
-   "send": 1
+   "send": 1,
+   "call": 1
   },
-  "auto": 3,
+  "auto": 5,
   "kunde_activities": 2,
   "kunde_kinds": {
    "user": 1,
    "send": 1
   },
   "msgflows": 2,
-  "data": 6,
+  "data": 8,
   "start": "Ersatzteile disponiert",
   "end": "Reparatur abgeschlossen",
-  "doc": "Der Techniker entnimmt die reservierten Teile und arbeitet die Reparaturschritte mit Zeiterfassung ab. Zusatzbefunde fuehren zu einem Nachtrags-KVA, den der Kunde freigeben muss (ohne Antwort innerhalb von drei Tagen gilt er als abgelehnt). Nach Endkontrolle wird der Auftrag auf 'fertig' gesetzt. Auch Nacharbeiten aus Prozess 09 laufen ueber diesen Prozess."
+  "doc": "Der Techniker entnimmt die reservierten Teile und arbeitet die Reparaturschritte mit Zeiterfassung ab. Zusatzbefunde fuehren zu einem Nachtrags-KVA, den der Kunde freigeben muss; die Teile fuer einen freigegebenen Nachtrag werden ueber Prozess 05 disponiert und entnommen. Ohne Antwort innerhalb von drei Tagen gilt der Nachtrag als abgelehnt. Nach Endkontrolle wird der Auftrag auf 'fertig' gesetzt; scheitert auch die zweite Nacharbeit, wird die Reparatur abgebrochen und der Auftrag auf 'abgelehnt' gesetzt. Auch Nacharbeiten aus Prozess 09 laufen ueber diesen Prozess."
  },
  {
   "num": "08",
@@ -241,12 +242,12 @@
    "Werkstattbetrieb",
    "Kunde"
   ],
-  "activities": 15,
+  "activities": 17,
   "kinds": {
    "service": 7,
    "send": 4,
-   "manual": 2,
-   "user": 2
+   "user": 4,
+   "manual": 2
   },
   "auto": 11,
   "kunde_activities": 5,
@@ -258,7 +259,7 @@
   "data": 7,
   "start": "Gerät abholbereit",
   "end": "Auftrag abgeschlossen",
-  "doc": "Sobald ein Geraet abholbereit ist (repariert, abgelehnt oder nach Nacharbeit), erstellt RepairFlow die Rechnung aus KVA und Arbeitszeiten bzw. ueber die Diagnosepauschale (kostenfreie Nacharbeit ohne Rechnung) und benachrichtigt den Kunden; nach der dritten Erinnerung wird eine Lagergebuehr berechnet. Bei der Abholung wird die Zahlung erfasst (bar/Karte sofort, auf Rechnung mit Zahlungsziel und Mahnung), das Geraet uebergeben und der Auftrag geschlossen."
+  "doc": "Sobald ein Geraet abholbereit ist (repariert, abgelehnt oder nach Nacharbeit), erstellt RepairFlow die Rechnung aus KVA und Arbeitszeiten bzw. ueber die Diagnosepauschale (kostenfreie Nacharbeit ohne Rechnung) und benachrichtigt den Kunden; nach der dritten Erinnerung wird eine Lagergebuehr berechnet, bleibt auch die vierte ohne Abholung, wird die Verwertung des Geraets eingeleitet. Bei der Abholung wird die Zahlung erfasst (bar/Karte sofort, auf Rechnung mit Zahlungsziel, bis zu drei Mahnungen, danach Inkasso), das Geraet uebergeben und der Auftrag geschlossen."
  },
  {
   "num": "09",

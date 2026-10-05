@@ -108,7 +108,7 @@ Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `tools/umlmodel.py`
 
 | Artefakt | Stand | Nächster Schritt |
 |---|---|---|
-| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 126 Aktivitäten im Werkstatt-Pool (Ø 12,6), 61 % automatisiert, Kunde mit eigenem Ablauf (E-16, +26 Aktivitäten), alle Rückgaben über Prozess 08 (E-17), Camunda-Linter und bpmnlint ohne Befund, PNG je Datei | Maxi (Prüfung verteilt laut Sprint-1-Protokoll): im Camunda Modeler öffnen, Problems-Panel prüfen, speichern; Camunda Cloud |
+| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 131 Aktivitäten im Werkstatt-Pool (Ø 13,1), 60 % automatisiert, Kunde mit eigenem Ablauf (E-16, +26 Aktivitäten), alle Rückgaben über Prozess 08 (E-17), Camunda-Linter und bpmnlint ohne Befund, PNG je Datei | Maxi (Prüfung verteilt laut Sprint-1-Protokoll): im Camunda Modeler öffnen, Problems-Panel prüfen, speichern; Camunda Cloud |
 | Use-Case-Diagramm `uml/usecase.*` | 19 UCs, 8 Akteure, 2 include, 6 bedingte extend, auch in `uml/modell.xmi` | Kilian: XMI in VP importieren, Diagramm anlegen, ins VP-Repository committen |
 | Klassendiagramm `uml/klassen.*` (genau ein vollständiges Diagramm) | 27 Klassen (mit Mitarbeiter-Hierarchie aus V2 und Servicemitarbeiter), 7 Enums, 36 Assoziationen | Kilian: in VP anlegen (Anleitung `uml/README.md`) |
 | Sequenzdiagramme `uml/sequenz-01…06.*` | 6 Stück; Klassenbotschaften verwenden Operationen der Empfängerklasse (erneut am 05.10. gegen BPMN abgeglichen, E-18) | Kilian: in VP als Unterdiagramme der Use Cases zeichnen |

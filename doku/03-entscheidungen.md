@@ -6,7 +6,7 @@ Jede Entscheidung, die mehr als eine Person betrifft, kommt hier rein: was entsc
 
 ### E-07 Bestätigung von E-02, E-03, E-05 und E-11 durch die Gruppe
 
-David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur (E-08, ersetzt durch E-11) festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, die Korrekturen aus E-15, der ausmodellierte Kunden-Pool aus E-16 und die Korrekturen des Komplettchecks aus E-17 (Abholung über Prozess 08, Schleifen-Ausstiege, Lagergebühr und Mahnung, Akteur Servicemitarbeiter, UC19 Retoure) sowie der UML-Abgleich aus E-18 und die Überarbeitung von P05 und P06 aus E-19.
+David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur (E-08, ersetzt durch E-11) festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, die Korrekturen aus E-15, der ausmodellierte Kunden-Pool aus E-16 und die Korrekturen des Komplettchecks aus E-17 (Abholung über Prozess 08, Schleifen-Ausstiege, Lagergebühr und Mahnung, Akteur Servicemitarbeiter, UC19 Retoure) sowie der UML-Abgleich aus E-18, die Logik-Korrekturen in P07/P08 aus E-19 und die Überarbeitung von P05 und P06 aus E-20.
 
 ### E-14 Bestätigung durch den Dozenten
 
@@ -14,7 +14,7 @@ Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Gruppentermin
 
 ## Entschieden
 
-### E-19 Überarbeitung von Prozess 05 und 06 (05.10.2026)
+### E-20 Überarbeitung von Prozess 05 und 06 (05.10.2026)
 
 Datum: 05.10.2026 (David, umgesetzt mit KI-Unterstützung in `tools/diagrams.py`, nur `p05` und `p06` neu erzeugt; Bestätigung durch die Gruppe siehe E-07).
 Entscheidung und Auswirkung:
@@ -25,9 +25,22 @@ Entscheidung und Auswirkung:
 - **P06 Ersatzlieferung prüfen:** Nach der Retoure (P10) wird eine Ersatzlieferung erst geprüft („Ersatzlieferung prüfen"), bevor die Teile zugeordnet werden (Befund B12, P06-Teil). Der P10-Teil von B12 („Ersatzlieferung buchen" ohne Empfang) ist offen.
 - **P06 Benennung:** „Liefertermin hinterlegen und Status 'Teile bestellt' setzen" heißt „Liefertermin hinterlegen"; der Statuswechsel steht im Datenobjekt „Reparatur-auftrag [Teile bestellt]".
 - **UML nachgezogen:** SD3 – Reparaturbeginn und Kundeninformation durch den Servicemitarbeiter statt Techniker, Bestellung nur „opt Fehlteile vorhanden", Hinweis zum Nachbestellvorschlag, BPMN-Anker `GW05_Fehlteile`/`S05_ResAndere`. SD6 – Vorbedingung, Timeout der Auftragsbestätigung, Mahnung, Prüfung der Ersatzlieferung, BPMN-Anker auf die neuen Elemente. Use Cases (`tools/umlmodel.py`, neu erzeugt): Servicemitarbeiter statt Techniker an UC09; extend UC10 → UC09 mit Bedingung „Fehlteile vorhanden". Texte in `tools/doc.js` und `tools/pres.js` angepasst. `tools/check_uml.py` ohne Befund (109 BPMN-Anker).
-Kennzahlen (mit `tools/mkstats.py`): 126 Aktivitäten im Werkstatt-Pool (Ø 12,6), 77 automatisiert (61 %), 26 Aktivitäten beim Kunden, 40 Nachrichtenflüsse, 58 Datenobjekte und -speicher. Layout-Prüfung 0 Befunde.
+Kennzahlen nach E-19 und E-20 zusammen (mit `tools/mkstats.py`): 131 Aktivitäten im Werkstatt-Pool (Ø 13,1), 79 automatisiert (60 %), 26 Aktivitäten beim Kunden, 40 Nachrichtenflüsse, 60 Datenobjekte und -speicher. Layout-Prüfung 0 Befunde.
 Noch offen: `@camunda/linting`/`bpmnlint` für P05/P06; PNG-Export von `p05`/`p06` (bpmn-js) sowie `sequenz-03`, `sequenz-06` und `usecase` (PlantUML); danach Doku und Folien neu erzeugen (Kennzahlen, Texte). Auf diesem Rechner fehlten Node.js und ein lauffähiges Java.
 Begründung: Fachliche Lücke (Reparatur wartete auf Lagernachschub), Warteschritte ohne Ausstieg, Konsistenz mit P06 (Kundeninfo in Service / Annahme) und Vorlesung (4-14, 4-21, 4-36, 4-64).
+
+### E-19 Logikfehler in Prozess 07 und 08 (05.10.2026)
+
+Datum: 05.10.2026 (Jakob, Prüfung mit KI-Unterstützung; Bestätigung durch die Gruppe siehe E-07).
+Befund: P08 hatte zwei Warteschleifen ohne Ausstieg (Abhol-Erinnerung mit wiederholter Lagergebühr, Mahnung), entgegen E-17; der Nachrichtenfluss „Mahnung" endete an der Sende-Aktivität „Rechnungsbetrag überweisen" des Kunden. In P07 gab es für einen freigegebenen Nachtrag keine Disposition der zusätzlichen Ersatzteile, und der Nachtrag bekam bei Ablehnung oder Timeout keinen KvaStatus.
+Entscheidung und Auswirkung (umgesetzt in `tools/diagrams.py`, BPMN, PNG, ZIP und `tools/process_stats.json` neu erzeugt):
+- **P07:** Freigegebener Nachtrag → Call Activity „05 Ersatzteile disponieren" → zurück vor „Reservierte Ersatzteile entnehmen". Ablehnung und 3-Tage-Timer laufen über „Nachtrag auf 'abgelehnt' setzen" (Datenobjekt „Kosten-voranschlag [abgelehnt]") in die Endkontrolle.
+- **P08 Abholung:** Gateway „Anzahl Erinnerungen?": < 3 erneut benachrichtigen, = 3 Lagergebühr aufnehmen und benachrichtigen, > 3 „Verwertung des Geräts einleiten". Die Lagergebühr fällt damit nur einmal an.
+- **P08 Zahlung:** Gateway „Dritte Mahnung erfolglos?" nach dem 14-Tage-Timer: nein → Mahnung senden, ja → „Forderung an Inkasso übergeben". Verwertung und Inkasso enden über Merges im einzigen Endereignis „Auftrag abgeschlossen" (Konvention aus E-15). Die Mahnung geht als Nachrichtenfluss an den Kunden-Pool, da der Kunde sie zu keinem festen Zeitpunkt seines Ablaufs erhält.
+- **P07 Nacharbeit:** Die Schleife Endkontrolle → Nacharbeit war unbegrenzt. Jetzt prüft „Zweite Nacharbeit erfolglos?“: nein → Nacharbeit, ja → „Auftragsstatus auf 'abgelehnt' setzen“ (Datenobjekt „Reparatur-auftrag [abgelehnt]“), danach über einen Merge zum einzigen Ende; die Rückgabe läuft wie bei jedem abgelehnten Auftrag über Prozess 08. Zustandsdiagramm: neuer Übergang in Reparatur → abgelehnt.
+- `tools/bpmngen.py`: Beschriftung nach links abgehender Flüsse links vom Gateway statt darüber (betrifft nur P08).
+Kennzahlen: 130 Aktivitäten im Werkstatt-Pool (Ø 13,0), 79 automatisiert (61 %), 26 beim Kunden, 39 Nachrichtenflüsse, 59 Datenobjekte und -speicher. `uml/zustand-reparaturauftrag.png` ist noch nicht neu gerendert (PlantUML fehlte). Projektdokumentation und Folien enthalten noch die Zahlen und Bilder aus E-17 und müssen neu erzeugt werden.
+Offen für die Gruppe (15.10.): Fristen (vierte Erinnerung bis zur Verwertung, drei Mahnungen bis Inkasso) und ob AuftragStatus einen Wert für verwertete Geräte braucht.
 
 ### E-18 Ein Klassendiagramm und erneuter UML-Abgleich mit BPMN (05.10.2026)
 
