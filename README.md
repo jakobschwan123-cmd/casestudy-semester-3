@@ -43,6 +43,8 @@ lösen auf.
 
 ## Nächste Schritte (bis zum Gruppentermin 15.10.2026)
 
+Die vollständige Aufgabenliste mit Verantwortlichen und Terminen steht in `doku/protokolle/2026-10-05-todo.md` (auch als Word-Datei).
+
 | # | Aufgabe | Verantwortlich | Status |
 |---|---|---|---|
 | 1 | Korrekturen vom 26.09. (E-15), 28.09. (E-16) und 05.10. (E-17) in der Gruppe bestätigen – betrifft alle BPMN und das UML-Modell; Lagergebühr/Mahnung in Prozess 08 entscheiden | alle, Abnahme Adrian | offen |

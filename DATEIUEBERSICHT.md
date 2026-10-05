@@ -71,6 +71,7 @@ Verantwortlich: **Kilian** (UML). Nächster Schritt: `UML-WWI25B4-Gruppe1.vpp` i
 | `protokolle/2026-09-02-sprint1.md` | Protokoll des ersten Gruppentermins (Entscheidungen, Aufgaben je Person, offene Punkte, Retrospektive – zwei Stellen vom Team zu füllen) |
 | `protokolle/2026-09-02-review-bpmn-09-10.md` | QM-Review BPMN 09 + 10 (Jakob), mit Nachtrag vom 26.09.2026 (p05-Befund war False Positive) |
 | `protokolle/2026-10-05-komplettcheck.md` | Komplettcheck aller Modelle und Texte vom 05.10.2026 (KI-gestützt): Befundliste mit Fundstellen, Schwere und Stand der Umsetzung (E-17) |
+| `protokolle/2026-10-05-todo.md` / `.docx` | Was die Gruppe noch tun MUSS (Stand 05.10.2026): Pflichtaufgaben mit Verantwortlichen und Terminen, Befehle zum Aktualisieren, was schon erledigt ist |
 | `qa-checkliste.md` | Definition of Done als Checkliste für BPMN, UML, Doku und Präsentation (Entwurf für Jakob, 05.10.2026) |
 
 Verantwortlich: **Claude** (Dokumanager) über Kilian/David; Kapitel 4 und Protokolle: **Kilian** (Scrum Master), Abgabe-PDF: **Nina**.
