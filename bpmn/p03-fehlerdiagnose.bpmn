@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_03" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_03">
-    <bpmn:documentation>Der Techniker prueft den KI-Diagnosevorschlag, fuehrt Funktionstest und Messung durch, dokumentiert den Fehlerbefund und legt den Ersatzteilbedarf fest. RepairFlow bewertet die Wirtschaftlichkeit der Reparatur.</bpmn:documentation>
+    <bpmn:documentation>Der Techniker prueft den KI-Diagnosevorschlag, fuehrt Funktionstest und Messung durch (bei Bedarf eine erweiterte Pruefung), dokumentiert den Fehlerbefund und legt den Ersatzteilbedarf fest. RepairFlow bewertet die Wirtschaftlichkeit der Reparatur; ist sie nicht gegeben (Totalschaden, Fehler nicht reproduzierbar), wird der Auftrag abgelehnt und ueber Prozess 08 mit Diagnosepauschale zur Abholung gebracht.</bpmn:documentation>
     <bpmn:participant id="Part_03_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_03" />
     <bpmn:participant id="Part_03_Kunde" name="Kunde" processRef="Proc_03_Kunde" />
-    <bpmn:messageFlow id="MsgFlow_03_1" name="Info Totalschaden" sourceRef="T03_Totalschaden" targetRef="K03_Start" />
+    <bpmn:messageFlow id="MsgFlow_03_1" name="Reparaturabsage (Totalschaden / kein Befund)" sourceRef="T03_Absage" targetRef="K03_Start" />
   </bpmn:collaboration>
   <bpmn:process id="Proc_03" name="03 Fehlerdiagnose" isExecutable="true">
     <bpmn:laneSet id="LaneSet_03">
       <bpmn:lane id="Lane_03_1" name="Service / Annahme">
-        <bpmn:flowNodeRef>T03_Totalschaden</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T03_Absage</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Schliessen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T03_Abholung</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_03_2" name="Techniker">
         <bpmn:flowNodeRef>Start_03</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Status</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_KI</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Merge_03</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Test</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW03_Repro</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Erweitert</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_03r</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Befund</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Teile</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Wirtschaft</bpmn:flowNodeRef>
@@ -59,34 +60,34 @@
         <bpmn:targetRef>T03_KI_prop_DataObjRef_03_2</bpmn:targetRef>
       </bpmn:dataInputAssociation>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Merge_03" name="">
-      <bpmn:incoming>Flow_03_5</bpmn:incoming>
-      <bpmn:incoming>Flow_03_10</bpmn:incoming>
-      <bpmn:outgoing>Flow_03_6</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:userTask id="T03_Test" name="Funktionstest durchführen und Messwerte erfassen">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t03_test" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_03_6</bpmn:incoming>
-      <bpmn:outgoing>Flow_03_7</bpmn:outgoing>
+      <bpmn:incoming>Flow_03_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_03_6</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="GW03_Repro" name="Fehler reproduzierbar?">
-      <bpmn:incoming>Flow_03_7</bpmn:incoming>
+      <bpmn:incoming>Flow_03_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_03_7</bpmn:outgoing>
       <bpmn:outgoing>Flow_03_8</bpmn:outgoing>
-      <bpmn:outgoing>Flow_03_9</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:manualTask id="T03_Erweitert" name="Erweiterte Prüfung durchführen">
+      <bpmn:incoming>Flow_03_8</bpmn:incoming>
+      <bpmn:outgoing>Flow_03_9</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Join_03r" name="">
+      <bpmn:incoming>Flow_03_7</bpmn:incoming>
       <bpmn:incoming>Flow_03_9</bpmn:incoming>
       <bpmn:outgoing>Flow_03_10</bpmn:outgoing>
-    </bpmn:manualTask>
+    </bpmn:exclusiveGateway>
     <bpmn:userTask id="T03_Befund" name="Fehlerbefund dokumentieren">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t03_befund" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_03_8</bpmn:incoming>
+      <bpmn:incoming>Flow_03_10</bpmn:incoming>
       <bpmn:outgoing>Flow_03_11</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="T03_Befund_out_DataObjRef_03_3">
         <bpmn:targetRef>DataObjRef_03_3</bpmn:targetRef>
@@ -112,9 +113,9 @@
       <bpmn:outgoing>Flow_03_14</bpmn:outgoing>
       <bpmn:outgoing>Flow_03_15</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="T03_Totalschaden" name="Kunde über Totalschaden informieren">
+    <bpmn:sendTask id="T03_Absage" name="Kunde über Reparaturabsage informieren">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t03_totalschaden" />
+        <zeebe:taskDefinition type="repairflow.t03_absage" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_03_15</bpmn:incoming>
       <bpmn:outgoing>Flow_03_16</bpmn:outgoing>
@@ -129,55 +130,63 @@
         <bpmn:targetRef>DataObjRef_03_4</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
+    <bpmn:callActivity id="T03_Abholung" name="08 Abholung abwickeln">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="Proc_08" propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_03_17</bpmn:incoming>
+      <bpmn:outgoing>Flow_03_18</bpmn:outgoing>
+    </bpmn:callActivity>
     <bpmn:userTask id="T03_Aufwand" name="Reparaturaufwand schätzen">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t03_aufwand" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_03_14</bpmn:incoming>
-      <bpmn:outgoing>Flow_03_18</bpmn:outgoing>
+      <bpmn:outgoing>Flow_03_19</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:serviceTask id="T03_Abschluss" name="Diagnose abschließen und KVA anstoßen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t03_abschluss" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_03_18</bpmn:incoming>
-      <bpmn:outgoing>Flow_03_19</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Join_03" name="">
-      <bpmn:incoming>Flow_03_17</bpmn:incoming>
       <bpmn:incoming>Flow_03_19</bpmn:incoming>
       <bpmn:outgoing>Flow_03_20</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Join_03" name="">
+      <bpmn:incoming>Flow_03_18</bpmn:incoming>
+      <bpmn:incoming>Flow_03_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_03_21</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="End_03" name="Diagnose abgeschlossen">
-      <bpmn:incoming>Flow_03_20</bpmn:incoming>
+      <bpmn:incoming>Flow_03_21</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_03_3" sourceRef="Start_03" targetRef="T03_Status" />
     <bpmn:sequenceFlow id="Flow_03_4" sourceRef="T03_Status" targetRef="T03_KI" />
-    <bpmn:sequenceFlow id="Flow_03_5" sourceRef="T03_KI" targetRef="Merge_03" />
-    <bpmn:sequenceFlow id="Flow_03_6" sourceRef="Merge_03" targetRef="T03_Test" />
-    <bpmn:sequenceFlow id="Flow_03_7" sourceRef="T03_Test" targetRef="GW03_Repro" />
-    <bpmn:sequenceFlow id="Flow_03_8" sourceRef="GW03_Repro" targetRef="T03_Befund" name="ja">
+    <bpmn:sequenceFlow id="Flow_03_5" sourceRef="T03_KI" targetRef="T03_Test" />
+    <bpmn:sequenceFlow id="Flow_03_6" sourceRef="T03_Test" targetRef="GW03_Repro" />
+    <bpmn:sequenceFlow id="Flow_03_7" sourceRef="GW03_Repro" targetRef="Join_03r" name="ja">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=fehlerReproduzierbar</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_03_9" sourceRef="GW03_Repro" targetRef="T03_Erweitert" name="nein">
+    <bpmn:sequenceFlow id="Flow_03_8" sourceRef="GW03_Repro" targetRef="T03_Erweitert" name="nein">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(fehlerReproduzierbar)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_03_10" sourceRef="T03_Erweitert" targetRef="Merge_03" />
+    <bpmn:sequenceFlow id="Flow_03_9" sourceRef="T03_Erweitert" targetRef="Join_03r" />
+    <bpmn:sequenceFlow id="Flow_03_10" sourceRef="Join_03r" targetRef="T03_Befund" />
     <bpmn:sequenceFlow id="Flow_03_11" sourceRef="T03_Befund" targetRef="T03_Teile" />
     <bpmn:sequenceFlow id="Flow_03_12" sourceRef="T03_Teile" targetRef="T03_Wirtschaft" />
     <bpmn:sequenceFlow id="Flow_03_13" sourceRef="T03_Wirtschaft" targetRef="GW03_Wirtschaft" />
     <bpmn:sequenceFlow id="Flow_03_14" sourceRef="GW03_Wirtschaft" targetRef="T03_Aufwand" name="ja">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=reparaturWirtschaftlich</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_03_15" sourceRef="GW03_Wirtschaft" targetRef="T03_Totalschaden" name="nein">
+    <bpmn:sequenceFlow id="Flow_03_15" sourceRef="GW03_Wirtschaft" targetRef="T03_Absage" name="nein">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(reparaturWirtschaftlich)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_03_16" sourceRef="T03_Totalschaden" targetRef="T03_Schliessen" />
-    <bpmn:sequenceFlow id="Flow_03_17" sourceRef="T03_Schliessen" targetRef="Join_03" />
-    <bpmn:sequenceFlow id="Flow_03_18" sourceRef="T03_Aufwand" targetRef="T03_Abschluss" />
-    <bpmn:sequenceFlow id="Flow_03_19" sourceRef="T03_Abschluss" targetRef="Join_03" />
-    <bpmn:sequenceFlow id="Flow_03_20" sourceRef="Join_03" targetRef="End_03" />
+    <bpmn:sequenceFlow id="Flow_03_16" sourceRef="T03_Absage" targetRef="T03_Schliessen" />
+    <bpmn:sequenceFlow id="Flow_03_17" sourceRef="T03_Schliessen" targetRef="T03_Abholung" />
+    <bpmn:sequenceFlow id="Flow_03_18" sourceRef="T03_Abholung" targetRef="Join_03" />
+    <bpmn:sequenceFlow id="Flow_03_19" sourceRef="T03_Aufwand" targetRef="T03_Abschluss" />
+    <bpmn:sequenceFlow id="Flow_03_20" sourceRef="T03_Abschluss" targetRef="Join_03" />
+    <bpmn:sequenceFlow id="Flow_03_21" sourceRef="Join_03" targetRef="End_03" />
     <bpmn:dataObjectReference id="DataObjRef_03_1" name="Reparatur-auftrag [in Diagnose]" dataObjectRef="DataObj_03_1" />
     <bpmn:dataObject id="DataObj_03_1" />
     <bpmn:dataObjectReference id="DataObjRef_03_2" name="KI-Diagnose-vorschlag" dataObjectRef="DataObj_03_2" />
@@ -186,10 +195,10 @@
     <bpmn:dataObject id="DataObj_03_3" />
     <bpmn:dataObjectReference id="DataObjRef_03_4" name="Reparatur-auftrag [abgelehnt]" dataObjectRef="DataObj_03_4" />
     <bpmn:dataObject id="DataObj_03_4" />
-    <bpmn:dataStoreReference id="DataStore_03_1" name="RepairFlow-Datenbank" />
+    <bpmn:dataStoreReference id="DataStore_03_1" name="RepairFlow-Datenbank" dataStoreRef="Store_03_1" />
   </bpmn:process>
   <bpmn:process id="Proc_03_Kunde" name="Kunde" isExecutable="false">
-    <bpmn:startEvent id="K03_Start" name="Totalschaden-Info erhalten">
+    <bpmn:startEvent id="K03_Start" name="Reparaturabsage erhalten">
       <bpmn:outgoing>Flow_03_1</bpmn:outgoing>
       <bpmn:messageEventDefinition id="K03_Start_def" messageRef="Msg_03_1" />
     </bpmn:startEvent>
@@ -197,13 +206,14 @@
       <bpmn:incoming>Flow_03_1</bpmn:incoming>
       <bpmn:outgoing>Flow_03_2</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:endEvent id="K03_End" name="Info verarbeitet">
+    <bpmn:endEvent id="K03_End" name="Absage verarbeitet">
       <bpmn:incoming>Flow_03_2</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_03_1" sourceRef="K03_Start" targetRef="K03_Planen" />
     <bpmn:sequenceFlow id="Flow_03_2" sourceRef="K03_Planen" targetRef="K03_End" />
   </bpmn:process>
-  <bpmn:message id="Msg_03_1" name="Info Totalschaden">
+  <bpmn:dataStore id="Store_03_1" name="RepairFlow-Datenbank" />
+  <bpmn:message id="Msg_03_1" name="Reparaturabsage (Totalschaden / kein Befund)">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />
     </bpmn:extensionElements>
@@ -211,16 +221,16 @@
   <bpmndi:BPMNDiagram id="Diagram_03">
     <bpmndi:BPMNPlane id="Plane_03" bpmnElement="Collab_03">
       <bpmndi:BPMNShape id="Part_03_Werkstatt_di" bpmnElement="Part_03_Werkstatt" isHorizontal="true">
-        <dc:Bounds x="120" y="360" width="2705" height="700" />
+        <dc:Bounds x="120" y="360" width="3085" height="645" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_03_1_di" bpmnElement="Lane_03_1" isHorizontal="true">
-        <dc:Bounds x="150" y="360" width="2675" height="225" />
+        <dc:Bounds x="150" y="360" width="3055" height="225" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_03_2_di" bpmnElement="Lane_03_2" isHorizontal="true">
-        <dc:Bounds x="150" y="585" width="2675" height="475" />
+        <dc:Bounds x="150" y="585" width="3055" height="420" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Part_03_Kunde_di" bpmnElement="Part_03_Kunde" isHorizontal="true">
-        <dc:Bounds x="120" y="55" width="2705" height="170" />
+        <dc:Bounds x="120" y="55" width="3085" height="170" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_03_di" bpmnElement="Start_03">
         <dc:Bounds x="227" y="704" width="36" height="36" />
@@ -234,70 +244,73 @@
       <bpmndi:BPMNShape id="T03_KI_di" bpmnElement="T03_KI">
         <dc:Bounds x="560" y="682" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Merge_03_di" bpmnElement="Merge_03">
-        <dc:Bounds x="790" y="698" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T03_Test_di" bpmnElement="T03_Test">
-        <dc:Bounds x="940" y="682" width="130" height="80" />
+        <dc:Bounds x="750" y="682" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW03_Repro_di" bpmnElement="GW03_Repro">
-        <dc:Bounds x="1170" y="698" width="50" height="50" />
+        <dc:Bounds x="980" y="698" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1120" y="664" width="150" height="27" />
+          <dc:Bounds x="930" y="664" width="150" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T03_Erweitert_di" bpmnElement="T03_Erweitert">
-        <dc:Bounds x="1320" y="798" width="130" height="80" />
+        <dc:Bounds x="1130" y="798" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_03r_di" bpmnElement="Join_03r">
+        <dc:Bounds x="1360" y="698" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T03_Befund_di" bpmnElement="T03_Befund">
-        <dc:Bounds x="1320" y="682" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T03_Teile_di" bpmnElement="T03_Teile">
         <dc:Bounds x="1510" y="682" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T03_Wirtschaft_di" bpmnElement="T03_Wirtschaft">
+      <bpmndi:BPMNShape id="T03_Teile_di" bpmnElement="T03_Teile">
         <dc:Bounds x="1700" y="682" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T03_Wirtschaft_di" bpmnElement="T03_Wirtschaft">
+        <dc:Bounds x="1890" y="682" width="130" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW03_Wirtschaft_di" bpmnElement="GW03_Wirtschaft">
-        <dc:Bounds x="1930" y="698" width="50" height="50" />
+        <dc:Bounds x="2120" y="698" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1802" y="668" width="120" height="27" />
+          <dc:Bounds x="1992" y="668" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T03_Totalschaden_di" bpmnElement="T03_Totalschaden">
-        <dc:Bounds x="2080" y="458" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T03_Schliessen_di" bpmnElement="T03_Schliessen">
+      <bpmndi:BPMNShape id="T03_Absage_di" bpmnElement="T03_Absage">
         <dc:Bounds x="2270" y="458" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T03_Aufwand_di" bpmnElement="T03_Aufwand">
-        <dc:Bounds x="2080" y="682" width="130" height="80" />
+      <bpmndi:BPMNShape id="T03_Schliessen_di" bpmnElement="T03_Schliessen">
+        <dc:Bounds x="2460" y="458" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T03_Abschluss_di" bpmnElement="T03_Abschluss">
+      <bpmndi:BPMNShape id="T03_Abholung_di" bpmnElement="T03_Abholung">
+        <dc:Bounds x="2650" y="458" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T03_Aufwand_di" bpmnElement="T03_Aufwand">
         <dc:Bounds x="2270" y="682" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T03_Abschluss_di" bpmnElement="T03_Abschluss">
+        <dc:Bounds x="2460" y="682" width="130" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Join_03_di" bpmnElement="Join_03">
-        <dc:Bounds x="2500" y="698" width="50" height="50" />
+        <dc:Bounds x="2880" y="698" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="End_03_di" bpmnElement="End_03">
-        <dc:Bounds x="2697" y="704" width="36" height="36" />
+        <dc:Bounds x="3077" y="704" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2660" y="746" width="110" height="27" />
+          <dc:Bounds x="3040" y="746" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K03_Start_di" bpmnElement="K03_Start">
-        <dc:Bounds x="2127" y="120" width="36" height="36" />
+        <dc:Bounds x="2317" y="120" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2090" y="86" width="110" height="27" />
+          <dc:Bounds x="2280" y="86" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K03_Planen_di" bpmnElement="K03_Planen">
-        <dc:Bounds x="2270" y="98" width="130" height="80" />
+        <dc:Bounds x="2460" y="98" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K03_End_di" bpmnElement="K03_End">
-        <dc:Bounds x="2507" y="120" width="36" height="36" />
+        <dc:Bounds x="2697" y="120" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2470" y="162" width="110" height="27" />
+          <dc:Bounds x="2660" y="162" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_03_1_di" bpmnElement="DataObjRef_03_1">
@@ -313,30 +326,30 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_03_3_di" bpmnElement="DataObjRef_03_3">
-        <dc:Bounds x="1419" y="597" width="36" height="50" />
+        <dc:Bounds x="1609" y="597" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1295" y="609" width="120" height="27" />
+          <dc:Bounds x="1485" y="609" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_03_4_di" bpmnElement="DataObjRef_03_4">
-        <dc:Bounds x="2369" y="372" width="36" height="50" />
+        <dc:Bounds x="2559" y="372" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2245" y="384" width="120" height="27" />
+          <dc:Bounds x="2435" y="384" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStore_03_1_di" bpmnElement="DataStore_03_1">
-        <dc:Bounds x="335" y="998" width="50" height="50" />
+        <dc:Bounds x="335" y="943" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="211" y="1010" width="120" height="27" />
+          <dc:Bounds x="211" y="955" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_03_1_di" bpmnElement="Flow_03_1">
-        <di:waypoint x="2163" y="138" />
-        <di:waypoint x="2270" y="138" />
+        <di:waypoint x="2353" y="138" />
+        <di:waypoint x="2460" y="138" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_2_di" bpmnElement="Flow_03_2">
-        <di:waypoint x="2400" y="138" />
-        <di:waypoint x="2507" y="138" />
+        <di:waypoint x="2590" y="138" />
+        <di:waypoint x="2697" y="138" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_3_di" bpmnElement="Flow_03_3">
         <di:waypoint x="263" y="722" />
@@ -348,90 +361,93 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_5_di" bpmnElement="Flow_03_5">
         <di:waypoint x="690" y="722" />
-        <di:waypoint x="790" y="722" />
+        <di:waypoint x="750" y="722" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_6_di" bpmnElement="Flow_03_6">
-        <di:waypoint x="840" y="722" />
-        <di:waypoint x="940" y="722" />
+        <di:waypoint x="880" y="722" />
+        <di:waypoint x="980" y="722" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_7_di" bpmnElement="Flow_03_7">
-        <di:waypoint x="1070" y="722" />
-        <di:waypoint x="1170" y="722" />
+        <di:waypoint x="1030" y="722" />
+        <di:waypoint x="1360" y="722" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1036" y="698" width="60" height="18" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_8_di" bpmnElement="Flow_03_8">
-        <di:waypoint x="1220" y="722" />
-        <di:waypoint x="1320" y="722" />
+        <di:waypoint x="1005" y="748" />
+        <di:waypoint x="1005" y="838" />
+        <di:waypoint x="1130" y="838" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1226" y="698" width="60" height="18" />
+          <dc:Bounds x="1013" y="816" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_9_di" bpmnElement="Flow_03_9">
-        <di:waypoint x="1195" y="748" />
-        <di:waypoint x="1195" y="838" />
-        <di:waypoint x="1320" y="838" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1202" y="758" width="60" height="18" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint x="1260" y="838" />
+        <di:waypoint x="1385" y="838" />
+        <di:waypoint x="1385" y="748" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_10_di" bpmnElement="Flow_03_10">
-        <di:waypoint x="1385" y="878" />
-        <di:waypoint x="1385" y="923" />
-        <di:waypoint x="815" y="923" />
-        <di:waypoint x="815" y="748" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03_11_di" bpmnElement="Flow_03_11">
-        <di:waypoint x="1450" y="722" />
+        <di:waypoint x="1410" y="722" />
         <di:waypoint x="1510" y="722" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03_12_di" bpmnElement="Flow_03_12">
+      <bpmndi:BPMNEdge id="Flow_03_11_di" bpmnElement="Flow_03_11">
         <di:waypoint x="1640" y="722" />
         <di:waypoint x="1700" y="722" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03_13_di" bpmnElement="Flow_03_13">
+      <bpmndi:BPMNEdge id="Flow_03_12_di" bpmnElement="Flow_03_12">
         <di:waypoint x="1830" y="722" />
-        <di:waypoint x="1930" y="722" />
+        <di:waypoint x="1890" y="722" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03_13_di" bpmnElement="Flow_03_13">
+        <di:waypoint x="2020" y="722" />
+        <di:waypoint x="2120" y="722" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_14_di" bpmnElement="Flow_03_14">
-        <di:waypoint x="1980" y="722" />
-        <di:waypoint x="2080" y="722" />
+        <di:waypoint x="2170" y="722" />
+        <di:waypoint x="2270" y="722" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1986" y="698" width="60" height="18" />
+          <dc:Bounds x="2176" y="698" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_15_di" bpmnElement="Flow_03_15">
-        <di:waypoint x="1955" y="698" />
-        <di:waypoint x="1955" y="498" />
-        <di:waypoint x="2080" y="498" />
+        <di:waypoint x="2145" y="698" />
+        <di:waypoint x="2145" y="498" />
+        <di:waypoint x="2270" y="498" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1962" y="670" width="60" height="18" />
+          <dc:Bounds x="2153" y="476" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_16_di" bpmnElement="Flow_03_16">
-        <di:waypoint x="2210" y="498" />
-        <di:waypoint x="2270" y="498" />
+        <di:waypoint x="2400" y="498" />
+        <di:waypoint x="2460" y="498" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_17_di" bpmnElement="Flow_03_17">
-        <di:waypoint x="2400" y="498" />
-        <di:waypoint x="2525" y="498" />
-        <di:waypoint x="2525" y="698" />
+        <di:waypoint x="2590" y="498" />
+        <di:waypoint x="2650" y="498" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_18_di" bpmnElement="Flow_03_18">
-        <di:waypoint x="2210" y="722" />
-        <di:waypoint x="2270" y="722" />
+        <di:waypoint x="2780" y="498" />
+        <di:waypoint x="2905" y="498" />
+        <di:waypoint x="2905" y="698" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_19_di" bpmnElement="Flow_03_19">
         <di:waypoint x="2400" y="722" />
-        <di:waypoint x="2500" y="722" />
+        <di:waypoint x="2460" y="722" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03_20_di" bpmnElement="Flow_03_20">
-        <di:waypoint x="2550" y="722" />
-        <di:waypoint x="2697" y="722" />
+        <di:waypoint x="2590" y="722" />
+        <di:waypoint x="2880" y="722" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03_21_di" bpmnElement="Flow_03_21">
+        <di:waypoint x="2930" y="722" />
+        <di:waypoint x="3077" y="722" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_03_1_di" bpmnElement="MsgFlow_03_1">
-        <di:waypoint x="2145" y="458" />
-        <di:waypoint x="2145" y="156" />
+        <di:waypoint x="2335" y="458" />
+        <di:waypoint x="2335" y="156" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2153" y="296" width="130" height="20" />
+          <dc:Bounds x="2343" y="296" width="130" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T03_Status_out_DataObjRef_03_1_di" bpmnElement="T03_Status_out_DataObjRef_03_1">
@@ -443,16 +459,16 @@
         <di:waypoint x="665" y="682" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T03_Befund_out_DataObjRef_03_3_di" bpmnElement="T03_Befund_out_DataObjRef_03_3">
-        <di:waypoint x="1425" y="682" />
-        <di:waypoint x="1437" y="647" />
+        <di:waypoint x="1615" y="682" />
+        <di:waypoint x="1627" y="647" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T03_Schliessen_out_DataObjRef_03_4_di" bpmnElement="T03_Schliessen_out_DataObjRef_03_4">
-        <di:waypoint x="2375" y="458" />
-        <di:waypoint x="2387" y="422" />
+        <di:waypoint x="2565" y="458" />
+        <di:waypoint x="2577" y="422" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T03_Status_out_DataStore_03_1_di" bpmnElement="T03_Status_out_DataStore_03_1">
         <di:waypoint x="395" y="762" />
-        <di:waypoint x="360" y="998" />
+        <di:waypoint x="360" y="943" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

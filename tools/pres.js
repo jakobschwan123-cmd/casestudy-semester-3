@@ -100,7 +100,7 @@ function fit(file, maxW, maxH) {
   {
     const s = base('Agenda', { speaker: 'Nina' });
     const items = [['1', 'Ausgangslage und Problem', 'David'], ['2', 'Das Startup RepairFlow und der Markt', 'Adrian'], ['3', 'Geschäftsprozesse (BPMN)', 'Maxi'],
-      ['4', 'Automatisierung und KI-Sofortdiagnose', 'Adrian'], ['5', 'Objektorientierte Analyse (UML)', 'Kilian, Jakob'], ['6', 'Vorgehen und Projektmanagement', 'David'],
+      ['4', 'KI-Sofortdiagnose als Alleinstellungsmerkmal', 'Adrian'], ['5', 'Objektorientierte Analyse (UML)', 'Kilian, Jakob'], ['6', 'Vorgehen und Projektmanagement', 'David'],
       ['7', 'Herausforderungen und Fazit', 'Jakob, Nina']];
     items.forEach((it, i) => {
       const y = 1.15 + i * 0.47;
@@ -171,15 +171,15 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 9 Prozess 01
   {
-    const s = base('Prozess 01: KI-Sofortdiagnose und Voranmeldung', { speaker: 'Maxi', notes: 'Message-Start aus der App, Medienprüfung mit Rückfrageschleife, KI als Business Rule Task, Vorab-KVA, Verfügbarkeit über alle Filialen, Terminvorschlag, ereignisbasiertes Gateway: Bestätigung oder 7-Tage-Timer.' });
-    picture(s, 'pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Aufnahme und Anfrage, Medienprüfung mit Rückfrage an den Kunden, KI-Diagnosevorschlag, Vorab-KVA');
-    bulletsBox(s, ['Kunde: Foto, Video oder Ton aufnehmen und in der App senden; Auslöser für die Werkstatt ist diese Nachricht','Rückfrageschleife bei nicht auswertbaren Medien', 'KI-Diagnosevorschlag als Geschäftsregel-Aktivität, danach Vorab-KVA, Verfügbarkeitsprüfung und Terminvorschlag', 'Warten auf Bestätigung oder 7-Tage-Timer, dann Voranmeldung mit Vorreservierung'], 0.5, 4.15, 9, 1.0, 11);
+    const s = base('Prozess 01: KI-Sofortdiagnose und Voranmeldung', { speaker: 'Maxi', notes: 'Message-Start aus der App, Voranmeldung wird sofort angelegt, Medienprüfung mit Rückfrage (Antwort oder 7-Tage-Timer), KI als Business Rule Task, Vorab-KVA, Verfügbarkeit über alle Filialen, Terminvorschlag, ereignisbasiertes Gateway: Bestätigung, Ablehnung oder 7-Tage-Timer.' });
+    picture(s, 'pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Aufnahme und Anfrage, Voranmeldung anlegen, Medienprüfung mit Rückfrage an den Kunden, KI-Diagnosevorschlag, Vorab-KVA');
+    bulletsBox(s, ['Kunde: Foto, Video oder Ton aufnehmen und in der App senden; RepairFlow legt daraus sofort die Voranmeldung an', 'Rückfrage bei nicht auswertbaren Medien: neue Aufnahme oder nach 7 Tagen verwerfen', 'KI-Diagnosevorschlag als Geschäftsregel-Aktivität, danach Vorab-KVA, Verfügbarkeitsprüfung und Terminvorschlag', 'Warten auf Bestätigung (Vorreservierung), Ablehnung oder 7-Tage-Timer (Voranmeldung verwerfen)'], 0.5, 4.15, 9, 1.0, 11);
   }
   // ---------------- 10 Prozess 04
   {
-    const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maxi', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden statt einer separaten Nachricht, damit das Diagramm ohne Kreuzungen bleibt.' });
-    picture(s, 'pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Kunde prüft und entscheidet, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife');
-    bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage verstrichen (Erinnerung)', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) als Call Activity auf; Ablehnung führt zur Diagnosepauschale und Abholaufforderung'], 0.5, 4.1, 9, 1.0, 11);
+    const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maxi', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden; nach der dritten Erinnerung gilt der KVA als abgelehnt. Abgelehnte Aufträge gehen über Prozess 08 mit Diagnosepauschale zur Abholung.' });
+    picture(s, 'pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Kunde prüft und entscheidet, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife mit Ausstieg nach der dritten Erinnerung');
+    bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage verstrichen (Erinnerung, höchstens dreimal)', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) auf; Ablehnung setzt den Auftrag auf „abgelehnt" und ruft Prozess 08 (Abholung mit Diagnosepauschale) auf'], 0.5, 4.1, 9, 1.0, 11);
   }
   // ---------------- 11 Automatisierung + KI
   {
@@ -199,27 +199,27 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 12 Use Cases
   {
-    const s = base('Use-Case-Diagramm: was RepairFlow leistet', { speaker: 'Kilian', notes: '18 Use Cases in vier Bereichen, sieben Akteure. include = immer, extend = bedingt.' });
+    const s = base('Use-Case-Diagramm: was RepairFlow leistet', { speaker: 'Kilian', notes: '19 Use Cases in vier Bereichen, acht Akteure (je Lane ein Akteur). include = immer, extend = bedingt.' });
     picture(s, 'uml2/usecase.png', 0.4, 1.05, 5.6, 4.1);
-    bulletsBox(s, ['18 Use Cases in vier Bereichen: Kundenportal, Auftrag und Werkstatt, Ersatzteil-Disposition, Administration',
-      'Primäre Akteure: Kunde, Techniker, Disponent, Werkstattleiter, Werkstattinhaber',
+    bulletsBox(s, ['19 Use Cases in vier Bereichen: Kundenportal, Auftrag und Werkstatt, Ersatzteil-Disposition, Administration',
+      'Primäre Akteure: Kunde, Servicemitarbeiter, Techniker, Disponent, Werkstattleiter, Werkstattinhaber',
       'Sekundär und extern: Lieferant, KI-Diagnosedienst',
-      '«include» für Pflicht-Teilschritte, z. B. KVA erstellen → Diagnosebefund erfassen',
+      '«include» für Pflicht-Teilschritte, z. B. Ersatzteil reservieren → Ersatzteil-Verfügbarkeit prüfen',
       '«extend» für bedingtes Verhalten, z. B. Voranmeldung bestätigen → Sofortdiagnose anfordern'], 6.2, 1.2, 3.3, 3.9, 11.5);
   }
   // ---------------- 13 Klassen
   {
-    const s = base('Klassendiagramm: 26 Klassen, ein Zustandsautomat', { speaker: 'Kilian', notes: 'Entwurfsentscheidungen: Reparaturauftrag als Aggregatwurzel, Lagerbestand je Filiale, Reservierung als eigene Klasse, Werkstattbetrieb als Mandant, Rollen als Unterklassen von Mitarbeiter, drei KI-Klassen.' });
-    picture(s, 'uml2/klassen-fokus-1-sofortdiagnose.png', 0.4, 1.05, 5.6, 3.75, 'Ausschnitt: Kundenkontakt und KI-Sofortdiagnose (vollständiges Diagramm in der Dokumentation)');
-    bulletsBox(s, ['Reparaturauftrag als Aggregatwurzel: Befund, KVA und Reparaturschritte sind Kompositionen, das Gerät ist nur zugeordnet',
+    const s = base('Klassendiagramm: 27 Klassen, ein Zustandsautomat', { speaker: 'Kilian', notes: 'Entwurfsentscheidungen: Reparaturauftrag als Aggregatwurzel, Lagerbestand je Filiale, Reservierung als eigene Klasse, Werkstattbetrieb als Mandant, Rollen als Unterklassen von Mitarbeiter, drei KI-Klassen.' });
+    picture(s, 'uml2/klassen-fokus-1-sofortdiagnose.png', 0.4, 1.05, 5.6, 3.75, 'Ausschnitt: Kundenkontakt und KI-Sofortdiagnose (vollständiges Diagramm in Anhang C der Dokumentation)');
+    bulletsBox(s, ['Reparaturauftrag als Aggregatwurzel: Befund und Reparaturschritte sind Kompositionen; KVA und Gerät sind nur zugeordnet (Vorab-KVA entsteht vor dem Auftrag)',
       'Lagerbestand als eigene Klasse zwischen Ersatzteil und Filiale: nur so geht filialübergreifende Verfügbarkeit',
       'ErsatzteilReservierung mit eigenem Lebenszyklus: vorreserviert, reserviert, entnommen, storniert',
-      'Werkstattbetrieb als Mandant; Rollen Techniker, Disponent, Werkstattleiter als Unterklassen von Mitarbeiter – wie die Lanes Techniker, Ersatzteil-Disposition und Werkstattleitung im BPMN',
+      'Werkstattbetrieb als Mandant; Rollen Servicemitarbeiter, Techniker, Disponent, Werkstattleiter als Unterklassen von Mitarbeiter – wie die vier Lanes im BPMN',
       'Voranmeldung, Medienanhang, KIDiagnosevorschlag tragen die Sofortdiagnose'], 6.2, 1.2, 3.3, 3.9, 11.5);
   }
   // ---------------- 14 SD1
   {
-    const s = base('Sequenzdiagramm SD1: Sofortdiagnose anfordern', { speaker: 'Kilian', notes: 'Lebenslinien sind Klassen, Botschaften sind Operationen. Fragmente: loop je Medienanhang, alt auswertbar/nicht, loop je Teil und Filiale, alt Bestätigung/Timer, opt Reservierung.' });
+    const s = base('Sequenzdiagramm SD1: Sofortdiagnose anfordern', { speaker: 'Kilian', notes: 'Lebenslinien sind Klassen, Botschaften sind Operationen. Fragmente: loop je Medienanhang, alt auswertbar/nicht, loop je Teil und Filiale, alt Bestätigung/Timer, opt Vorreservierung. Die Voranmeldung entsteht wie in Prozess 01 direkt mit der Anfrage.' });
     picture(s, 'uml2/sequenz-01-sofortdiagnose.png', 0.4, 1.05, 6.4, 4.1);
     bulletsBox(s, ['Voranmeldung lässt jeden Medienanhang analysieren, der KI-Diagnosedienst wertet aus (loop)', 'alt: Medien nicht auswertbar → Rückfrage; sonst KIDiagnosevorschlag und vorläufiger KVA', 'loop je Ersatzteil und Filiale über Lagerbestand', 'alt: Kunde bestätigt → opt Vorreservierung; sonst Timer → verwerfen', 'Alle Botschaften sind Operationen des Klassendiagramms'], 7.0, 1.2, 2.5, 3.9, 10.5);
   }
@@ -254,8 +254,8 @@ function fit(file, maxW, maxH) {
   {
     const s = base('Fazit und Ausblick', { dark: true, speaker: 'Nina' });
     stat(s, 0.5, 1.2, '10', 'BPMN-Kollaborationsdiagramme, ' + TOTAL_ACT + ' Aktivitäten', 2.2);
-    stat(s, 2.9, 1.2, '18', 'Use Cases, 7 Akteure', 2.2);
-    stat(s, 5.3, 1.2, '26', 'Klassen, 35 Assoziationen', 2.2);
+    stat(s, 2.9, 1.2, '19', 'Use Cases, 8 Akteure', 2.2);
+    stat(s, 5.3, 1.2, '27', 'Klassen, 36 Assoziationen', 2.2);
     stat(s, 7.7, 1.2, '6', 'Sequenzdiagramme + Zustandsdiagramm', 2.2);
     s.addText([{ text: 'RepairFlow löst den Medienbruch aus Papier, Excel und Telefon und macht den Reparaturauftrag zum zentralen Zustandsautomaten. ', options: { breakLine: true } },
       { text: 'Der fachliche Mehrwert liegt in der filialübergreifenden Disposition und in der KI-Sofortdiagnose, die dem Kunden Klarheit gibt, bevor er die Werkstatt betritt.', options: { breakLine: true } },
@@ -264,7 +264,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 19 Danke
   {
-    const s = base(null, { dark: true, speaker: 'alle' });
+    const s = base(null, { dark: true, speaker: 'Nina' });
     s.addText('Vielen Dank', { x: 0.6, y: 1.8, w: 8, h: 1.0, fontFace: FONT, fontSize: 48, bold: true, color: C.white, isTextBox: true, margin: 0 });
     s.addText('Fragen?', { x: 0.6, y: 2.8, w: 8, h: 0.6, fontFace: FONT, fontSize: 24, color: 'CFE3E3', isTextBox: true, margin: 0 });
     s.addText('Gruppe 1 · WWI25B4 · RepairFlow', { x: 0.6, y: 3.6, w: 8, h: 0.4, fontFace: FONT, fontSize: 14, color: C.white, isTextBox: true, margin: 0 });
@@ -275,7 +275,7 @@ function fit(file, maxW, maxH) {
     const s = base('Anhang: Beiträge der Vortragenden', { speaker: '-', notes: 'Pflichtangabe für den PDF-Export laut Ablauf: welche/r Vortragende welchen Beitrag verantwortet.' });
     const hdr = (t) => ({ text: t, options: { bold: true, color: C.white, fill: { color: C.teal } } });
     const rows = [[hdr('Vortragende(r)'), hdr('Folien'), hdr('Verantworteter Beitrag')],
-      ['Nina Sattler', '1–2, 18–19', 'Einleitung und Agenda, Fazit und Ausblick; Projektleitung'],
+      ['Nina Sattler', '1–2, 18–19', 'Einleitung und Agenda, Fazit und Ausblick, Moderation der Fragerunde; Projektleitung'],
       ['David Leismann', '3, 16', 'Ausgangslage und Problem; Vorgehen und Projektmanagement; stellvertretende Projektleitung, Backups'],
       ['Adrian Wenzler', '4–6, 11', 'Startup und Markt, Zustandsautomat, KI-Sofortdiagnose; Product Owner'],
       ['Maximilian Ewald', '7–10', 'Geschäftsprozessmodell: Prozesslandkarte, Konventionen, Prozesse 01 und 04; BPMN-Modellierung im Camunda Modeler'],

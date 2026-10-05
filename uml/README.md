@@ -4,11 +4,11 @@ Quelle aller Namen ist `tools/umlmodel.py`. Daraus entstehen das Klassendiagramm
 
 | Datei | Inhalt |
 |---|---|
-| modell.xmi | XMI 2.1 (UML 2.x) mit Klassenmodell (26 Klassen, 7 Aufzählungen, 35 Assoziationen) und Anwendungsfallmodell (18 Use Cases, 7 Akteure, 4 include, 5 extend) zum Import in Visual Paradigm |
+| modell.xmi | XMI 2.1 (UML 2.x) mit Klassenmodell (27 Klassen, 7 Aufzählungen, 36 Assoziationen) und Anwendungsfallmodell (19 Use Cases, 8 Akteure, 3 include, 5 extend) zum Import in Visual Paradigm |
 | klassen.puml / .png | vollständiges Klassendiagramm |
 | klassen-fokus-1…4-*.puml / .png | vier Ausschnitte für Doku und Präsentation (Sofortdiagnose, Auftrag, Disposition, Organisation/Rollen) |
 | usecase.puml / .png | Use-Case-Diagramm |
-| sequenz-01-sofortdiagnose … sequenz-06-nachbestellvorschlag.puml / .png | sechs Sequenzdiagramme (UC01, UC07, UC09, UC14, UC16, UC12/UC10); gefordert sind fünf |
+| sequenz-01-sofortdiagnose … sequenz-06-nachbestellvorschlag.puml / .png | sechs Sequenzdiagramme (UC01, UC07, UC09, UC14, UC16, UC10 mit ref auf UC12); gefordert sind fünf |
 | zustand-reparaturauftrag.puml / .png | Zustandsdiagramm der Klasse Reparaturauftrag (Zusatz, nicht gefordert) |
 | systemkontext.puml / .png | Systemkontext für die Doku |
 
@@ -16,17 +16,17 @@ Quelle aller Namen ist `tools/umlmodel.py`. Daraus entstehen das Klassendiagramm
 
 1. Lehre-VPN starten, Visual Paradigm öffnen, Teamwork Client anmelden, Repository **WWI25B4G1 (trunk)** auschecken und öffnen (Anleitung in `doku/01-projektkontext.md`).
 2. **Modell importieren:** Project → Import → XMI…, Datei `modell.xmi` wählen. Im Model Explorer erscheinen die Pakete Datentypen, Klassenmodell und Anwendungsfallmodell mit allen Elementen. Falls der Import Fehler meldet: Meldung notieren und in `doku/protokolle/` ablegen, dann Klassen nach dem PNG von Hand anlegen (die Attribute und Operationen stehen komplett in `klassen.puml`).
-3. **Klassendiagramm anlegen:** neues Class Diagram „cd RepairFlow" in den Standardordner, Klassen und Aufzählungen aus dem Model Explorer auf die Fläche ziehen (mehrere markieren und gemeinsam ziehen). Assoziationen und Generalisierungen werden automatisch mitgezeichnet. Layout nach dem PNG ordnen: links Mandant, Personen und Mitarbeiter-Rollen (Techniker, Disponent, Werkstattleiter), Mitte Auftrag, rechts Disposition, Aufzählungen am Rand.
+3. **Klassendiagramm anlegen:** neues Class Diagram „cd RepairFlow" in den Standardordner, Klassen und Aufzählungen aus dem Model Explorer auf die Fläche ziehen (mehrere markieren und gemeinsam ziehen). Assoziationen und Generalisierungen werden automatisch mitgezeichnet. Layout nach dem PNG ordnen: links Mandant, Personen und Mitarbeiter-Rollen (Servicemitarbeiter, Techniker, Disponent, Werkstattleiter), Mitte Auftrag, rechts Disposition, Aufzählungen am Rand.
 4. **Use-Case-Diagramm anlegen:** neues Use Case Diagram „ud RepairFlow", Systemgrenze „RepairFlow" zeichnen, Use Cases aus dem Model Explorer hineinziehen, Akteure links (primär) und rechts (Lieferant, KI-Diagnosedienst). include/extend kommen aus dem Modell mit.
-5. **Sequenzdiagramme als Unterdiagramme:** im Use-Case-Diagramm den Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram. So verlangt es der Ablauf („Verfeinerungsdiagramm"). Je Use Case eines: UC01 Sofortdiagnose anfordern (SD1), UC07 KVA freigeben / ablehnen (SD2), UC09 Ersatzteil reservieren (SD3), UC14 Auftrag fertigmelden und Kunde benachrichtigen (SD4), UC16 Reklamation bearbeiten (SD5), UC12 Nachbestellvorschlag bei Meldebestand (SD6, zusammen mit UC10). Lebenslinien: Akteure als Actor, Objekte als „: Klassenname" mit der Klasse aus dem Modell verknüpfen (dann bietet VP die Operationen zur Auswahl an). Fragmente alt/opt/loop wie in den PNGs.
-6. Optional: Zustandsdiagramm „sd Reparaturauftrag" als Unterdiagramm der Klasse Reparaturauftrag.
+5. **Sequenzdiagramme als Unterdiagramme:** im Use-Case-Diagramm den Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram. So verlangt es der Ablauf („Verfeinerungsdiagramm"). Je Use Case eines: UC01 Sofortdiagnose anfordern (SD1), UC07 KVA freigeben / ablehnen (SD2), UC09 Ersatzteil reservieren (SD3), UC14 Auftrag fertigmelden und Kunde benachrichtigen (SD4), UC16 Reklamation bearbeiten (SD5), UC10 Lieferantenbestellung auslösen (SD6, mit ref-Fragment auf UC12). Lebenslinien: Akteure als Actor, Objekte als „: Klassenname" mit der Klasse aus dem Modell verknüpfen (dann bietet VP die Operationen zur Auswahl an). Fragmente alt/opt/loop wie in den PNGs.
+6. Optional: Zustandsdiagramm „stm Reparaturauftrag" als Unterdiagramm der Klasse Reparaturauftrag.
 7. Die Stereotypen «mandant» (Werkstattbetrieb) und «stammdaten» (Filiale, Lieferant, Ersatzteil) überträgt die XMI nicht; in VP von Hand setzen. Die extend-Beziehungen kommen ohne Extension Points; bei Bedarf in VP ergänzen.
-8. Wer das XMI schon vor dem 26.09.2026 importiert hat: neu importieren (einfacher) oder die Änderungen aus `doku/03-entscheidungen.md`, E-15, von Hand nachziehen (neue Operationen, Multiplizitäten, Assoziation Ersatzteil–Lieferant, UC10 extend UC09, Akteurzuordnung).
+8. Wer das XMI schon vor dem 05.10.2026 importiert hat: neu importieren (einfacher) oder die Änderungen aus `doku/03-entscheidungen.md`, E-15 und E-17, von Hand nachziehen (Servicemitarbeiter, UC19, include/extend, neue Operationen und Assoziationen).
 9. Nach jeder Sitzung Commit in den Teamwork-Server und zusätzlich File → Save Project As als lokale Sicherung `UML-WWI25B4-Gruppe1.vpp` (die Datei kommt so in die Abgabe).
 
 ## Herkunft
 
-Das Modell ist die Zusammenführung aus dem Solution-Provider-Entwurf (Claude/David) und Kilians V2: Die Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter`, `Kunde.meldeMangel()` und SD6 stammen aus Kilians früherem UML-Paket (`archiv/uml-v1-betreiber/`), siehe `doku/05-vergleich-und-zusammenfuehrung.md`. Am 26.09.2026 wurde das Modell geprüft und korrigiert (Botschaften = Operationen, Multiplizitäten, Akteurzuordnung, Zustandsdiagramm; Details in `doku/03-entscheidungen.md`, E-15).
+Das Modell ist die Zusammenführung aus dem Solution-Provider-Entwurf (Claude/David) und Kilians V2: Die Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter`, `Kunde.meldeMangel()` und SD6 stammen aus Kilians früherem UML-Paket (`archiv/uml-v1-betreiber/`), siehe `doku/05-vergleich-und-zusammenfuehrung.md`. Am 26.09.2026 wurde das Modell geprüft und korrigiert (Botschaften = Operationen, Multiplizitäten, Akteurzuordnung, Zustandsdiagramm; E-15), am 05.10.2026 erneut (Servicemitarbeiter, UC19 Retoure, include/extend, Nacharbeit; E-17 in `doku/03-entscheidungen.md`).
 
 ## Namensregeln
 

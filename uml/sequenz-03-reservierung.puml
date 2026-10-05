@@ -51,9 +51,5 @@ loop je benötigtes Ersatzteil
         ref over Disponent, LB : UC12 Nachbestellvorschlag bei Meldebestand
     end
 end
-opt mindestens ein Fehlteil bestellt
-    Disponent -> RA : wechsleStatus(TEILE_BESTELLT)
-    note right of RA : Status: Teile bestellt
-end
-note right of RA : ohne Fehlteile bleibt der Status\nfreigegeben bis zum Reparaturbeginn
+note right of RA : Status bleibt freigegeben; bei Fehlteilen\nsetzt UC10 den Status Teile bestellt
 @enduml

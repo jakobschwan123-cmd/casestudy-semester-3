@@ -10,7 +10,7 @@ Datum: 02.09.2026. Verglichen wurden Kilians Entwurf V2 (nicht im Repository; se
 |---|---|---|
 | BPMN (10 Diagramme) | Claude/David (Camunda 8, engine-ready, Linter 0 Befunde) | Datenspeicher `Technikerplan` (Prozess 02) und `Buchhaltung (DATEV-Export)` (Prozess 08); Prüfliste der Qualitätssicherung |
 | Use-Case-Diagramm | Claude/David (18 UCs, 7 Akteure, Sofortdiagnose) | – |
-| Klassendiagramm | Claude/David (23 → 26 Klassen) | Rollen als Klassen: abstrakte Klasse `Mitarbeiter` mit `Techniker`, `Disponent`, `Werkstattleiter` und ihren Operationen; `Kunde.meldeMangel()`; Assoziation `Mitarbeiter arbeitet in Filiale` |
+| Klassendiagramm | Claude/David (23 → 26 Klassen, seit E-17: 27) | Rollen als Klassen: abstrakte Klasse `Mitarbeiter` mit `Techniker`, `Disponent`, `Werkstattleiter` und ihren Operationen; `Kunde.meldeMangel()`; Assoziation `Mitarbeiter arbeitet in Filiale` |
 | Sequenzdiagramme | Claude/David (SD1–SD5) | SD6 „Nachbestellvorschlag bei Meldebestand / Lieferantenbestellung auslösen" (Kilians sqd-03, auf unsere Operationen umgeschrieben) |
 | Zustandsdiagramm | beide gleichwertig, Claude/David behalten | Erläuterungstext (Übergänge = Ereignis + Operation) |
 | Projektdokumentation | Claude/David (Solution Provider, KI-Kapitel, alle Diagramme im Anhang) | Kapitel 3.3 Qualitätssicherung, Kapitel 4 (Scrum-Vorgehen, Sprintplan mit Terminen, Trello-Board, Repository-Regeln), Abschnitt 5.4 Konsistenz zwischen den Modellen, Herausforderung „Pool- und Lane-Struktur", KI-Nutzungshinweis in Kapitel 1 |
@@ -31,7 +31,7 @@ Datum: 02.09.2026. Verglichen wurden Kilians Entwurf V2 (nicht im Repository; se
 - **Rollen als Klassen.** `Mitarbeiter` (abstrakt) mit `Techniker`, `Disponent`, `Werkstattleiter` bildet die BPMN-Lanes und die Akteure des Use-Case-Diagramms im Klassenmodell ab. Operationen wie `weiseTechnikerZu()`, `pruefeAuslastung()`, `gibBestellungFrei()`, `loeseBestellungAus()` machen die Sequenzdiagramme sauberer, weil Akteure jetzt Klassen mit Operationen sind.
 - **Datenspeicher mit Fachbezug.** `Technikerplan` (Kapazitäts- und Terminplanung) und `Buchhaltung (DATEV-Export)` zeigen die Systemgrenze im Diagramm: Buchhaltung liegt außerhalb, es wird nur übergeben.
 - **Sequenzdiagramm Nachbestellvorschlag.** Der Zusammenhang Meldebestand → Vorschlag → Bestellung (mit Freigabe des Werkstattleiters über der Freigabegrenze) war bei uns nur in Prozess 06 sichtbar; jetzt auch als SD6.
-- **Projektmanagement mit echten Terminen.** Sprint 0 (02.09.), Sprint 1 (03.09.–05.10.), Sprint 2 (05.10.–15.10.), Sprint 3 (15.10.–22.10.), Abschluss 27.10./13.11.; Trello-Board mit Listen, Labels und Karten; Definition of Done; Git-Regeln. Unser Kapitel 4 hatte nur Platzhalter.
+- **Projektmanagement mit echten Terminen.** Sprint 1 (02.09.), Sprint 2 (03.09.–05.10.), Sprint 3 (06.10.–15.10.), Sprint 4 (16.10.–22.10.), Abschluss 27.10./13.11. (Zählung wie in Doku Kapitel 4.2 und E-12; Kilians V2 zählte ab Sprint 0); Trello-Board mit Listen, Labels und Karten; Definition of Done; Git-Regeln. Unser Kapitel 4 hatte nur Platzhalter.
 - **Konsistenz-Abschnitt.** Die „drei Klammern" (Datenobjekte = Klassennamen, Lanes = Akteure = Mitarbeiter-Unterklassen, ein Zustandsautomat) als eigener Abschnitt 5.4, ergänzt um eine Zuordnungstabelle Prozess ↔ Use Cases ↔ Klassen ↔ Sequenzdiagramm.
 - **KI-Nutzungshinweis.** Ein klarer Absatz, was mit KI-Unterstützung entstanden ist und was das Team verantwortet, mit Platzhalter für eine eventuell geforderte Erklärung.
 

@@ -4,15 +4,30 @@ Jede Entscheidung, die mehr als eine Person betrifft, kommt hier rein: was entsc
 
 ## Offen
 
-### E-07 Bestätigung von E-02, E-03, E-05 und E-08 durch die Gruppe
+### E-07 Bestätigung von E-02, E-03, E-05 und E-11 durch die Gruppe
 
-David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, die Korrekturen aus E-15 und der ausmodellierte Kunden-Pool aus E-16.
+David hat am 02.09.2026 Perspektive, Gimmick, Prozessliste und Ablagestruktur (E-08, ersetzt durch E-11) festgelegt, damit die Artefakte gebaut werden konnten. Adrian (Owner) und die Gruppe sollten das beim nächsten Treffen bestätigen oder kippen, solange Änderungen noch billig sind. Ebenfalls zu bestätigen: ob der Absatz zum KI-Einsatz in Kapitel 1 der Doku bleibt, die Korrekturen aus E-15, der ausmodellierte Kunden-Pool aus E-16 und die Korrekturen des Komplettchecks aus E-17 (Abholung über Prozess 08, Schleifen-Ausstiege, Lagergebühr und Mahnung, Akteur Servicemitarbeiter, UC19 Retoure).
 
 ### E-14 Bestätigung durch den Dozenten
 
 Offen: Wechsel der Ansprechperson (Maximilian → Nina) mitteilen; Gruppentermine 05.10., 15.10., 22.10. gegen Rapla prüfen. Zur Camunda Cloud: Der Ablauf verlangt die Ablage der BPMN-Modelle „in die vorbereiteten Unterordner im Camunda Cloud Repository"; wir laden deshalb hoch, ohne auf eine Antwort zu warten (Git bleibt zusätzlich die Arbeitsgrundlage).
 
 ## Entschieden
+
+### E-17 Korrekturen nach dem Komplettcheck (05.10.2026)
+
+Datum: 05.10.2026 (Kilian, Prüfung mit KI-Unterstützung gegen Ablauf und Vorlesung; Bestätigung durch die Gruppe siehe E-07). Vollständige Befundliste: `doku/protokolle/2026-10-05-komplettcheck.md`.
+Entscheidung und Auswirkung (umgesetzt in `tools/diagrams.py`, `tools/bpmngen.py`, `tools/umlmodel.py`, `uml/*.puml`, Doku und Folien neu erzeugt):
+- **Abholung abgelehnter und reklamierter Aufträge (B1/B2/B3/B7):** Prozess 08 startet jetzt mit „Gerät abholbereit" und unterscheidet die Abrechnung (Reparatur, Diagnosepauschale, kostenfrei). Prozess 03 (Totalschaden/kein Befund), 04 (KVA abgelehnt, auch nach dritter Erinnerung) und 09 (Nacharbeit, abgelehntes Angebot) rufen „08 Abholung abwickeln" als Call Activity auf; damit ist der Übergang abgelehnt → abgeholt des Zustandsdiagramms erstmals in einem Prozess abgebildet. Die Nacharbeit in 09 läuft über „07 Reparatur durchführen"; das Zustandsdiagramm erhält den Übergang angenommen → in Reparatur [Nacharbeit].
+- **Schleifen mit Ausstieg (B6):** P01 Rückfrage mit ereignisbasiertem Gateway (neue Aufnahme oder 7 Tage), Termin kann abgelehnt werden; P03 ohne Diagnoseschleife (erweiterte Prüfung einmal, Befund immer dokumentiert); P04 nach der dritten Erinnerung „abgelehnt"; P06 Bestellung stornieren und alternativen Lieferanten suchen, sonst Ende ohne Teile; P07 Nachtrag ohne Antwort nach 3 Tagen abgelehnt; P08 Lagergebühr nach der dritten Abhol-Erinnerung, Mahnung 14 Tage nach Rechnung; P10 Teil abschreiben nach der zweiten Eskalation.
+- **Nachrichtenflüsse (B5):** P08 Zahlungsart, Bar-/Kartenzahlung, Geräteübergabe, Zahlung und Mahnung; P09 Geräteabgabe; P10 Eskalation und Rücksendung an den Lieferanten. Kommunikation zwischen Pools nur noch über Nachrichtenflüsse (Vorlesung 4-43).
+- **Prozessübergänge und Datenobjekte (B4/B9/B10):** P05 informiert den Kunden vor der Bestellung; P06 startet mit „Bestellbedarf gemeldet" und verarbeitet auch Nachbestellvorschläge; Startereignis P04 „KVA angestoßen", P07 „Ersatzteile disponiert"; neue Datenobjekte Reparaturauftrag [KVA offen]/[abgelehnt], Kostenvoranschlag [Entwurf]/[versendet]/[freigegeben], Lieferantenbestellung [storniert]/[Retoure]/[Gutschrift], Rechnung [Mahnung]; Datenspeicher mit `dataStore`-Element, mehrfache Referenzen zählen einmal.
+- **Use-Case-Diagramm (C1–C6):** include UC15→UC14 und UC06→UC05 entfernt; extend UC16→UC15 ersetzt durch include UC16→UC03 (Nacharbeitsauftrag); extend UC12→UC09 statt UC08; UC12 heißt „Nachbestellvorschlag erzeugen"; neuer Akteur Servicemitarbeiter (Lane Service / Annahme) mit UC03, UC07, UC15, UC16; neuer UC19 „Retoure abwickeln" (Disponent, Lieferant; extend UC11). Jetzt 19 Use Cases, 8 Akteure, 3 include, 5 extend.
+- **Klassendiagramm (C7–C9, C13):** Klasse Servicemitarbeiter (Mitarbeiter); Reparaturauftrag–Kostenvoranschlag ist Assoziation statt Komposition; neue Assoziation Reklamation → Reparaturauftrag „führt zu Nacharbeit" und Attribut `Reparaturauftrag.kostenfrei`; `ErsatzteilReservierung.vorreserviere()`, `Reklamation.legeNacharbeitAn()`, `Lieferantenbestellung.storniere()/meldeRetoure()/retourengrund`, `Lieferant.bestaetigeBestellung()` statt `erstelleBestellung()`; `Mitarbeiter.rolle` und `Kostenvoranschlag.vorlaeufig` entfernt (Vererbung bzw. KvaStatus reichen); Mitarbeiter 0..* je Filiale; BestellStatus um RETOURE und GUTSCHRIFT ergänzt. Jetzt 27 Klassen, 36 Assoziationen.
+- **Sequenz- und Zustandsdiagramm (C10–C14):** SD2 mit Servicemitarbeiter (Status und Versand) und maximal drei Erinnerungen; SD3 ohne Statuswechsel „Teile bestellt" (jetzt in SD6/UC10); SD4 ohne Rechnung (entsteht in UC15) und mit Endkontrolle als Bedingung; SD5 mit `Kunde.meldeMangel()`, Servicemitarbeiter und Werkstattleiter-Freigabe; SD6 nur noch UC10 mit `ref` auf UC12 und Bestellung im Status Vorschlag; Zustandsdiagramm „stm", Übergang „KVA geprüft" statt „KVA versendet", Nacharbeit-Übergang, Endkontrolle in der Bedingung. In Prozess 01 wird die Voranmeldung mit der Anfrage angelegt und am Ende bestätigt oder verworfen – passend zur Komposition Voranmeldung ◆ Medienanhang und zu SD1.
+- **Texte:** OOA-Reihenfolge in Doku 5.3 (UC → Klassen → Interaktion → Zustand), KI-Diagnosedienst als Geschäftsregel statt Pool erklärt, Konsistenzaussage in 5.4 präzisiert, Klassendiagramm als Anhang C, Sprint-Zählung in `05-vergleich` angeglichen, QA-Checkliste `doku/qa-checkliste.md` angelegt (Entwurf für Jakob), Stand-Daten aktualisiert.
+Kennzahlen: 125 Aktivitäten im Werkstatt-Pool (Ø 12,5), 77 automatisiert (62 %), 26 Aktivitäten beim Kunden, 39 Nachrichtenflüsse, 57 Datenobjekte und -speicher; beide Linter und die Layout-Prüfung ohne Befund.
+Begründung: Aufgabenstellung (vollständige, syntaktisch korrekte Modelle) und Vorlesung (4-43 Nachrichtenflüsse, 4-50 Start/Ende, 5-54 include/extend, 5-60 Zustandsdiagramm nutzt Klassenoperationen). Die Entscheidung, ob Lagergebühr und Mahnung so gewollt sind, trifft die Gruppe am 15.10.
 
 ### E-16 Kunde als eigener Prozess statt Black Box (28.09.2026)
 
@@ -97,7 +112,7 @@ Datum: 02.09.2026 (Claude/David, vorläufig, siehe E-07).
 Entscheidung: `bpmn/` (Diagramme + PNG), `uml/` (PlantUML, PNG, XMI), `doku/` (docx + PDF), `praesentation/` (pptx + PDF), `abgabe/` (ZIPs für Moodle), `tools/` (Generatoren), `docs/` (Doku des Teams), `archiv/repairflow-v1/` (erste Fassung der Projektgrundlagen). Dateinamen der Abgabe nach Ablauf: `Projekt-WWI25B4-Gruppe1.pdf`, `BPMN-WWI25B4-Gruppe1.zip`, `UML-WWI25B4-Gruppe1.vpp`, `Praesentation-WWI25B4-Gruppe1.pdf`.
 Begründung: Ein Ordner je Artefakttyp, Verantwortliche sind in der README zugeordnet, die Abgabenamen stehen früh fest.
 
-### E-09 Umfang der UML-Modelle (überholt durch E-10 und E-15: 26 Klassen, 35 Assoziationen, sechs Sequenzdiagramme)
+### E-09 Umfang der UML-Modelle (überholt durch E-10, E-15 und E-17: 27 Klassen, 36 Assoziationen, 19 Use Cases, sechs Sequenzdiagramme)
 
 Datum: 02.09.2026 (Claude/David, vorläufig).
 Entscheidung: 18 Use Cases in vier Bereichen mit sieben Akteuren (davon zwei sekundär: Lieferant, KI-Diagnosedienst); 23 Klassen mit sieben Aufzählungen; Sequenzdiagramme zu UC01, UC07, UC09, UC14 und UC16; zusätzlich ein Zustandsdiagramm für Reparaturauftrag.

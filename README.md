@@ -1,10 +1,12 @@
 # RepairFlow – Fallstudie Systemanalyse (WWI25B4, Gruppe 1)
 
-Stand: 26.09.2026. Zusammengeführter Stand der Fallstudie RepairFlow
+Stand: 05.10.2026. Zusammengeführter Stand der Fallstudie RepairFlow
 (Solution-Provider-Perspektive mit KI-Sofortdiagnose, BPMN für Camunda 8).
 Was aus welchem der beiden ursprünglichen Entwürfe übernommen wurde und warum,
 steht in `doku/05-vergleich-und-zusammenfuehrung.md`; die Korrekturen der
-Gesamtprüfung vom 26.09.2026 in `doku/03-entscheidungen.md` (E-15).
+Gesamtprüfung vom 26.09.2026 in `doku/03-entscheidungen.md` (E-15), der Kunden-Pool
+vom 28.09. in E-16 und die Korrekturen des Komplettchecks vom 05.10.2026 in E-17
+(Befundliste: `doku/protokolle/2026-10-05-komplettcheck.md`).
 
 ## Repository-Stand
 
@@ -21,8 +23,8 @@ lösen auf.
 
 | Ordner | Inhalt | Abgabekriterium |
 |---|---|---|
-| `bpmn/` | 10 Kollaborationsdiagramme `p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` (Camunda 8) + PNG mit gleichem Basisnamen, `README.md` | 10 Prozesse, 121 Aktivitäten (Ø 12,1), 61 % automatisiert |
-| `uml/` | `klassen.puml/.png` (26 Klassen, 35 Assoziationen), vier Fokus-Ausschnitte, `usecase.puml/.png` (18 Use Cases), `sequenz-01…06`, `zustand-reparaturauftrag`, `systemkontext`, `modell.xmi` für Visual Paradigm, `README.md` | ≥ 10 UCs, ≥ 10 Klassen, 5 Sequenzdiagramme (wir haben 6) |
+| `bpmn/` | 10 Kollaborationsdiagramme `p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` (Camunda 8) + PNG mit gleichem Basisnamen, `README.md` | 10 Prozesse, 125 Aktivitäten im Werkstatt-Pool (Ø 12,5), 62 % automatisiert, Kunde mit eigenem Ablauf |
+| `uml/` | `klassen.puml/.png` (27 Klassen, 36 Assoziationen), vier Fokus-Ausschnitte, `usecase.puml/.png` (19 Use Cases, 8 Akteure), `sequenz-01…06`, `zustand-reparaturauftrag`, `systemkontext`, `modell.xmi` für Visual Paradigm, `README.md` | ≥ 10 UCs, ≥ 10 Klassen, 5 Sequenzdiagramme (wir haben 6) |
 | `doku/` | `Projektdokumentation.docx/.pdf` (offene Stellen gelb markiert), Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, Vergleichsnotiz, Protokolle | Projektdokumentation |
 | `praesi/` | `Abschlusspraesentation.pptx/.pdf` (20 Folien, Vortragende je Folie) | Präsentation |
 | `abgabe/` | `BPMN-WWI25B4-Gruppe1.zip` (die zehn BPMN-Dateien, benannt nach Ablauf: `01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`) + Anleitung für das Moodle-Archiv | Abgabeformat |
@@ -39,11 +41,11 @@ lösen auf.
 3. **Sprint-Takt**: Gruppentermine 02.09., 05.10., 15.10., 22.10.; Trello-Board
    mit einer Liste je Termin.
 
-## Nächste Schritte (bis zum Gruppentermin 05.10.2026)
+## Nächste Schritte (bis zum Gruppentermin 15.10.2026)
 
 | # | Aufgabe | Verantwortlich | Status |
 |---|---|---|---|
-| 1 | Korrekturen vom 26.09. (E-15) in der Gruppe bestätigen – betrifft BPMN 02, 03, 05, 06, 08, 09, 10 und das UML-Modell | alle, Abnahme Adrian | offen |
+| 1 | Korrekturen vom 26.09. (E-15), 28.09. (E-16) und 05.10. (E-17) in der Gruppe bestätigen – betrifft alle BPMN und das UML-Modell; Lagergebühr/Mahnung in Prozess 08 entscheiden | alle, Abnahme Adrian | offen |
 | 2 | Alle zehn BPMN im Camunda Modeler (Camunda 8) öffnen, Problems-Panel prüfen, speichern; in die vorbereiteten Unterordner der Camunda Cloud hochladen (Namen `01-Sofortdiagnose` … `10-Retoure`); danach `abgabe/BPMN-WWI25B4-Gruppe1.zip` neu packen (`abgabe/README.md`) | Maxi | offen – die Dateien tragen noch `exporter="RepairFlow BPMN Generator"` |
 | 3 | `uml/modell.xmi` in Visual Paradigm importieren, Klassen- und Use-Case-Diagramm aufziehen, die Sequenzdiagramme als Unterdiagramme der Use Cases anlegen, `UML-WWI25B4-Gruppe1.vpp` sichern und einchecken (Anleitung: `uml/README.md`). Wer vor dem 26.09. schon importiert hat: neu importieren oder die Änderungen aus E-15 von Hand nachziehen | Kilian | offen – `.vpp` fehlt im Repo (Pflicht-Abgabedatei) |
 | 4 | Trello-Board anlegen; Screenshot in Doku 4.3 und auf Präsentations-Folie 16 einfügen | Kilian / Jakob | offen |
@@ -54,7 +56,7 @@ lösen auf.
 ## Offene Entscheidungen (siehe `doku/03-entscheidungen.md`)
 
 - **E-07**: Adrian (Product Owner) und die Gruppe bestätigen Perspektive (E-02),
-  KI-Gimmick (E-03), Prozessliste (E-05) und die Korrekturen aus E-15.
+  KI-Gimmick (E-03), Prozessliste (E-05) und die Korrekturen aus E-15, E-16 und E-17.
 - **E-14**: Dozent informieren (Ansprechperson, Termine).
 - **Zuständigkeit BPMN 09/10**: Drei Dokumente weisen die Prüfung unterschiedlich
   zu (Maxi vs. Jakob) – in der Review-Runde klären und in `03-entscheidungen.md`

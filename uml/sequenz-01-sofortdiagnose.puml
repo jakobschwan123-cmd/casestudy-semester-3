@@ -31,7 +31,7 @@ else Medien auswertbar
     VA -> KI : <<create>>
     VA -> KI : erzeugeVorabKva()
     activate KI
-    KI -> KVA : <<create>> (vorlaeufig = true)
+    KI -> KVA : <<create>> (status = VORLAEUFIG)
     KI -> KVA : addPosition(p)
     KI -> KVA : berechneSumme()
     KVA --> KI : summe
@@ -53,7 +53,7 @@ else Medien auswertbar
     alt Kunde bestätigt innerhalb 7 Tagen
         Kunde -> VA : bestaetigen()
         opt Teile verfügbar
-            VA -> RES : <<create>> reserviere()
+            VA -> RES : <<create>> vorreserviere()
             activate RES
             RES -> LB : reserviere(anzahl)
             RES --> VA : Status VORRESERVIERT

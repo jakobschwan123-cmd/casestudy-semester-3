@@ -5,7 +5,7 @@ Das Moodle-Archiv heißt `Fallstudie-WWI25B4-Gruppe1.zip` und enthält:
 | Datei | Quelle im Repo | Stand |
 |---|---|---|
 | Projekt-WWI25B4-Gruppe1.pdf | doku/Projektdokumentation.pdf (beim Packen umbenennen) | Entwurf, offene Stellen gelb markiert |
-| BPMN-WWI25B4-Gruppe1.zip | abgabe/ (aus bpmn/*.bpmn, Dateinamen `01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`) | Stand 26.09.2026, nach Nacharbeit im Modeler neu packen |
+| BPMN-WWI25B4-Gruppe1.zip | abgabe/ (aus bpmn/*.bpmn, Dateinamen `01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`) | Stand 05.10.2026 (E-17), nach Nacharbeit im Modeler neu packen |
 | UML-WWI25B4-Gruppe1.vpp | aus Visual Paradigm (File → Save Project As) | offen, Kilian |
 | Praesentation-WWI25B4-Gruppe1.pdf | praesi/Abschlusspraesentation.pdf (beim Packen umbenennen) | Entwurf, Zuordnung der Vortragenden auf der letzten Folie |
 

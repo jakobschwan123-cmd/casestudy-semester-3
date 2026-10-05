@@ -1,8 +1,9 @@
 @startuml
-title sqd : UC07 KVA freigeben / ablehnen (mit Erinnerungsschleife)
+title sqd : UC07 KVA freigeben / ablehnen (mit Erinnerungsschleife, max. drei Erinnerungen)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign center
 actor Techniker
+actor Servicemitarbeiter as SM
 participant ": Reparaturauftrag" as RA
 participant ": Kostenvoranschlag" as KVA
 participant ": KvaPosition" as POS
@@ -20,12 +21,13 @@ KVA -> KVA : berechneSumme()
 KVA --> Techniker : summe
 deactivate KVA
 
-Techniker -> RA : wechsleStatus(KVA_OFFEN)
+Techniker -> SM : KVA zur Prüfung
+SM -> RA : wechsleStatus(KVA_OFFEN)
 note right of RA : Status: KVA offen
-Techniker -> KVA : versendeAnKunde()
+SM -> KVA : versendeAnKunde()
 activate KVA
 KVA -> Kunde : Kostenvoranschlag
-loop solange keine Reaktion (Erinnerung alle 3 Tage)
+loop solange keine Reaktion, höchstens dreimal (Erinnerung alle 3 Tage)
     KVA -> Kunde : Erinnerung
 end
 alt Kunde gibt frei
@@ -34,13 +36,11 @@ alt Kunde gibt frei
     KVA -> RA : wechsleStatus(FREIGEGEBEN)
     note right of RA : Status: freigegeben\n-> Ersatzteil-Disposition (UC08/UC09)
     KVA --> Kunde : Freigabe bestätigt
-else Kunde lehnt ab
+else Kunde lehnt ab oder reagiert nicht
     Kunde -> KVA : ablehnen(grund)
     KVA -> KVA : setzeStatus(ABGELEHNT)
     KVA -> RA : wechsleStatus(ABGELEHNT)
-    note right of RA : Status: abgelehnt\n(Gerät wird unrepariert abgeholt)
-    KVA -> RA : benachrichtigeKunde("Bitte Gerät abholen")
-    RA -> Kunde : Nachricht "Bitte Gerät abholen"
+    note right of RA : Status: abgelehnt\n-> Abholung mit Diagnosepauschale (UC15)
 end
 deactivate KVA
 @enduml

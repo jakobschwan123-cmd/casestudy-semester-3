@@ -3,16 +3,19 @@ title sqd : UC16 Reklamation bearbeiten (Gewährleistungsentscheidung)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign center
 actor Kunde
-actor Techniker
+actor Servicemitarbeiter as SM
 participant ": Reklamation" as REK
 participant "ursprung : Reparaturauftrag" as RA
 participant ": Rechnung" as RE
+actor Werkstattleiter
 participant "nacharbeit : Reparaturauftrag" as NA
 participant "neuauftrag : Reparaturauftrag" as NEU
 
-Kunde -> Techniker : Mangel melden (Auftrag, Beschreibung)
+Kunde -> Kunde : meldeMangel(a, beschreibung)
+Kunde -> SM : Mangelmeldung (Auftrag, Beschreibung)
+SM -> SM : erfasseReklamation(a, grund)
 create REK
-Techniker -> REK : <<create>>
+SM -> REK : <<create>>
 activate REK
 REK -> RA : getRechnung()
 activate RA
@@ -25,11 +28,14 @@ deactivate RE
 REK -> REK : pruefeGewaehrleistung()
 
 alt innerhalb Gewährleistung
+    REK -> Werkstattleiter : Gewährleistungsfall zur Freigabe
+    Werkstattleiter -> Werkstattleiter : entscheideReklamation(r)
+    Werkstattleiter -> REK : legeNacharbeitAn(kostenfrei = true)
     create NA
-    REK -> NA : <<create>> (kostenfrei)
+    REK -> NA : <<create>> (kostenfrei = true)
     activate NA
     NA -> NA : wechsleStatus(ANGENOMMEN)
-    note right of NA : neuer Zyklus, kostenfrei
+    note right of NA : neuer Zyklus (UC03), kostenfrei;\nDurchführung in UC13/UC14, Übergabe in UC15
     NA -> NA : benachrichtigeKunde("kostenfreie Nacharbeit")
     NA -> Kunde : Nachricht "kostenfreie Nacharbeit"
     NA --> REK : Nacharbeit angelegt
@@ -38,17 +44,19 @@ else außerhalb Gewährleistung
     REK -> Kunde : Angebot kostenpflichtige Nacharbeit
     Kunde --> REK : Entscheidung
     alt Kunde nimmt Angebot an
+        REK -> REK : legeNacharbeitAn(kostenfrei = false)
         create NEU
-        REK -> NEU : <<create>> (kostenpflichtig)
+        REK -> NEU : <<create>> (kostenfrei = false)
         activate NEU
         NEU -> NEU : wechsleStatus(ANGENOMMEN)
         note right of NEU : Nacharbeit zum angenommenen Angebot
         NEU --> REK : Nacharbeit angelegt
         deactivate NEU
     else Kunde lehnt ab
-        REK -> REK : schliesseAb()
+        note over REK : keine Nacharbeit, Gerät wird\nunrepariert abgeholt (UC15)
     end
 end
-REK --> Techniker : Reklamation bearbeitet
+REK -> REK : schliesseAb()
+REK --> SM : Reklamation bearbeitet
 deactivate REK
 @enduml

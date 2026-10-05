@@ -6,7 +6,6 @@ actor Techniker
 participant ": Reparaturschritt" as RS
 participant ": Arbeitszeitbuchung" as AZB
 participant ": Reparaturauftrag" as RA
-participant ": Rechnung" as RE
 actor Kunde
 
 Techniker -> RS : schliesseAb()
@@ -22,17 +21,13 @@ deactivate RS
 Techniker -> RA : fertigmelden()
 activate RA
 RA -> RA : alleSchritteAbgeschlossen()
-alt alle Schritte abgeschlossen
+alt alle Schritte abgeschlossen und Endkontrolle bestanden
     RA -> RA : wechsleStatus(FERTIG)
-    note right of RA : Status: in Reparatur -> fertig
-    RA -> RE : <<create>> berechneBetrag()
-    activate RE
-    RE --> RA : bruttobetrag
-    deactivate RE
+    note right of RA : Status: in Reparatur -> fertig\nRechnung entsteht in UC15
     RA -> RA : benachrichtigeKunde("Gerät abholbereit")
     RA -> Kunde : Nachricht "Gerät abholbereit"\n(über den hinterlegten Kanal: E-Mail / SMS / App)
     RA --> Techniker : fertiggemeldet
-else noch offene Schritte
+else noch offene Schritte oder Nacharbeit nach Endkontrolle
     RA --> Techniker : offene Schritte (Anzahl)
     note right of RA : Status bleibt: in Reparatur
 end

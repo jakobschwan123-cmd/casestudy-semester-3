@@ -27,7 +27,6 @@ class Kunde {
 }
 abstract class Mitarbeiter {
   # personalnummer : String
-  # rolle : String
   --
   + getRolle() : String
 }
@@ -37,6 +36,12 @@ class Techniker {
   + pruefeDiagnosevorschlag(v : KIDiagnosevorschlag) : boolean
   + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
   + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
+}
+class Servicemitarbeiter {
+  + nimmGeraetAn(k : Kunde, g : Geraet) : Reparaturauftrag
+  + versendeKva(kva : Kostenvoranschlag) : void
+  + erfasseReklamation(a : Reparaturauftrag, grund : String) : Reklamation
+  + uebergebeGeraet(a : Reparaturauftrag) : void
 }
 class Disponent {
   + pruefeVerfuegbarkeit(e : Ersatzteil, menge : int) : boolean
@@ -70,9 +75,10 @@ class Filiale <<stammdaten>> {
 Person <|-- Kunde
 Person <|-- Mitarbeiter
 Mitarbeiter <|-- Techniker
+Mitarbeiter <|-- Servicemitarbeiter
 Mitarbeiter <|-- Disponent
 Mitarbeiter <|-- Werkstattleiter
 Werkstattbetrieb "1" *-down- "1..*" Filiale : betreibt >
 Werkstattbetrieb "1" -- "1..*" Mitarbeiter : beschäftigt >
-Mitarbeiter "1..*" -- "1" Filiale : arbeitet in >
+Mitarbeiter "0..*" -- "1" Filiale : arbeitet in >
 @enduml

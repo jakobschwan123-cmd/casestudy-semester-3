@@ -1,5 +1,5 @@
 @startuml
-title sd : Klasse Reparaturauftrag – Zustandsdiagramm
+title stm : Klasse Reparaturauftrag – Zustandsdiagramm
 skinparam defaultFontName Arial
 state "angenommen" as angenommen
 state "in Diagnose" as inDiagnose
@@ -12,23 +12,24 @@ state "fertig" as fertig
 state "abgeholt" as abgeholt
 [*] --> angenommen : Auftrag anlegen /\nwechsleStatus(ANGENOMMEN)
 angenommen --> inDiagnose : Diagnose begonnen /\nwechsleStatus(IN_DIAGNOSE)
-inDiagnose --> kvaOffen : KVA versendet /\nwechsleStatus(KVA_OFFEN)
+inDiagnose --> kvaOffen : KVA geprüft /\nwechsleStatus(KVA_OFFEN)
 inDiagnose --> abgelehnt : nicht reparierbar /\nwechsleStatus(ABGELEHNT)
 kvaOffen --> freigegeben : KVA freigegeben /\nwechsleStatus(FREIGEGEBEN)
-kvaOffen --> abgelehnt : KVA abgelehnt /\nwechsleStatus(ABGELEHNT)
+kvaOffen --> abgelehnt : KVA abgelehnt oder\nnach dritter Erinnerung verfallen /\nwechsleStatus(ABGELEHNT)
 freigegeben --> teileBestellt : Fehlteile bestellt /\nwechsleStatus(TEILE_BESTELLT)
 freigegeben --> inReparatur : Reparatur begonnen\n[alle Teile reserviert] /\nwechsleStatus(IN_REPARATUR)
 teileBestellt --> inReparatur : Reparatur begonnen\n[Teile eingegangen] /\nwechsleStatus(IN_REPARATUR)
-inReparatur --> fertig : fertigmelden()\n[alleSchritteAbgeschlossen()] /\nwechsleStatus(FERTIG)
+angenommen --> inReparatur : Nacharbeit begonnen\n[kostenfrei oder Angebot angenommen] /\nwechsleStatus(IN_REPARATUR)
+inReparatur --> fertig : fertigmelden()\n[alleSchritteAbgeschlossen()\nund Endkontrolle bestanden] /\nwechsleStatus(FERTIG)
 fertig --> abgeholt : Übergabe und Zahlung /\nwechsleStatus(ABGEHOLT)
-abgelehnt --> abgeholt : Gerät abgeholt /\nwechsleStatus(ABGEHOLT)
+abgelehnt --> abgeholt : Gerät unrepariert abgeholt\n(Diagnosepauschale) /\nwechsleStatus(ABGEHOLT)
 abgeholt --> [*]
 note right of inReparatur
   Zusatzbefund: Nachtrags-KVA mit eigenem
   KvaStatus; der Auftrag bleibt in Reparatur
 end note
 note bottom of abgeholt
-  Reklamation: neuer Reparaturauftrag
-  (Nacharbeit), kein Rücksprung
+  Reklamation: neuer Reparaturauftrag (Nacharbeit)
+  ohne Diagnose und KVA, kein Rücksprung
 end note
 @enduml

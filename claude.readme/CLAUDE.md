@@ -4,7 +4,7 @@
 > Entscheidungen in [`../doku/03-entscheidungen.md`](../doku/03-entscheidungen.md),
 > Team-/Git-Regeln in [`README.md`](README.md). Diese Datei enthält nur, was dort
 > nicht steht: bindende Konventionen für die Arbeit am Repo.
-> Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) und am 26.09.2026 nach der Gesamtprüfung (E-15).
+> Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) am 26.09.2026 nach der Gesamtprüfung (E-15), am 28.09. nach dem Kunden-Pool (E-16) und am 05.10.2026 nach dem Komplettcheck (E-17).
 
 ## Was das Projekt ist
 
@@ -24,9 +24,9 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
-| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 12,1; Linter 0 Befunde) | `bpmn/p01-…p10-*.bpmn` |
-| Use-Case-Diagramm | ≥ 10 Use Cases | 18 | `uml/usecase.puml` |
-| Klassendiagramm | ≥ 10 Klassen | 26 (+ 7 Enums) | `uml/klassen.puml`, Ausschnitte `klassen-fokus-1..4-*.puml` |
+| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 12,5; Linter und Layout-Prüfung 0 Befunde) | `bpmn/p01-…p10-*.bpmn` |
+| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (8 Akteure) | `uml/usecase.puml` |
+| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | `uml/klassen.puml`, Ausschnitte `klassen-fokus-1..4-*.puml` |
 | Sequenzdiagramme | 5 | 6 | `uml/sequenz-01..06-*.puml` |
 | Zustandsdiagramm (Zusatz) | – | 1 | `uml/zustand-reparaturauftrag.puml` |
 
@@ -44,7 +44,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   = Rollen:** `Service / Annahme`, `Techniker`, `Werkstattleitung`,
   `Ersatzteil-Disposition`. Keine Lane für die Software; Automatisierung steckt
   im Aktivitätstyp (E-06). Im Klassenmodell sind die Rollen die Unterklassen von
-  `Mitarbeiter`: `Techniker`, `Disponent`, `Werkstattleiter`.
+  `Mitarbeiter`: `Servicemitarbeiter`, `Techniker`, `Disponent`, `Werkstattleiter` (eine je Lane).
 - **Zustandsautomat `Reparaturauftrag`:** `angenommen` → `in Diagnose` →
   `KVA offen` → `freigegeben` | `abgelehnt` → `Teile bestellt` →
   `in Reparatur` → `fertig` → `abgeholt`. Diese Statuswerte sind auch das
@@ -79,7 +79,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 - **Zwei Entwürfe, ein Stand.** Kilians V2 (Betreiber-Perspektive, Camunda 7,
   ohne KI) und der Solution-Provider-Entwurf wurden am 02.09.2026 zusammengeführt
   (`doku/05-vergleich-und-zusammenfuehrung.md`). Nicht wieder auf die
-  Betreiber-Fassung zurückfallen; offene Punkte stehen in E-07/E-14, die Korrekturen vom 26.09.2026 in E-15.
+  Betreiber-Fassung zurückfallen; offene Punkte stehen in E-07/E-14, die Korrekturen vom 26.09.2026 in E-15 und vom 05.10.2026 in E-17.
 - **Keine Umlaute in Ordner-/Dateinamen.** macOS (NFD) und Linux (NFC)
   normalisieren Umlaute unterschiedlich; das erzeugt im Team Phantom-Änderungen.
   Deshalb `praesi/`, nicht `präsi/`.

@@ -198,9 +198,9 @@
     <bpmn:dataObject id="DataObj_02_2" />
     <bpmn:dataObjectReference id="DataObjRef_02_3" name="Reparatur-auftrag [angenommen]" dataObjectRef="DataObj_02_3" />
     <bpmn:dataObject id="DataObj_02_3" />
-    <bpmn:dataStoreReference id="DataStore_02_1" name="RepairFlow-Datenbank" />
-    <bpmn:dataStoreReference id="DataStore_02_2" name="Technikerplan" />
-    <bpmn:dataStoreReference id="DataStore_02_3" name="Technikerplan" />
+    <bpmn:dataStoreReference id="DataStore_02_1" name="RepairFlow-Datenbank" dataStoreRef="Store_02_1" />
+    <bpmn:dataStoreReference id="DataStore_02_2" name="Technikerplan" dataStoreRef="Store_02_2" />
+    <bpmn:dataStoreReference id="DataStore_02_3" name="Technikerplan" dataStoreRef="Store_02_2" />
   </bpmn:process>
   <bpmn:process id="Proc_02_Kunde" name="Kunde" isExecutable="false">
     <bpmn:startEvent id="K02_Start" name="Reparatur gewünscht">
@@ -226,6 +226,8 @@
     <bpmn:sequenceFlow id="Flow_02_3" sourceRef="K02_Abgeben" targetRef="K02_Beleg" />
     <bpmn:sequenceFlow id="Flow_02_4" sourceRef="K02_Beleg" targetRef="K02_End" />
   </bpmn:process>
+  <bpmn:dataStore id="Store_02_1" name="RepairFlow-Datenbank" />
+  <bpmn:dataStore id="Store_02_2" name="Technikerplan" />
   <bpmn:message id="Msg_02_1" name="Gerät abgegeben">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />
@@ -405,7 +407,7 @@
         <di:waypoint x="815" y="612" />
         <di:waypoint x="940" y="612" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="822" y="532" width="60" height="18" />
+          <dc:Bounds x="823" y="590" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02_8_di" bpmnElement="Flow_02_8">
@@ -454,7 +456,7 @@
         <di:waypoint x="2335" y="978" />
         <di:waypoint x="2460" y="978" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2342" y="898" width="60" height="18" />
+          <dc:Bounds x="2343" y="956" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_02_18_di" bpmnElement="Flow_02_18">

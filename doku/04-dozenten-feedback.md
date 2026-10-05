@@ -18,7 +18,8 @@ Folgt daraus: Entscheidung E-02 (Solution Provider, FixWerk als Pilotkunde). Umg
 
 - ~~Reicht unser GitHub-Repo als Artefakt-Repository für BPMN?~~ Geklärt über den Ablauf: Die Modelle gehören in die vorbereiteten Unterordner der Camunda Cloud; Git nutzen wir zusätzlich (E-14).
 - Wechsel der Ansprechperson von Maximilian (Gruppeneinteilung) zu Nina (Projektleitung) mitteilen.
-- Zählt bei „durchschnittlich 10 Aktivitäten" pro Diagramm nur der ausmodellierte Pool oder alle Pools zusammen? (Unsere Diagramme haben 10 bis 14 Aktivitäten im Werkstatt-Pool, im Schnitt 12,1; seit E-16 kommen im Kunden-Pool 0 bis 5 je Diagramm dazu.)
+- Zählt bei „durchschnittlich 10 Aktivitäten" pro Diagramm nur der ausmodellierte Pool oder alle Pools zusammen? (Unsere Diagramme haben 10 bis 15 Aktivitäten im Werkstatt-Pool, im Schnitt 12,5; seit E-16 kommen im Kunden-Pool 0 bis 6 je Diagramm dazu.)
 - Passt es, den Kunden als eigenen, nicht ausführbaren Prozess auszumodellieren und nur den Lieferanten als Black Box zu lassen (E-16)?
 - Ist die Camunda-8-Anreicherung (Task-Definitionen, Subscriptions, FEEL-Bedingungen) erwünscht oder soll rein fachlich modelliert werden? Wir haben angereichert, damit das Problems-Panel leer ist.
-- Sind 26 Klassen und 18 Use Cases im Rahmen, oder soll das Modell für die Abgabe verkleinert werden?
+- Sind 27 Klassen und 19 Use Cases im Rahmen, oder soll das Modell für die Abgabe verkleinert werden?
+- Sind Lagergebühr nach der dritten Abhol-Erinnerung und Mahnung nach 14 Tagen (Prozess 08, E-17) fachlich so gewollt, oder soll die Abholung einfacher bleiben?

@@ -6,10 +6,11 @@ left to right direction
 actor "Kunde\n(Endkunde der Werkstatt)" as Kunde
 actor "Lieferant" as Lieferant
 rectangle "Werkstattbetrieb (Mandant), z. B. FixWerk GmbH" as WB {
-  actor "Service / Annahme" as Service
+  actor "Servicemitarbeiter\n(Service / Annahme)" as Service
   actor "Techniker" as Techniker
-  actor "Werkstattleitung" as Leitung
-  actor "Ersatzteil-Disposition" as Dispo
+  actor "Werkstattleiter\n(Werkstattleitung)" as Leitung
+  actor "Disponent\n(Ersatzteil-Disposition)" as Dispo
+  actor "Werkstattinhaber" as Inhaber
 }
 rectangle "RepairFlow-Plattform (SaaS)\nRepairFlow GmbH" as RF #EEF3FF {
   rectangle "Kundenportal / App" as App
@@ -24,6 +25,7 @@ Service -- Auftrag
 Techniker -- Auftrag
 Leitung -- Auftrag
 Dispo -- DispoM
+Inhaber -- Auftrag : Onboarding, Filialen, Nutzer
 App -- KI : Foto / Video / Ton
 DispoM -- Lieferant : Bestellung, Auftragsbestätigung,\nLieferung, Retoure
 Abr .. DATEV : Export (Schnittstelle)

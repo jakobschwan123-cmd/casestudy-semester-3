@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_10" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_10">
-    <bpmn:documentation>Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht. Ob nach einer Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06.</bpmn:documentation>
+    <bpmn:documentation>Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht. Antwortet der Lieferant auch nach der zweiten Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06.</bpmn:documentation>
     <bpmn:participant id="Part_10_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_10" />
     <bpmn:participant id="Part_10_Lieferant" name="Lieferant" />
     <bpmn:messageFlow id="MsgFlow_10_1" name="Retoure anmelden" sourceRef="T10_Anmelden" targetRef="Part_10_Lieferant" />
     <bpmn:messageFlow id="MsgFlow_10_2" name="RMA-Nummer" sourceRef="Part_10_Lieferant" targetRef="E10_RMA" />
-    <bpmn:messageFlow id="MsgFlow_10_3" name="Ersatz / Gutschrift" sourceRef="Part_10_Lieferant" targetRef="T10_Rueckmeldung" />
+    <bpmn:messageFlow id="MsgFlow_10_3" name="Eskalation" sourceRef="T10_Eskalieren" targetRef="Part_10_Lieferant" />
+    <bpmn:messageFlow id="MsgFlow_10_4" name="Rücksendung" sourceRef="T10_Versenden" targetRef="Part_10_Lieferant" />
+    <bpmn:messageFlow id="MsgFlow_10_5" name="Ersatz / Gutschrift" sourceRef="Part_10_Lieferant" targetRef="T10_Rueckmeldung" />
   </bpmn:collaboration>
   <bpmn:process id="Proc_10" name="10 Ersatzteil-Retoure und Lieferanten-Reklamation" isExecutable="true">
     <bpmn:laneSet id="LaneSet_10">
       <bpmn:lane id="Lane_10_1" name="Werkstattleitung">
+        <bpmn:flowNodeRef>GW10_Zweite</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T10_Eskalieren</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T10_Abschreiben</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_10_2" name="Ersatzteil-Disposition">
         <bpmn:flowNodeRef>Start_10</bpmn:flowNodeRef>
@@ -62,10 +66,13 @@
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10_3</bpmn:incoming>
       <bpmn:outgoing>Flow_10_4</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T10_Anmelden_out_DataObjRef_10_2">
+        <bpmn:targetRef>DataObjRef_10_2</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
     </bpmn:sendTask>
     <bpmn:exclusiveGateway id="Merge_10" name="">
       <bpmn:incoming>Flow_10_4</bpmn:incoming>
-      <bpmn:incoming>Flow_10_9</bpmn:incoming>
+      <bpmn:incoming>Flow_10_11</bpmn:incoming>
       <bpmn:outgoing>Flow_10_5</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:eventBasedGateway id="GW10_Warten" name="">
@@ -82,72 +89,87 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:intermediateCatchEvent id="E10_RMA" name="RMA-Freigabe erhalten">
       <bpmn:incoming>Flow_10_7</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_10</bpmn:outgoing>
+      <bpmn:outgoing>Flow_10_13</bpmn:outgoing>
       <bpmn:messageEventDefinition id="E10_RMA_def" messageRef="Msg_10_1" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:userTask id="T10_Eskalieren" name="Beim Lieferanten eskalieren">
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="form-t10_eskalieren" />
-      </bpmn:extensionElements>
+    <bpmn:exclusiveGateway id="GW10_Zweite" name="Bereits eskaliert?">
       <bpmn:incoming>Flow_10_8</bpmn:incoming>
       <bpmn:outgoing>Flow_10_9</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:manualTask id="T10_Versenden" name="Teil verpacken und versenden">
-      <bpmn:incoming>Flow_10_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_10</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="T10_Eskalieren" name="Eskalation an Lieferanten senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t10_eskalieren" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10_9</bpmn:incoming>
       <bpmn:outgoing>Flow_10_11</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:serviceTask id="T10_Abschreiben" name="Teil abschreiben">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t10_abschreiben" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_12</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:manualTask id="T10_Versenden" name="Teil verpacken und versenden">
+      <bpmn:incoming>Flow_10_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_14</bpmn:outgoing>
     </bpmn:manualTask>
     <bpmn:serviceTask id="T10_Bestand" name="Lagerbestand korrigieren">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t10_bestand" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_10_11</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_12</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="T10_Bestand_out_DataObjRef_10_2">
-        <bpmn:targetRef>DataObjRef_10_2</bpmn:targetRef>
+      <bpmn:incoming>Flow_10_14</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_15</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T10_Bestand_out_DataObjRef_10_3">
+        <bpmn:targetRef>DataObjRef_10_3</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
     <bpmn:receiveTask id="T10_Rueckmeldung" name="Rückmeldung des Lieferanten empfangen" messageRef="Msg_10_2">
-      <bpmn:incoming>Flow_10_12</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_13</bpmn:outgoing>
+      <bpmn:incoming>Flow_10_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_16</bpmn:outgoing>
     </bpmn:receiveTask>
     <bpmn:exclusiveGateway id="GW10_Art" name="Ersatz oder Gutschrift?">
-      <bpmn:incoming>Flow_10_13</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_14</bpmn:outgoing>
-      <bpmn:outgoing>Flow_10_15</bpmn:outgoing>
+      <bpmn:incoming>Flow_10_16</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_17</bpmn:outgoing>
+      <bpmn:outgoing>Flow_10_18</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="T10_Ersatz" name="Ersatzlieferung buchen">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t10_ersatz" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_10_14</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_16</bpmn:outgoing>
+      <bpmn:incoming>Flow_10_17</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_19</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:serviceTask id="T10_Gutschrift" name="Gutschrift verbuchen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t10_gutschrift" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_10_15</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_17</bpmn:outgoing>
+      <bpmn:incoming>Flow_10_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_20</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T10_Gutschrift_out_DataObjRef_10_4">
+        <bpmn:targetRef>DataObjRef_10_4</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Join_10a" name="">
-      <bpmn:incoming>Flow_10_16</bpmn:incoming>
-      <bpmn:incoming>Flow_10_17</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_18</bpmn:outgoing>
+      <bpmn:incoming>Flow_10_12</bpmn:incoming>
+      <bpmn:incoming>Flow_10_19</bpmn:incoming>
+      <bpmn:incoming>Flow_10_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_21</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="T10_Abschluss" name="Retoure dokumentieren und abschließen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t10_abschluss" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_10_18</bpmn:incoming>
-      <bpmn:outgoing>Flow_10_19</bpmn:outgoing>
+      <bpmn:incoming>Flow_10_21</bpmn:incoming>
+      <bpmn:outgoing>Flow_10_22</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="T10_Abschluss_out_DataStore_10_1">
         <bpmn:targetRef>DataStore_10_1</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
     <bpmn:endEvent id="End_10" name="Retoure abgeschlossen">
-      <bpmn:incoming>Flow_10_19</bpmn:incoming>
+      <bpmn:incoming>Flow_10_22</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_10_1" sourceRef="Start_10" targetRef="T10_Grund" />
     <bpmn:sequenceFlow id="Flow_10_2" sourceRef="T10_Grund" targetRef="T10_Ermitteln" />
@@ -156,28 +178,40 @@
     <bpmn:sequenceFlow id="Flow_10_5" sourceRef="Merge_10" targetRef="GW10_Warten" />
     <bpmn:sequenceFlow id="Flow_10_6" sourceRef="GW10_Warten" targetRef="E10_Timer" />
     <bpmn:sequenceFlow id="Flow_10_7" sourceRef="GW10_Warten" targetRef="E10_RMA" />
-    <bpmn:sequenceFlow id="Flow_10_8" sourceRef="E10_Timer" targetRef="T10_Eskalieren" />
-    <bpmn:sequenceFlow id="Flow_10_9" sourceRef="T10_Eskalieren" targetRef="Merge_10" />
-    <bpmn:sequenceFlow id="Flow_10_10" sourceRef="E10_RMA" targetRef="T10_Versenden" />
-    <bpmn:sequenceFlow id="Flow_10_11" sourceRef="T10_Versenden" targetRef="T10_Bestand" />
-    <bpmn:sequenceFlow id="Flow_10_12" sourceRef="T10_Bestand" targetRef="T10_Rueckmeldung" />
-    <bpmn:sequenceFlow id="Flow_10_13" sourceRef="T10_Rueckmeldung" targetRef="GW10_Art" />
-    <bpmn:sequenceFlow id="Flow_10_14" sourceRef="GW10_Art" targetRef="T10_Ersatz" name="Ersatz">
+    <bpmn:sequenceFlow id="Flow_10_8" sourceRef="E10_Timer" targetRef="GW10_Zweite" />
+    <bpmn:sequenceFlow id="Flow_10_9" sourceRef="GW10_Zweite" targetRef="T10_Eskalieren" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(eskaliert)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_10_10" sourceRef="GW10_Zweite" targetRef="T10_Abschreiben" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=eskaliert</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_10_11" sourceRef="T10_Eskalieren" targetRef="Merge_10" />
+    <bpmn:sequenceFlow id="Flow_10_12" sourceRef="T10_Abschreiben" targetRef="Join_10a" />
+    <bpmn:sequenceFlow id="Flow_10_13" sourceRef="E10_RMA" targetRef="T10_Versenden" />
+    <bpmn:sequenceFlow id="Flow_10_14" sourceRef="T10_Versenden" targetRef="T10_Bestand" />
+    <bpmn:sequenceFlow id="Flow_10_15" sourceRef="T10_Bestand" targetRef="T10_Rueckmeldung" />
+    <bpmn:sequenceFlow id="Flow_10_16" sourceRef="T10_Rueckmeldung" targetRef="GW10_Art" />
+    <bpmn:sequenceFlow id="Flow_10_17" sourceRef="GW10_Art" targetRef="T10_Ersatz" name="Ersatz">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rueckmeldung = "ersatz"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_10_15" sourceRef="GW10_Art" targetRef="T10_Gutschrift" name="Gutschrift">
+    <bpmn:sequenceFlow id="Flow_10_18" sourceRef="GW10_Art" targetRef="T10_Gutschrift" name="Gutschrift">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rueckmeldung = "gutschrift"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_10_16" sourceRef="T10_Ersatz" targetRef="Join_10a" />
-    <bpmn:sequenceFlow id="Flow_10_17" sourceRef="T10_Gutschrift" targetRef="Join_10a" />
-    <bpmn:sequenceFlow id="Flow_10_18" sourceRef="Join_10a" targetRef="T10_Abschluss" />
-    <bpmn:sequenceFlow id="Flow_10_19" sourceRef="T10_Abschluss" targetRef="End_10" />
+    <bpmn:sequenceFlow id="Flow_10_19" sourceRef="T10_Ersatz" targetRef="Join_10a" />
+    <bpmn:sequenceFlow id="Flow_10_20" sourceRef="T10_Gutschrift" targetRef="Join_10a" />
+    <bpmn:sequenceFlow id="Flow_10_21" sourceRef="Join_10a" targetRef="T10_Abschluss" />
+    <bpmn:sequenceFlow id="Flow_10_22" sourceRef="T10_Abschluss" targetRef="End_10" />
     <bpmn:dataObjectReference id="DataObjRef_10_1" name="Lieferanten-bestellung" dataObjectRef="DataObj_10_1" />
     <bpmn:dataObject id="DataObj_10_1" />
-    <bpmn:dataObjectReference id="DataObjRef_10_2" name="Lagerbestand" dataObjectRef="DataObj_10_2" />
+    <bpmn:dataObjectReference id="DataObjRef_10_2" name="Lieferanten-bestellung [Retoure]" dataObjectRef="DataObj_10_2" />
     <bpmn:dataObject id="DataObj_10_2" />
-    <bpmn:dataStoreReference id="DataStore_10_1" name="RepairFlow-Datenbank" />
+    <bpmn:dataObjectReference id="DataObjRef_10_3" name="Lagerbestand" dataObjectRef="DataObj_10_3" />
+    <bpmn:dataObject id="DataObj_10_3" />
+    <bpmn:dataObjectReference id="DataObjRef_10_4" name="Lieferanten-bestellung [Gutschrift]" dataObjectRef="DataObj_10_4" />
+    <bpmn:dataObject id="DataObj_10_4" />
+    <bpmn:dataStoreReference id="DataStore_10_1" name="RepairFlow-Datenbank" dataStoreRef="Store_10_1" />
   </bpmn:process>
+  <bpmn:dataStore id="Store_10_1" name="RepairFlow-Datenbank" />
   <bpmn:message id="Msg_10_1" name="RMA-Freigabe">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />
@@ -191,224 +225,287 @@
   <bpmndi:BPMNDiagram id="Diagram_10">
     <bpmndi:BPMNPlane id="Plane_10" bpmnElement="Collab_10">
       <bpmndi:BPMNShape id="Part_10_Werkstatt_di" bpmnElement="Part_10_Werkstatt" isHorizontal="true">
-        <dc:Bounds x="120" y="60" width="3085" height="590" />
+        <dc:Bounds x="120" y="60" width="3085" height="705" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_10_1_di" bpmnElement="Lane_10_1" isHorizontal="true">
-        <dc:Bounds x="150" y="60" width="3055" height="170" />
+        <dc:Bounds x="150" y="60" width="3055" height="285" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_10_2_di" bpmnElement="Lane_10_2" isHorizontal="true">
-        <dc:Bounds x="150" y="230" width="3055" height="420" />
+        <dc:Bounds x="150" y="345" width="3055" height="420" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Part_10_Lieferant_di" bpmnElement="Part_10_Lieferant" isHorizontal="true">
-        <dc:Bounds x="120" y="745" width="3085" height="60" />
+        <dc:Bounds x="120" y="860" width="3085" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_10_di" bpmnElement="Start_10">
-        <dc:Bounds x="227" y="350" width="36" height="36" />
+        <dc:Bounds x="227" y="464" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="190" y="392" width="110" height="27" />
+          <dc:Bounds x="190" y="506" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Grund_di" bpmnElement="T10_Grund">
-        <dc:Bounds x="370" y="328" width="130" height="80" />
+        <dc:Bounds x="370" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Ermitteln_di" bpmnElement="T10_Ermitteln">
-        <dc:Bounds x="560" y="328" width="130" height="80" />
+        <dc:Bounds x="560" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Anmelden_di" bpmnElement="T10_Anmelden">
-        <dc:Bounds x="750" y="328" width="130" height="80" />
+        <dc:Bounds x="750" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_10_di" bpmnElement="Merge_10">
-        <dc:Bounds x="980" y="342" width="50" height="50" />
+        <dc:Bounds x="980" y="458" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW10_Warten_di" bpmnElement="GW10_Warten">
-        <dc:Bounds x="1170" y="342" width="50" height="50" />
+        <dc:Bounds x="1170" y="458" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E10_Timer_di" bpmnElement="E10_Timer">
-        <dc:Bounds x="1367" y="350" width="36" height="36" />
+        <dc:Bounds x="1367" y="464" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1330" y="392" width="110" height="27" />
+          <dc:Bounds x="1330" y="506" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E10_RMA_di" bpmnElement="E10_RMA">
-        <dc:Bounds x="1367" y="464" width="36" height="36" />
+        <dc:Bounds x="1367" y="580" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1330" y="430" width="110" height="27" />
+          <dc:Bounds x="1330" y="546" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW10_Zweite_di" bpmnElement="GW10_Zweite">
+        <dc:Bounds x="1360" y="232" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1232" y="202" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Eskalieren_di" bpmnElement="T10_Eskalieren">
         <dc:Bounds x="1510" y="102" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T10_Abschreiben_di" bpmnElement="T10_Abschreiben">
+        <dc:Bounds x="1700" y="218" width="130" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Versenden_di" bpmnElement="T10_Versenden">
-        <dc:Bounds x="1700" y="328" width="130" height="80" />
+        <dc:Bounds x="1700" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Bestand_di" bpmnElement="T10_Bestand">
-        <dc:Bounds x="1890" y="328" width="130" height="80" />
+        <dc:Bounds x="1890" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Rueckmeldung_di" bpmnElement="T10_Rueckmeldung">
-        <dc:Bounds x="2080" y="328" width="130" height="80" />
+        <dc:Bounds x="2080" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW10_Art_di" bpmnElement="GW10_Art">
-        <dc:Bounds x="2310" y="342" width="50" height="50" />
+        <dc:Bounds x="2310" y="458" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2260" y="308" width="150" height="27" />
+          <dc:Bounds x="2260" y="424" width="150" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Ersatz_di" bpmnElement="T10_Ersatz">
-        <dc:Bounds x="2460" y="328" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T10_Gutschrift_di" bpmnElement="T10_Gutschrift">
         <dc:Bounds x="2460" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T10_Gutschrift_di" bpmnElement="T10_Gutschrift">
+        <dc:Bounds x="2460" y="558" width="130" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Join_10a_di" bpmnElement="Join_10a">
-        <dc:Bounds x="2690" y="342" width="50" height="50" />
+        <dc:Bounds x="2690" y="458" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T10_Abschluss_di" bpmnElement="T10_Abschluss">
-        <dc:Bounds x="2840" y="328" width="130" height="80" />
+        <dc:Bounds x="2840" y="442" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="End_10_di" bpmnElement="End_10">
-        <dc:Bounds x="3077" y="350" width="36" height="36" />
+        <dc:Bounds x="3077" y="464" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3040" y="392" width="110" height="27" />
+          <dc:Bounds x="3040" y="506" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_10_1_di" bpmnElement="DataObjRef_10_1">
-        <dc:Bounds x="659" y="242" width="36" height="50" />
+        <dc:Bounds x="659" y="357" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="535" y="254" width="120" height="27" />
+          <dc:Bounds x="535" y="369" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_10_2_di" bpmnElement="DataObjRef_10_2">
-        <dc:Bounds x="1989" y="242" width="36" height="50" />
+        <dc:Bounds x="849" y="357" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1865" y="254" width="120" height="27" />
+          <dc:Bounds x="725" y="369" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_10_3_di" bpmnElement="DataObjRef_10_3">
+        <dc:Bounds x="1989" y="357" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1865" y="369" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_10_4_di" bpmnElement="DataObjRef_10_4">
+        <dc:Bounds x="2559" y="703" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2435" y="715" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStore_10_1_di" bpmnElement="DataStore_10_1">
-        <dc:Bounds x="2805" y="588" width="50" height="50" />
+        <dc:Bounds x="2805" y="703" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2681" y="600" width="120" height="27" />
+          <dc:Bounds x="2681" y="715" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_10_1_di" bpmnElement="Flow_10_1">
-        <di:waypoint x="263" y="368" />
-        <di:waypoint x="370" y="368" />
+        <di:waypoint x="263" y="482" />
+        <di:waypoint x="370" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_2_di" bpmnElement="Flow_10_2">
-        <di:waypoint x="500" y="368" />
-        <di:waypoint x="560" y="368" />
+        <di:waypoint x="500" y="482" />
+        <di:waypoint x="560" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_3_di" bpmnElement="Flow_10_3">
-        <di:waypoint x="690" y="368" />
-        <di:waypoint x="750" y="368" />
+        <di:waypoint x="690" y="482" />
+        <di:waypoint x="750" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_4_di" bpmnElement="Flow_10_4">
-        <di:waypoint x="880" y="368" />
-        <di:waypoint x="980" y="368" />
+        <di:waypoint x="880" y="482" />
+        <di:waypoint x="980" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_5_di" bpmnElement="Flow_10_5">
-        <di:waypoint x="1030" y="368" />
-        <di:waypoint x="1170" y="368" />
+        <di:waypoint x="1030" y="482" />
+        <di:waypoint x="1170" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_6_di" bpmnElement="Flow_10_6">
-        <di:waypoint x="1220" y="368" />
-        <di:waypoint x="1367" y="368" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_10_7_di" bpmnElement="Flow_10_7">
-        <di:waypoint x="1195" y="392" />
-        <di:waypoint x="1195" y="482" />
+        <di:waypoint x="1220" y="482" />
         <di:waypoint x="1367" y="482" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_7_di" bpmnElement="Flow_10_7">
+        <di:waypoint x="1195" y="508" />
+        <di:waypoint x="1195" y="598" />
+        <di:waypoint x="1367" y="598" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_8_di" bpmnElement="Flow_10_8">
-        <di:waypoint x="1403" y="368" />
-        <di:waypoint x="1575" y="368" />
-        <di:waypoint x="1575" y="182" />
+        <di:waypoint x="1385" y="464" />
+        <di:waypoint x="1385" y="282" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_9_di" bpmnElement="Flow_10_9">
+        <di:waypoint x="1385" y="232" />
+        <di:waypoint x="1385" y="142" />
         <di:waypoint x="1510" y="142" />
-        <di:waypoint x="1005" y="142" />
-        <di:waypoint x="1005" y="342" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1393" y="120" width="60" height="18" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_10_di" bpmnElement="Flow_10_10">
-        <di:waypoint x="1403" y="482" />
-        <di:waypoint x="1765" y="482" />
-        <di:waypoint x="1765" y="408" />
+        <di:waypoint x="1410" y="258" />
+        <di:waypoint x="1700" y="258" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1416" y="234" width="60" height="18" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_11_di" bpmnElement="Flow_10_11">
-        <di:waypoint x="1830" y="368" />
-        <di:waypoint x="1890" y="368" />
+        <di:waypoint x="1575" y="102" />
+        <di:waypoint x="1575" y="72" />
+        <di:waypoint x="1005" y="72" />
+        <di:waypoint x="1005" y="458" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_12_di" bpmnElement="Flow_10_12">
-        <di:waypoint x="2020" y="368" />
-        <di:waypoint x="2080" y="368" />
+        <di:waypoint x="1830" y="258" />
+        <di:waypoint x="2715" y="258" />
+        <di:waypoint x="2715" y="458" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_13_di" bpmnElement="Flow_10_13">
-        <di:waypoint x="2210" y="368" />
-        <di:waypoint x="2310" y="368" />
+        <di:waypoint x="1403" y="598" />
+        <di:waypoint x="1765" y="598" />
+        <di:waypoint x="1765" y="522" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_14_di" bpmnElement="Flow_10_14">
-        <di:waypoint x="2360" y="368" />
-        <di:waypoint x="2460" y="368" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2366" y="344" width="60" height="18" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint x="1830" y="482" />
+        <di:waypoint x="1890" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_15_di" bpmnElement="Flow_10_15">
-        <di:waypoint x="2335" y="392" />
-        <di:waypoint x="2335" y="482" />
-        <di:waypoint x="2460" y="482" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2342" y="402" width="60" height="18" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint x="2020" y="482" />
+        <di:waypoint x="2080" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_16_di" bpmnElement="Flow_10_16">
-        <di:waypoint x="2590" y="368" />
-        <di:waypoint x="2690" y="368" />
+        <di:waypoint x="2210" y="482" />
+        <di:waypoint x="2310" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_17_di" bpmnElement="Flow_10_17">
-        <di:waypoint x="2590" y="482" />
-        <di:waypoint x="2715" y="482" />
-        <di:waypoint x="2715" y="392" />
+        <di:waypoint x="2360" y="482" />
+        <di:waypoint x="2460" y="482" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2366" y="458" width="60" height="18" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_18_di" bpmnElement="Flow_10_18">
-        <di:waypoint x="2740" y="368" />
-        <di:waypoint x="2840" y="368" />
+        <di:waypoint x="2335" y="508" />
+        <di:waypoint x="2335" y="598" />
+        <di:waypoint x="2460" y="598" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2343" y="576" width="60" height="18" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_19_di" bpmnElement="Flow_10_19">
-        <di:waypoint x="2970" y="368" />
-        <di:waypoint x="3077" y="368" />
+        <di:waypoint x="2590" y="482" />
+        <di:waypoint x="2690" y="482" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_20_di" bpmnElement="Flow_10_20">
+        <di:waypoint x="2590" y="598" />
+        <di:waypoint x="2715" y="598" />
+        <di:waypoint x="2715" y="508" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_21_di" bpmnElement="Flow_10_21">
+        <di:waypoint x="2740" y="482" />
+        <di:waypoint x="2840" y="482" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10_22_di" bpmnElement="Flow_10_22">
+        <di:waypoint x="2970" y="482" />
+        <di:waypoint x="3077" y="482" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_10_1_di" bpmnElement="MsgFlow_10_1">
-        <di:waypoint x="845" y="408" />
-        <di:waypoint x="845" y="745" />
+        <di:waypoint x="845" y="522" />
+        <di:waypoint x="845" y="860" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="853" y="566" width="130" height="20" />
+          <dc:Bounds x="853" y="681" width="130" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_10_2_di" bpmnElement="MsgFlow_10_2">
-        <di:waypoint x="1385" y="745" />
-        <di:waypoint x="1385" y="500" />
+        <di:waypoint x="1385" y="860" />
+        <di:waypoint x="1385" y="616" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1393" y="613" width="130" height="20" />
+          <dc:Bounds x="1393" y="728" width="130" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_10_3_di" bpmnElement="MsgFlow_10_3">
-        <di:waypoint x="2175" y="745" />
-        <di:waypoint x="2175" y="408" />
+        <di:waypoint x="1605" y="182" />
+        <di:waypoint x="1605" y="860" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2183" y="566" width="130" height="20" />
+          <dc:Bounds x="1613" y="511" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_10_4_di" bpmnElement="MsgFlow_10_4">
+        <di:waypoint x="1795" y="522" />
+        <di:waypoint x="1795" y="860" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1803" y="681" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_10_5_di" bpmnElement="MsgFlow_10_5">
+        <di:waypoint x="2175" y="860" />
+        <di:waypoint x="2175" y="522" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2183" y="681" width="130" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T10_Ermitteln_in_DataObjRef_10_1_di" bpmnElement="T10_Ermitteln_in_DataObjRef_10_1">
-        <di:waypoint x="677" y="292" />
-        <di:waypoint x="665" y="328" />
+        <di:waypoint x="677" y="407" />
+        <di:waypoint x="665" y="442" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T10_Bestand_out_DataObjRef_10_2_di" bpmnElement="T10_Bestand_out_DataObjRef_10_2">
-        <di:waypoint x="1995" y="328" />
-        <di:waypoint x="2007" y="292" />
+      <bpmndi:BPMNEdge id="T10_Anmelden_out_DataObjRef_10_2_di" bpmnElement="T10_Anmelden_out_DataObjRef_10_2">
+        <di:waypoint x="855" y="442" />
+        <di:waypoint x="867" y="407" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T10_Bestand_out_DataObjRef_10_3_di" bpmnElement="T10_Bestand_out_DataObjRef_10_3">
+        <di:waypoint x="1995" y="442" />
+        <di:waypoint x="2007" y="407" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T10_Gutschrift_out_DataObjRef_10_4_di" bpmnElement="T10_Gutschrift_out_DataObjRef_10_4">
+        <di:waypoint x="2565" y="638" />
+        <di:waypoint x="2577" y="703" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T10_Abschluss_out_DataStore_10_1_di" bpmnElement="T10_Abschluss_out_DataStore_10_1">
-        <di:waypoint x="2865" y="408" />
-        <di:waypoint x="2830" y="588" />
+        <di:waypoint x="2865" y="522" />
+        <di:waypoint x="2830" y="703" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

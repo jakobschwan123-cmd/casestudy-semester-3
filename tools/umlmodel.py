@@ -11,7 +11,7 @@ ENUMS = {
                       "IN_REPARATUR", "FERTIG", "ABGEHOLT"],
     "KvaStatus": ["VORLAEUFIG", "ENTWURF", "VERSENDET", "FREIGEGEBEN", "ABGELEHNT"],
     "ReservierungStatus": ["VORRESERVIERT", "RESERVIERT", "ENTNOMMEN", "STORNIERT"],
-    "BestellStatus": ["VORSCHLAG", "OFFEN", "BESTAETIGT", "WARENEINGANG", "STORNIERT"],
+    "BestellStatus": ["VORSCHLAG", "OFFEN", "BESTAETIGT", "WARENEINGANG", "STORNIERT", "RETOURE", "GUTSCHRIFT"],
     "ZahlungStatus": ["OFFEN", "BEZAHLT", "MAHNUNG"],
     "GeraeteTyp": ["FAHRRAD", "EBIKE", "ELEKTRONIK"],
     "MedienTyp": ["FOTO", "VIDEO", "AUDIO"],
@@ -31,13 +31,19 @@ CLASSES = [
       ("+", "lehneKvaAb", "kva : Kostenvoranschlag", "void"),
       ("+", "meldeMangel", "a : Reparaturauftrag, beschreibung : String", "Reklamation")]),
     ("Mitarbeiter", True, None,
-     [("#", "personalnummer", "String"), ("#", "rolle", "String")],
+     [("#", "personalnummer", "String")],
      [("+", "getRolle", "", "String")]),
     ("Techniker", False, None,
      [("-", "qualifikation", "String")],
      [("+", "pruefeDiagnosevorschlag", "v : KIDiagnosevorschlag", "boolean"),
       ("+", "erfasseBefund", "a : Reparaturauftrag", "Fehlerbefund"),
       ("+", "bucheArbeitszeit", "s : Reparaturschritt, dauer : int", "Arbeitszeitbuchung")]),
+    ("Servicemitarbeiter", False, None,
+     [],
+     [("+", "nimmGeraetAn", "k : Kunde, g : Geraet", "Reparaturauftrag"),
+      ("+", "versendeKva", "kva : Kostenvoranschlag", "void"),
+      ("+", "erfasseReklamation", "a : Reparaturauftrag, grund : String", "Reklamation"),
+      ("+", "uebergebeGeraet", "a : Reparaturauftrag", "void")]),
     ("Disponent", False, None,
      [],
      [("+", "pruefeVerfuegbarkeit", "e : Ersatzteil, menge : int", "boolean"),
@@ -60,7 +66,7 @@ CLASSES = [
       ("+", "getFreieTermine", "ab : Date", "List<Date>")]),
     ("Lieferant", False, "stammdaten",
      [("-", "lieferantennummer", "String"), ("-", "name", "String"), ("-", "lieferzeitTage", "int")],
-     [("+", "erstelleBestellung", "pos : List<Bestellposition>", "Lieferantenbestellung")]),
+     [("+", "bestaetigeBestellung", "b : Lieferantenbestellung, liefertermin : Date", "void")]),
     ("Voranmeldung", False, None,
      [("-", "voranmeldungsnummer", "String"), ("-", "erstelltAm", "Date"), ("-", "gueltigBis", "Date"),
       ("-", "symptombeschreibung", "String"), ("-", "wunschtermin", "Date"), ("-", "bestaetigt", "boolean")],
@@ -78,7 +84,7 @@ CLASSES = [
       ("+", "bestaetigen", "t : Techniker", "void")]),
     ("Reparaturauftrag", False, None,
      [("-", "auftragsnummer", "String"), ("-", "eingangsdatum", "Date"), ("-", "status", "AuftragStatus"),
-      ("-", "werkstatttermin", "Date")],
+      ("-", "werkstatttermin", "Date"), ("-", "kostenfrei", "boolean")],
      [("+", "wechsleStatus", "neu : AuftragStatus", "void"), ("+", "alleSchritteAbgeschlossen", "", "boolean"),
       ("+", "fertigmelden", "", "void"), ("+", "benachrichtigeKunde", "text : String", "void"),
       ("+", "getRechnung", "", "Rechnung")]),
@@ -90,7 +96,7 @@ CLASSES = [
      [("+", "istReparaturLohnend", "", "boolean")]),
     ("Kostenvoranschlag", False, None,
      [("-", "kvaNummer", "String"), ("-", "erstelldatum", "Date"), ("-", "gueltigBis", "Date"),
-      ("-", "status", "KvaStatus"), ("-", "vorlaeufig", "boolean")],
+      ("-", "status", "KvaStatus")],
      [("+", "addPosition", "p : KvaPosition", "void"), ("+", "getPositionen", "", "List<KvaPosition>"),
       ("+", "berechneSumme", "", "double"), ("+", "versendeAnKunde", "", "void"),
       ("+", "freigeben", "", "void"), ("+", "ablehnen", "grund : String", "void"),
@@ -116,13 +122,15 @@ CLASSES = [
     ("ErsatzteilReservierung", False, None,
      [("-", "reservierungsnummer", "String"), ("-", "menge", "int"), ("-", "datum", "Date"),
       ("-", "status", "ReservierungStatus")],
-     [("+", "reserviere", "", "void"), ("+", "storniere", "", "void"), ("+", "entnehmen", "", "void")]),
+     [("+", "vorreserviere", "", "void"), ("+", "reserviere", "", "void"), ("+", "storniere", "", "void"),
+      ("+", "entnehmen", "", "void")]),
     ("Lieferantenbestellung", False, None,
      [("-", "bestellnummer", "String"), ("-", "bestelldatum", "Date"), ("-", "liefertermin", "Date"),
-      ("-", "status", "BestellStatus")],
+      ("-", "status", "BestellStatus"), ("-", "retourengrund", "String")],
      [("+", "addPosition", "teil : Ersatzteil, menge : int", "void"), ("+", "uebermittle", "", "void"),
       ("+", "bucheWareneingang", "", "void"), ("+", "berechneBestellwert", "", "double"),
-      ("+", "freigeben", "", "void")]),
+      ("+", "freigeben", "", "void"), ("+", "storniere", "", "void"),
+      ("+", "meldeRetoure", "grund : String", "void")]),
     ("Bestellposition", False, None,
      [("-", "menge", "int"), ("-", "einzelpreis", "double")],
      [("+", "positionswert", "", "double")]),
@@ -134,22 +142,24 @@ CLASSES = [
     ("Reklamation", False, None,
      [("-", "reklamationsnummer", "String"), ("-", "datum", "Date"), ("-", "grund", "String"),
       ("-", "istGewaehrleistung", "boolean")],
-     [("+", "pruefeGewaehrleistung", "", "boolean"), ("+", "schliesseAb", "", "void")]),
+     [("+", "pruefeGewaehrleistung", "", "boolean"), ("+", "legeNacharbeitAn", "kostenfrei : boolean", "Reparaturauftrag"),
+      ("+", "schliesseAb", "", "void")]),
 ]
 
 GENERALIZATIONS = [("Kunde", "Person"), ("Mitarbeiter", "Person"),
-                   ("Techniker", "Mitarbeiter"), ("Disponent", "Mitarbeiter"), ("Werkstattleiter", "Mitarbeiter")]
+                   ("Techniker", "Mitarbeiter"), ("Servicemitarbeiter", "Mitarbeiter"), ("Disponent", "Mitarbeiter"),
+                   ("Werkstattleiter", "Mitarbeiter")]
 
 # (whole/left, mult_left, kind, right, mult_right, name)   kind: assoc | comp | agg | dep
 ASSOCIATIONS = [
     ("Werkstattbetrieb", "1", "comp", "Filiale", "1..*", "betreibt"),
     ("Werkstattbetrieb", "1", "assoc", "Mitarbeiter", "1..*", "beschäftigt"),
-    ("Mitarbeiter", "1..*", "assoc", "Filiale", "1", "arbeitet in"),
+    ("Mitarbeiter", "0..*", "assoc", "Filiale", "1", "arbeitet in"),
     ("Kunde", "1", "assoc", "Voranmeldung", "0..*", "stellt"),
     ("Kunde", "1", "assoc", "Reparaturauftrag", "0..*", "beauftragt"),
     ("Voranmeldung", "1", "comp", "Medienanhang", "1..*", "enthält"),
     ("Voranmeldung", "1", "comp", "KIDiagnosevorschlag", "0..1", "führt zu"),
-    ("Voranmeldung", "0..*", "assoc", "Filiale", "1", "Wunschfiliale"),
+    ("Voranmeldung", "0..*", "assoc", "Filiale", "1", "vorgeschlagene Filiale"),
     ("Voranmeldung", "0..1", "assoc", "Reparaturauftrag", "0..1", "wird übernommen in"),
     ("KIDiagnosevorschlag", "0..1", "assoc", "Kostenvoranschlag", "0..1", "erzeugt vorläufigen"),
     ("KIDiagnosevorschlag", "0..*", "assoc", "Ersatzteil", "0..*", "schlägt vor"),
@@ -159,7 +169,7 @@ ASSOCIATIONS = [
     ("Reparaturauftrag", "0..*", "assoc", "Techniker", "0..1", "zugewiesen an"),
     ("Reparaturauftrag", "1", "comp", "Fehlerbefund", "0..1", "hat"),
     ("Fehlerbefund", "0..*", "assoc", "Techniker", "1", "erstellt von"),
-    ("Reparaturauftrag", "0..1", "comp", "Kostenvoranschlag", "0..*", "hat"),
+    ("Reparaturauftrag", "0..1", "assoc", "Kostenvoranschlag", "0..*", "hat"),
     ("Kostenvoranschlag", "1", "comp", "KvaPosition", "1..*", "besteht aus"),
     ("KvaPosition", "0..*", "assoc", "Ersatzteil", "0..1", "referenziert"),
     ("Reparaturauftrag", "1", "comp", "Reparaturschritt", "0..*", "gliedert sich in"),
@@ -177,16 +187,18 @@ ASSOCIATIONS = [
     ("Lieferantenbestellung", "0..*", "assoc", "Filiale", "1", "bestellt von"),
     ("Reparaturauftrag", "1", "assoc", "Rechnung", "0..1", "abgerechnet mit"),
     ("Reparaturauftrag", "1", "assoc", "Reklamation", "0..*", "reklamiert als"),
+    ("Reklamation", "0..1", "assoc", "Reparaturauftrag", "0..1", "führt zu Nacharbeit"),
 ]
 
 # ----------------------------------------------------------------------------- use cases
 ACTORS = [  # (id, name, kind: primary/secondary, description)
     ("Kunde", "Kunde", "primär, extern", "Nutzt die RepairFlow-App: Sofortdiagnose, Voranmeldung, KVA-Freigabe, Zahlung, Reklamation"),
     ("Techniker", "Techniker", "primär, intern", "Diagnose, KVA-Inhalt, Reparaturschritte, Fertigmeldung"),
+    ("Servicemitarbeiter", "Servicemitarbeiter", "primär, intern", "Service / Annahme: Geräteannahme, Auftrag anlegen, KVA und Rechnung versenden, Übergabe, Reklamation erfassen"),
     ("Disponent", "Disponent", "primär, intern", "Ersatzteil-Disposition über alle Filialen, Bestellung, Wareneingang"),
-    ("Werkstattleiter", "Werkstattleiter", "primär, intern", "Terminplanung, Technikerzuweisung, Rechnungsfreigabe, Reklamationen"),
+    ("Werkstattleiter", "Werkstattleiter", "primär, intern", "Terminplanung, Technikerzuweisung, Bestellfreigabe, Reklamationsentscheidung"),
     ("Werkstattinhaber", "Werkstattinhaber", "primär, intern", "Onboarding des Werkstattbetriebs, Filialen und Nutzer in RepairFlow"),
-    ("Lieferant", "Lieferant", "sekundär, extern", "Empfängt Bestellungen, liefert Ersatzteile, bearbeitet Retouren"),
+    ("Lieferant", "Lieferant", "sekundär, extern", "Empfängt Bestellungen, liefert Ersatzteile, nimmt Retouren an und erstattet"),
     ("KIDienst", "KI-Diagnosedienst", "sekundär, extern (System)", "Externer KI-Dienst, der Foto, Video und Ton auswertet"),
 ]
 
@@ -202,36 +214,38 @@ USECASES = [  # (id, name)
     ("UC09", "Ersatzteil reservieren"),
     ("UC10", "Lieferantenbestellung auslösen"),
     ("UC11", "Wareneingang buchen"),
-    ("UC12", "Nachbestellvorschlag bei Meldebestand"),
+    ("UC12", "Nachbestellvorschlag erzeugen"),
     ("UC13", "Reparaturschritt und Arbeitszeit erfassen"),
     ("UC14", "Auftrag fertigmelden und Kunde benachrichtigen"),
     ("UC15", "Rechnung erstellen und Zahlung erfassen"),
     ("UC16", "Reklamation bearbeiten"),
     ("UC17", "Werkstatttermin planen und Techniker zuweisen"),
     ("UC18", "Werkstattbetrieb und Filialen verwalten"),
+    ("UC19", "Retoure abwickeln"),
 ]
 
 ACTOR_UC = [
     ("Kunde", ["UC01", "UC02", "UC03", "UC07", "UC14", "UC15", "UC16"]),
-    ("Techniker", ["UC04", "UC05", "UC06", "UC07", "UC13", "UC14", "UC16"]),
-    ("Disponent", ["UC08", "UC09", "UC10", "UC11", "UC12"]),
-    ("Werkstattleiter", ["UC03", "UC10", "UC15", "UC16", "UC17"]),
+    ("Techniker", ["UC04", "UC05", "UC06", "UC13", "UC14", "UC16"]),
+    ("Servicemitarbeiter", ["UC03", "UC07", "UC15", "UC16"]),
+    ("Disponent", ["UC08", "UC09", "UC10", "UC11", "UC12", "UC19"]),
+    ("Werkstattleiter", ["UC10", "UC16", "UC17"]),
     ("Werkstattinhaber", ["UC18"]),
-    ("Lieferant", ["UC10", "UC11"]),
+    ("Lieferant", ["UC10", "UC11", "UC19"]),
     ("KIDienst", ["UC01"]),
 ]
 
 INCLUDES = [  # (base, included)
-    ("UC01", "UC08"), ("UC06", "UC05"), ("UC09", "UC08"), ("UC15", "UC14"),
+    ("UC01", "UC08"), ("UC09", "UC08"), ("UC16", "UC03"),
 ]
 EXTENDS = [  # (extension, extended)
-    ("UC02", "UC01"), ("UC04", "UC05"), ("UC10", "UC09"), ("UC12", "UC08"), ("UC16", "UC15"),
+    ("UC02", "UC01"), ("UC04", "UC05"), ("UC10", "UC09"), ("UC12", "UC09"), ("UC19", "UC11"),
 ]
 
 # ----------------------------------------------------------------------------- PlantUML
 
 PACKAGES = [
-    ("Mandant und Organisation", ["Werkstattbetrieb", "Filiale", "Person", "Mitarbeiter", "Techniker", "Disponent", "Werkstattleiter"]),
+    ("Mandant und Organisation", ["Werkstattbetrieb", "Filiale", "Person", "Mitarbeiter", "Techniker", "Servicemitarbeiter", "Disponent", "Werkstattleiter"]),
     ("Kundenkontakt und KI-Sofortdiagnose", ["Kunde", "Voranmeldung", "Medienanhang", "KIDiagnosevorschlag"]),
     ("Auftragsabwicklung", ["Reparaturauftrag", "Geraet", "Fehlerbefund", "Kostenvoranschlag", "KvaPosition",
                             "Reparaturschritt", "Arbeitszeitbuchung", "Rechnung", "Reklamation"]),
@@ -310,14 +324,14 @@ FOCUS = {
     "klassen-fokus-3-disposition": ("cd : Fokus 3 – Ersatzteil-Disposition",
         ["Disponent", "Ersatzteil", "Lagerbestand", "ErsatzteilReservierung", "Lieferantenbestellung", "Bestellposition", "Lieferant", "Reparaturauftrag", "Filiale"]),
     "klassen-fokus-4-organisation": ("cd : Fokus 4 – Mandant, Filialen und Rollen",
-        ["Person", "Kunde", "Mitarbeiter", "Techniker", "Disponent", "Werkstattleiter", "Werkstattbetrieb", "Filiale"]),
+        ["Person", "Kunde", "Mitarbeiter", "Techniker", "Servicemitarbeiter", "Disponent", "Werkstattleiter", "Werkstattbetrieb", "Filiale"]),
 }
 
 
 UC_GROUPS = [
     ("Kundenportal (App)", ["UC01", "UC02", "UC07"]),
     ("Auftrag und Werkstatt", ["UC03", "UC17", "UC04", "UC05", "UC06", "UC13", "UC14", "UC15", "UC16"]),
-    ("Ersatzteil-Disposition", ["UC08", "UC09", "UC10", "UC11", "UC12"]),
+    ("Ersatzteil-Disposition", ["UC08", "UC09", "UC10", "UC11", "UC12", "UC19"]),
     ("Administration", ["UC18"]),
 ]
 RIGHT_ACTORS = ["Lieferant", "KIDienst"]

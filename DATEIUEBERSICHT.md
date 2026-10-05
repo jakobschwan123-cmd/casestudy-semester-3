@@ -1,6 +1,6 @@
 # Dateiübersicht – RepairFlow (Fallstudie Systemanalyse, WWI25B4 Gruppe 1)
 
-Stand 26.09.2026. Diese Datei erklärt jede Datei im Repository: wo sie liegt, wie sie heißt, wofür sie da ist und wer sie pflegt. Ordnerstruktur = Jakobs `main` (`bpmn/`, `uml/`, `doku/`, `praesi/`, `abgabe/`, `tools/`, `archiv/`, `claude.readme/`).
+Stand 05.10.2026. Diese Datei erklärt jede Datei im Repository: wo sie liegt, wie sie heißt, wofür sie da ist und wer sie pflegt. Ordnerstruktur = Jakobs `main` (`bpmn/`, `uml/`, `doku/`, `praesi/`, `abgabe/`, `tools/`, `archiv/`, `claude.readme/`).
 
 ## Wurzelverzeichnis
 
@@ -26,7 +26,7 @@ Dateiname = `p` + zweistellige Nummer + Prozessname, keine Umlaute. Quelle ist i
 | `p08-abholung.bpmn/.png` | Abholung, Rechnung und Zahlung (DATEV-Übergabe) | Kunde, Werkstattbetrieb (Service/Annahme, Techniker) |
 | `p09-reklamation.bpmn/.png` | Reklamation und Gewährleistung | Kunde, Werkstattbetrieb (Techniker, Service/Annahme, Werkstattleitung) |
 | `p10-retoure.bpmn/.png` | Ersatzteil-Retoure und Lieferanten-Reklamation | Werkstattbetrieb (Werkstattleitung, Disposition), Lieferant |
-| `README.md` | Konventionen (Pool = Unternehmen, Lanes = Rollen, Aktivitätstypen, Datenobjekte), Prüfstand (Linter 0 Befunde, Ø 12,1 Aktivitäten), Aufgaben für Maxi (im Camunda Modeler öffnen, speichern, Camunda Cloud) | Maxi |
+| `README.md` | Konventionen (Pool = Unternehmen, Lanes = Rollen, Aktivitätstypen, Datenobjekte), Prüfstand (Linter und Layout-Prüfung 0 Befunde, Ø 12,5 Aktivitäten), Aufgaben für Maxi (im Camunda Modeler öffnen, speichern, Camunda Cloud) | Maxi |
 
 Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modeler öffnen, Problems-Panel prüfen, speichern, in die Camunda Cloud laden.
 
@@ -36,8 +36,8 @@ Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modele
 
 | Datei | Wofür |
 |---|---|
-| `usecase.puml/.png` | Use-Case-Diagramm `ud : RepairFlow` – 18 Use Cases, 7 Akteure, 4 include, 5 extend, Systemgrenze |
-| `klassen.puml/.png` | Vollständiges Klassendiagramm `cd : RepairFlow` – 26 Klassen, 7 Enums, 35 Assoziationen |
+| `usecase.puml/.png` | Use-Case-Diagramm `ud : RepairFlow` – 19 Use Cases, 8 Akteure, 3 include, 5 extend, Systemgrenze |
+| `klassen.puml/.png` | Vollständiges Klassendiagramm `cd : RepairFlow` – 27 Klassen, 7 Enums, 36 Assoziationen |
 | `klassen-fokus-1-sofortdiagnose.puml/.png` | Ausschnitt Kundenkontakt und KI-Sofortdiagnose (in Doku und Folien) |
 | `klassen-fokus-2-auftrag.puml/.png` | Ausschnitt Auftragsabwicklung (in der Doku) |
 | `klassen-fokus-3-disposition.puml/.png` | Ausschnitt Ersatzteil-Disposition |
@@ -47,8 +47,8 @@ Verantwortlich: **Maxi** (BPMN). Nächster Schritt: jede Datei im Camunda Modele
 | `sequenz-03-reservierung.puml/.png` | SD3 zu UC09 Ersatzteil reservieren (filialübergreifend) |
 | `sequenz-04-fertigmeldung.puml/.png` | SD4 zu UC14 Auftrag fertigmelden und Kunde benachrichtigen |
 | `sequenz-05-reklamation.puml/.png` | SD5 zu UC16 Reklamation bearbeiten |
-| `sequenz-06-nachbestellvorschlag.puml/.png` | SD6 zu UC12/UC10 Nachbestellvorschlag und Lieferantenbestellung (sechstes SD, Bonus) |
-| `zustand-reparaturauftrag.puml/.png` | Zustandsdiagramm `sd : Reparaturauftrag` (Bonus; der Zustandsautomat, der alle Modelle verbindet) |
+| `sequenz-06-nachbestellvorschlag.puml/.png` | SD6 zu UC10 Lieferantenbestellung auslösen, mit `ref` auf UC12 (sechstes SD, Bonus) |
+| `zustand-reparaturauftrag.puml/.png` | Zustandsdiagramm `stm : Reparaturauftrag` (Bonus; der Zustandsautomat, der alle Modelle verbindet) |
 | `systemkontext.puml/.png` | Systemkontext-Skizze für Doku Kapitel 2.4 |
 | `modell.xmi` | Klassen- und Use-Case-Modell als XMI 2.1 für **Visual Paradigm** (Project → Import → XMI) |
 | `README.md` | Vorgehen für Kilian in Visual Paradigm 18: XMI importieren, Diagramme aus dem Modell ziehen, Sequenzdiagramme als Unterdiagramme der Use Cases anlegen, Commit auf den Teamwork-Server, `.vpp` sichern | Kilian |
@@ -59,17 +59,19 @@ Verantwortlich: **Kilian** (UML). Nächster Schritt: `UML-WWI25B4-Gruppe1.vpp` i
 
 | Datei | Wofür |
 |---|---|
-| `Projektdokumentation.docx` | Die Projektdokumentation (Word): Titelseite mit Kurs, Gruppe, Namen; Kapitel 1 Mitglieder und Rollen, 2 Projekt, 3 Vorgehen, 4 Projektmanagement, 5 Artefakte, 6 Probleme, 7 Feedback, Anhang A Abgabestruktur, Anhang B die zehn BPMN-Diagramme. Titelseite, Haupttext mit Anhang A, Anhang B mit je einer Seite pro BPMN-Diagramm. Offene Stellen sind gelb als `[Gruppe: …]` markiert (Trello-Screenshot, echte Sprint-Ergebnisse, Kapitel 6/7 nach der Präsentation). Wird bei der Abgabe zu `Projekt-WWI25B4-Gruppe1.pdf` |
+| `Projektdokumentation.docx` | Die Projektdokumentation (Word): Titelseite mit Kurs, Gruppe, Namen; Kapitel 1 Mitglieder und Rollen, 2 Projekt, 3 Vorgehen, 4 Projektmanagement, 5 Artefakte, 6 Probleme, 7 Feedback, Anhang A Abgabestruktur, Anhang B die zehn BPMN-Diagramme, Anhang C das vollständige Klassendiagramm. Titelseite, Haupttext mit Anhang A, Anhang B mit je einer Seite pro BPMN-Diagramm, Anhang C. Offene Stellen sind gelb als `[Gruppe: …]` markiert (Trello-Screenshot, echte Sprint-Ergebnisse, Kapitel 6/7 nach der Präsentation). Wird bei der Abgabe zu `Projekt-WWI25B4-Gruppe1.pdf` |
 | `Projektdokumentation.pdf` | PDF-Export der Word-Datei (nach jeder Änderung neu erzeugen) |
 | `00-uebersicht.md` | Inhaltsverzeichnis des Ordners `doku/` |
 | `01-projektkontext.md` | Fachliche Fakten: Szenario FixWerk, Perspektive Solution Provider, Prozessliste, Systemgrenze, Zustandsautomat – Nachschlagewerk für alle |
 | `02-team-und-rollen.md` | Rollen (Stand 02.09.: Nina PL, David Stellvertretung/Backups, Adrian PO, Kilian SM + UML, Maxi BPMN, Jakob QM), Zweierteams, Sprecherzuordnung der Präsentation, Präsentationstermin |
-| `03-entscheidungen.md` | Entscheidungslog E-01 … E-15: was, wann, warum, Auswirkung. Offene Entscheidungen stehen oben |
+| `03-entscheidungen.md` | Entscheidungslog E-01 … E-17: was, wann, warum, Auswirkung. Offene Entscheidungen stehen oben |
 | `04-dozenten-feedback.md` | Rückmeldungen des Dozenten (Perspektive klären, KI-Gimmick) und offene Fragen fürs nächste Coaching |
 | `05-vergleich-und-zusammenfuehrung.md` | Warum der Solution-Provider-Entwurf die Basis ist und was aus Kilians Betreiber-Entwurf übernommen wurde |
 | `protokolle/_vorlage.md` | Vorlage für Sprint-Protokolle |
 | `protokolle/2026-09-02-sprint1.md` | Protokoll des ersten Gruppentermins (Entscheidungen, Aufgaben je Person, offene Punkte, Retrospektive – zwei Stellen vom Team zu füllen) |
 | `protokolle/2026-09-02-review-bpmn-09-10.md` | QM-Review BPMN 09 + 10 (Jakob), mit Nachtrag vom 26.09.2026 (p05-Befund war False Positive) |
+| `protokolle/2026-10-05-komplettcheck.md` | Komplettcheck aller Modelle und Texte vom 05.10.2026 (KI-gestützt): Befundliste mit Fundstellen, Schwere und Stand der Umsetzung (E-17) |
+| `qa-checkliste.md` | Definition of Done als Checkliste für BPMN, UML, Doku und Präsentation (Entwurf für Jakob, 05.10.2026) |
 
 Verantwortlich: **Claude** (Dokumanager) über Kilian/David; Kapitel 4 und Protokolle: **Kilian** (Scrum Master), Abgabe-PDF: **Nina**.
 

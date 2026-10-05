@@ -1,91 +1,91 @@
 {
 "uml2/klassen-fokus-1-sofortdiagnose.png": [
-1257,
-1045
+1250,
+1075
 ],
 "uml2/klassen-fokus-2-auftrag.png": [
-1448,
-1201
+1530,
+1234
 ],
 "uml2/klassen-fokus-3-disposition.png": [
-1179,
-845
+1140,
+935
 ],
 "uml2/klassen-fokus-4-organisation.png": [
-1878,
-630
+2265,
+645
 ],
 "uml2/klassen.png": [
-3130,
-2729
+3658,
+2851
 ],
 "uml2/sequenz-01-sofortdiagnose.png": [
-1498,
-1290
+1418,
+1330
 ],
 "uml2/sequenz-02-kva-freigabe.png": [
-919,
-1083
+981,
+1073
 ],
 "uml2/sequenz-03-reservierung.png": [
-1133,
-1057
+975,
+979
 ],
 "uml2/sequenz-04-fertigmeldung.png": [
-1102,
-809
+1011,
+779
 ],
 "uml2/sequenz-05-reklamation.png": [
-1712,
-1035
+1845,
+1349
 ],
 "uml2/sequenz-06-nachbestellvorschlag.png": [
 1238,
-1011
+1151
 ],
 "uml2/systemkontext.png": [
-1316,
-613
+1216,
+785
 ],
 "uml2/usecase.png": [
-1320,
-1312
+1109,
+1393
 ],
 "uml2/zustand-reparaturauftrag.png": [
-823,
-1336
+933,
+1379
 ],
 "png2_15/p01-sofortdiagnose.png": [
-6008,
-2160
+6863,
+2505
 ],
 "png2_15/p02-auftragsannahme.png": [
 5723,
 1778
 ],
 "png2_15/p03-fehlerdiagnose.png": [
-4298,
-1650
+4868,
+1568
 ],
 "png2_15/p04-kostenvoranschlag.png": [
 5153,
-1830
+2115
 ],
 "png2_15/p05-ersatzteilreservierung.png": [
-6578,
+6293,
 1658
 ],
 "png2_15/p06-ersatzteilbestellung.png": [
 7433,
-2228
+2400
 ],
 "png2_15/p07-reparaturdurchfuehrung.png": [
 5723,
-1823
+1995
 ],
 "png2_15/p08-abholung.png": [
-5723,
-1658
+8288,
+2258
 ],
 "png2_15/p09-reklamation.png": [
 6578,
@@ -93,15 +93,15 @@
 ],
 "png2_15/p10-retoure.png": [
 4868,
-1268
+1440
 ],
 "pres/crop-01-links.png": [
 3200,
-1320
+1547
 ],
 "pres/crop-04-mitte.png": [
 3200,
-1403
+1349
 ],
 "pres/crop-05-links.png": [
 3200,

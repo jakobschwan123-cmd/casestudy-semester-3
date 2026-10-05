@@ -120,10 +120,10 @@ class Diagram:
     def flow(self, src, tgt, name=None, cond=None, loop=False, **kw):
         self.flows.append((src, tgt, name, cond, loop, kw))
 
-    def msg(self, src, tgt, name, snap=True):
+    def msg(self, src, tgt, name, snap=True, dx=0):
         # snap=False: node <-> node flow keeps the task attach point (centre + 30) and jogs
         # between the pools, e.g. when a sequence flow already enters the task at the event's x
-        self.msgs.append((src, tgt, name, snap))
+        self.msgs.append((src, tgt, name, snap, dx))
 
     def data(self, node, name, dir="out", pos=None):
         self.datas.append(dict(node=node, name=name, dir=dir, pos=pos))
@@ -245,6 +245,11 @@ class Diagram:
         if via == "up":
             # leave upwards, then run horizontally into the target's left side
             return [(s.cx, s.top), (s.cx, t.cy), (t.left, t.cy)]
+        if via == "over":
+            # leave upwards into the lane's top strip, run back, then down into the target from above
+            g = self.geo(s) if s.pool else self.lane_geo[s.lane]
+            yo = g["top"] + g["strip"] / 2
+            return [(s.cx, s.top), (s.cx, yo), (t.cx, yo), (t.cx, t.top)]
         if via == "right":
             # leave to the right, then vertically into the target
             return [(s.right, s.cy), (t.cx, s.cy), (t.cx, t.top if t.cy > s.cy else t.bottom)]
@@ -316,7 +321,7 @@ class Diagram:
             else:
                 A('    <bpmn:participant id="%s" name="%s" />' % (pool_ids[p], escape(p)))
         mf_ids = []
-        for i, (src, tgt, name, snap) in enumerate(self.msgs):
+        for i, (src, tgt, name, snap, dx) in enumerate(self.msgs):
             mid = "MsgFlow_%s_%d" % (num, i + 1)
             s = pool_ids.get(src, src)
             t = pool_ids.get(tgt, tgt)
@@ -347,7 +352,7 @@ class Diagram:
 
         # message flow attachment for message events / receive tasks
         msg_by_node = {}
-        for (src, tgt, name, _snap) in self.msgs:
+        for (src, tgt, name, _snap, _dx) in self.msgs:
             if tgt in self.nodes:
                 msg_by_node[tgt] = name
 
@@ -456,8 +461,12 @@ class Diagram:
         for d in self.datas:
             A('    <bpmn:dataObjectReference id="%s" name="%s" dataObjectRef="%s" />' % (d["id"], escape(d["name"]), d["obj"]))
             A('    <bpmn:dataObject id="%s" />' % d["obj"])
+        store_names = []
         for s in self.stores:
-            A('    <bpmn:dataStoreReference id="%s" name="%s" />' % (s["id"], escape(s["name"])))
+            if s["name"] not in store_names:
+                store_names.append(s["name"])
+            A('    <bpmn:dataStoreReference id="%s" name="%s" dataStoreRef="Store_%s_%d" />'
+              % (s["id"], escape(s["name"]), num, store_names.index(s["name"]) + 1))
         for ai, (nid, text) in enumerate(self.annotations):
             A('    <bpmn:textAnnotation id="Note_%s_%d">' % (num, ai + 1))
             A('      <bpmn:text>%s</bpmn:text>' % escape(text))
@@ -476,6 +485,10 @@ class Diagram:
                 if self.nodes[src].pool == p:
                     A(flow_xml(i, src, tgt, fname, cond, kw, 4))
             A('  </bpmn:process>')
+
+        # ---------------- data stores (one per name; several references may point to it)
+        for si, sname in enumerate(store_names):
+            A('  <bpmn:dataStore id="Store_%s_%d" name="%s" />' % (num, si + 1, escape(sname)))
 
         # ---------------- messages
         for mname, mid in self.messages.items():
@@ -521,7 +534,7 @@ class Diagram:
             t_ = self.nodes[tgt]
             if abs(cx_ - dx_) < 1:
                 t_.kw["_vtop" if cy_ < dy_ else "_vbottom"] = True
-        for (src, tgt, name, _snap) in self.msgs:
+        for (src, tgt, name, _snap, _dx) in self.msgs:
             if src in self.pool_geo or tgt in self.pool_geo:
                 nid = tgt if src in self.pool_geo else src
                 pool = src if src in self.pool_geo else tgt
@@ -597,6 +610,9 @@ class Diagram:
                 (x1, y1), (x2, y2) = pts[0], pts[1]
                 if abs(y1 - y2) < 1:      # horizontal first segment
                     label = (x1 + 6, y1 - 24, 60, 18)
+                elif len(pts) > 2 and abs(pts[2][1] - y2) < 1:
+                    # vertical first segment followed by a horizontal one: label at the corner, next to the target row
+                    label = (x2 + 8, y2 - 22, 60, 18)
                 else:                     # vertical first segment
                     label = (x1 + 7, y1 + (10 if y2 > y1 else -28), 60, 18)
             edge(flow_ids[i], pts, label)
@@ -608,10 +624,14 @@ class Diagram:
                 return n.cx + 30
             return n.cx
 
-        for i, (src, tgt, name, snap) in enumerate(self.msgs):
+        for i, (src, tgt, name, snap, dx) in enumerate(self.msgs):
             if src in self.nodes and tgt in self.nodes:   # node in partner pool <-> node in Werkstatt pool
                 a_, b_ = self.nodes[src], self.nodes[tgt]
                 xa, xb = attach_x(a_, b_), attach_x(b_, a_)
+                if a_.kind in TASK_TYPES:
+                    xa += dx
+                if b_.kind in TASK_TYPES:
+                    xb += dx
                 down = a_.cy < b_.cy
                 ya = a_.bottom if down else a_.top
                 yb = b_.top if down else b_.bottom
@@ -629,6 +649,7 @@ class Diagram:
                     pb = self.pool_geo[b_.pool] if b_.pool else None
                     pg = pa or pb
                     ym = (pg["y"] + pg["h"] + POOL_GAP / 2) if pg["y"] < self.pool_top else (pg["y"] - POOL_GAP / 2)
+                    ym += -14 if down else 14   # opposite directions use different heights in the gap
                     pts = [(xa, ya), (xa, ym), (xb, ym), (xb, yb)]
                 (x1, y1), (x2, y2) = pts[0], pts[-1]
                 ly = (y1 + y2) / 2 - 10

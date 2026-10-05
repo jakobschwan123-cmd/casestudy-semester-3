@@ -38,6 +38,7 @@ class ErsatzteilReservierung {
   - datum : Date
   - status : ReservierungStatus
   --
+  + vorreserviere() : void
   + reserviere() : void
   + storniere() : void
   + entnehmen() : void
@@ -47,12 +48,15 @@ class Lieferantenbestellung {
   - bestelldatum : Date
   - liefertermin : Date
   - status : BestellStatus
+  - retourengrund : String
   --
   + addPosition(teil : Ersatzteil, menge : int) : void
   + uebermittle() : void
   + bucheWareneingang() : void
   + berechneBestellwert() : double
   + freigeben() : void
+  + storniere() : void
+  + meldeRetoure(grund : String) : void
 }
 class Bestellposition {
   - menge : int
@@ -65,13 +69,14 @@ class Lieferant <<stammdaten>> {
   - name : String
   - lieferzeitTage : int
   --
-  + erstelleBestellung(pos : List<Bestellposition>) : Lieferantenbestellung
+  + bestaetigeBestellung(b : Lieferantenbestellung, liefertermin : Date) : void
 }
 class Reparaturauftrag {
   - auftragsnummer : String
   - eingangsdatum : Date
   - status : AuftragStatus
   - werkstatttermin : Date
+  - kostenfrei : boolean
   --
   + wechsleStatus(neu : AuftragStatus) : void
   + alleSchritteAbgeschlossen() : boolean

@@ -10,6 +10,7 @@ title ud : RepairFlow – Use-Case-Diagramm
 
 actor "Kunde" as Kunde
 actor "Techniker" as Techniker
+actor "Servicemitarbeiter" as Servicemitarbeiter
 actor "Disponent" as Disponent
 actor "Werkstattleiter" as Werkstattleiter
 actor "Werkstattinhaber" as Werkstattinhaber
@@ -36,7 +37,8 @@ rectangle "RepairFlow" {
     usecase "Ersatzteil reservieren" as UC09
     usecase "Lieferantenbestellung auslösen" as UC10
     usecase "Wareneingang buchen" as UC11
-    usecase "Nachbestellvorschlag bei Meldebestand" as UC12
+    usecase "Nachbestellvorschlag erzeugen" as UC12
+    usecase "Retoure abwickeln" as UC19
   }
   rectangle "Administration" {
     usecase "Werkstattbetrieb und Filialen verwalten" as UC18
@@ -56,32 +58,34 @@ Kunde -- UC16
 Techniker -- UC04
 Techniker -- UC05
 Techniker -- UC06
-Techniker -- UC07
 Techniker -- UC13
 Techniker -- UC14
 Techniker -- UC16
+Servicemitarbeiter -- UC03
+Servicemitarbeiter -- UC07
+Servicemitarbeiter -- UC15
+Servicemitarbeiter -- UC16
 Disponent -- UC08
 Disponent -- UC09
 Disponent -- UC10
 Disponent -- UC11
 Disponent -- UC12
-Werkstattleiter -- UC03
+Disponent -- UC19
 Werkstattleiter -- UC10
-Werkstattleiter -- UC15
 Werkstattleiter -- UC16
 Werkstattleiter -- UC17
 Werkstattinhaber -- UC18
 UC10 -- Lieferant
 UC11 -- Lieferant
+UC19 -- Lieferant
 UC01 -- KIDienst
 
 UC01 ..> UC08 : <<include>>
-UC06 ..> UC05 : <<include>>
 UC09 ..> UC08 : <<include>>
-UC15 ..> UC14 : <<include>>
+UC16 ..> UC03 : <<include>>
 UC02 ..> UC01 : <<extend>>
 UC04 ..> UC05 : <<extend>>
 UC10 ..> UC09 : <<extend>>
-UC12 ..> UC08 : <<extend>>
-UC16 ..> UC15 : <<extend>>
+UC12 ..> UC09 : <<extend>>
+UC19 ..> UC11 : <<extend>>
 @enduml

@@ -42,7 +42,7 @@ def count(path):
         "kunde_activities": sum(kunde.values()),
         "kunde_kinds": dict(kunde),
         "msgflows": len(col.findall(NS + "messageFlow")),
-        "data": len([e for e in root.iter() if e.tag in (NS + "dataObjectReference", NS + "dataStoreReference")]),
+        "data": len([e for e in root.iter() if e.tag == NS + "dataObjectReference"]) + len(root.findall(NS + "dataStore")),
         "start": proc.find(NS + "startEvent").get("name"),
         "end": proc.find(NS + "endEvent").get("name"),
     }
