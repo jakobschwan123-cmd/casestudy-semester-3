@@ -15,9 +15,9 @@ Unser Beispiel: **RepairFlow**, ein Software-Startup (Solution Provider), das We
 - 10 BPMN-2.0-Kollaborationsdiagramme mit durchschnittlich 10 Aktivitäten, vollständig und syntaktisch korrekt
 - Beteiligte Ressourcen als Pools/Lanes, außerdem Datenobjekte und Datenspeicher
 - Werkzeug: Camunda Modeler (Camunda 8, BPMN diagram) oder bpmn.io
-- Diagrammnamen mit zweistelliger Nummer und prägnantem Namen: `01-Sofortdiagnose`, `02-Auftragsannahme` usw. (so heißen die Dateien im Abgabe-ZIP und in der Camunda Cloud; im Repository `p01-sofortdiagnose.bpmn` usw., E-11/E-15)
+- Diagrammnamen mit zweistelliger Nummer und prägnantem Namen: `01-Sofortdiagnose`, `02-Auftragsannahme` usw. (so heißen die Dateien im Abgabe-ZIP; im Repository `p01-sofortdiagnose.bpmn` usw., E-11/E-15)
 - Abgabe als ZIP aller exportierten Diagramme (XML)
-- Artefakt-Repository: Der Ablauf verlangt die Ablage in den vorbereiteten Unterordnern der Camunda Cloud; die Installationsanleitung empfiehlt zusätzlich Git für die Teamarbeit. Wir nutzen beides (Git als Arbeitsgrundlage, Camunda Cloud als Pflichtablage).
+- Artefakt-Repository: Der Ablauf nennt die Camunda Cloud, die Installationsanleitung empfiehlt Git. Wir nutzen nur das GitHub-Repository, die Camunda Cloud nicht (E-20).
 
 ### Automatisierungspotential
 
@@ -95,7 +95,7 @@ Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Sch
 
 ## Fachliche Konventionen für alle Artefakte
 
-Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `tools/umlmodel.py` und `bpmn/README.md`).
+Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `uml/klassen.puml`, `uml/usecase.puml` und `bpmn/README.md`).
 
 - Pools: Werkstattbetrieb (Pilotkunde FixWerk GmbH) · Kunde · Lieferant; Lanes: Service / Annahme · Techniker · Werkstattleitung · Ersatzteil-Disposition
 - Zustandsautomat `Reparaturauftrag`: angenommen → in Diagnose → KVA offen → freigegeben | abgelehnt → Teile bestellt → in Reparatur → fertig → abgeholt
@@ -104,16 +104,6 @@ Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `tools/umlmodel.py`
 - Use Cases (19): UC01 Sofortdiagnose anfordern · UC02 Voranmeldung bestätigen · UC03 Reparaturauftrag anlegen · UC04 Diagnosevorschlag prüfen · UC05 Diagnosebefund erfassen · UC06 KVA erstellen · UC07 KVA freigeben / ablehnen · UC08 Ersatzteil-Verfügbarkeit prüfen · UC09 Ersatzteile disponieren und reservieren · UC10 Lieferantenbestellung auslösen · UC11 Wareneingang buchen · UC12 Nachbestellvorschlag erzeugen · UC13 Reparaturschritt und Arbeitszeit erfassen · UC14 Auftrag fertigmelden · UC15 Abholung und Abrechnung abwickeln · UC16 Reklamation bearbeiten · UC17 Werkstatttermin planen und Techniker zuweisen · UC18 Werkstattbetrieb und Filialen verwalten · UC19 Retoure abwickeln
 - Sequenzdiagramme: SD1 UC01 · SD2 UC07 · SD3 UC09 · SD4 UC14 · SD5 UC16 · SD6 UC10 (Bestellbedarf aus UC12, ref UC11/UC19)
 
-## Stand der Artefakte (05.10.2026, nach E-15 bis E-18 einschließlich UML-Abgleich)
+## Stand der Artefakte
 
-| Artefakt | Stand | Nächster Schritt |
-|---|---|---|
-| BPMN `bpmn/p01-sofortdiagnose.bpmn` … `p10-retoure.bpmn` | fertig, 125 Aktivitäten im Werkstatt-Pool (Ø 12,5), 62 % automatisiert, Kunde mit eigenem Ablauf (E-16, +26 Aktivitäten), alle Rückgaben über Prozess 08 (E-17), Camunda-Linter und bpmnlint ohne Befund, PNG je Datei | Maxi (Prüfung verteilt laut Sprint-1-Protokoll): im Camunda Modeler öffnen, Problems-Panel prüfen, speichern; Camunda Cloud |
-| Use-Case-Diagramm `uml/usecase.*` | 19 UCs, 8 Akteure, 2 include, 6 bedingte extend, auch in `uml/modell.xmi` | Kilian: XMI in VP importieren, Diagramm anlegen, ins VP-Repository committen |
-| Klassendiagramm `uml/klassen.*` (genau ein vollständiges Diagramm) | 27 Klassen (mit Mitarbeiter-Hierarchie aus V2 und Servicemitarbeiter), 7 Enums, 36 Assoziationen | Kilian: in VP anlegen (Anleitung `uml/README.md`) |
-| Sequenzdiagramme `uml/sequenz-01…06.*` | 6 Stück; Klassenbotschaften verwenden Operationen der Empfängerklasse (erneut am 05.10. gegen BPMN abgeglichen, E-18) | Kilian: in VP als Unterdiagramme der Use Cases zeichnen |
-| Zustandsdiagramm `uml/zustand-reparaturauftrag.*` | PlantUML/PNG (Zusatz) | optional in VP |
-| Projektdokumentation `doku/Projektdokumentation.docx/.pdf` | Haupttext (Kapitel 1–7) plus Anhang A (Abgabestruktur) und Anhang B (BPMN-Diagramme), Kapitel 4 mit Sprintplan/Trello aus V2, gelb markierte Stellen brauchen Input der Gruppe | alle: Platzhalter füllen, Jakob: Review |
-| Präsentation `praesi/Abschlusspraesentation.pptx/.pdf` | 20 Folien mit Notizen und Vortragenden (Vorschlag), Termin 27.10. auf der Titelfolie | Gruppe: Zuordnung und Termin bestätigen, Probevortrag |
-| Abgabe-ZIP | `abgabe/BPMN-WWI25B4-Gruppe1.zip` liegt bereit, VPP fehlt noch | Nina: Ende Oktober zusammenstellen |
-| Trello-Board | Plan in Doku Kapitel 4.2/4.3 | Kilian: Board anlegen, Karten aus dem Plan übernehmen |
+Der aktuelle Stand und die offenen Aufgaben stehen in der `README.md` im Hauptverzeichnis, die gültigen Entscheidungen in `03-entscheidungen.md`.

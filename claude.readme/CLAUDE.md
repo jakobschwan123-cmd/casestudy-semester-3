@@ -4,7 +4,7 @@
 > Entscheidungen in [`../doku/03-entscheidungen.md`](../doku/03-entscheidungen.md),
 > Team-/Git-Regeln in [`README.md`](README.md). Diese Datei enthält nur, was dort
 > nicht steht: bindende Konventionen für die Arbeit am Repo.
-> Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) am 26.09.2026 nach der Gesamtprüfung (E-15), am 28.09. nach dem Kunden-Pool (E-16) und am 05.10.2026 nach dem Komplettcheck (E-17).
+> Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) am 26.09.2026 nach der Gesamtprüfung (E-15), am 28.09. nach dem Kunden-Pool (E-16), am 05.10.2026 nach dem Komplettcheck (E-17) und nach dem Gruppenbeschluss E-20 (Generatoren archiviert).
 
 ## Was das Projekt ist
 
@@ -34,10 +34,11 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 - **Namens-Konsistenz über alle Artefakte.** Rollen/Pools, Klassennamen,
   Use-Case-Namen und Statuswerte sind über Doku, BPMN, Use-Case-, Klassen- und
-  Sequenzdiagramme **wortgleich** zu halten. Single Source of Truth für Klassen,
-  Operationen und Use Cases ist `tools/umlmodel.py` (erzeugt ausschließlich `klassen.puml`,
-  `usecase.puml`, `modell.xmi`); für die Prozesse `tools/diagrams.py`. Änderungen
-  dort zuerst, dann Bilder, Doku und Folien nachziehen.
+  Sequenzdiagramme **wortgleich** zu halten. Quelle für Klassen,
+  Operationen und Use Cases sind `uml/klassen.puml`, `uml/usecase.puml` und `uml/modell.xmi`
+  bzw. das Visual-Paradigm-Projekt; für die Prozesse die `.bpmn`-Dateien (E-20).
+  Die Generatoren in `archiv/tools/` werden nicht mehr verwendet. Bei Änderungen
+  Bilder, Doku und Folien nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
   ausmodellierten Prozess, `Kunde` mit eigenem nicht ausführbarem Prozess (E-16),
   `Lieferant` als Empty Pool. **Lanes (4)
@@ -54,9 +55,8 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   ohne Anreicherung), angereichert mit `zeebe:taskDefinition`, `zeebe:userTask`
   + Formular-ID, Message-Subscriptions, ISO-Timern und FEEL-Bedingungen, damit das
   Problems-Panel des Camunda Modelers leer bleibt. Beim Bearbeiten im Modeler
-  diese Anreicherung nicht entfernen; nach Änderungen `@camunda/linting` und
-  `bpmnlint` laufen lassen (`tools/lint.mjs` für den Camunda-Linter, `npx bpmnlint` mit
-  `{"extends": "bpmnlint:recommended"}`); danach `python3 tools/check_layout.py bpmn` und `python3 tools/mkstats.py`. Je Diagramm (Prozessebene) genau ein Start-
+  diese Anreicherung nicht entfernen; nach Änderungen das Problems-Panel
+  prüfen und das PNG neu exportieren. Je Diagramm (Prozessebene) genau ein Start-
   und ein Endereignis (eingebettete Teilprozesse haben ihr eigenes), Ereignisse im Partizip Perfekt, Aktivitäten Verb + Objekt.
 - **Werkzeuge:** BPMN in **Camunda Modeler (Camunda 8)**, UML in **Visual
   Paradigm 18** (Import über `uml/modell.xmi`). Die `.puml`-Dateien liefern
@@ -69,8 +69,9 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   Klammern und Bindestrich für den Umbruch („Kosten-voranschlag [vorläufig]").
   Datenspeicher: `RepairFlow-Datenbank`, `Technikerplan`, `Buchhaltung (DATEV-Export)`.
   Zustände in Datenobjekten sind Werte der Aufzählungen (AuftragStatus usw.).
-- **Abgabe-Namen BPMN:** Im ZIP und in der Camunda Cloud heißen die Diagramme nach
-  Ablauf `01-Sofortdiagnose` … `10-Retoure` (`python3 tools/pack_bpmn.py`).
+- **Abgabe-Namen BPMN:** Im Abgabe-ZIP heißen die Diagramme nach Ablauf
+  `01-Sofortdiagnose` … `10-Retoure`; das ZIP packt die Gruppe zur Abgabe selbst.
+  Keine Camunda Cloud (E-20).
 
 ## Fallstricke
 
@@ -78,8 +79,9 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   (früher `repairflow-klassen.puml`) — der Ordner sagt schon, was es ist.
 - **Zwei Entwürfe, ein Stand.** Kilians V2 (Betreiber-Perspektive, Camunda 7,
   ohne KI) und der Solution-Provider-Entwurf wurden am 02.09.2026 zusammengeführt
-  (`doku/05-vergleich-und-zusammenfuehrung.md`). Nicht wieder auf die
-  Betreiber-Fassung zurückfallen; offene Punkte stehen in E-07/E-14, die Korrekturen vom 26.09.2026 in E-15 und vom 05.10.2026 in E-17.
+  (`archiv/doku/05-vergleich-und-zusammenfuehrung.md`). Nicht wieder auf die
+  Betreiber-Fassung zurückfallen. Gültige Entscheidungen in Kurzform:
+  `doku/03-entscheidungen.md`; ausführlicher Verlauf im Archiv.
 - **Keine Umlaute in Ordner-/Dateinamen.** macOS (NFD) und Linux (NFC)
   normalisieren Umlaute unterschiedlich; das erzeugt im Team Phantom-Änderungen.
   Deshalb `praesi/`, nicht `präsi/`.
@@ -102,4 +104,4 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 ## UML-Abgleich E-18 (05.10.2026)
 
-Aktiv gibt es genau ein Klassendiagramm (`uml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Prüfprotokoll: `doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`; Strukturprüfung: `python3 tools/check_uml.py`.
+Aktiv gibt es genau ein Klassendiagramm (`uml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Prüfprotokoll: `archiv/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`; Strukturprüfung: `python3 tools/check_uml.py`.

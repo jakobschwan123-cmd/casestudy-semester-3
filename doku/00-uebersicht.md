@@ -1,15 +1,13 @@
 # Team-Doku (Gruppe 1, WWI25B4)
 
-Hier liegt alles, was das Team zum Projekt wissen muss und was nicht in die Modelle gehört. Die Dateien sind der gemeinsame Stand; wer etwas ändert, macht das wie beim Rest des Repos über einen `docs/…`-Branch (Branch-Präfix laut Teamregeln) und einen Pull Request.
-
 | Datei | Inhalt |
 |---|---|
-| `01-projektkontext.md` | Aufgabenstellung, Anforderungen an die Artefakte, Bewertung, Termine, Abgabeformat, Werkzeuge und Zugänge, Stand der Artefakte |
+| `Projektdokumentation.docx` / `.pdf` | die abzugebende Projektdokumentation; gelb markierte Stellen füllt die Gruppe |
+| `01-projektkontext.md` | Aufgabenstellung, Anforderungen, Termine, Abgabeformat, Werkzeuge und Zugänge |
 | `02-team-und-rollen.md` | Wer macht was, Zuordnung der Vortragenden |
-| `03-entscheidungen.md` | Entscheidungslog: was wir wann warum entschieden haben (und was noch offen ist) |
-| `04-dozenten-feedback.md` | Rückmeldungen aus den Coaching-Terminen und was daraus folgt |
-| `05-vergleich-und-zusammenfuehrung.md` | Vergleich von Kilians V2 mit dem Solution-Provider-Entwurf, was übernommen wurde und warum |
-| `Projektdokumentation.docx` / `.pdf` | die abzugebende Projektdokumentation (Kapitel 1–7 nach Ablauf, Anhang mit allen BPMN-Diagrammen) |
-| `protokolle/` | Kurze Notizen zu Gruppentreffen, eine Datei pro Termin oder Review (`JJJJ-MM-TT-<thema>.md`, Vorlage liegt dabei) |
+| `03-entscheidungen.md` | gültige Entscheidungen in Kurzform (Verlauf im Archiv) |
+| `04-dozenten-feedback.md` | Rückmeldungen aus den Coaching-Terminen |
+| `qa-checkliste.md` | Abnahme-Checkliste des Qualitätsmanagers |
+| `protokolle/` | ein kurzes Protokoll je Gruppentermin (`JJJJ-MM-TT-<thema>.md`, Vorlage liegt dabei) |
 
-Pflege: Claude (Dokumanager) über David. Wer etwas ergänzen will, kann das aber jederzeit direkt tun.
+Die Projektdokumentation und die Präsentation werden ab jetzt direkt in Word bzw. PowerPoint bearbeitet. Vorher in der WhatsApp-Gruppe Bescheid geben, weil sich Office-Dateien nicht mergen lassen. Das Inhaltsverzeichnis ist statisch: Verschieben sich Seiten, die Seitenzahlen von Hand anpassen oder in Word ein automatisches Verzeichnis einfügen.

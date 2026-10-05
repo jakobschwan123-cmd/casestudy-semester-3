@@ -1,6 +1,6 @@
 # BPMN-Modelle (Geschäftsprozessanalyse)
 
-Zehn Kollaborationsdiagramme im BPMN-2.0-Format, erstellt für den **Camunda Modeler (Camunda 8)**. Dateiname = `p` + zweistellige Nummer + Prozessname in Kleinbuchstaben ohne Umlaute (Repo-Konvention, `claude.readme/CLAUDE.md`); das PNG mit gleichem Basisnamen liegt daneben. Für Abgabe und Camunda Cloud gilt der Ablauf: zweistellige Nummer + prägnanter Modellname (`01-Sofortdiagnose` … `10-Retoure`); `python3 tools/pack_bpmn.py` erzeugt das Abgabe-ZIP mit diesen Namen.
+Zehn Kollaborationsdiagramme im BPMN-2.0-Format für den **Camunda Modeler (Camunda 8)**. Die `.bpmn`-Datei ist die Quelle; das PNG mit gleichem Basisnamen ist der Bildexport für Doku und Präsentation. Bearbeitet wird nur im Camunda Modeler, danach das PNG neu exportieren (E-20).
 
 | Datei | Prozess | Pools |
 |---|---|---|
@@ -15,37 +15,17 @@ Zehn Kollaborationsdiagramme im BPMN-2.0-Format, erstellt für den **Camunda Mod
 | p09-reklamation.bpmn | Reklamation und Gewährleistung | Kunde, Werkstattbetrieb |
 | p10-retoure.bpmn | Ersatzteil-Retoure und Lieferanten-Reklamation | Werkstattbetrieb, Lieferant |
 
-Die PNG-Dateien (bpmn-js-Rendering, 2-fach) sind Bildexporte für Doku und Präsentation; Quelle ist immer die .bpmn-Datei.
+Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`), siehe `abgabe/README.md`.
 
-## Konventionen (aus Vorlesung SYAN-04 und Entscheidung E-06)
+## Konventionen (Vorlesung SYAN-04, E-06)
 
-- Pool = Unternehmen: „Werkstattbetrieb (Pilotkunde FixWerk GmbH)" mit dem ausmodellierten Prozess, „Kunde" mit eigenem, nicht ausführbarem Prozess (Start, Aktivitäten, Ende; E-16), „Lieferant" als Empty Pool (Black Box). Kommunikation zwischen den Pools nur über Nachrichtenflüsse, die an konkreten Elementen beginnen und enden.
-- Lanes = Rollen im Werkstattbetrieb: Service / Annahme, Techniker, Werkstattleitung, Ersatzteil-Disposition. Keine Lane für die Software.
-- Automatisierung steckt im Aktivitätstyp: Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive Task = Nachricht über RepairFlow, User Task = Mensch mit RepairFlow-Oberfläche, Manual Task = außerhalb der Software.
-- Aufruf-Aktivitäten verbinden die Prozesse: 04 → 05, 05 → 06, 06/09 → 10, 09 → 07, 03/04/09 → 08 (Rückgabe des Geräts immer über Prozess 08).
-- Je Diagramm (Prozessebene) ein Start- und ein Endereignis; eingebettete Teilprozesse (p05) haben ihr eigenes Start-/Endereignis. Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
-- Datenobjekte tragen die Klassennamen des Klassendiagramms (Bindestrich nur als Zeilenumbruch, z. B. „Kosten-voranschlag"), der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung (AuftragStatus, KvaStatus, ReservierungStatus, BestellStatus, ZahlungStatus). Datenspeicher: „RepairFlow-Datenbank" (Aufträge, Bestände), „Technikerplan" (Prozess 02, Kapazität und Termine) und „Buchhaltung (DATEV-Export)" (Prozess 08, Übergabe an die Buchhaltung außerhalb der Systemgrenze) – die beiden letzten aus Kilians V2 übernommen.
-- Camunda-8-Anreicherung, damit das Problems-Panel leer bleibt: `zeebe:taskDefinition` an Service-/Send-/Business-Rule-Tasks, `zeebe:userTask` + Formular-ID an User Tasks, Message-Subscriptions mit Correlation Key, ISO-Dauern an Timern, FEEL-Bedingungen an allen XOR-Ausgängen, `zeebe:calledElement` an Call Activities, `zeebe:loopCharacteristics` am Mehrfach-Teilprozess.
+- Pool = Unternehmen: „Werkstattbetrieb (Pilotkunde FixWerk GmbH)“ mit dem ausführbaren Prozess, „Kunde“ mit eigenem, nicht ausführbarem Prozess (E-16), „Lieferant“ als Black Box. Zwischen Pools nur Nachrichtenflüsse.
+- Lanes = Rollen: Service / Annahme, Techniker, Werkstattleitung, Ersatzteil-Disposition. Keine Lane für die Software.
+- Automatisierung über den Aktivitätstyp: Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive Task = Nachricht über RepairFlow, User Task = Mensch mit RepairFlow, Manual Task = außerhalb der Software.
+- Aufrufe zwischen Prozessen: 04 → 05, 05 → 06, 07 → 05 (Nachtrag), 09 → 07, 06/09 → 10, 03/04/09 → 08 (Rückgabe des Geräts immer über 08).
+- Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
+- Datenobjekte tragen die Klassennamen des Klassendiagramms, der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
 
-## Prüfstand (05.10.2026, nach E-15 bis E-19)
+## Kennzahlen (Stand E-19)
 
-- `@camunda/linting` (Regeln des Problems-Panels im Camunda Modeler, Camunda 8): 0 Befunde in allen zehn Dateien. Geprüft per Skript, nicht im Modeler selbst. Der Kunden-Prozess ist `isExecutable="false"` und hat keine Camunda-Anreicherung; der Modeler prüft ihn nur syntaktisch.
-- `bpmnlint` (recommended): 0 Befunde.
-- Import mit bpmn-js: 0 Warnungen; keine Sequenz- oder Nachrichtenflüsse durch fremde Elemente (per Skript geprüft).
-- Aktivitäten im Werkstatt-Pool: 130 gesamt, im Schnitt 13,0 je Diagramm, 79 davon automatisiert (61 %); dazu 26 Aktivitäten in den Kundenabläufen (P01–P09); 39 Nachrichtenflüsse, 59 Datenobjekte und -speicher (Datenspeicher je Name einmal gezählt) (`python3 tools/mkstats.py` zählt nach und schreibt `tools/process_stats.json`).
-- Korrigiert am 05.10. (E-19): P07 Teile für freigegebenen Nachtrag über „05 Ersatzteile disponieren“, Nachtrag bei Ablehnung/Timeout auf „abgelehnt“, Abbruch nach der zweiten erfolglosen Nacharbeit; P08 Ausstieg aus beiden Schleifen (Verwertung nach der vierten Abhol-Erinnerung, Inkasso nach der dritten erfolglosen Mahnung), Mahnung an den Kunden-Pool. Layout-Prüfung und bpmn-js-Import ohne Befund; die beiden Linter sind für P07/P08 noch nicht erneut gelaufen.
-- Korrigiert am 05.10. (E-17): alle Rückgaben über „08 Abholung abwickeln" (P03, P04, P09), Nacharbeit über „07 Reparatur durchführen", jede Warteschleife mit Ausstieg (Timer, dritte Erinnerung, Storno, Abschreibung), fehlende Nachrichtenflüsse in P08–P10, Voranmeldung in P01 mit der Anfrage angelegt; Details in `doku/03-entscheidungen.md`, E-17.
-- Ergänzt am 28.09. (E-16): Kunde mit eigenem Ablauf in P01–P09, z. B. P01 Foto/Video/Ton aufnehmen → Anfrage senden → Rückfrage oder Diagnose abwarten → Termin annehmen → Ende; Nachrichtenflüsse verbinden jetzt Elemente beider Pools. Lieferant bleibt Black Box.
-- Korrigiert am 26.09.: P02 (Umleitung an andere Filiale mit Techniker und Termin), P05 (Reservierungen und Meldebestand immer, danach Fehlteilbestellung), P03 (Status „abgelehnt" bei Totalschaden), P06 (nach Retoure: Ersatz zuordnen oder neu bestellen), P08 (Zahlungseingang bei Rechnung), P09 (Nacharbeitsauftrag, Aufrufname), P10 (ohne „07 Reparatur fortsetzen"); Details in `doku/03-entscheidungen.md`, E-15.
-
-## Aufgaben für Maxi (BPMN-Verantwortlicher)
-
-1. Jede Datei im Camunda Modeler öffnen (Camunda 8), Problems-Panel prüfen, einmal speichern (dann steht der Modeler als Exporter in der Datei).
-2. Layout gegenlesen: Beschriftungen, Kreuzungen, Lane-Höhen. Bei Bedarf Elemente verschieben, die Semantik bleibt unberührt.
-3. Fachlich prüfen, ob Bezeichnungen und Reihenfolgen zum Verständnis der Gruppe passen. Änderungen bitte auch in `doku/03-entscheidungen.md` bzw. in der Doku nachziehen, wenn sie Namen betreffen.
-4. Die zehn Dateien in die vorbereiteten Unterordner der Camunda Cloud hochladen (Pflicht laut Ablauf), Namen `01-Sofortdiagnose` … `10-Retoure`.
-5. Für die Abgabe: `python3 tools/pack_bpmn.py` ausführen, falls sich Dateien geändert haben (erzeugt `abgabe/BPMN-WWI25B4-Gruppe1.zip` mit den Ablauf-Namen).
-
-Die Diagramme wurden aus einer strukturierten Prozessspezifikation erzeugt (`tools/diagrams.py`, Generator `tools/bpmngen.py`). Wer die Rohfassung neu erzeugen will: siehe `tools/README.md`.
-
-Kilians frühere Fassung (Camunda 7, Betreiber-Perspektive, `isExecutable="false"`) liegt unter `archiv/alte-versionen/bpmn/` und ist nicht Teil dieses Stands; Begründung in `doku/05-vergleich-und-zusammenfuehrung.md`.
+130 Aktivitäten im Werkstatt-Pool (Ø 13,0 je Diagramm), davon 79 automatisiert (61 %); 26 Aktivitäten in den Kundenabläufen; 39 Nachrichtenflüsse; 59 Datenobjekte und -speicher. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.

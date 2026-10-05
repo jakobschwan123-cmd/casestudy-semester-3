@@ -1,6 +1,6 @@
 # UML-Modelle (objektorientierte Analyse)
 
-Quelle aller Namen ist `tools/umlmodel.py`. Daraus entstehen das Klassendiagramm, das Use-Case-Diagramm und die XMI-Datei; die Sequenzdiagramme und das Zustandsdiagramm sind von Hand in PlantUML geschrieben und verwenden dieselben Klassen- und Operationsnamen.
+Die PlantUML-Quellen (`.puml`) und `modell.xmi` sind der aktuelle Stand; die PNGs sind daraus gerendert. Das Ziel für die Abgabe ist `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm.
 
 | Datei | Inhalt |
 |---|---|
@@ -20,21 +20,15 @@ Quelle aller Namen ist `tools/umlmodel.py`. Daraus entstehen das Klassendiagramm
 5. **Sequenzdiagramme als Unterdiagramme:** im Use-Case-Diagramm den Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram. So verlangt es der Ablauf („Verfeinerungsdiagramm"). Je Use Case eines: UC01 Sofortdiagnose anfordern (SD1), UC07 KVA freigeben / ablehnen (SD2), UC09 Ersatzteile disponieren und reservieren (SD3), UC14 Auftrag fertigmelden (SD4), UC16 Reklamation bearbeiten (SD5), UC10 Lieferantenbestellung auslösen (SD6, Bestellbedarf aus UC12; ref auf UC11/UC19). Lebenslinien: Akteure als Actor, Objekte als „: Klassenname" mit der Klasse aus dem Modell verknüpfen (dann bietet VP die Operationen zur Auswahl an). Fragmente alt/opt/loop/par/break und ref wie in den PNGs.
 6. Optional: Zustandsdiagramm „stm Reparaturauftrag" als Unterdiagramm der Klasse Reparaturauftrag.
 7. Die Stereotypen «mandant» (Werkstattbetrieb) und «stammdaten» (Filiale, Lieferant, Ersatzteil) überträgt die XMI nicht; in VP von Hand setzen. Die extend-Beziehungen enthalten jetzt Erweiterungspunkte und Bedingungen; nach dem Import gegen `usecase.puml` prüfen.
-8. Wer das XMI schon vor dem 05.10.2026 importiert hat: neu importieren (einfacher) oder die Änderungen aus `doku/03-entscheidungen.md`, E-15, E-17 und E-18, von Hand nachziehen (Servicemitarbeiter, UC19, include/extend, neue Operationen und Assoziationen).
+8. Wer das XMI schon vor dem 05.10.2026 importiert hat: neu importieren (einfacher) oder die Änderungen aus E-15, E-17 und E-18 (`archiv/doku/03-entscheidungen-bis-2026-10-05.md`) von Hand nachziehen (Servicemitarbeiter, UC19, include/extend, neue Operationen und Assoziationen).
 9. Nach jeder Sitzung Commit in den Teamwork-Server und zusätzlich File → Save Project As als lokale Sicherung `UML-WWI25B4-Gruppe1.vpp` (die Datei kommt so in die Abgabe).
 
 ## Herkunft
 
-Das Modell ist die Zusammenführung aus dem Solution-Provider-Entwurf (Claude/David) und Kilians V2: Die Rollenklassen `Mitarbeiter` → `Techniker`/`Disponent`/`Werkstattleiter`, `Kunde.meldeMangel()` und SD6 stammen aus Kilians früherem UML-Paket (`archiv/uml-v1-betreiber/`), siehe `doku/05-vergleich-und-zusammenfuehrung.md`. Am 26.09.2026 wurde das Modell geprüft und korrigiert (Botschaften = Operationen, Multiplizitäten, Akteurzuordnung, Zustandsdiagramm; E-15), am 05.10.2026 erneut (Servicemitarbeiter, UC19 Retoure, include/extend, Nacharbeit; E-17 in `doku/03-entscheidungen.md`).
+Zusammenführung aus dem Solution-Provider-Entwurf und Kilians V2 (E-10), korrigiert in E-15, E-17 und E-18. Der Generator (`archiv/tools/umlmodel.py`) und das Prüfprotokoll des UML-BPMN-Abgleichs (`archiv/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`) liegen im Archiv. Ab jetzt wird direkt in Visual Paradigm bzw. in den `.puml`-Dateien gearbeitet.
 
 ## Namensregeln
 
 - Klassen in UpperCamelCase ohne Umlaute (Geraet, KvaPosition, KIDiagnosevorschlag), Attribute und Operationen in lowerCamelCase.
 - Multiplizitäten in UML-Schreibweise (0..*, 1..*), Kompositionen nur dort, wo Teile ohne das Ganze nicht existieren.
 - Die BPMN-Datenobjekte verwenden dieselben Namen, zur besseren Lesbarkeit im Diagramm mit Bindestrich getrennt („Kosten-voranschlag [vorläufig]").
-
-## Abgleich mit BPMN am 05.10.2026 (E-18)
-
-Alle 19 Use Cases und sechs Sequenzdiagramme wurden gegen die aktiven Dateien unter `bpmn/` gelesen und angepasst. Zuordnung, BPMN-Element-IDs, Sonderfälle und Grenzen der Prüfung: `doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`. UC18 ist Administration außerhalb der zehn Reparaturprozesse. Die archivierten Modelle sind historische Fassungen.
-
-`python3 tools/check_uml.py` (vom Repository-Wurzelordner) prüft das einzelne Klassendiagramm, Generatorstand, Operationen und Statuswerte in Sequenzdiagrammen, BPMN-Anker sowie XMI-IDs und Referenzen. Die fachliche Reihenfolge wird zusätzlich anhand des Prüfprotokolls geprüft. PlantUML-Syntaxprüfung und PNG-Rendering sind separat; ein erfolgreicher Import in Visual Paradigm ist erst nach Durchführung dort bestätigt.

@@ -99,7 +99,7 @@ function fit(file, maxW, maxH) {
   // ---------------- 2 Agenda
   {
     const s = base('Agenda', { speaker: 'Nina' });
-    const items = [['1', 'Ausgangslage und Problem', 'David'], ['2', 'Das Startup RepairFlow und der Markt', 'Adrian'], ['3', 'Geschäftsprozesse (BPMN)', 'Maxi'],
+    const items = [['1', 'Ausgangslage und Problem', 'David'], ['2', 'Das Startup RepairFlow und der Markt', 'Adrian'], ['3', 'Geschäftsprozesse (BPMN)', 'Maximilian'],
       ['4', 'KI-Sofortdiagnose als Alleinstellungsmerkmal', 'Adrian'], ['5', 'Objektorientierte Analyse (UML)', 'Kilian, Jakob'], ['6', 'Vorgehen und Projektmanagement', 'David'],
       ['7', 'Herausforderungen und Fazit', 'Jakob, Nina']];
     items.forEach((it, i) => {
@@ -152,7 +152,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 7 Prozesslandkarte
   {
-    const s = base('Zehn Geschäftsprozesse als Kollaborationsdiagramme', { speaker: 'Maxi' });
+    const s = base('Zehn Geschäftsprozesse als Kollaborationsdiagramme', { speaker: 'Maximilian' });
     const rows = [[{ text: 'Nr', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Prozess', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Pools', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Akt.', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'autom.', options: { bold: true, color: C.white, fill: { color: C.teal } } }]];
     for (const st of STATS) rows.push([st.num, st.name, st.pools.join(', '), String(st.activities), Math.round(100 * st.auto / st.activities) + ' %']);
     s.addTable(rows, { x: 0.5, y: 1.05, w: 6.3, colW: [0.4, 3.2, 1.6, 0.5, 0.6], fontFace: FONT, fontSize: 9.5, color: C.dark, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.31, valign: 'middle' });
@@ -162,7 +162,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 8 Konventionen
   {
-    const s = base('So lesen sich unsere BPMN-Diagramme', { speaker: 'Maxi', notes: 'Regeln aus der Vorlesung: Pool = Unternehmen, Lane = Rolle, keine Lane für Software. Automatisierung zeigt der Aktivitätstyp. Der Kunde hat einen eigenen, nicht ausführbaren Ablauf (z. B. Foto aufnehmen, Anfrage senden, KVA freigeben), der Lieferant bleibt Black Box.' });
+    const s = base('So lesen sich unsere BPMN-Diagramme', { speaker: 'Maximilian', notes: 'Regeln aus der Vorlesung: Pool = Unternehmen, Lane = Rolle, keine Lane für Software. Automatisierung zeigt der Aktivitätstyp. Der Kunde hat einen eigenen, nicht ausführbaren Ablauf (z. B. Foto aufnehmen, Anfrage senden, KVA freigeben), der Lieferant bleibt Black Box.' });
     card(s, 0.5, 1.1, 4.35, 1.4, 'FaSitemap', 'Pools und Lanes', 'Pool = Unternehmen: Werkstattbetrieb (Mandant), Kunde mit eigenem Ablauf, Lieferant als Black Box. Lanes = Rollen: Service, Techniker, Werkstattleitung, Disposition.');
     card(s, 5.15, 1.1, 4.35, 1.4, 'FaBolt', 'Automatisierung als Aktivitätstyp', 'Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive = Nachricht, User Task = Mensch mit RepairFlow, Manual = außerhalb.');
     card(s, 0.5, 2.65, 4.35, 1.4, 'FaExchangeAlt', 'Nachrichtenflüsse und Daten', 'Kommunikation mit Kunde und Lieferant nur als Nachrichtenfluss. Datenobjekte tragen Klassennamen mit Zustand, z. B. Reparaturauftrag [freigegeben].');
@@ -171,13 +171,13 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 9 Prozess 01
   {
-    const s = base('Prozess 01: KI-Sofortdiagnose und Voranmeldung', { speaker: 'Maxi', notes: 'Message-Start aus der App, Voranmeldung wird sofort angelegt, Medienprüfung mit Rückfrage (Antwort oder 7-Tage-Timer), KI als Business Rule Task, Vorab-KVA, Verfügbarkeit über alle Filialen, Terminvorschlag, ereignisbasiertes Gateway: Bestätigung, Ablehnung oder 7-Tage-Timer.' });
+    const s = base('Prozess 01: KI-Sofortdiagnose und Voranmeldung', { speaker: 'Maximilian', notes: 'Message-Start aus der App, Voranmeldung wird sofort angelegt, Medienprüfung mit Rückfrage (Antwort oder 7-Tage-Timer), KI als Business Rule Task, Vorab-KVA, Verfügbarkeit über alle Filialen, Terminvorschlag, ereignisbasiertes Gateway: Bestätigung, Ablehnung oder 7-Tage-Timer.' });
     picture(s, 'tools/pres/crop-01-links.png', 0.5, 1.05, 9.0, 2.7, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Aufnahme und Anfrage, Voranmeldung anlegen, Medienprüfung mit Rückfrage an den Kunden, KI-Diagnosevorschlag, Vorab-KVA');
     bulletsBox(s, ['Kunde: Foto, Video oder Ton aufnehmen und in der App senden; RepairFlow legt daraus sofort die Voranmeldung an', 'Rückfrage bei nicht auswertbaren Medien: neue Aufnahme oder nach 7 Tagen verwerfen', 'KI-Diagnosevorschlag als Geschäftsregel-Aktivität, danach Vorab-KVA, Verfügbarkeitsprüfung und Terminvorschlag', 'Warten auf Bestätigung (Vorreservierung), Ablehnung oder 7-Tage-Timer (Voranmeldung verwerfen)'], 0.5, 4.15, 9, 1.0, 11);
   }
   // ---------------- 10 Prozess 04
   {
-    const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maxi', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden; nach der dritten Erinnerung gilt der KVA als abgelehnt. Abgelehnte Aufträge gehen über Prozess 08 mit Diagnosepauschale zur Abholung.' });
+    const s = base('Prozess 04: Kostenvoranschlag und Kundenfreigabe', { speaker: 'Maximilian', notes: 'Ereignisbasiertes Gateway: Freigabe, Ablehnung oder Timer. Die Erinnerung protokollieren und den KVA erneut senden; nach der dritten Erinnerung gilt der KVA als abgelehnt. Abgelehnte Aufträge gehen über Prozess 08 mit Diagnosepauschale zur Abholung.' });
     picture(s, 'tools/pres/crop-04-mitte.png', 0.5, 1.05, 9.0, 2.65, 'Ausschnitt Pool Kunde und Lane Service / Annahme: Kunde prüft und entscheidet, ereignisbasiertes Gateway mit Freigabe, Ablehnung und Timer, Erinnerungsschleife mit Ausstieg nach der dritten Erinnerung');
     bulletsBox(s, ['Techniker erfasst Positionen, RepairFlow übernimmt Ersatzteilpreise und berechnet den KVA', 'Ereignisbasiertes Gateway: Freigabe erhalten, Ablehnung erhalten oder 3 Tage verstrichen (Erinnerung, höchstens dreimal)', 'Freigabe ruft Prozess 05 (Ersatzteile disponieren) auf; Ablehnung setzt den Auftrag auf „abgelehnt" und ruft Prozess 08 (Abholung mit Diagnosepauschale) auf'], 0.5, 4.1, 9, 1.0, 11);
   }
@@ -238,7 +238,7 @@ function fit(file, maxW, maxH) {
       s.addShape(pres.ShapeType.chevron, { x, y: 1.1, w: 1.5, h: 0.6, fill: { color: i % 2 ? C.teal2 : C.teal }, line: { color: C.white } });
       s.addText(p, { x: x + 0.15, y: 1.1, w: 1.25, h: 0.6, fontFace: FONT, fontSize: 10, bold: true, color: C.white, align: 'center', valign: 'middle', isTextBox: true, margin: 0 });
     });
-    card(s, 0.5, 1.95, 2.9, 3.1, 'FaUsers', 'Rollen', 'Projektleitung Nina (Stellvertretung und Backups David), Product Owner Adrian, Scrum Master und UML Kilian, BPMN Maxi, Qualität Jakob, Dokumanager: KI-Werkzeug Claude.');
+    card(s, 0.5, 1.95, 2.9, 3.1, 'FaUsers', 'Rollen', 'Projektleitung Nina (Stellvertretung und Backups David), Product Owner Adrian, Scrum Master und UML Kilian, BPMN Maximilian, Qualität Jakob.');
     card(s, 3.55, 1.95, 2.9, 3.1, 'FaGitAlt', 'Zusammenarbeit', 'Scrum im Takt der vier Gruppentermine, Trello-Board mit einer Liste je Termin und einer Karte je Person und Aufgabe, Prüfung jedes Diagramms im Zweierteam, GitHub mit Branches, Pull Requests und Review.');
     card(s, 6.6, 1.95, 2.9, 3.1, 'FaFlagCheckered', 'Meilensteine', '02.09. alle Diagramme erstellt, Prüfung im Zweierteam verteilt, 05.10. Korrekturen und Sequenzdiagramme, 15.10. Modelle, Doku und Folien fertig, 22.10. Generalprobe, 27.10. Präsentation, 13.11. Abgabe.');
   }
