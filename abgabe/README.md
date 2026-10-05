@@ -11,4 +11,4 @@ Jede Person lädt das vollständige Archiv `Fallstudie-WWI25B4-Gruppe1.zip` selb
 
 Das BPMN-ZIP packen wir zur Abgabe selbst. Laut Ablauf heißen die Diagramme mit zweistelliger Nummer und prägnantem Namen, also beim Packen umbenennen: `p01-sofortdiagnose.bpmn` → `01-Sofortdiagnose.bpmn`, `p02-auftragsannahme.bpmn` → `02-Auftragsannahme.bpmn` … `p10-retoure.bpmn` → `10-Retoure.bpmn`.
 
-Den KI-Einsatz geben wir beim Moodle-Upload gesondert an (E-20).
+Den KI-Einsatz geben wir beim Moodle-Upload gesondert an (E-21).

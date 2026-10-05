@@ -922,14 +922,14 @@
       <packagedElement xmi:type="uml:UseCase" xmi:id="uc_UC08" name="Ersatzteil-Verfügbarkeit prüfen" subject="subject_RepairFlow">
       </packagedElement>
       <packagedElement xmi:type="uml:UseCase" xmi:id="uc_UC09" name="Ersatzteile disponieren und reservieren" subject="subject_RepairFlow">
-        <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="ep_UC09_UC10" name="Fehlteile oder Nachbestellvorschlag"/>
+        <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="ep_UC09_UC10" name="Fehlteile vorhanden"/>
         <extensionPoint xmi:type="uml:ExtensionPoint" xmi:id="ep_UC09_UC12" name="Meldebestand unterschritten"/>
         <include xmi:type="uml:Include" xmi:id="inc_599" addition="uc_UC08"/>
       </packagedElement>
       <packagedElement xmi:type="uml:UseCase" xmi:id="uc_UC10" name="Lieferantenbestellung auslösen" subject="subject_RepairFlow">
         <extend xmi:type="uml:Extend" xmi:id="ext_600" extendedCase="uc_UC09" extensionLocation="ep_UC09_UC10">
           <condition xmi:type="uml:Constraint" xmi:id="guard_601">
-            <specification xmi:type="uml:LiteralString" xmi:id="spec_602" value="Fehlteile oder Nachbestellvorschlag"/>
+            <specification xmi:type="uml:LiteralString" xmi:id="spec_602" value="Fehlteile vorhanden"/>
           </condition>
         </extend>
       </packagedElement>
@@ -1019,35 +1019,35 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_648" memberEnd="end_649 end_650">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_649" type="actor_Techniker" association="aassoc_648"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_650" type="uc_UC09" association="aassoc_648"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_650" type="uc_UC13" association="aassoc_648"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_651" memberEnd="end_652 end_653">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_652" type="actor_Techniker" association="aassoc_651"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_653" type="uc_UC13" association="aassoc_651"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_653" type="uc_UC14" association="aassoc_651"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_654" memberEnd="end_655 end_656">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_655" type="actor_Techniker" association="aassoc_654"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_656" type="uc_UC14" association="aassoc_654"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_656" type="uc_UC16" association="aassoc_654"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_657" memberEnd="end_658 end_659">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_658" type="actor_Techniker" association="aassoc_657"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_659" type="uc_UC16" association="aassoc_657"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_659" type="uc_UC19" association="aassoc_657"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_660" memberEnd="end_661 end_662">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_661" type="actor_Techniker" association="aassoc_660"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_662" type="uc_UC19" association="aassoc_660"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_661" type="actor_Servicemitarbeiter" association="aassoc_660"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_662" type="uc_UC03" association="aassoc_660"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_663" memberEnd="end_664 end_665">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_664" type="actor_Servicemitarbeiter" association="aassoc_663"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_665" type="uc_UC03" association="aassoc_663"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_665" type="uc_UC06" association="aassoc_663"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_666" memberEnd="end_667 end_668">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_667" type="actor_Servicemitarbeiter" association="aassoc_666"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_668" type="uc_UC06" association="aassoc_666"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_668" type="uc_UC07" association="aassoc_666"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_669" memberEnd="end_670 end_671">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_670" type="actor_Servicemitarbeiter" association="aassoc_669"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_671" type="uc_UC07" association="aassoc_669"/>
+        <ownedEnd xmi:type="uml:Property" xmi:id="end_671" type="uc_UC09" association="aassoc_669"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_672" memberEnd="end_673 end_674">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_673" type="actor_Servicemitarbeiter" association="aassoc_672"/>

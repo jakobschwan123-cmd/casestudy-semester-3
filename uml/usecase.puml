@@ -61,7 +61,6 @@ Techniker -right- UC03
 Techniker -right- UC04
 Techniker -right- UC05
 Techniker -right- UC06
-Techniker -right- UC09
 Techniker -right- UC13
 Techniker -right- UC14
 Techniker -right- UC16
@@ -69,6 +68,7 @@ Techniker -right- UC19
 Servicemitarbeiter -right- UC03
 Servicemitarbeiter -right- UC06
 Servicemitarbeiter -right- UC07
+Servicemitarbeiter -right- UC09
 Servicemitarbeiter -right- UC10
 Servicemitarbeiter -right- UC15
 Servicemitarbeiter -right- UC16
@@ -97,7 +97,7 @@ KIDienst -[hidden]down- Lieferant
 UC01 ..> UC08 : <<include>>
 UC09 ..> UC08 : <<include>>
 UC02 ..> UC01 : <<extend>>\n[Kunde bestätigt Voranmeldung]
-UC10 ..> UC09 : <<extend>>\n[Fehlteile oder Nachbestellvorschlag]
+UC10 ..> UC09 : <<extend>>\n[Fehlteile vorhanden]
 UC12 ..> UC09 : <<extend>>\n[Meldebestand unterschritten]
 UC03 ..> UC16 : <<extend>>\n[Nacharbeit freigegeben oder Angebot angenommen]
 UC19 ..> UC11 : <<extend>>\n[Lieferung mangelhaft]

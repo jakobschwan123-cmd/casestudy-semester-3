@@ -4,7 +4,7 @@
 > Entscheidungen in [`../doku/03-entscheidungen.md`](../doku/03-entscheidungen.md),
 > Team-/Git-Regeln in [`README.md`](README.md). Diese Datei enthält nur, was dort
 > nicht steht: bindende Konventionen für die Arbeit am Repo.
-> Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) am 26.09.2026 nach der Gesamtprüfung (E-15), am 28.09. nach dem Kunden-Pool (E-16), am 05.10.2026 nach dem Komplettcheck (E-17) und nach dem Gruppenbeschluss E-20 (Generatoren archiviert).
+> Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) am 26.09.2026 nach der Gesamtprüfung (E-15), am 28.09. nach dem Kunden-Pool (E-16), am 05.10.2026 nach dem Komplettcheck (E-17) und nach dem Gruppenbeschluss E-21 (Generatoren archiviert).
 
 ## Was das Projekt ist
 
@@ -24,7 +24,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
-| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 12,5; Linter und Layout-Prüfung 0 Befunde) | `bpmn/p01-…p10-*.bpmn` |
+| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,1; Linter und Layout-Prüfung 0 Befunde) | `bpmn/p01-…p10-*.bpmn` |
 | Use-Case-Diagramm | ≥ 10 Use Cases | 19 (8 Akteure) | `uml/usecase.puml` |
 | Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `uml/klassen.puml` |
 | Sequenzdiagramme | 5 | 6 | `uml/sequenz-01..06-*.puml` |
@@ -36,7 +36,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   Use-Case-Namen und Statuswerte sind über Doku, BPMN, Use-Case-, Klassen- und
   Sequenzdiagramme **wortgleich** zu halten. Quelle für Klassen,
   Operationen und Use Cases sind `uml/klassen.puml`, `uml/usecase.puml` und `uml/modell.xmi`
-  bzw. das Visual-Paradigm-Projekt; für die Prozesse die `.bpmn`-Dateien (E-20).
+  bzw. das Visual-Paradigm-Projekt; für die Prozesse die `.bpmn`-Dateien (E-21).
   Die Generatoren in `archiv/tools/` werden nicht mehr verwendet. Bei Änderungen
   Bilder, Doku und Folien nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
@@ -71,7 +71,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   Zustände in Datenobjekten sind Werte der Aufzählungen (AuftragStatus usw.).
 - **Abgabe-Namen BPMN:** Im Abgabe-ZIP heißen die Diagramme nach Ablauf
   `01-Sofortdiagnose` … `10-Retoure`; das ZIP packt die Gruppe zur Abgabe selbst.
-  Keine Camunda Cloud (E-20).
+  Keine Camunda Cloud (E-21).
 
 ## Fallstricke
 

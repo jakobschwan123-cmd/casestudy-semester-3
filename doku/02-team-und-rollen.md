@@ -1,6 +1,6 @@
 # Team und Rollen
 
-Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester). Rollen am Gruppentermin 02.09.2026 festgelegt (E-13), bestätigt am 05.10.2026 (E-20).
+Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester). Rollen am Gruppentermin 02.09.2026 festgelegt (E-13), bestätigt am 05.10.2026 (E-21).
 
 | Person | Rolle | Zuständig für |
 |---|---|---|
@@ -16,7 +16,7 @@ Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (M
 
 ## Kommunikation
 
-Abstimmung über die WhatsApp-Gruppe, Dateien ausschließlich über das GitHub-Repository. Eine feste Ansprechperson für den Dozenten gibt es nicht; Fragen klären wir im Coaching (E-20).
+Abstimmung über die WhatsApp-Gruppe, Dateien ausschließlich über das GitHub-Repository. Eine feste Ansprechperson für den Dozenten gibt es nicht; Fragen klären wir im Coaching (E-21).
 
 ## Präsentation
 

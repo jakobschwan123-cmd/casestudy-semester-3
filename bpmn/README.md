@@ -1,6 +1,6 @@
 # BPMN-Modelle (Geschäftsprozessanalyse)
 
-Zehn Kollaborationsdiagramme im BPMN-2.0-Format für den **Camunda Modeler (Camunda 8)**. Die `.bpmn`-Datei ist die Quelle; das PNG mit gleichem Basisnamen ist der Bildexport für Doku und Präsentation. Bearbeitet wird nur im Camunda Modeler, danach das PNG neu exportieren (E-20).
+Zehn Kollaborationsdiagramme im BPMN-2.0-Format für den **Camunda Modeler (Camunda 8)**. Die `.bpmn`-Datei ist die Quelle; das PNG mit gleichem Basisnamen ist der Bildexport für Doku und Präsentation. Bearbeitet wird nur im Camunda Modeler, danach das PNG neu exportieren (E-21).
 
 | Datei | Prozess | Pools |
 |---|---|---|
@@ -26,6 +26,6 @@ Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn`
 - Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
 - Datenobjekte tragen die Klassennamen des Klassendiagramms, der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
 
-## Kennzahlen (Stand E-19)
+## Kennzahlen (Stand E-20)
 
-130 Aktivitäten im Werkstatt-Pool (Ø 13,0 je Diagramm), davon 79 automatisiert (61 %); 26 Aktivitäten in den Kundenabläufen; 39 Nachrichtenflüsse; 59 Datenobjekte und -speicher. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.
+131 Aktivitäten im Werkstatt-Pool (Ø 13,1 je Diagramm), davon 79 automatisiert (60 %); 26 Aktivitäten in den Kundenabläufen; 40 Nachrichtenflüsse; 60 Datenobjekte und -speicher. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.

@@ -11,7 +11,7 @@ Ort/Format: Gruppentermin in Präsenz
 
 ## Entschieden
 
-- Alle offenen Entscheidungen getroffen, siehe E-20 in `03-entscheidungen.md`.
+- Alle offenen Entscheidungen getroffen, siehe E-21 in `03-entscheidungen.md`.
 
 ## Aufgaben bis zum 15.10.2026
 

@@ -14,4 +14,4 @@ Folgt daraus: Entscheidung E-03 (KI-Sofortdiagnose). Umgesetzt als Prozess 01, U
 
 Folgt daraus: Entscheidung E-02 (Solution Provider, FixWerk als Pilotkunde). Umgesetzt in Doku (Kapitel 2.2, 2.3), Klassenmodell (Werkstattbetrieb als Mandant), Use Case UC18 (Werkstattbetrieb und Filialen verwalten) und Präsentation (Folien 4 und 5).
 
-Die früher hier gesammelten offenen Fragen hat die Gruppe am 05.10.2026 selbst entschieden (E-20 in `03-entscheidungen.md`). Neue Rückmeldungen aus dem Coaching oben eintragen.
+Die früher hier gesammelten offenen Fragen hat die Gruppe am 05.10.2026 selbst entschieden (E-21 in `03-entscheidungen.md`). Neue Rückmeldungen aus dem Coaching oben eintragen.

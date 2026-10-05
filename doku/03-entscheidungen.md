@@ -1,12 +1,13 @@
 # Entscheidungslog
 
-Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-19) liegt in `archiv/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-21, E-22 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
+Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `archiv/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-22, E-23 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
 
 ## Offen
 
 - **E-19 bestätigen** (Jakob, P07/P08): Fristen bis zur Verwertung (vierte Abhol-Erinnerung) und bis zum Inkasso (dritte Mahnung) sowie die Frage, ob `AuftragStatus` einen Wert für verwertete Geräte braucht.
+- **E-20 bestätigen** (David, P05/P06): Lieferanten-Bestellung nur noch bei Fehlteilen, ereignisbasiertes Warten in P06; offen ist, nach wie vielen Liefermahnungen storniert wird.
 
-## E-20 Gruppenbeschluss vom 05.10.2026
+## E-21 Gruppenbeschluss vom 05.10.2026
 
 Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützung (Claude) vorbereitet.
 
@@ -36,4 +37,5 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-17 | Korrekturen des Komplettchecks vom 05.10. (Rückgabe über P08, Schleifenausstiege, Servicemitarbeiter, UC19) |
 | E-18 | Ein vollständiges Klassendiagramm; Use Cases und Sequenzdiagramme mit BPMN abgeglichen |
 | E-19 | Logikfehler in P07/P08 behoben (Nachtrag über P05, begrenzte Nacharbeit, Verwertung, Inkasso) – Bestätigung offen |
-| E-20 | Gruppenbeschluss vom 05.10.2026 (siehe oben) |
+| E-20 | Überarbeitung P05/P06 (Bestellung nur bei Fehlteilen, Warten mit Ausstieg in P06) – Bestätigung offen |
+| E-21 | Gruppenbeschluss vom 05.10.2026 (siehe oben) |
