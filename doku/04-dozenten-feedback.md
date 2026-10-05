@@ -14,12 +14,4 @@ Folgt daraus: Entscheidung E-03 (KI-Sofortdiagnose). Umgesetzt als Prozess 01, U
 
 Folgt daraus: Entscheidung E-02 (Solution Provider, FixWerk als Pilotkunde). Umgesetzt in Doku (Kapitel 2.2, 2.3), Klassenmodell (Werkstattbetrieb als Mandant), Use Case UC18 (Werkstattbetrieb und Filialen verwalten) und Präsentation (Folien 4 und 5).
 
-## Offene Fragen für das nächste Coaching
-
-- ~~Reicht unser GitHub-Repo als Artefakt-Repository für BPMN?~~ Geklärt über den Ablauf: Die Modelle gehören in die vorbereiteten Unterordner der Camunda Cloud; Git nutzen wir zusätzlich (E-14).
-- Wechsel der Ansprechperson von Maximilian (Gruppeneinteilung) zu Nina (Projektleitung) mitteilen.
-- Zählt bei „durchschnittlich 10 Aktivitäten" pro Diagramm nur der ausmodellierte Pool oder alle Pools zusammen? (Unsere Diagramme haben 10 bis 15 Aktivitäten im Werkstatt-Pool, im Schnitt 12,5; seit E-16 kommen im Kunden-Pool 0 bis 6 je Diagramm dazu.)
-- Passt es, den Kunden als eigenen, nicht ausführbaren Prozess auszumodellieren und nur den Lieferanten als Black Box zu lassen (E-16)?
-- Ist die Camunda-8-Anreicherung (Task-Definitionen, Subscriptions, FEEL-Bedingungen) erwünscht oder soll rein fachlich modelliert werden? Wir haben angereichert, damit das Problems-Panel leer ist.
-- Sind 27 Klassen und 19 Use Cases im Rahmen, oder soll das Modell für die Abgabe verkleinert werden?
-- Sind Lagergebühr nach der dritten Abhol-Erinnerung und Mahnung nach 14 Tagen (Prozess 08, E-17) fachlich so gewollt, oder soll die Abholung einfacher bleiben?
+Die früher hier gesammelten offenen Fragen hat die Gruppe am 05.10.2026 selbst entschieden (E-21 in `03-entscheidungen.md`). Neue Rückmeldungen aus dem Coaching oben eintragen.

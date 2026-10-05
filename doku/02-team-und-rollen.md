@@ -1,22 +1,22 @@
 # Team und Rollen
 
-Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester). Stand: 02.09.2026, Rollen am Gruppentermin festgelegt (E-13).
+Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester). Rollen am Gruppentermin 02.09.2026 festgelegt (E-13), bestätigt am 05.10.2026 (E-21).
 
 | Person | Rolle | Zuständig für |
 |---|---|---|
-| Nina Sattler | Projektleiterin | Ansprechpartnerin für den Dozenten, Gesamtplanung, Termine, Abgabe-Archiv |
-| David Leismann | Stellvertretende Projektleitung, Backup-Beauftragter | Sicherung der Repositories (Git, Camunda, VP-Server), Termine, Abgabe-Check |
+| Nina Sattler | Projektleiterin | Gesamtplanung, Termine, Abgabe-Archiv |
+| David Leismann | Stellvertretende Projektleitung, Backup-Beauftragter | Sicherung der Repositories (Git, VP-Server), Termine, Abgabe-Check |
 | Adrian Wenzler | Product Owner | Fachliche Entscheidungen zum Produkt (Umfang, Prioritäten, KI-Sofortdiagnose), Abnahme im Sprint Review |
 | Kilian Platter | Scrum Master und UML-Verantwortlicher | Sprint-Rituale und Trello-Board; Use-Case-, Klassen- und Sequenzdiagramme in Visual Paradigm, VP-Repository |
-| Maximilian Ewald | BPMN-Verantwortlicher | Die 10 Kollaborationsdiagramme im Camunda Modeler, Camunda-Repository, BPMN-Export |
+| Maximilian Ewald | BPMN-Verantwortlicher | Die 10 Kollaborationsdiagramme im Camunda Modeler (inklusive 09/10), BPMN-Dateien und PNG-Export im Git-Repository |
 | Jakob Schwan | Qualitätsmanager | Review der Artefakte gegen die Anforderungen, Konsistenz zwischen BPMN, UML und Doku, Präsentation, Abgabe-Check |
 | Claude | Dokumanager | Projektdokumentation, die Markdown-Dateien in `doku/`, Entscheidungslog, Erzeugung der Rohartefakte |
 
-Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (Maxi/David, Adrian/Nina, Jakob/Kilian), jede Trello-Karte hat genau eine verantwortliche Person und den Teampartner als Prüfer.
+Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (Maximilian/David, Adrian/Nina, Jakob/Kilian), jede Trello-Karte hat genau eine verantwortliche Person und den Teampartner als Prüfer.
 
-## Hinweis zur Ansprechperson
+## Kommunikation
 
-In der offiziellen Gruppeneinteilung steht Maximilian Ewald in der ersten Zeile, also als vorläufige Ansprechperson der Gruppe. Lizenzen und Zugänge zum VP-Repository gehen laut Ablauf an die Projektgruppenleiter. Da Nina die Projektleitung übernimmt, muss der Dozent das erfahren (offen, siehe `04-dozenten-feedback.md`).
+Abstimmung über die WhatsApp-Gruppe, Dateien ausschließlich über das GitHub-Repository. Eine feste Ansprechperson für den Dozenten gibt es nicht; Fragen klären wir im Coaching (E-21).
 
 ## Präsentation
 
