@@ -1,6 +1,6 @@
 @startuml
 ' BPMN: p07-reparaturdurchfuehrung.bpmn
-' BPMN-Nodes: T07_Status T07_Start T07_Doku GW07_Weitere T07_Nachtrag T07_NachtragSenden E07_Entscheidung E07_Timer GW07_Nachtrag T07_Endkontrolle GW07_Qualitaet T07_Nacharbeit T07_Fertig
+' BPMN-Nodes: T07_Status T07_Start T07_Doku GW07_Weitere T07_Nachtrag T07_NachtragSenden E07_Entscheidung E07_Timer GW07_Nachtrag T07_Teile T07_Endkontrolle GW07_Qualitaet GW07_Grenze T07_Nacharbeit T07_Abbruch T07_Fertig
 title sqd : UC14 Auftrag fertigmelden (BPMN 07)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
@@ -12,22 +12,26 @@ participant ": Reparaturauftrag" as RA
 participant ": Reparaturschritt" as RS
 
 note over Techniker, RA : Vorbedingung: Status IN_REPARATUR;\nReparaturschritte und Arbeitszeiten werden in UC13 erfasst.
-ref over Techniker, RA, RS : UC13 Reparaturschritte und Arbeitszeit erfassen\nZusatzbefund: Nachtrags-KVA; Freigabe -> weitere Schritte,\nAblehnung oder 3-Tage-Timer -> Endkontrolle (BPMN 07)
+ref over Techniker, RA, RS : UC13 Reparaturschritte und Arbeitszeit erfassen\nZusatzbefund: Nachtrags-KVA; Freigabe -> Ersatzteile über UC09 disponieren\n(BPMN 05, T07_Teile), danach weitere Schritte;\nAblehnung oder 3-Tage-Timer -> Endkontrolle (BPMN 07)
 Techniker -> RA : alleSchritteAbgeschlossen()
 RA --> Techniker : true / false
 alt Reparaturschritte noch offen
     ref over Techniker, RA, RS : UC13 Offene Schritte bearbeiten\nNoch keine Fertigmeldung
 else alle Reparaturschritte abgeschlossen
-    loop Endkontrolle bis Qualität in Ordnung (GW07_Qualitaet)
-        note over Techniker, RA : Endkontrolle durchführen und Prüfprotokoll erfassen
+    note over Techniker, RA : Endkontrolle durchführen und Prüfprotokoll erfassen
+    Techniker -> RA : erfasseEndkontrolle(bestanden)
+    loop 0..2: Qualität nicht in Ordnung (GW07_Qualitaet, GW07_Grenze)
+        ref over Techniker, RA, RS : Nacharbeit durchführen (T07_Nacharbeit)
         Techniker -> RA : erfasseEndkontrolle(bestanden)
-        opt Qualität nicht in Ordnung
-            ref over Techniker, RA, RS : Nacharbeit durchführen (T07_Nacharbeit)\nDanach erneut Endkontrolle
-        end
     end
-    Techniker -> RA : fertigmelden()
-    RA -> RA : wechsleStatus(FERTIG)
-    RA --> Techniker : fertiggemeldet
+    alt Qualität in Ordnung
+        Techniker -> RA : fertigmelden()
+        RA -> RA : wechsleStatus(FERTIG)
+        RA --> Techniker : fertiggemeldet
+    else auch nach der zweiten Nacharbeit nicht in Ordnung (T07_Abbruch)
+        RA -> RA : wechsleStatus(ABGELEHNT)
+        RA --> Techniker : Auftrag abgebrochen
+    end
 end
-note over Techniker, RA : Abholbenachrichtigung und Rechnung folgen in BPMN 08 / UC15.\nUC14 versendet keine Kundennachricht und legt keine Rechnung an.
+note over Techniker, RA : Abholbenachrichtigung, Rückgabe und Rechnung folgen in BPMN 08 / UC15.\nUC14 versendet keine Kundennachricht und legt keine Rechnung an.
 @enduml

@@ -1,11 +1,21 @@
 # Entscheidungslog
 
-Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `archiv/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-22, E-23 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
+Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `archiv/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-23, E-24 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
 
 ## Offen
 
 - **E-19 bestätigen** (Jakob, P07/P08): Fristen bis zur Verwertung (vierte Abhol-Erinnerung) und bis zum Inkasso (dritte Mahnung) sowie die Frage, ob `AuftragStatus` einen Wert für verwertete Geräte braucht.
-- **E-20 bestätigen** (David, P05/P06): Nach wie vielen Lieferungs-Mahnungen wird in P06 storniert? Außerdem offen: Befund B12, P10-Teil („Ersatzlieferung buchen“ ohne vorherigen Empfang).
+- **E-20 bestätigen** (David, P05/P06).
+- **E-22 bestätigen** (Kilian, P06/P10/SD4): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
+
+## E-22 Abschluss der QA-Befunde Q1–Q3 und B12 (08.10.2026)
+
+Vorschlag von Kilian (umgesetzt mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+
+- **P06 (Q1):** Nach „14 Tage verstrichen“ fragt das neue Gateway „Bereits zweimal angemahnt?“. Nein → „Lieferung anmahnen“ und weiter warten, ja → derselbe Weg wie ohne Auftragsbestätigung: „Bestellung stornieren“ → „Alternativen Lieferanten suchen“. Damit hat jede Warteschleife einen Ausstieg. Die Zahl zwei ist ein Vorschlag (analog zur einmaligen Eskalation in P10) und kann am 15.10. geändert werden.
+- **P10 (B12):** Vor „Ersatzlieferung buchen“ steht das Nachrichten-Zwischenereignis „Ersatzlieferung erhalten“ mit Nachrichtenfluss vom Lieferanten.
+- **SD4 (Q2, Q3):** ref auf UC13 nennt die Teile-Disposition über UC09/P05 bei freigegebenem Nachtrag; nach der Endkontrolle `loop 0..2` für Nacharbeit, danach alt: fertigmelden oder `wechsleStatus(ABGELEHNT)`.
+- **Kennzahlen:** 131 Aktivitäten (unverändert, Gateway und Ereignis zählen nicht), 41 Nachrichtenflüsse. Beide Linter ohne Befund. Doku (5.1, 5.1.2, 5.3.3, 5.4, Kapitel 6) und Bilder angepasst; P06/P10 wurden aus dem archivierten Generator erzeugt, der P03–P10 bis dahin unverändert reproduzierte. Maximilian prüft beide Dateien bei der Modeler-Prüfung mit.
 
 ## E-21 Gruppenbeschluss vom 05.10.2026
 
@@ -39,3 +49,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-19 | Logikfehler in P07/P08 behoben (Nachtrag über P05, begrenzte Nacharbeit, Verwertung, Inkasso) – Bestätigung offen |
 | E-20 | P05/P06 überarbeitet (Bestellung nur bei Fehlteilen, Kundeninfo durch Service, Warten mit Timer und Mahnung in P06) – Bestätigung offen |
 | E-21 | Gruppenbeschluss vom 05.10.2026 (siehe oben) |
+| E-22 | Ausstieg der Liefermahnung in P06, Empfang der Ersatzlieferung in P10, SD4 an P07 angeglichen – Bestätigung offen |

@@ -194,7 +194,7 @@
   "data": 7,
   "start": "Bestellbedarf gemeldet",
   "end": "Bestellung abgeschlossen",
-  "doc": "Fehlteile eines Reparaturauftrags werden zusammen mit offenen Nachbestellvorschlaegen zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Kommt binnen 3 Tagen keine Auftragsbestaetigung oder kann der Lieferant nicht liefern, wird die Bestellung storniert und ein alternativer Lieferant gesucht. Bleibt die Lieferung 14 Tage aus, wird sie angemahnt. Nach dem Wareneingang werden die Fehlteile dem Auftrag zugeordnet, Nachbestellteile gehen ins Lager; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess 10: Eine Ersatzlieferung wird vor der Zuordnung geprueft, bei Gutschrift wird neu bestellt, solange das Teil noch benoetigt wird."
+  "doc": "Fehlteile eines Reparaturauftrags werden zusammen mit offenen Nachbestellvorschlaegen zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Kommt binnen 3 Tagen keine Auftragsbestaetigung oder kann der Lieferant nicht liefern, wird die Bestellung storniert und ein alternativer Lieferant gesucht. Bleibt die Lieferung 14 Tage aus, wird sie angemahnt; bleibt sie nach der zweiten Mahnung weitere 14 Tage aus, wird ebenfalls storniert. Nach dem Wareneingang werden die Fehlteile dem Auftrag zugeordnet, Nachbestellteile gehen ins Lager; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess 10: Eine Ersatzlieferung wird vor der Zuordnung geprueft, bei Gutschrift wird neu bestellt, solange das Teil noch benoetigt wird."
  },
  {
   "num": "07",
@@ -321,10 +321,10 @@
   "auto": 8,
   "kunde_activities": 0,
   "kunde_kinds": {},
-  "msgflows": 5,
+  "msgflows": 6,
   "data": 5,
   "start": "Mangelhaftes Teil festgestellt",
   "end": "Retoure abgeschlossen",
-  "doc": "Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht. Antwortet der Lieferant auch nach der zweiten Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06."
+  "doc": "Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung die Ersatzlieferung nach ihrem Eingang oder die Gutschrift verbucht. Antwortet der Lieferant auch nach der zweiten Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06."
  }
 ]
