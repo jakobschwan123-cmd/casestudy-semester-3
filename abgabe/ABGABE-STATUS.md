@@ -29,15 +29,15 @@ In `doku/Projektdokumentation.docx` (danach PDF neu exportieren und Inhaltsverze
 
 - Kapitel 1: „verantwortlich für … in Visual Paradigm“ (David, Kilian) → „… in Visual Paradigm“, sobald erledigt
 - 3.1 Camunda Modeler: „Die abschließende Prüfung aller zehn Dateien im Modeler ist noch offen.“ → streichen
-- 3.1 Visual Paradigm: „die abzugebende VPP-Datei liegt noch nicht vor.“ → „die VPP-Datei liegt in uml/.“
-- 3.3: „Für den aktuellen Stand sind das Öffnen, Prüfen und Speichern … noch ausstehend.“ → streichen
+- 3.1 Visual Paradigm: „Die abzugebende VPP-Datei liegt noch nicht vor.“ → „Die VPP-Datei liegt in uml/.“
+- 3.3: „Für den aktuellen Stand stehen das Öffnen, Prüfen und Speichern … noch aus.“ → streichen
 - 4.3 letzter Satz: „…folgen bis zum 15.10.2026.“ → tatsächliches Ergebnis
-- 4.4: „die lokale VPP-Sicherung wird nach der Fertigstellung ergänzt“ → streichen
-- 5.3: „die sechs Sequenzdiagramme sind dort als Unterdiagramme der zugehörigen Use Cases anzulegen“ → „… angelegt“; „UML-WWI25B4-Gruppe1.vpp ist noch zu erstellen und in uml/ zu sichern.“ → streichen
+- 4.4: „Die lokale VPP-Sicherung wird nach der Fertigstellung ergänzt.“ → streichen
+- 5.3: „Dort sind die sechs Sequenzdiagramme als Unterdiagramme der zugehörigen Use Cases anzulegen.“ → „… angelegt.“; „UML-WWI25B4-Gruppe1.vpp ist noch zu erstellen und in uml/ zu sichern.“ → streichen
 - 5.1.2 Prozess 08: „Die Verwertungs- und Mahngrenzen aus E-19 sind noch durch die Gruppe zu bestätigen.“ → Ergebnis der Bestätigung
 - 5.4: „Von der Gruppe zu bestätigen sind noch …“ → Ergebnis der Bestätigung
-- Kapitel 3, Tabelle der sechs Schritte (Schritt 4 und 5), und Sprintplan in 4.2 (Sprint 3): „wird vor der Abgabe … geprüft“, „steht noch aus“, „Geplant:“ → Ist-Stand
-- Anhang A, Zeile VPP: „Noch zu erstellendes …“ → „Visual-Paradigm-Projekt mit …“
+- Kapitel 3, Tabelle der sechs Schritte (Schritt 4 und 5), und Sprintplan-Tabelle in 4.2 (Sprint 3): „wird vor der Abgabe … geprüft“, „steht noch aus“, „Geplant:“ → Ist-Stand
+- Anhang A (Tabelle), Zeile VPP: „Noch zu erstellendes …“ → „Visual-Paradigm-Projekt mit …“
 
 ## Archiv packen
 
