@@ -1,6 +1,6 @@
 # RepairFlow – Fallstudie Systemanalyse (WWI25B4, Gruppe 1)
 
-RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätten eine SaaS-Plattform mit KI-Sofortdiagnose anbietet. Pilotkunde ist die fiktive FixWerk GmbH. Stand: 05.10.2026.
+RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätten eine SaaS-Plattform mit KI-Sofortdiagnose anbietet. Pilotkunde ist die fiktive FixWerk GmbH. Stand: 08.10.2026.
 
 ## Was liegt wo
 
@@ -28,8 +28,8 @@ RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätt
 |---|---|
 | `UML-WWI25B4-Gruppe1.vpp` in Visual Paradigm erstellen und in `uml/` einchecken | Kilian, David |
 | Alle zehn BPMN im Camunda Modeler öffnen, prüfen, speichern und die PNGs neu exportieren | Maximilian |
-| E-19 (P07/P08) und E-20 (P05/P06) bestätigen | alle |
-| Gelb markierte Stellen in der Projektdokumentation füllen | Nina, Zulieferung alle |
+| E-19 (P07/P08), E-20 (P05/P06) und E-22 (P06/P10/SD4) bestätigen | alle |
+| Textentwurf in der Projektdokumentation prüfen: Beiträge je Person (Kapitel 1), 3.3, 4.3, 6, 7.1, 7.2; Statussätze nach VPP und Modeler-Prüfung anpassen (`abgabe/ABGABE-STATUS.md`) | Nina, alle |
 | QA-Checkliste anwenden | Jakob |
 | Generalprobe am 22.10., Präsentation am 27.10.2026, 09:00, B458 | alle |
 | Abgabe bis 13.11.2026, 23:59 (Anleitung `abgabe/README.md`) | jede Person selbst |

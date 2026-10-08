@@ -5,9 +5,9 @@ Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester).
 | Person | Rolle | Zuständig für |
 |---|---|---|
 | Nina Sattler | Projektleiterin | Gesamtplanung, Termine, Abgabe-Archiv |
-| David Leismann | Stellvertretende Projektleitung, Backup-Beauftragter | Sicherung der Repositories (Git, VP-Server), Termine, Abgabe-Check |
+| David Leismann | Stellvertretende Projektleitung, Backup-Beauftragter | Sicherung der Repositories (Git, VP-Server), Termine, Abgabe-Check; SD2, SD4, SD5 und SD6 in Visual Paradigm |
 | Adrian Wenzler | Product Owner | Fachliche Entscheidungen zum Produkt (Umfang, Prioritäten, KI-Sofortdiagnose), Abnahme im Sprint Review |
-| Kilian Platter | Scrum Master und UML-Verantwortlicher | Sprint-Rituale und Trello-Board; Use-Case-, Klassen- und Sequenzdiagramme in Visual Paradigm, VP-Repository |
+| Kilian Platter | Scrum Master und UML-Verantwortlicher | Sprint-Rituale und Trello-Board; Use-Case- und Klassendiagramm sowie SD1 und SD3 in Visual Paradigm, VP-Repository |
 | Maximilian Ewald | BPMN-Verantwortlicher | Die 10 Kollaborationsdiagramme im Camunda Modeler (inklusive 09/10), BPMN-Dateien und PNG-Export im Git-Repository |
 | Jakob Schwan | Qualitätsmanager | Review der Artefakte gegen die Anforderungen, Konsistenz zwischen BPMN, UML und Doku, Präsentation, Abgabe-Check |
 | Claude | Dokumanager | Projektdokumentation, die Markdown-Dateien in `doku/`, Entscheidungslog, Erzeugung der Rohartefakte |

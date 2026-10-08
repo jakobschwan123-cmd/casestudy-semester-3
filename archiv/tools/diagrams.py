@@ -331,7 +331,7 @@ def build_06():
                     "Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten "
                     "gesendet. Kommt binnen 3 Tagen keine Auftragsbestaetigung oder kann der Lieferant nicht liefern, wird die "
                     "Bestellung storniert und ein alternativer Lieferant gesucht. Bleibt die Lieferung 14 Tage aus, wird sie "
-                    "angemahnt. Nach dem Wareneingang werden die Fehlteile dem Auftrag zugeordnet, Nachbestellteile gehen ins "
+                    "angemahnt; bleibt sie nach der zweiten Mahnung weitere 14 Tage aus, wird ebenfalls storniert. Nach dem Wareneingang werden die Fehlteile dem Auftrag zugeordnet, Nachbestellteile gehen ins "
                     "Lager; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess "
                     "10: Eine Ersatzlieferung wird vor der Zuordnung geprueft, bei Gutschrift wird neu bestellt, solange das "
                     "Teil noch benoetigt wird.")
@@ -361,6 +361,7 @@ def build_06():
     n("GW06_Lief", "event", "", 1, 19)
     n("E06_Lieferung", "catch", "Lieferung erhalten", 1, 20, trigger="message", msg="Lieferung")
     n("E06_LiefTimer", "catch", "14 Tage verstrichen", 1, 20, 1, trigger="timer", duration="P14D")
+    n("GW06_Mahnung", "xor", "Bereits zweimal angemahnt?", 1, 20, 2)
     n("T06_Mahnen", "send", "Lieferung anmahnen", 1, 21, 2)
     n("T06_Wareneingang", "user", "Wareneingang prüfen und buchen", 1, 22)
     n("GW06_Mangelfrei", "xor", "Lieferung mangelfrei?", 1, 23)
@@ -395,7 +396,10 @@ def build_06():
     f("GW06_Verzoegert", "Join_06b", "nein", "=not(reparaturVerzoegert)")
     f("T06_KundeInfo", "Join_06b"); f("Join_06b", "Merge_06m"); f("Merge_06m", "GW06_Lief")
     f("GW06_Lief", "E06_Lieferung"); f("GW06_Lief", "E06_LiefTimer")
-    f("E06_LiefTimer", "T06_Mahnen"); f("T06_Mahnen", "Merge_06m", loop=1)
+    f("E06_LiefTimer", "GW06_Mahnung")
+    f("GW06_Mahnung", "T06_Mahnen", "nein", "=anzahlMahnungen < 2")
+    f("GW06_Mahnung", "Merge_06s", "ja", "=anzahlMahnungen >= 2")
+    f("T06_Mahnen", "Merge_06m", loop=1)
     f("E06_Lieferung", "T06_Wareneingang"); f("T06_Wareneingang", "GW06_Mangelfrei")
     f("GW06_Mangelfrei", "Join_06c", "ja", "=lieferungMangelfrei")
     f("GW06_Mangelfrei", "T06_Retoure", "nein", "=not(lieferungMangelfrei)")
@@ -703,8 +707,8 @@ def build_09():
 def build_10():
     d = Diagram("10", "Ersatzteil-Retoure und Lieferanten-Reklamation", [LEITUNG, DISPO], pools_bottom=[LIEF],
                 doc="Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil "
-                    "zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung Ersatzlieferung oder Gutschrift verbucht. "
-                    "Antwortet der Lieferant auch nach der zweiten Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer "
+                    "zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung die Ersatzlieferung nach ihrem Eingang oder die Gutschrift verbucht. "
+                    "Antwortet der Lieferant auch nach der Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer "
                     "Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06.")
     n, f = d.node, d.flow
     n("Start_10", "start", "Mangelhaftes Teil festgestellt", 1, 0)
@@ -722,11 +726,12 @@ def build_10():
     n("T10_Bestand", "service", "Lagerbestand korrigieren", 1, 9)
     n("T10_Rueckmeldung", "receive", "Rückmeldung des Lieferanten empfangen", 1, 10, msg="Retourenrückmeldung")
     n("GW10_Art", "xor", "Ersatz oder Gutschrift?", 1, 11)
-    n("T10_Ersatz", "user", "Ersatzlieferung buchen", 1, 12)
-    n("T10_Gutschrift", "service", "Gutschrift verbuchen", 1, 12, 1)
-    n("Join_10a", "xor", "", 1, 13)
-    n("T10_Abschluss", "service", "Retoure dokumentieren und abschließen", 1, 14)
-    n("End_10", "end", "Retoure abgeschlossen", 1, 15)
+    n("E10_Ersatz", "catch", "Ersatzlieferung erhalten", 1, 12, trigger="message", msg="Ersatzlieferung")
+    n("T10_Ersatz", "user", "Ersatzlieferung buchen", 1, 13)
+    n("T10_Gutschrift", "service", "Gutschrift verbuchen", 1, 13, 1)
+    n("Join_10a", "xor", "", 1, 14)
+    n("T10_Abschluss", "service", "Retoure dokumentieren und abschließen", 1, 15)
+    n("End_10", "end", "Retoure abgeschlossen", 1, 16)
     f("Start_10", "T10_Grund"); f("T10_Grund", "T10_Ermitteln"); f("T10_Ermitteln", "T10_Anmelden")
     f("T10_Anmelden", "Merge_10"); f("Merge_10", "GW10_Warten")
     f("GW10_Warten", "E10_Timer"); f("GW10_Warten", "E10_RMA")
@@ -737,7 +742,7 @@ def build_10():
     f("T10_Abschreiben", "Join_10a")
     f("E10_RMA", "T10_Versenden"); f("T10_Versenden", "T10_Bestand"); f("T10_Bestand", "T10_Rueckmeldung")
     f("T10_Rueckmeldung", "GW10_Art")
-    f("GW10_Art", "T10_Ersatz", "Ersatz", '=rueckmeldung = "ersatz"')
+    f("GW10_Art", "E10_Ersatz", "Ersatz", '=rueckmeldung = "ersatz"'); f("E10_Ersatz", "T10_Ersatz")
     f("GW10_Art", "T10_Gutschrift", "Gutschrift", '=rueckmeldung = "gutschrift"')
     f("T10_Ersatz", "Join_10a"); f("T10_Gutschrift", "Join_10a"); f("Join_10a", "T10_Abschluss"); f("T10_Abschluss", "End_10")
     d.msg("T10_Anmelden", LIEF, "Retoure anmelden")
@@ -745,6 +750,7 @@ def build_10():
     d.msg("T10_Eskalieren", LIEF, "Eskalation")
     d.msg("T10_Versenden", LIEF, "Rücksendung")
     d.msg(LIEF, "T10_Rueckmeldung", "Ersatz / Gutschrift")
+    d.msg(LIEF, "E10_Ersatz", "Ersatzteil")
     d.data("T10_Ermitteln", "Lieferanten-bestellung", dir="in")
     d.data("T10_Anmelden", "Lieferanten-bestellung [Retoure]")
     d.data("T10_Bestand", "Lagerbestand")

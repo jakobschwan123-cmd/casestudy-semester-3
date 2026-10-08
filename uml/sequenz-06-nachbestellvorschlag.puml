@@ -1,6 +1,6 @@
 @startuml
 ' BPMN: p06-ersatzteilbestellung.bpmn
-' BPMN-Nodes: T06_Buendeln T06_Lieferant T06_Bestellung GW06_Grenze T06_Freigabe T06_Senden GW06_AB E06_AB E06_ABTimer GW06_Lieferbar T06_Storno T06_Alternative GW06_Alt T06_Termin GW06_Verzoegert T06_KundeInfo GW06_Lief E06_Lieferung E06_LiefTimer T06_Mahnen T06_Wareneingang GW06_Mangelfrei T06_Retoure GW06_Ersatz T06_ErsatzPruefen GW06_Bedarf T06_Zuordnen
+' BPMN-Nodes: T06_Buendeln T06_Lieferant T06_Bestellung GW06_Grenze T06_Freigabe T06_Senden GW06_AB E06_AB E06_ABTimer GW06_Lieferbar T06_Storno T06_Alternative GW06_Alt T06_Termin GW06_Verzoegert T06_KundeInfo GW06_Lief E06_Lieferung E06_LiefTimer GW06_Mahnung T06_Mahnen T06_Wareneingang GW06_Mangelfrei T06_Retoure GW06_Ersatz T06_ErsatzPruefen GW06_Bedarf T06_Zuordnen
 title sqd : UC10 Lieferantenbestellung auslösen (BPMN 06)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
@@ -49,19 +49,24 @@ loop erster Lieferant oder verfügbarer alternativer Lieferant
             SM -> RA : benachrichtigeKunde("neuer Liefertermin")
             RA -> Kunde : Verzögerungsinformation mit Liefertermin
         end
-        note over Disponent, Lieferant : Nach 14 Tagen ohne Lieferung anmahnen und weiter warten (T06_Mahnen).
-        ref over Disponent, BEST, Lieferant : UC11 Lieferung empfangen, Wareneingang prüfen und buchen\nBei Mangel: BPMN 10 / UC19 Retoure abwickeln
-        alt mangelfreie Lieferung oder Ersatz geliefert
-            note over BEST, RA : Ersatzlieferung zuerst prüfen (T06_ErsatzPruefen);\nFehlteile dem Auftrag zuordnen (T06_Zuordnen)
-            break Bestellung abgeschlossen
-                note over Disponent : Keine weitere Bestellung
+        alt Lieferung eingetroffen (nach höchstens zwei Mahnungen)
+            note over Disponent, Lieferant : Nach je 14 Tagen ohne Lieferung anmahnen und weiter warten (T06_Mahnen),\nhöchstens zweimal (GW06_Mahnung).
+            ref over Disponent, BEST, Lieferant : UC11 Lieferung empfangen, Wareneingang prüfen und buchen\nBei Mangel: BPMN 10 / UC19 Retoure abwickeln
+            alt mangelfreie Lieferung oder Ersatz geliefert
+                note over BEST, RA : Ersatzlieferung zuerst prüfen (T06_ErsatzPruefen);\nFehlteile dem Auftrag zuordnen (T06_Zuordnen)
+                break Bestellung abgeschlossen
+                    note over Disponent : Keine weitere Bestellung
+                end
+            else kein Ersatz und Teil weiterhin benötigt
+                note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Bedarf -> Merge_06)
+            else kein Ersatz und Teil nicht mehr benötigt
+                break Bestellung ohne Teilezuordnung abgeschlossen
+                    note over BEST : Bestellbedarf beendet
+                end
             end
-        else kein Ersatz und Teil weiterhin benötigt
-            note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Bedarf -> Merge_06)
-        else kein Ersatz und Teil nicht mehr benötigt
-            break Bestellung ohne Teilezuordnung abgeschlossen
-                note over BEST : Bestellbedarf beendet
-            end
+        else auch nach der zweiten Mahnung keine Lieferung (GW06_Mahnung)
+            Disponent -> BEST : storniere()
+            note over Disponent, Lieferant : Weiter wie ohne Auftragsbestätigung: alternativer Lieferant\n(GW06_Alt -> Merge_06) oder Abschluss ohne Lieferung
         end
     else nicht bestätigt, nicht lieferbar oder keine Auftragsbestätigung
         Disponent -> BEST : storniere()

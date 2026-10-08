@@ -98,7 +98,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 2 Agenda
   {
-    const s = base('Agenda', { speaker: 'Nina' });
+    const s = base('Agenda', { speaker: 'Nina', notes: 'Kurz die sieben Teile und die Vortragenden nennen; Fragen bitte am Ende.' });
     const items = [['1', 'Ausgangslage und Problem', 'David'], ['2', 'Das Startup RepairFlow und der Markt', 'Adrian'], ['3', 'Geschäftsprozesse (BPMN)', 'Maximilian'],
       ['4', 'KI-Sofortdiagnose als Alleinstellungsmerkmal', 'Adrian'], ['5', 'Objektorientierte Analyse (UML)', 'Kilian, Jakob'], ['6', 'Vorgehen und Projektmanagement', 'David'],
       ['7', 'Herausforderungen und Fazit', 'Jakob, Nina']];
@@ -113,8 +113,8 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 3 Ausgangslage
   {
-    const s = base('Werkstätten heute: Papier, Excel und Telefon', { speaker: 'David', notes: 'Pilotkunde FixWerk GmbH: vier Filialen, Fahrrad, E-Bike und Elektronik.' });
-    s.addText('Unabhängige Reparaturwerkstätten für Fahrräder, E-Bikes und Elektronik wachsen, ihre Abläufe nicht. Unser Pilotkunde FixWerk GmbH (vier Filialen) zeigt die typischen Probleme:',
+    const s = base('Werkstätten heute: Papier, Excel und Telefon', { speaker: 'David', notes: 'FixWerk GmbH ist ein fiktiver Pilotkunde mit vier Filialen in der Region Karlsruhe (Fahrrad, E-Bike, Elektronik). Die vier Probleme sind Annahmen unseres Szenarios, keine erhobenen Daten.' });
+    s.addText('Unser Szenario: Die fiktive Werkstattkette FixWerk GmbH (vier Filialen, Fahrrad, E-Bike und Elektronik) arbeitet mit Papier, Excel-Listen und Telefon. Wir gehen von vier Problemen aus:',
       { x: 0.5, y: 1.05, w: 9, h: 0.7, fontFace: FONT, fontSize: 13, color: C.dark, isTextBox: true, margin: 0 });
     card(s, 0.5, 1.9, 4.35, 1.45, 'FaBell', 'Kunden hören nichts', 'Keine zuverlässige Info, wann ein Kostenvoranschlag freizugeben oder das Gerät abholbereit ist. Rückfragen per Telefon, Geräte stehen wochenlang im Lager.');
     card(s, 5.15, 1.9, 4.35, 1.45, 'FaQuestionCircle', 'Kein Auftragsstatus', 'Wer wissen will, wo ein Gerät steht, fragt in der Werkstatt nach. Papierzettel und Excel-Listen laufen auseinander.');
@@ -123,7 +123,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 4 Startup
   {
-    const s = base('RepairFlow: Solution Provider für Werkstätten', { speaker: 'Adrian' });
+    const s = base('RepairFlow: Solution Provider für Werkstätten', { speaker: 'Adrian', notes: 'Rückfrage des Dozenten bei der Konzeptvorstellung: Betreiber oder Solution Provider? Wir sind der Softwareanbieter, FixWerk ist der Pilotkunde. Systemkontext: Buchhaltung, Lieferantensysteme und die physische Reparatur liegen außerhalb der Systemgrenze.' });
     bulletsBox(s, ['Wir sind das Software-Startup, nicht die Werkstatt: RepairFlow ist eine Cloud-Plattform für den gesamten Reparatur-Lebenszyklus.',
       'Vier Module: Kundenportal mit App, Auftrags- und Werkstattmodul, Dispositionsmodul, Abrechnung.',
       'Zielkunden: unabhängige Werkstätten und kleine Ketten mit 2 bis 10 Filialen im DACH-Raum.',
@@ -133,8 +133,8 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 5 Markt
   {
-    const s = base('Markt und Wettbewerb: drei Unterschiede', { speaker: 'Adrian', notes: 'Fahrrad: fixdesk, RO App, Repero. Elektronik: RepairDesk, RepairShopr. Stand der Recherche September 2026.' });
-    s.addText('Werkstattsoftware gibt es, aber getrennt nach Welten: Fahrrad (fixdesk, RO App, Repero) oder Elektronik (RepairDesk, RepairShopr).',
+    const s = base('Unser Zuschnitt: drei Merkmale', { speaker: 'Adrian', notes: 'Die drei Merkmale beschreiben den Zuschnitt unseres Entwurfs. Einen belegten Funktionsvergleich mit bestehenden Werkstattlösungen haben wir nicht erstellt; deshalb nennen wir keine Wettbewerber.' });
+    s.addText('RepairFlow soll Fahrrad-, E-Bike- und Elektronikreparaturen gemeinsam abbilden. Drei Merkmale prägen unseren Entwurf:',
       { x: 0.5, y: 1.05, w: 9, h: 0.5, fontFace: FONT, fontSize: 13, color: C.dark, isTextBox: true, margin: 0 });
     card(s, 0.5, 1.75, 2.9, 3.2, 'FaTools', 'Eine Plattform', 'Fahrrad, E-Bike und Elektronik auf einer Plattform, mit gemeinsamer Kundenbasis und gemeinsamem Ersatzteillager.');
     card(s, 3.55, 1.75, 2.9, 3.2, 'FaExchangeAlt', 'Filialübergreifend', 'Bestände, Reservierungen und Umlagerungen über alle Standorte. Bestellt wird nur, was nirgends liegt.');
@@ -152,7 +152,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 7 Prozesslandkarte
   {
-    const s = base('Zehn Geschäftsprozesse als Kollaborationsdiagramme', { speaker: 'Maximilian' });
+    const s = base('Zehn Geschäftsprozesse als Kollaborationsdiagramme', { speaker: 'Maximilian', notes: 'Prozesse 01 bis 08 sind die Auftragsreise entlang des Zustandsautomaten, 09 und 10 die Folgeprozesse Reklamation und Retoure. Gezählt sind nur die Aktivitäten im Werkstatt-Pool; die 26 Aktivitäten der Kundenabläufe kommen hinzu.' });
     const rows = [[{ text: 'Nr', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Prozess', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Pools', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'Akt.', options: { bold: true, color: C.white, fill: { color: C.teal } } }, { text: 'autom.', options: { bold: true, color: C.white, fill: { color: C.teal } } }]];
     for (const st of STATS) rows.push([st.num, st.name, st.pools.join(', '), String(st.activities), Math.round(100 * st.auto / st.activities) + ' %']);
     s.addTable(rows, { x: 0.5, y: 1.05, w: 6.3, colW: [0.4, 3.2, 1.6, 0.5, 0.6], fontFace: FONT, fontSize: 9.5, color: C.dark, border: { type: 'solid', color: C.line, pt: 0.5 }, rowH: 0.31, valign: 'middle' });
@@ -231,7 +231,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 16 Vorgehen & PM
   {
-    const s = base('Vorgehen und Projektmanagement', { speaker: 'David' });
+    const s = base('Vorgehen und Projektmanagement', { speaker: 'David', notes: 'Scrum im Takt der Gruppentermine: Review, Retrospektive und Planning je Termin. Jede Änderung über Branch, Pull Request und Review; Merge durch Jakob als Qualitätsmanager. Abstimmung über WhatsApp, Dateien nur über GitHub.' });
     const phases = ['Themenwahl', 'Konzept + Feedback', 'Prozessanalyse', 'BPMN', 'OOA (UML)', 'Doku + Präsentation'];
     phases.forEach((p, i) => {
       const x = 0.5 + i * 1.5;
@@ -244,15 +244,15 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 17 Herausforderungen
   {
-    const s = base('Herausforderungen und was wir gelernt haben', { speaker: 'Jakob' });
+    const s = base('Herausforderungen und was wir gelernt haben', { speaker: 'Jakob', notes: 'Beispiel für die Konsistenzprüfung: Nach den Korrekturen an Prozess 07 (E-19) musste SD4 nachgezogen werden. Prüfrunden: Gesamtprüfung am 26.09., Komplettcheck am 05.10. mit 39 Befunden, QA-Checkliste mit Q1 bis Q8.' });
     card(s, 0.5, 1.1, 4.35, 1.9, 'FaBalanceScale', 'Perspektive klären', 'Werkstatt oder Softwareanbieter? Die Rückfrage des Dozenten hat uns zur klaren Entscheidung gezwungen: Solution Provider, FixWerk als Pilotkunde. Prozesse blieben, Texte und Klassenmodell zogen nach.');
-    card(s, 5.15, 1.1, 4.35, 1.9, 'FaProjectDiagram', 'Drei Modelle, ein Vokabular', 'Datenobjekte, Klassen, Lebenslinien und Statuswerte müssen wortgleich sein. Eine gemeinsame Modellbeschreibung als Single Source of Truth hat die Abweichungen beseitigt.');
+    card(s, 5.15, 1.1, 4.35, 1.9, 'FaProjectDiagram', 'Drei Modelle, ein Vokabular', 'Datenobjekte, Klassen, Lebenslinien und Statuswerte müssen wortgleich sein. Gemeinsame Namensregeln und ein Abgleich nach jeder Änderung (QA-Checkliste) halten die Modelle zusammen.');
     card(s, 0.5, 3.15, 4.35, 1.9, 'FaClipboardCheck', 'Engine-ready statt Fehlerliste', 'Der Camunda Modeler meldet für Camunda 8 fehlende technische Details als Fehler. Wir haben die Diagramme angereichert, bis der Camunda-Linter (Regeln des Problems-Panels) keine Befunde mehr meldete.');
     card(s, 5.15, 3.15, 4.35, 1.9, 'FaLightbulb', 'Vision mit Absicherung', 'Die KI-Sofortdiagnose soll beeindrucken, aber glaubwürdig bleiben: klare Trennung von heute Machbarem und Vision, Vorschlag bleibt vorläufig.');
   }
   // ---------------- 18 Fazit
   {
-    const s = base('Fazit und Ausblick', { dark: true, speaker: 'Nina' });
+    const s = base('Fazit und Ausblick', { dark: true, speaker: 'Nina', notes: 'Kennzahlen kurz nennen, dann die zwei Kernaussagen. Der Ausblick ist Vision, nicht modelliert.' });
     stat(s, 0.5, 1.2, '10', 'BPMN-Kollaborationsdiagramme, ' + TOTAL_ACT + ' Aktivitäten', 2.2);
     stat(s, 2.9, 1.2, '19', 'Use Cases, 8 Akteure', 2.2);
     stat(s, 5.3, 1.2, '27', 'Klassen, 36 Assoziationen', 2.2);
