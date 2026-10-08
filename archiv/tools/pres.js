@@ -244,7 +244,7 @@ function fit(file, maxW, maxH) {
   }
   // ---------------- 17 Herausforderungen
   {
-    const s = base('Herausforderungen und was wir gelernt haben', { speaker: 'Jakob', notes: 'Beispiel für die Konsistenzprüfung: Nach den Korrekturen an Prozess 07 (E-19) musste SD4 nachgezogen werden. Prüfrunden: Gesamtprüfung am 26.09., Komplettcheck am 05.10. mit 26 Befunden, QA-Checkliste mit Q1 bis Q8.' });
+    const s = base('Herausforderungen und was wir gelernt haben', { speaker: 'Jakob', notes: 'Beispiel für die Konsistenzprüfung: Nach den Korrekturen an Prozess 07 (E-19) musste SD4 nachgezogen werden. Prüfrunden: Gesamtprüfung am 26.09., Komplettcheck am 05.10. mit 39 Befunden, QA-Checkliste mit Q1 bis Q8.' });
     card(s, 0.5, 1.1, 4.35, 1.9, 'FaBalanceScale', 'Perspektive klären', 'Werkstatt oder Softwareanbieter? Die Rückfrage des Dozenten hat uns zur klaren Entscheidung gezwungen: Solution Provider, FixWerk als Pilotkunde. Prozesse blieben, Texte und Klassenmodell zogen nach.');
     card(s, 5.15, 1.1, 4.35, 1.9, 'FaProjectDiagram', 'Drei Modelle, ein Vokabular', 'Datenobjekte, Klassen, Lebenslinien und Statuswerte müssen wortgleich sein. Gemeinsame Namensregeln und ein Abgleich nach jeder Änderung (QA-Checkliste) halten die Modelle zusammen.');
     card(s, 0.5, 3.15, 4.35, 1.9, 'FaClipboardCheck', 'Engine-ready statt Fehlerliste', 'Der Camunda Modeler meldet für Camunda 8 fehlende technische Details als Fehler. Wir haben die Diagramme angereichert, bis der Camunda-Linter (Regeln des Problems-Panels) keine Befunde mehr meldete.');

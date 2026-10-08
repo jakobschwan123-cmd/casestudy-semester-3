@@ -6,7 +6,7 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 - **E-19 bestätigen** (Jakob, P07/P08): Fristen bis zur Verwertung (vierte Abhol-Erinnerung) und bis zum Inkasso (dritte Mahnung) sowie die Frage, ob `AuftragStatus` einen Wert für verwertete Geräte braucht.
 - **E-20 bestätigen** (David, P05/P06).
-- **E-22 bestätigen** (Kilian, P06/P10/SD4): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
+- **E-22 bestätigen** (Kilian, P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
 
 ## E-22 Abschluss der QA-Befunde Q1–Q3 und B12 (08.10.2026)
 
@@ -15,7 +15,9 @@ Vorschlag von Kilian (umgesetzt mit KI-Unterstützung), Bestätigung durch die G
 - **P06 (Q1):** Nach „14 Tage verstrichen“ fragt das neue Gateway „Bereits zweimal angemahnt?“. Nein → „Lieferung anmahnen“ und weiter warten, ja → derselbe Weg wie ohne Auftragsbestätigung: „Bestellung stornieren“ → „Alternativen Lieferanten suchen“. Damit hat jede Warteschleife einen Ausstieg. Die Zahl zwei ist ein Vorschlag (analog zur einmaligen Eskalation in P10) und kann am 15.10. geändert werden.
 - **P10 (B12):** Vor „Ersatzlieferung buchen“ steht das Nachrichten-Zwischenereignis „Ersatzlieferung erhalten“ mit Nachrichtenfluss vom Lieferanten.
 - **SD4 (Q2, Q3):** ref auf UC13 nennt die Teile-Disposition über UC09/P05 bei freigegebenem Nachtrag; nach der Endkontrolle `loop 0..2` für Nacharbeit, danach alt: fertigmelden oder `wechsleStatus(ABGELEHNT)`.
-- **Kennzahlen:** 131 Aktivitäten (unverändert, Gateway und Ereignis zählen nicht), 41 Nachrichtenflüsse. Beide Linter ohne Befund. Doku (5.1, 5.1.2, 5.3.3, 5.4, Kapitel 6) und Bilder angepasst; P06/P10 wurden aus dem archivierten Generator erzeugt, der P03–P10 bis dahin unverändert reproduzierte. Maximilian prüft beide Dateien bei der Modeler-Prüfung mit.
+- **SD6:** nach der Bestellbestätigung alt „Lieferung eingetroffen (nach höchstens zwei Mahnungen)“ / „auch nach der zweiten Mahnung keine Lieferung“ → `storniere()`, weiter wie ohne Auftragsbestätigung.
+- **Kennzahlen:** 131 Aktivitäten (unverändert, Gateway und Ereignis zählen nicht), 41 Nachrichtenflüsse. Beide Linter ohne Befund. Doku (1, 3.3, 4.3, 5.1, 5.1.2, 5.3.3, 5.4, 6, 7) und Bilder angepasst.
+- **Abweichung vom Werkzeugweg aus E-21:** P06 und P10 wurden ausnahmsweise mit dem archivierten Generator neu erzeugt statt im Camunda Modeler geändert, weil er P03–P10 bis dahin byte-gleich reproduzierte und so das Layout erhalten blieb. Maximilian öffnet beide Dateien bei der Modeler-Prüfung, speichert sie dort und exportiert die PNGs neu; danach gilt wieder nur der Modeler.
 
 ## E-21 Gruppenbeschluss vom 05.10.2026
 

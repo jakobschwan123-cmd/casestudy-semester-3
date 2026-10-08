@@ -708,7 +708,7 @@ def build_10():
     d = Diagram("10", "Ersatzteil-Retoure und Lieferanten-Reklamation", [LEITUNG, DISPO], pools_bottom=[LIEF],
                 doc="Defekte oder falsche Lieferantenteile werden beim Lieferanten reklamiert. Nach RMA-Freigabe wird das Teil "
                     "zurueckgesendet, der Bestand korrigiert und je nach Rueckmeldung die Ersatzlieferung nach ihrem Eingang oder die Gutschrift verbucht. "
-                    "Antwortet der Lieferant auch nach der zweiten Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer "
+                    "Antwortet der Lieferant auch nach der Eskalation nicht, wird das Teil abgeschrieben. Ob nach einer "
                     "Gutschrift neu bestellt wird, entscheidet der aufrufende Prozess 06.")
     n, f = d.node, d.flow
     n("Start_10", "start", "Mangelhaftes Teil festgestellt", 1, 0)
