@@ -1,6 +1,6 @@
 # Entscheidungslog
 
-Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `archiv/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-23, E-24 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
+Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-23, E-24 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
 
 ## Offen
 
@@ -26,9 +26,9 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 - **Bestätigt:** Perspektive Solution Provider (E-02), KI-Sofortdiagnose (E-03), Prozessliste (E-05), Ablagestruktur (E-11), Korrekturen E-15, Kunde als eigener Prozess (E-16), E-17 vollständig (Rückgabe über P08, Lagergebühr nach der dritten Abhol-Erinnerung, Mahnung nach 14 Tagen, Akteur Servicemitarbeiter, UC19 Retoure), E-18 mit genau einem Klassendiagramm und UC04 als eigenständigem Use Case. Damit sind E-07 und E-14 erledigt.
 - **KI-Nutzung:** Kein KI-Absatz in der Projektdokumentation; den KI-Einsatz geben wir beim Moodle-Upload gesondert an. Absatz in Kapitel 1 und „Dokumanager“ auf Folie 16 entfernt.
 - **Modellierung:** Aktivitäten zählen nur im Werkstatt-Pool (Ø 13,1); Camunda-8-Anreicherung bleibt; Modellgröße bleibt (27 Klassen, 19 Use Cases); UC18 bleibt als Administration außerhalb der zehn Prozesse; Startereignis P09 bleibt „Mangel gemeldet“.
-- **Werkzeuge:** Keine Camunda Cloud, die BPMN-Modelle liegen nur im Git-Repository. Quelle der BPMN-Diagramme sind ab jetzt die `.bpmn`-Dateien (Camunda Modeler); die Generatoren liegen in `archiv/tools/`. Das BPMN-Abgabe-ZIP wird zur Abgabe von Hand gepackt.
+- **Werkzeuge:** Keine Camunda Cloud, die BPMN-Modelle liegen nur im Git-Repository (mit dem Dozenten abgeklärt, für ihn in Ordnung). Quelle der BPMN-Diagramme sind ab jetzt die `.bpmn`-Dateien (Camunda Modeler); die Generatoren liegen in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/tools/`. Das BPMN-Abgabe-ZIP wird zur Abgabe von Hand gepackt.
 - **Organisation:** Keine feste Ansprechperson für den Dozenten, Abstimmung im Coaching. Zuständigkeiten bleiben wie in `02-team-und-rollen.md` (Maximilian BPMN inklusive 09/10). Kommunikation über WhatsApp, Dateien nur über das GitHub-Repository. Kein Trello-Screenshot in Doku und Folien. In allen Dokumenten heißt es „Maximilian“.
-- **Repository:** Prüfprotokolle, alte Befunde, die To-do-Liste vom 05.10., die Vergleichsnotiz, die alte Dateiübersicht und der ausführliche Entscheidungslog liegen in `archiv/`.
+- **Repository:** Prüfprotokolle, alte Befunde, die To-do-Liste vom 05.10., die Vergleichsnotiz, die alte Dateiübersicht und der ausführliche Entscheidungslog liegen in `9_archiv/`.
 
 ## Gültige Entscheidungen im Überblick
 
@@ -41,7 +41,7 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-05 | Zehn Prozesse P01 Sofortdiagnose bis P10 Retoure |
 | E-06 | BPMN-Konventionen nach Vorlesung (Pool je Unternehmen, Lanes je Rolle, Verb + Objekt, Partizip Perfekt) |
 | E-10 | Zusammenführung von Kilians Entwurf V2 und dem Solution-Provider-Entwurf |
-| E-11 | Ablagestruktur `bpmn/`, `uml/`, `doku/`, `praesi/`, `abgabe/`, `archiv/` |
+| E-11 | Ablagestruktur `1_bpmn/`, `2_uml/`, `3_doku/`, `4_praesentation/`, `0_abgabe/`, `9_archiv/` |
 | E-12 | Scrum im Takt der Gruppentermine, Sprintplan in Doku Kapitel 4 |
 | E-13 | Rollen, Gruppentermine 02.09./05.10./15.10./22.10., Präsentation 27.10.2026, 09:00, B458 |
 | E-15 | Korrekturen der Gesamtprüfung vom 26.09. (BPMN-Fehler, Botschaft = Operation) |

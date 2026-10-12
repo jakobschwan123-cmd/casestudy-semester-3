@@ -1,8 +1,8 @@
 # Kontext für KI-Assistenten (Case Study S3 — RepairFlow)
 
-> Fachliche Fakten stehen in [`../doku/01-projektkontext.md`](../doku/01-projektkontext.md),
-> Entscheidungen in [`../doku/03-entscheidungen.md`](../doku/03-entscheidungen.md),
-> Team-/Git-Regeln in [`README.md`](README.md). Diese Datei enthält nur, was dort
+> Fachliche Fakten stehen in [`01-projektkontext.md`](01-projektkontext.md),
+> Entscheidungen in [`03-entscheidungen.md`](03-entscheidungen.md),
+> Team-/Git-Regeln in [`git-workflow.md`](git-workflow.md). Diese Datei enthält nur, was dort
 > nicht steht: bindende Konventionen für die Arbeit am Repo.
 > Aktualisiert am 02.09.2026 nach der Zusammenführung der Entwürfe (E-10/E-11) am 26.09.2026 nach der Gesamtprüfung (E-15), am 28.09. nach dem Kunden-Pool (E-16), am 05.10.2026 nach dem Komplettcheck (E-17) und nach dem Gruppenbeschluss E-21 (Generatoren archiviert).
 
@@ -24,20 +24,20 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
-| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,1; Linter und Layout-Prüfung 0 Befunde) | `bpmn/p01-…p10-*.bpmn` |
-| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (8 Akteure) | `uml/usecase.puml` |
-| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `uml/klassen.puml` |
-| Sequenzdiagramme | 5 | 6 | `uml/sequenz-01..06-*.puml` |
-| Zustandsdiagramm (Zusatz) | – | 1 | `uml/zustand-reparaturauftrag.puml` |
+| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,1; Linter und Layout-Prüfung 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
+| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (8 Akteure) | `2_uml/entwurf-plantuml/usecase.puml` |
+| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `2_uml/entwurf-plantuml/klassen.puml` |
+| Sequenzdiagramme | 5 | 6 | `2_uml/entwurf-plantuml/sequenz-01..06-*.puml` |
+| Zustandsdiagramm (Zusatz) | – | 1 | `2_uml/entwurf-plantuml/zustand-reparaturauftrag.puml` |
 
 ## Unumstößliche Konventionen
 
 - **Namens-Konsistenz über alle Artefakte.** Rollen/Pools, Klassennamen,
   Use-Case-Namen und Statuswerte sind über Doku, BPMN, Use-Case-, Klassen- und
   Sequenzdiagramme **wortgleich** zu halten. Quelle für Klassen,
-  Operationen und Use Cases sind `uml/klassen.puml`, `uml/usecase.puml` und `uml/modell.xmi`
+  Operationen und Use Cases sind `2_uml/entwurf-plantuml/klassen.puml`, `2_uml/entwurf-plantuml/usecase.puml` und `2_uml/modell.xmi`
   bzw. das Visual-Paradigm-Projekt; für die Prozesse die `.bpmn`-Dateien (E-21).
-  Die Generatoren in `archiv/tools/` werden nicht mehr verwendet. Bei Änderungen
+  Die Generatoren in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/tools/` werden nicht mehr verwendet. Bei Änderungen
   Bilder, Doku und Folien nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
   ausmodellierten Prozess, `Kunde` mit eigenem nicht ausführbarem Prozess (E-16),
@@ -59,7 +59,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   prüfen und das PNG neu exportieren. Je Diagramm (Prozessebene) genau ein Start-
   und ein Endereignis (eingebettete Teilprozesse haben ihr eigenes), Ereignisse im Partizip Perfekt, Aktivitäten Verb + Objekt.
 - **Werkzeuge:** BPMN in **Camunda Modeler (Camunda 8)**, UML in **Visual
-  Paradigm 18** (Import über `uml/modell.xmi`). Die `.puml`-Dateien liefern
+  Paradigm 18** (Import über `2_uml/modell.xmi`). Die `.puml`-Dateien liefern
   validen PlantUML-Code; die `.png` sind Renderings, keine Quellen. Quelle
   ändern → Rendering neu erzeugen, nie nur das PNG austauschen.
 - **PNG und Quelle gehören zusammen.** Beide liegen im selben Ordner mit
@@ -79,12 +79,12 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   (früher `repairflow-klassen.puml`) — der Ordner sagt schon, was es ist.
 - **Zwei Entwürfe, ein Stand.** Kilians V2 (Betreiber-Perspektive, Camunda 7,
   ohne KI) und der Solution-Provider-Entwurf wurden am 02.09.2026 zusammengeführt
-  (`archiv/doku/05-vergleich-und-zusammenfuehrung.md`). Nicht wieder auf die
+  (`9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/05-vergleich-und-zusammenfuehrung.md`). Nicht wieder auf die
   Betreiber-Fassung zurückfallen. Gültige Entscheidungen in Kurzform:
-  `doku/03-entscheidungen.md`; ausführlicher Verlauf im Archiv.
+  `5_team/03-entscheidungen.md`; ausführlicher Verlauf im Archiv.
 - **Keine Umlaute in Ordner-/Dateinamen.** macOS (NFD) und Linux (NFC)
   normalisieren Umlaute unterschiedlich; das erzeugt im Team Phantom-Änderungen.
-  Deshalb `praesi/`, nicht `präsi/`.
+  Deshalb `4_praesentation/`, nicht `präsi/`.
 - **Office-Dateien sind Binärdateien.** `.docx`/`.pptx` lassen sich nicht mergen.
   Vor dem Bearbeiten im Team abstimmen, wer sie anfasst.
 - **Keine Zugangsdaten committen** — keine Tokens, Keys oder Passwörter.
@@ -104,4 +104,4 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 ## UML-Abgleich E-18 (05.10.2026)
 
-Aktiv gibt es genau ein Klassendiagramm (`uml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Prüfprotokoll: `archiv/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`; Strukturprüfung: `python3 tools/check_uml.py`.
+Aktiv gibt es genau ein Klassendiagramm (`2_uml/entwurf-plantuml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Prüfprotokoll: `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`; Strukturprüfung: `python3 tools/check_uml.py`.

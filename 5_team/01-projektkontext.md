@@ -17,7 +17,7 @@ Unser Beispiel: **RepairFlow**, ein Software-Startup (Solution Provider), das We
 - Werkzeug: Camunda Modeler (Camunda 8, BPMN diagram) oder bpmn.io
 - Diagrammnamen mit zweistelliger Nummer und prägnantem Namen: `01-Sofortdiagnose`, `02-Auftragsannahme` usw. (so heißen die Dateien im Abgabe-ZIP; im Repository `p01-sofortdiagnose.bpmn` usw., E-11/E-15)
 - Abgabe als ZIP aller exportierten Diagramme (XML)
-- Artefakt-Repository: Der Ablauf nennt die Camunda Cloud, die Installationsanleitung empfiehlt Git. Wir nutzen nur das GitHub-Repository, die Camunda Cloud nicht (E-21).
+- Artefakt-Repository: Der Ablauf nennt die Camunda Cloud, die Installationsanleitung empfiehlt Git. Wir nutzen nur das GitHub-Repository, die Camunda Cloud nicht (E-21). Mit dem Dozenten abgeklärt: Das ist so in Ordnung.
 
 ### Automatisierungspotential
 
@@ -59,7 +59,7 @@ Das Fallstudien-Portfolio ist Teil des Moduls „Methoden der WI" und wird 50:50
 
 ## Abgabeformat
 
-Ein ZIP mit dem Namen `Fallstudie-WWI25B4-Gruppe1.zip`, darin (siehe auch `abgabe/README.md`):
+Ein ZIP mit dem Namen `Fallstudie-WWI25B4-Gruppe1.zip`, darin (siehe auch `0_abgabe/README.md`):
 
 | Datei | Inhalt |
 |---|---|
@@ -91,11 +91,11 @@ Download über camunda.com/de/download/modeler, beim Start „Camunda 8 → BPMN
 
 ### Git
 
-Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Schriftliche. Regeln stehen in `claude.readme/README.md` (Branches, Pull Requests, Commit-Messages, Definition of Done).
+Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Schriftliche. Regeln stehen in `5_team/git-workflow.md` (Branches, Pull Requests, Commit-Messages, Definition of Done).
 
 ## Fachliche Konventionen für alle Artefakte
 
-Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `uml/klassen.puml`, `uml/usecase.puml` und `bpmn/README.md`).
+Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `2_uml/entwurf-plantuml/klassen.puml`, `2_uml/entwurf-plantuml/usecase.puml` und `1_bpmn/README.md`).
 
 - Pools: Werkstattbetrieb (Pilotkunde FixWerk GmbH) · Kunde · Lieferant; Lanes: Service / Annahme · Techniker · Werkstattleitung · Ersatzteil-Disposition
 - Zustände von `Reparaturauftrag`: angenommen, in Diagnose, KVA offen, freigegeben, abgelehnt, Teile bestellt, in Reparatur, fertig, abgeholt. Ohne Fehlteile entfällt „Teile bestellt“; ein Nacharbeitsauftrag beginnt ohne erneute Diagnose und KVA. Eine erfolglose zweite Nacharbeit führt in P07 von „in Reparatur“ nach „abgelehnt“ (E-19).

@@ -1,6 +1,6 @@
 # QA-Checkliste (Definition of Done)
 
-Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.3, den Konventionen in `bpmn/README.md`, `uml/README.md`, `claude.readme/CLAUDE.md` und dem Gruppenbeschluss E-21. Jeder Pull Request wird vor dem Merge auf `main` gegen die passenden Abschnitte geprüft; gemergt wird durch Jakob. Änderungen an der Liste bitte per Pull Request.
+Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.3, den Konventionen in `1_bpmn/README.md`, `2_uml/README.md`, `5_team/CLAUDE.md` und dem Gruppenbeschluss E-21. Jeder Pull Request wird vor dem Merge auf `main` gegen die passenden Abschnitte geprüft; gemergt wird durch Jakob. Änderungen an der Liste bitte per Pull Request.
 
 ## Für jedes Artefakt
 
@@ -20,11 +20,11 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 - [ ] Kommunikation zwischen Pools nur über Nachrichtenflüsse; jeder Send Task und jedes Nachrichtenereignis hat ein Gegenstück
 - [ ] Datenobjekte tragen Klassennamen aus dem Klassendiagramm, Zustände sind Werte der zugehörigen Aufzählung
 - [ ] Aufruf-Aktivitäten verweisen auf den richtigen Prozess, Start des aufgerufenen Prozesses passt zur Aufrufsituation
-- [ ] Kennzahlen in `bpmn/README.md`, Doku 5.1 und auf den Folien noch korrekt
+- [ ] Kennzahlen in `1_bpmn/README.md`, Doku 5.1 und auf den Folien noch korrekt
 
 ## UML
 
-- [ ] Genau ein aktives vollständiges Klassendiagramm (`uml/klassen.puml/.png`), keine Fokusvarianten
+- [ ] Genau ein aktives vollständiges Klassendiagramm (`2_uml/entwurf-plantuml/klassen.puml/.png`), keine Fokusvarianten
 - [ ] PNG nach jeder Änderung der `.puml` neu gerendert
 - [ ] Use Cases und Sequenzdiagramme passen zu den BPMN-Prozessen (Zuordnung siehe E-18, auch nach späteren BPMN-Änderungen)
 - [ ] Jede Botschaft an eine Klassen-Lebenslinie ist eine Operation dieser Klasse im Klassendiagramm
@@ -32,11 +32,11 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 - [ ] include/extend-Richtung stimmt (Basis → inkludiert, erweiternd → Basis) und ist fachlich begründet
 - [ ] Zustandsdiagramm nutzt nur Zustände der Aufzählung AuftragStatus und Operationen der Klasse Reparaturauftrag
 - [ ] Statuswechsel in BPMN, Sequenzdiagramm und Zustandsdiagramm stimmen überein
-- [ ] In Visual Paradigm committet, `.vpp` gesichert und in `uml/` eingecheckt
+- [ ] In Visual Paradigm committet, `.vpp` gesichert und in `2_uml/` eingecheckt
 
 ## Doku und Präsentation
 
-- [ ] Zahlen (Aktivitäten, Klassen, Use Cases, Assoziationen) gegen `bpmn/README.md` und das Klassendiagramm geprüft
+- [ ] Zahlen (Aktivitäten, Klassen, Use Cases, Assoziationen) gegen `1_bpmn/README.md` und das Klassendiagramm geprüft
 - [ ] Bilder entsprechen dem aktuellen Stand der Quellen
 - [ ] Keine gelben Platzhalter mehr; Titelseite vollständig; Sprecherzuordnung auf der letzten Folie aktuell
 - [ ] Kein KI-Absatz in der Doku; KI-Einsatz beim Moodle-Upload angegeben (E-21)
@@ -44,7 +44,7 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 
 ## Prüfstand 05.10.2026
 
-Geprüft von Jakob (mit KI-Unterstützung) auf `main` nach PR #4: das Abgleich-Protokoll `archiv/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md` gegen die damaligen BPMN-Dateien und PNGs, dazu die Bildstände. Die automatische UML-Prüfung (`archiv/tools/check_uml.py`) lief für diesen Stand ohne Befund (109 BPMN-Anker).
+Geprüft von Jakob (mit KI-Unterstützung) auf `main` nach PR #4: das Abgleich-Protokoll `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md` gegen die damaligen BPMN-Dateien und PNGs, dazu die Bildstände. Die automatische UML-Prüfung (`9_archiv/v2_2026-10-05_generatoren-und-pruefungen/tools/check_uml.py`) lief für diesen Stand ohne Befund (109 BPMN-Anker).
 
 Aktualisierung nach PR #6 (`main` auf `cc329e1`): Q4 und Q5 sind erledigt. Alle 20 Diagrammbilder der Projektdokumentation entsprechen den aktuellen PNGs im Repository. Beim Dokumentationsabgleich wurde außerdem der oben abgeschnittene Use-Case-Export aus der unveränderten `.puml` vollständig neu gerendert (Q8). Die Kennzahlen wurden aus den aktuellen BPMN-XML nachgezählt: 131 Werkstatt-Aktivitäten, davon 79 automatisiert, sowie 26 Kundenaktivitäten. Q1 bis Q3 bleiben offen; zusätzlich ist der fehlende Empfang einer Ersatzlieferung in P10 zu klären (B12, siehe offene Frage zu E-20). Die abschließende Prüfung im Camunda Modeler und die VPP-Datei stehen weiterhin aus.
 
@@ -59,4 +59,4 @@ Aktualisierung nach PR #6 (`main` auf `cc329e1`): Q4 und Q5 sind erledigt. Alle 
 | Q7 | Zuständigkeit BPMN 09/10 ist durch E-21 geklärt (Maximilian, BPMN inklusive 09/10). | erledigt |
 | Q8 | Erledigt beim Dokumentationsabgleich: Das Use-Case-PNG war oben abgeschnitten. Vollständiger Neu-Export mit PlantUML 1.2026.8 aus der unveränderten Quelle, mit allen acht Akteuren; PNG im Repository und Bild in der Doku ersetzt. | erledigt |
 
-Aktualisierung 08.10.2026 (Kilian, E-22): Q1 bis Q3 und B12 in `bpmn/p06-…`, `bpmn/p10-…`, `uml/sequenz-04-fertigmeldung.puml` und `uml/sequenz-06-nachbestellvorschlag.puml` umgesetzt, PNGs und Doku-Bilder erneuert, Camunda-Linter und bpmnlint ohne Befund, 41 Nachrichtenflüsse. Offen bleiben die Modeler-Prüfung aller zehn Dateien, die `.vpp` und die Bestätigung von E-19, E-20 und E-22.
+Aktualisierung 08.10.2026 (Kilian, E-22): Q1 bis Q3 und B12 in `1_bpmn/p06-…`, `1_bpmn/p10-…`, `2_uml/entwurf-plantuml/sequenz-04-fertigmeldung.puml` und `2_uml/entwurf-plantuml/sequenz-06-nachbestellvorschlag.puml` umgesetzt, PNGs und Doku-Bilder erneuert, Camunda-Linter und bpmnlint ohne Befund, 41 Nachrichtenflüsse. Offen bleiben die Modeler-Prüfung aller zehn Dateien, die `.vpp` und die Bestätigung von E-19, E-20 und E-22.
