@@ -12,4 +12,4 @@
 
 Die Projektdokumentation und die Präsentation werden ab jetzt direkt in Word bzw. PowerPoint bearbeitet. Vorher in der WhatsApp-Gruppe Bescheid geben, weil sich Office-Dateien nicht mergen lassen. Das Inhaltsverzeichnis ist statisch: Verschieben sich Seiten, die Seitenzahlen von Hand anpassen oder in Word ein automatisches Verzeichnis einfügen.
 
-Stand 08.10.2026 (E-22): Die Befunde zu P06, P10, SD4 und SD6 sind behoben, die gelben Platzhalter sind durch Textentwürfe ersetzt, die jede Person prüft (Kapitel 1, 3.3, 4.3, 6, 7). Die Word-Kommentare vom 05.10. waren erledigt und sind entfernt. Was nach VPP und Modeler-Prüfung noch geändert werden muss, steht in `abgabe/ABGABE-STATUS.md`.
+Stand 12.10.2026: Die Projektdokumentation ist auf ca. 20 Seiten neu gefasst (ohne Anhänge). Modelldiagramme sind Platzhalter, die mit Exporten aus Visual Paradigm und dem Camunda Modeler gefüllt werden; offene Stellen sind gelb markiert und in `abgabe/ABGABE-STATUS.md` aufgelistet.
