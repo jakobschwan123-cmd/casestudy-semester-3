@@ -15,7 +15,7 @@ Zehn Kollaborationsdiagramme im BPMN-2.0-Format für den **Camunda Modeler (Camu
 | p09-reklamation.bpmn | Reklamation und Gewährleistung | Kunde, Werkstattbetrieb |
 | p10-retoure.bpmn | Ersatzteil-Retoure und Lieferanten-Reklamation | Werkstattbetrieb, Lieferant |
 
-Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`), siehe `abgabe/README.md`.
+Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn` … `10-Retoure.bpmn`), siehe `0_abgabe/README.md`.
 
 ## Konventionen (Vorlesung SYAN-04, E-06)
 

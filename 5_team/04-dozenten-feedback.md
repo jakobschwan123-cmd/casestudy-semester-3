@@ -2,6 +2,12 @@
 
 Rückmeldungen aus Kickoff und Coaching-Terminen, jeweils mit dem, was daraus folgt. Neueste Einträge oben.
 
+## Camunda Cloud (vor dem 12.10.2026)
+
+Wir haben mit dem Dozenten abgeklärt, dass wir die im Ablauf genannte Camunda Cloud nicht nutzen und die BPMN-Modelle nur im Git-Repository ablegen. Er meinte, das passt so.
+
+Folgt daraus: E-21 bleibt, in der Projektdokumentation (Abschnitt 4.3) steht „in Absprache mit dem Dozenten“.
+
 ## Konzeptvorstellung RepairFlow (vor dem 02.09.2026)
 
 Notiert von David am 02.09.2026.

@@ -10,7 +10,7 @@ Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester).
 | Kilian Platter | Scrum Master und UML-Verantwortlicher | Sprint-Rituale und Trello-Board; Use-Case- und Klassendiagramm sowie SD1 und SD3 in Visual Paradigm, VP-Repository |
 | Maximilian Ewald | BPMN-Verantwortlicher | Die 10 Kollaborationsdiagramme im Camunda Modeler (inklusive 09/10), BPMN-Dateien und PNG-Export im Git-Repository |
 | Jakob Schwan | Qualitätsmanager | Review der Artefakte gegen die Anforderungen, Konsistenz zwischen BPMN, UML und Doku, Präsentation, Abgabe-Check |
-| Claude | Dokumanager | Projektdokumentation, die Markdown-Dateien in `doku/`, Entscheidungslog, Erzeugung der Rohartefakte |
+| Claude | Dokumanager | Projektdokumentation, die Markdown-Dateien in `3_doku/`, Entscheidungslog, Erzeugung der Rohartefakte |
 
 Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (Maximilian/David, Adrian/Nina, Jakob/Kilian), jede Trello-Karte hat genau eine verantwortliche Person und den Teampartner als Prüfer.
 
