@@ -194,7 +194,7 @@
     <bpmn:sequenceFlow id="Flow_02_23" sourceRef="T02_Einlagern" targetRef="End_02" />
     <bpmn:dataObjectReference id="DataObjRef_02_1" name="Voranmeldung" dataObjectRef="DataObj_02_1" />
     <bpmn:dataObject id="DataObj_02_1" />
-    <bpmn:dataObjectReference id="DataObjRef_02_2" name="Gerät" dataObjectRef="DataObj_02_2" />
+    <bpmn:dataObjectReference id="DataObjRef_02_2" name="Geraet" dataObjectRef="DataObj_02_2" />
     <bpmn:dataObject id="DataObj_02_2" />
     <bpmn:dataObjectReference id="DataObjRef_02_3" name="Reparatur-auftrag [angenommen]" dataObjectRef="DataObj_02_3" />
     <bpmn:dataObject id="DataObj_02_3" />

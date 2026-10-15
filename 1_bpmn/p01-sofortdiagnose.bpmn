@@ -7,7 +7,7 @@
     <bpmn:messageFlow id="MsgFlow_01_1" name="Foto / Video / Ton + Symptome" sourceRef="K01_Senden" targetRef="Start_01" />
     <bpmn:messageFlow id="MsgFlow_01_2" name="Rückfrage" sourceRef="T01_Rueckfrage" targetRef="K01_Rueckfrage" />
     <bpmn:messageFlow id="MsgFlow_01_3" name="Neue Aufnahme" sourceRef="K01_Neu" targetRef="E01_Neu" />
-    <bpmn:messageFlow id="MsgFlow_01_4" name="Diagnose, KVA, Termin" sourceRef="T01_Senden" targetRef="K01_Diagnose" />
+    <bpmn:messageFlow id="MsgFlow_01_4" name="Diagnose, Vorab-KVA, Termin" sourceRef="T01_Senden" targetRef="K01_Diagnose" />
     <bpmn:messageFlow id="MsgFlow_01_5" name="Bestätigung" sourceRef="K01_Bestaetigen" targetRef="E01_Bestaetigt" />
     <bpmn:messageFlow id="MsgFlow_01_6" name="Ablehnung" sourceRef="K01_Ablehnen" targetRef="E01_Abgelehnt" />
     <bpmn:messageFlow id="MsgFlow_01_7" name="Bestätigung der Voranmeldung" sourceRef="T01_Bestaetigung" targetRef="K01_Bestaetigung" />
