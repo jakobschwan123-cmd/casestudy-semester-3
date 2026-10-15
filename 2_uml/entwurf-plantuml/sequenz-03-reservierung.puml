@@ -1,6 +1,6 @@
 @startuml
 ' BPMN: p05-ersatzteilreservierung.bpmn
-' BPMN-Nodes: T05_Teileliste Sub_05 S05_Eigen GW05_Eigen S05_Reservieren S05_Andere GW05_Andere S05_ResAndere S05_Umlagerung S05_Fehlteil T05_Bestaetigen T05_Meldebestand GW05_Meldebestand T05_Nachbestellung T05_Beginn T05_Info GW05_Fehlteile T05_Bestellen
+' BPMN-Nodes: T05_Teileliste T05_Vorreservierung Sub_05 S05_Eigen GW05_Eigen S05_Reservieren S05_Andere GW05_Andere S05_ResAndere S05_Umlagerung S05_Fehlteil T05_Bestaetigen T05_Meldebestand GW05_Meldebestand T05_Nachbestellung T05_Beginn T05_Info GW05_Fehlteile T05_Bestellen
 title sqd : UC09 Ersatzteile disponieren und reservieren (BPMN 05)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
@@ -18,7 +18,11 @@ actor Kunde
 
 Disponent -> KVA : getPositionen()
 KVA --> Disponent : List<KvaPosition>
-par je benötigtem Ersatzteil (parallele Mehrfachinstanz Sub_05)
+opt Vorreservierung aus der Sofortdiagnose vorhanden (BPMN 01)
+    Disponent -> RES : reserviere()
+    note right of RES : VORRESERVIERT -> RESERVIERT;\nTeil wird nicht erneut geprüft (T05_Vorreservierung)
+end
+par je noch offenem Ersatzteil (parallele Mehrfachinstanz Sub_05)
     Disponent -> LB : pruefeVerfuegbarkeit(anzahl)
     LB --> Disponent : verfuegbar
     alt eigener Bestand ausreichend

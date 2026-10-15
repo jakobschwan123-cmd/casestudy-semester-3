@@ -21,10 +21,12 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jedem f
 
 ## B. BPMN im Camunda Modeler
 
-- [ ] **Korrektur in `1_bpmn/p04-kostenvoranschlag.bpmn`:** Auf eine freie Stelle außerhalb der Pools klicken, rechts im Properties Panel unter **Documentation** den Text `nach der dritten Erinnerung gilt er als abgelehnt.` ersetzen durch `nach dem dritten Fristablauf ohne Antwort gilt er als abgelehnt.` Grund: Das Modell sendet den KVA und höchstens zwei Erinnerungen, abgelehnt wird nach dem dritten Fristablauf.
-- [ ] **Korrektur in `1_bpmn/p02-auftragsannahme.bpmn`:** Das Datenobjekt „Gerät“ an der Aktivität „Gerät registrieren“ in „Geraet“ umbenennen. Grund: Datenobjekte tragen den Klassennamen, die Klasse heißt `Geraet`. Aktivitätsnamen mit „Gerät“ bleiben.
+- [x] **Korrektur in `1_bpmn/p04-kostenvoranschlag.bpmn`:** (erledigt mit E-25) Auf eine freie Stelle außerhalb der Pools klicken, rechts im Properties Panel unter **Documentation** den Text `nach der dritten Erinnerung gilt er als abgelehnt.` ersetzen durch `nach dem dritten Fristablauf ohne Antwort gilt er als abgelehnt.` Grund: Das Modell sendet den KVA und höchstens zwei Erinnerungen, abgelehnt wird nach dem dritten Fristablauf.
+- [x] **Korrektur in `1_bpmn/p02-auftragsannahme.bpmn`:** (erledigt mit E-25) Das Datenobjekt „Gerät“ an der Aktivität „Gerät registrieren“ in „Geraet“ umbenennen. Grund: Datenobjekte tragen den Klassennamen, die Klasse heißt `Geraet`. Aktivitätsnamen mit „Gerät“ bleiben.
 - [ ] **Alle zehn Dateien `p01` bis `p10` prüfen und exportieren:** Datei öffnen, unten den Reiter **Problems** öffnen (es dürfen keine Fehler stehen; falls doch Screenshot in die WhatsApp-Gruppe, nicht selbst umbauen), Strg+S, File → Export as image → PNG mit gleichem Dateinamen in `1_bpmn/` überschreiben. P06 und P10 unbedingt im Modeler speichern (E-22). Dann per Branch und Pull Request einreichen.
-- [ ] **Kennzahlen abgleichen** nach allen Änderungen: Doku 5.1, `1_bpmn/README.md` und Folie 7 müssen dieselben Zahlen zeigen (131 Aktivitäten, 79 automatisiert, 41 Nachrichtenflüsse).
+- [ ] **Kennzahlen abgleichen** nach allen Änderungen: Doku 5.1, `1_bpmn/README.md` und Folie 7 müssen dieselben Zahlen zeigen (132 Aktivitäten, Ø 13,2, 80 automatisiert = 61 %, 41 Nachrichtenflüsse, 63 Datenobjekte und -speicher; Stand E-25). `1_bpmn/README.md` ist nachgezogen, Doku 5.1 und Folie 7 nennen noch 131/79.
+- [ ] **E-25 in Doku und Folien nachziehen:** Abb. 2 (P01) und Abb. 3 (P04) neu einfügen, Beschreibung von P03 (neue Gateways „KI-Vorschlag vorhanden?“ und „Fehler gefunden?“) und P05 („Vorreservierungen übernehmen“) in Kapitel 5 prüfen.
+- [ ] **SD3 neu rendern und in VP übernehmen:** `2_uml/entwurf-plantuml/sequenz-03-reservierung.puml` hat einen neuen opt-Block „Vorreservierung aus der Sofortdiagnose“ (E-25); PNG mit PlantUML neu erzeugen, in Visual Paradigm beim Anlegen von SD3 mit übernehmen.
 
 ## C. Entscheidungen (Gruppentermin 15.10.)
 

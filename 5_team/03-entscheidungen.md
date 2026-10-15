@@ -9,6 +9,19 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 - **E-22 bestätigen** (Adrian, P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
 - **E-23 bestätigen** (alle, 15.10.): Zuständigkeiten für die Fertigstellung.
 - **E-24 bestätigen** (alle, 15.10.): Use-Case-Diagramm mit einer Rolle je Use Case.
+- **E-25 bestätigen** (alle, Modeler-Prüfung Maximilian): Korrekturen P01–P05.
+
+## E-25 Fehleranalyse und Korrekturen P01–P05 (15.10.2026)
+
+Vorschlag von Jakob (Analyse und Umsetzung mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+
+- **P03:** Neues Gateway „KI-Vorschlag vorhanden?“ vor „KI-Diagnosevorschlag sichten“, weil Aufträge ohne Voranmeldung (P02, Zweig „nein“) keinen KI-Vorschlag haben. Nach „Erweiterte Prüfung durchführen“ fragt „Fehler gefunden?“; bei „nein“ geht es wie bei Unwirtschaftlichkeit zur Reparaturabsage (die Nachricht nennt „kein Befund“ schon bisher).
+- **P04:** Gateway heißt „Dritte Frist verstrichen?“ statt „Dritte Erinnerung ohne Antwort?“ (KVA plus höchstens zwei Erinnerungen, abgelehnt nach dem dritten Fristablauf), Documentation entsprechend. Bei Freigabe und Ablehnung entsteht zusätzlich „Kostenvoranschlag [freigegeben]“ bzw. „[abgelehnt]“, weil P05 den freigegebenen KVA als Eingabe liest. Datenobjekt „KvaPosition“ statt „Kva-Position“.
+- **P05:** Neue Aktivität „Vorreservierungen übernehmen“ (Service Task) vor der Teileprüfung; Vorreservierungen aus P01 werden zu Reservierungen, die Mehrfachinstanz prüft nur noch die offenen Teile (`offeneErsatzteile`). Vorher wurden vorreservierte Teile ein zweites Mal reserviert. Startereignis im Kunden-Pool „Reparaturbeginn erhalten“. SD3 hat dafür einen opt-Block.
+- **P01/P02:** Nachrichtenfluss „Diagnose, Vorab-KVA, Termin“ wie die Nachricht; Datenobjekt „Geraet“ (Klassenname).
+- **Darstellung:** XOR-Gateways in P03–P05 mit X-Markierung wie in P01/P02.
+- **Kennzahlen:** 132 Aktivitäten (Ø 13,2), 80 automatisiert (61 %), 41 Nachrichtenflüsse, 63 Datenobjekte und -speicher. Camunda-Linter ohne Befund. PNGs von P01–P05 mit bpmn-js (Renderer des Modelers) neu erzeugt; die Modeler-Prüfung aller zehn Dateien bleibt bei Maximilian (TODO B).
+- **Nicht geändert:** Im Kunden-Pool von P01 gibt es keinen Ausstieg, falls die Werkstatt die Voranmeldung nach Fristablauf verwirft; der Kundenablauf modelliert nur das Antworten, daher kein Deadlock im Modell.
 
 ## E-24 Use-Case-Diagramm: je Use Case eine Rolle (15.10.2026)
 
@@ -76,3 +89,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-22 | Ausstieg der Liefermahnung in P06, Empfang der Ersatzlieferung in P10, SD4 an P07 angeglichen – Bestätigung offen |
 | E-23 | Zuständigkeiten für die Fertigstellung, Vortrag folgt der Verantwortung – Bestätigung offen |
 | E-24 | Use-Case-Diagramm mit einer Rolle je Use Case, 15 Mitarbeiterrollen, Zuordnung in Doku Tabelle 7 – Bestätigung offen |
+| E-25 | Korrekturen P01–P05 (KI-Vorschlag optional, kein Befund, KVA-Status, Vorreservierungen in P05) – Bestätigung offen |
