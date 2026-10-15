@@ -1,10 +1,26 @@
 @startuml
 ' BPMN: p09-reklamation.bpmn. Kernablauf: Mangel prüfen, Gewährleistung oder Angebot, Nacharbeitsauftrag, Abschluss.
-title sqd : UC16 Reklamation bearbeiten (BPMN 09)
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC16 Reklamation bearbeiten]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
 skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
 actor Kunde
 actor Reklamationsbearbeiter as SM
@@ -14,7 +30,8 @@ actor Werkstattleiter as WL
 participant "nacharbeit : Reparaturauftrag" as NA
 
 Kunde -> SM : Mangelmeldung (Auftrag, Beschreibung)
-SM -> REK : <<create>> erfasseReklamation(a, grund)
+create REK
+SM -->> REK : erfasseReklamation(a, grund)
 Diagnostiker -> REK : pruefeGewaehrleistung()
 REK --> Diagnostiker : istGewaehrleistung
 alt Gewährleistungsfall
@@ -26,7 +43,8 @@ else kein Gewährleistungsfall
 end
 alt Nacharbeit freigegeben oder Angebot angenommen
     Diagnostiker -> REK : legeNacharbeitAn(kostenfrei)
-    REK -> NA : <<create>>
+    create NA
+    REK -->> NA : new()
     ref over Diagnostiker, NA : UC13 / UC14 Nacharbeit durchführen (BPMN 07)
 else Angebot abgelehnt
     SM -> REK : ablehnen()

@@ -1,10 +1,26 @@
 @startuml
 ' BPMN: p07-reparaturdurchfuehrung.bpmn. Kernablauf: Endkontrolle, höchstens zwei Nacharbeiten (E-22), fertigmelden oder abbrechen.
-title sqd : UC14 Auftrag fertigmelden (BPMN 07)
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC14 Auftrag fertigmelden]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
 skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
 actor Endkontrolleur as E
 participant ": Reparaturauftrag" as RA
