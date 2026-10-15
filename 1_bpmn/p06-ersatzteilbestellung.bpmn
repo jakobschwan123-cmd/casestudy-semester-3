@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_06" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_06" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_06">
     <bpmn:documentation>Fehlteile eines Reparaturauftrags werden zusammen mit offenen Nachbestellvorschlaegen zu einer Lieferantenbestellung gebuendelt, bei Bedarf von der Werkstattleitung freigegeben und an den Lieferanten gesendet. Kommt binnen 3 Tagen keine Auftragsbestaetigung oder kann der Lieferant nicht liefern, wird die Bestellung storniert und ein alternativer Lieferant gesucht. Bleibt die Lieferung 14 Tage aus, wird sie angemahnt; bleibt sie nach der zweiten Mahnung weitere 14 Tage aus, wird ebenfalls storniert. Nach dem Wareneingang werden die Fehlteile dem Auftrag zugeordnet, Nachbestellteile gehen ins Lager; bei Verzoegerungen informiert RepairFlow den Kunden. Mangelhafte Lieferungen laufen ueber Prozess 10: Eine Ersatzlieferung wird vor der Zuordnung geprueft, bei Gutschrift wird neu bestellt, solange das Teil noch benoetigt wird.</bpmn:documentation>
     <bpmn:participant id="Part_06_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_06" />
@@ -10,6 +10,7 @@
     <bpmn:messageFlow id="MsgFlow_06_3" name="Lieferung + Lieferschein" sourceRef="Part_06_Lieferant" targetRef="E06_Lieferung" />
     <bpmn:messageFlow id="MsgFlow_06_4" name="Mahnung" sourceRef="T06_Mahnen" targetRef="Part_06_Lieferant" />
     <bpmn:messageFlow id="MsgFlow_06_5" name="Info: neuer Liefertermin" sourceRef="T06_KundeInfo" targetRef="K06_Start" />
+    <bpmn:messageFlow id="MsgFlow_06_Storno" name="Stornierung" sourceRef="T06_Storno" targetRef="Part_06_Lieferant" />
   </bpmn:collaboration>
   <bpmn:process id="Proc_06" name="06 Ersatzteil-Bestellung beim Lieferanten" isExecutable="true">
     <bpmn:laneSet id="LaneSet_06">
@@ -30,7 +31,6 @@
         <bpmn:flowNodeRef>E06_ABTimer</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW06_Lieferbar</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Merge_06s</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>T06_Storno</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T06_Alternative</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW06_Alt</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T06_Termin</bpmn:flowNodeRef>
@@ -52,6 +52,11 @@
         <bpmn:flowNodeRef>T06_Zuordnen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_06d</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>End_06</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T06_Storno</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_06r</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW06_ErsatzOk</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_06n</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T06_NichtBeschaffbar</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_06_3" name="Service / Annahme">
         <bpmn:flowNodeRef>T06_KundeInfo</bpmn:flowNodeRef>
@@ -94,6 +99,9 @@
     <bpmn:serviceTask id="T06_Bestellung" name="Bestellung beim Lieferanten anlegen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t06_bestellung" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=0" target="anzahlMahnungen" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_6</bpmn:incoming>
       <bpmn:outgoing>Flow_06_7</bpmn:outgoing>
@@ -154,16 +162,6 @@
       <bpmn:incoming>Flow_06_34</bpmn:incoming>
       <bpmn:outgoing>Flow_06_19</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="T06_Storno" name="Bestellung stornieren">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t06_storno" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_06_19</bpmn:incoming>
-      <bpmn:outgoing>Flow_06_20</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="T06_Storno_out_DataObjRef_06_4">
-        <bpmn:targetRef>DataObjRef_06_4</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
     <bpmn:userTask id="T06_Alternative" name="Alternativen Lieferanten suchen">
       <bpmn:extensionElements>
         <zeebe:userTask />
@@ -180,6 +178,9 @@
     <bpmn:serviceTask id="T06_Termin" name="Liefertermin hinterlegen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t06_termin" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=liefertermin" target="nachfrist" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_17</bpmn:incoming>
       <bpmn:outgoing>Flow_06_24</bpmn:outgoing>
@@ -219,11 +220,11 @@
       <bpmn:outgoing>Flow_06_36</bpmn:outgoing>
       <bpmn:messageEventDefinition id="E06_Lieferung_def" messageRef="Msg_06_2" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="E06_LiefTimer" name="14 Tage verstrichen">
+    <bpmn:intermediateCatchEvent id="E06_LiefTimer" name="Lieferfrist überschritten">
       <bpmn:incoming>Flow_06_31</bpmn:incoming>
       <bpmn:outgoing>Flow_06_32</bpmn:outgoing>
       <bpmn:timerEventDefinition id="E06_LiefTimer_def">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">=nachfrist</bpmn:timeDate>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:exclusiveGateway id="GW06_Mahnung" name="Bereits zweimal angemahnt?">
@@ -234,6 +235,10 @@
     <bpmn:sendTask id="T06_Mahnen" name="Lieferung anmahnen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t06_mahnen" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=anzahlMahnungen + 1" target="anzahlMahnungen" />
+          <zeebe:output source="=now() + duration(&#34;P14D&#34;)" target="nachfrist" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_33</bpmn:incoming>
       <bpmn:outgoing>Flow_06_35</bpmn:outgoing>
@@ -261,7 +266,7 @@
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_10" propagateAllChildVariables="false" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_06_39</bpmn:incoming>
+      <bpmn:incoming>Flow_06_39b</bpmn:incoming>
       <bpmn:outgoing>Flow_06_40</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:exclusiveGateway id="GW06_Ersatz" name="Ersatz geliefert?">
@@ -284,20 +289,22 @@
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Join_06c" name="">
       <bpmn:incoming>Flow_06_38</bpmn:incoming>
-      <bpmn:incoming>Flow_06_43</bpmn:incoming>
+      <bpmn:incoming>Flow_06_43a</bpmn:incoming>
       <bpmn:outgoing>Flow_06_46</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="T06_Zuordnen" name="Fehlteile dem Reparaturauftrag zuordnen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t06_zuordnen" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=true" target="teileVollstaendig" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_46</bpmn:incoming>
       <bpmn:outgoing>Flow_06_47</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Join_06d" name="">
-      <bpmn:incoming>Flow_06_23</bpmn:incoming>
-      <bpmn:incoming>Flow_06_45</bpmn:incoming>
       <bpmn:incoming>Flow_06_47</bpmn:incoming>
+      <bpmn:incoming>Flow_06_45c</bpmn:incoming>
       <bpmn:outgoing>Flow_06_48</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="End_06" name="Bestellung abgeschlossen">
@@ -308,10 +315,10 @@
     <bpmn:sequenceFlow id="Flow_06_5" sourceRef="Merge_06" targetRef="T06_Lieferant" />
     <bpmn:sequenceFlow id="Flow_06_6" sourceRef="T06_Lieferant" targetRef="T06_Bestellung" />
     <bpmn:sequenceFlow id="Flow_06_7" sourceRef="T06_Bestellung" targetRef="GW06_Grenze" />
-    <bpmn:sequenceFlow id="Flow_06_8" sourceRef="GW06_Grenze" targetRef="T06_Freigabe" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_8" name="ja" sourceRef="GW06_Grenze" targetRef="T06_Freigabe">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bestellwert &gt; freigabegrenze</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_9" sourceRef="GW06_Grenze" targetRef="Join_06a" name="nein">
+    <bpmn:sequenceFlow id="Flow_06_9" name="nein" sourceRef="GW06_Grenze" targetRef="Join_06a">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bestellwert &lt;= freigabegrenze</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_10" sourceRef="T06_Freigabe" targetRef="Join_06a" />
@@ -321,26 +328,23 @@
     <bpmn:sequenceFlow id="Flow_06_14" sourceRef="GW06_AB" targetRef="E06_ABTimer" />
     <bpmn:sequenceFlow id="Flow_06_15" sourceRef="E06_AB" targetRef="GW06_Lieferbar" />
     <bpmn:sequenceFlow id="Flow_06_16" sourceRef="E06_ABTimer" targetRef="Merge_06s" />
-    <bpmn:sequenceFlow id="Flow_06_17" sourceRef="GW06_Lieferbar" targetRef="T06_Termin" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_17" name="ja" sourceRef="GW06_Lieferbar" targetRef="T06_Termin">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bestaetigt and lieferbar</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_18" sourceRef="GW06_Lieferbar" targetRef="Merge_06s" name="nein">
+    <bpmn:sequenceFlow id="Flow_06_18" name="nein" sourceRef="GW06_Lieferbar" targetRef="Merge_06s">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(bestaetigt and lieferbar)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_19" sourceRef="Merge_06s" targetRef="T06_Storno" />
     <bpmn:sequenceFlow id="Flow_06_20" sourceRef="T06_Storno" targetRef="T06_Alternative" />
     <bpmn:sequenceFlow id="Flow_06_21" sourceRef="T06_Alternative" targetRef="GW06_Alt" />
-    <bpmn:sequenceFlow id="Flow_06_22" sourceRef="GW06_Alt" targetRef="Merge_06" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_22" name="ja" sourceRef="GW06_Alt" targetRef="Merge_06">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=alternativeVerfuegbar</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_23" sourceRef="GW06_Alt" targetRef="Join_06d" name="nein">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(alternativeVerfuegbar)</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_24" sourceRef="T06_Termin" targetRef="GW06_Verzoegert" />
-    <bpmn:sequenceFlow id="Flow_06_25" sourceRef="GW06_Verzoegert" targetRef="T06_KundeInfo" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_25" name="ja" sourceRef="GW06_Verzoegert" targetRef="T06_KundeInfo">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=reparaturVerzoegert</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_26" sourceRef="GW06_Verzoegert" targetRef="Join_06b" name="nein">
+    <bpmn:sequenceFlow id="Flow_06_26" name="nein" sourceRef="GW06_Verzoegert" targetRef="Join_06b">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(reparaturVerzoegert)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_27" sourceRef="T06_KundeInfo" targetRef="Join_06b" />
@@ -349,34 +353,27 @@
     <bpmn:sequenceFlow id="Flow_06_30" sourceRef="GW06_Lief" targetRef="E06_Lieferung" />
     <bpmn:sequenceFlow id="Flow_06_31" sourceRef="GW06_Lief" targetRef="E06_LiefTimer" />
     <bpmn:sequenceFlow id="Flow_06_32" sourceRef="E06_LiefTimer" targetRef="GW06_Mahnung" />
-    <bpmn:sequenceFlow id="Flow_06_33" sourceRef="GW06_Mahnung" targetRef="T06_Mahnen" name="nein">
+    <bpmn:sequenceFlow id="Flow_06_33" name="nein" sourceRef="GW06_Mahnung" targetRef="T06_Mahnen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=anzahlMahnungen &lt; 2</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_34" sourceRef="GW06_Mahnung" targetRef="Merge_06s" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_34" name="ja" sourceRef="GW06_Mahnung" targetRef="Merge_06s">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=anzahlMahnungen &gt;= 2</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_35" sourceRef="T06_Mahnen" targetRef="Merge_06m" />
     <bpmn:sequenceFlow id="Flow_06_36" sourceRef="E06_Lieferung" targetRef="T06_Wareneingang" />
     <bpmn:sequenceFlow id="Flow_06_37" sourceRef="T06_Wareneingang" targetRef="GW06_Mangelfrei" />
-    <bpmn:sequenceFlow id="Flow_06_38" sourceRef="GW06_Mangelfrei" targetRef="Join_06c" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_38" name="ja" sourceRef="GW06_Mangelfrei" targetRef="Join_06c">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=lieferungMangelfrei</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_39" sourceRef="GW06_Mangelfrei" targetRef="T06_Retoure" name="nein">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(lieferungMangelfrei)</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_40" sourceRef="T06_Retoure" targetRef="GW06_Ersatz" />
-    <bpmn:sequenceFlow id="Flow_06_41" sourceRef="GW06_Ersatz" targetRef="T06_ErsatzPruefen" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_41" name="ja" sourceRef="GW06_Ersatz" targetRef="T06_ErsatzPruefen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ersatzGeliefert</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_42" sourceRef="GW06_Ersatz" targetRef="GW06_Bedarf" name="nein">
+    <bpmn:sequenceFlow id="Flow_06_42" name="nein" sourceRef="GW06_Ersatz" targetRef="GW06_Bedarf">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(ersatzGeliefert)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_43" sourceRef="T06_ErsatzPruefen" targetRef="Join_06c" />
-    <bpmn:sequenceFlow id="Flow_06_44" sourceRef="GW06_Bedarf" targetRef="Merge_06" name="ja">
+    <bpmn:sequenceFlow id="Flow_06_44" name="ja" sourceRef="GW06_Bedarf" targetRef="Merge_06">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=teilBenoetigt</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06_45" sourceRef="GW06_Bedarf" targetRef="Join_06d" name="nein">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(teilBenoetigt)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_06_46" sourceRef="Join_06c" targetRef="T06_Zuordnen" />
     <bpmn:sequenceFlow id="Flow_06_47" sourceRef="T06_Zuordnen" targetRef="Join_06d" />
@@ -394,6 +391,60 @@
     <bpmn:dataObjectReference id="DataObjRef_06_6" name="Lagerbestand" dataObjectRef="DataObj_06_6" />
     <bpmn:dataObject id="DataObj_06_6" />
     <bpmn:dataStoreReference id="DataStore_06_1" name="RepairFlow-Datenbank" dataStoreRef="Store_06_1" />
+    <bpmn:sendTask id="T06_Storno" name="Bestellung stornieren">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t06_storno" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_06_20</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T06_Storno_out_DataObjRef_06_4">
+        <bpmn:targetRef>DataObjRef_06_4</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="Merge_06r">
+      <bpmn:incoming>Flow_06_39</bpmn:incoming>
+      <bpmn:incoming>Flow_06_43b</bpmn:incoming>
+      <bpmn:outgoing>Flow_06_39b</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_06_39" name="nein" sourceRef="GW06_Mangelfrei" targetRef="Merge_06r">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(lieferungMangelfrei)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06_39b" sourceRef="Merge_06r" targetRef="T06_Retoure" />
+    <bpmn:exclusiveGateway id="GW06_ErsatzOk" name="Ersatzlieferung mangelfrei?">
+      <bpmn:incoming>Flow_06_43</bpmn:incoming>
+      <bpmn:outgoing>Flow_06_43a</bpmn:outgoing>
+      <bpmn:outgoing>Flow_06_43b</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_06_43" sourceRef="T06_ErsatzPruefen" targetRef="GW06_ErsatzOk" />
+    <bpmn:sequenceFlow id="Flow_06_43a" name="ja" sourceRef="GW06_ErsatzOk" targetRef="Join_06c">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ersatzMangelfrei</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06_43b" name="nein" sourceRef="GW06_ErsatzOk" targetRef="Merge_06r">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(ersatzMangelfrei)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Merge_06n">
+      <bpmn:incoming>Flow_06_23</bpmn:incoming>
+      <bpmn:incoming>Flow_06_45</bpmn:incoming>
+      <bpmn:outgoing>Flow_06_45b</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T06_NichtBeschaffbar" name="Fehlteil als nicht beschaffbar markieren">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t06_nicht_beschaffbar" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=false" target="teileVollstaendig" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06_45b</bpmn:incoming>
+      <bpmn:outgoing>Flow_06_45c</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_06_23" name="nein" sourceRef="GW06_Alt" targetRef="Merge_06n">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(alternativeVerfuegbar)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06_45" name="nein" sourceRef="GW06_Bedarf" targetRef="Merge_06n">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(teilBenoetigt)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06_45b" sourceRef="Merge_06n" targetRef="T06_NichtBeschaffbar" />
+    <bpmn:sequenceFlow id="Flow_06_45c" sourceRef="T06_NichtBeschaffbar" targetRef="Join_06d" />
   </bpmn:process>
   <bpmn:process id="Proc_06_Kunde" name="Kunde" isExecutable="false">
     <bpmn:startEvent id="K06_Start" name="Verzögerungsinfo erhalten">
@@ -431,20 +482,14 @@
       <bpmndi:BPMNShape id="Part_06_Werkstatt_di" bpmnElement="Part_06_Werkstatt" isHorizontal="true">
         <dc:Bounds x="120" y="250" width="5935" height="1045" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_06_1_di" bpmnElement="Lane_06_1" isHorizontal="true">
-        <dc:Bounds x="150" y="250" width="5905" height="170" />
+      <bpmndi:BPMNShape id="Lane_06_3_di" bpmnElement="Lane_06_3" isHorizontal="true">
+        <dc:Bounds x="150" y="1125" width="5905" height="170" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_06_2_di" bpmnElement="Lane_06_2" isHorizontal="true">
         <dc:Bounds x="150" y="420" width="5905" height="705" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_06_3_di" bpmnElement="Lane_06_3" isHorizontal="true">
-        <dc:Bounds x="150" y="1125" width="5905" height="170" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Part_06_Lieferant_di" bpmnElement="Part_06_Lieferant" isHorizontal="true">
-        <dc:Bounds x="120" y="55" width="5935" height="60" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Part_06_Kunde_di" bpmnElement="Part_06_Kunde" isHorizontal="true">
-        <dc:Bounds x="120" y="1390" width="5935" height="170" />
+      <bpmndi:BPMNShape id="Lane_06_1_di" bpmnElement="Lane_06_1" isHorizontal="true">
+        <dc:Bounds x="150" y="250" width="5905" height="170" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_06_di" bpmnElement="Start_06">
         <dc:Bounds x="227" y="540" width="36" height="36" />
@@ -455,7 +500,7 @@
       <bpmndi:BPMNShape id="T06_Buendeln_di" bpmnElement="T06_Buendeln">
         <dc:Bounds x="370" y="518" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Merge_06_di" bpmnElement="Merge_06">
+      <bpmndi:BPMNShape id="Merge_06_di" bpmnElement="Merge_06" isMarkerVisible="true">
         <dc:Bounds x="600" y="532" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T06_Lieferant_di" bpmnElement="T06_Lieferant">
@@ -464,7 +509,7 @@
       <bpmndi:BPMNShape id="T06_Bestellung_di" bpmnElement="T06_Bestellung">
         <dc:Bounds x="940" y="518" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Grenze_di" bpmnElement="GW06_Grenze">
+      <bpmndi:BPMNShape id="GW06_Grenze_di" bpmnElement="GW06_Grenze" isMarkerVisible="true">
         <dc:Bounds x="1170" y="532" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1120" y="588" width="150" height="27" />
@@ -473,7 +518,7 @@
       <bpmndi:BPMNShape id="T06_Freigabe_di" bpmnElement="T06_Freigabe">
         <dc:Bounds x="1320" y="292" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Join_06a_di" bpmnElement="Join_06a">
+      <bpmndi:BPMNShape id="Join_06a_di" bpmnElement="Join_06a" isMarkerVisible="true">
         <dc:Bounds x="1550" y="532" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T06_Senden_di" bpmnElement="T06_Senden">
@@ -494,22 +539,19 @@
           <dc:Bounds x="2090" y="696" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Lieferbar_di" bpmnElement="GW06_Lieferbar">
+      <bpmndi:BPMNShape id="GW06_Lieferbar_di" bpmnElement="GW06_Lieferbar" isMarkerVisible="true">
         <dc:Bounds x="2310" y="532" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2260" y="498" width="150" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Merge_06s_di" bpmnElement="Merge_06s">
+      <bpmndi:BPMNShape id="Merge_06s_di" bpmnElement="Merge_06s" isMarkerVisible="true">
         <dc:Bounds x="2310" y="648" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T06_Storno_di" bpmnElement="T06_Storno">
-        <dc:Bounds x="2460" y="632" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T06_Alternative_di" bpmnElement="T06_Alternative">
         <dc:Bounds x="2650" y="632" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Alt_di" bpmnElement="GW06_Alt">
+      <bpmndi:BPMNShape id="GW06_Alt_di" bpmnElement="GW06_Alt" isMarkerVisible="true">
         <dc:Bounds x="2880" y="648" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2830" y="614" width="150" height="27" />
@@ -518,7 +560,7 @@
       <bpmndi:BPMNShape id="T06_Termin_di" bpmnElement="T06_Termin">
         <dc:Bounds x="2460" y="518" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Verzoegert_di" bpmnElement="GW06_Verzoegert">
+      <bpmndi:BPMNShape id="GW06_Verzoegert_di" bpmnElement="GW06_Verzoegert" isMarkerVisible="true">
         <dc:Bounds x="3070" y="532" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3020" y="498" width="150" height="27" />
@@ -527,10 +569,10 @@
       <bpmndi:BPMNShape id="T06_KundeInfo_di" bpmnElement="T06_KundeInfo">
         <dc:Bounds x="3220" y="1168" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Join_06b_di" bpmnElement="Join_06b">
+      <bpmndi:BPMNShape id="Join_06b_di" bpmnElement="Join_06b" isMarkerVisible="true">
         <dc:Bounds x="3450" y="532" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Merge_06m_di" bpmnElement="Merge_06m">
+      <bpmndi:BPMNShape id="Merge_06m_di" bpmnElement="Merge_06m" isMarkerVisible="true">
         <dc:Bounds x="3640" y="532" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW06_Lief_di" bpmnElement="GW06_Lief">
@@ -545,10 +587,10 @@
       <bpmndi:BPMNShape id="E06_LiefTimer_di" bpmnElement="E06_LiefTimer">
         <dc:Bounds x="4027" y="654" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3990" y="620" width="110" height="27" />
+          <dc:Bounds x="4013" y="620" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Mahnung_di" bpmnElement="GW06_Mahnung">
+      <bpmndi:BPMNShape id="GW06_Mahnung_di" bpmnElement="GW06_Mahnung" isMarkerVisible="true">
         <dc:Bounds x="4020" y="762" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3970" y="818" width="150" height="27" />
@@ -560,7 +602,7 @@
       <bpmndi:BPMNShape id="T06_Wareneingang_di" bpmnElement="T06_Wareneingang">
         <dc:Bounds x="4360" y="518" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Mangelfrei_di" bpmnElement="GW06_Mangelfrei">
+      <bpmndi:BPMNShape id="GW06_Mangelfrei_di" bpmnElement="GW06_Mangelfrei" isMarkerVisible="true">
         <dc:Bounds x="4590" y="532" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="4540" y="498" width="150" height="27" />
@@ -569,7 +611,7 @@
       <bpmndi:BPMNShape id="T06_Retoure_di" bpmnElement="T06_Retoure">
         <dc:Bounds x="4740" y="632" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Ersatz_di" bpmnElement="GW06_Ersatz">
+      <bpmndi:BPMNShape id="GW06_Ersatz_di" bpmnElement="GW06_Ersatz" isMarkerVisible="true">
         <dc:Bounds x="4970" y="648" width="50" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="4920" y="614" width="150" height="27" />
@@ -578,40 +620,25 @@
       <bpmndi:BPMNShape id="T06_ErsatzPruefen_di" bpmnElement="T06_ErsatzPruefen">
         <dc:Bounds x="5120" y="632" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="GW06_Bedarf_di" bpmnElement="GW06_Bedarf">
+      <bpmndi:BPMNShape id="GW06_Bedarf_di" bpmnElement="GW06_Bedarf" isMarkerVisible="true">
         <dc:Bounds x="5160" y="762" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5110" y="728" width="150" height="27" />
+          <dc:Bounds x="5218" y="800" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Join_06c_di" bpmnElement="Join_06c">
+      <bpmndi:BPMNShape id="Join_06c_di" bpmnElement="Join_06c" isMarkerVisible="true">
         <dc:Bounds x="5350" y="532" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T06_Zuordnen_di" bpmnElement="T06_Zuordnen">
         <dc:Bounds x="5500" y="518" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Join_06d_di" bpmnElement="Join_06d">
+      <bpmndi:BPMNShape id="Join_06d_di" bpmnElement="Join_06d" isMarkerVisible="true">
         <dc:Bounds x="5730" y="878" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="End_06_di" bpmnElement="End_06">
         <dc:Bounds x="5927" y="884" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5890" y="926" width="110" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K06_Start_di" bpmnElement="K06_Start">
-        <dc:Bounds x="3267" y="1454" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3230" y="1496" width="110" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K06_Kenntnis_di" bpmnElement="K06_Kenntnis">
-        <dc:Bounds x="3410" y="1432" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K06_End_di" bpmnElement="K06_End">
-        <dc:Bounds x="3647" y="1454" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3610" y="1496" width="110" height="27" />
+          <dc:Bounds x="5908" y="926" width="74" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_06_1_di" bpmnElement="DataObjRef_06_1">
@@ -656,14 +683,25 @@
           <dc:Bounds x="4201" y="1075" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_06_1_di" bpmnElement="Flow_06_1">
-        <di:waypoint x="3303" y="1472" />
-        <di:waypoint x="3410" y="1472" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06_2_di" bpmnElement="Flow_06_2">
-        <di:waypoint x="3540" y="1472" />
-        <di:waypoint x="3647" y="1472" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0tbpkli_di" bpmnElement="T06_Storno">
+        <dc:Bounds x="2460" y="632" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0hbp0tk_di" bpmnElement="Merge_06r" isMarkerVisible="true">
+        <dc:Bounds x="4590" y="647" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0vmao4c_di" bpmnElement="GW06_ErsatzOk" isMarkerVisible="true">
+        <dc:Bounds x="5350" y="647" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5410" y="658" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_11azhes_di" bpmnElement="Merge_06n" isMarkerVisible="true">
+        <dc:Bounds x="5275" y="877" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mdbqiw_di" bpmnElement="T06_NichtBeschaffbar">
+        <dc:Bounds x="5425" y="862" width="130" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_06_3_di" bpmnElement="Flow_06_3">
         <di:waypoint x="263" y="558" />
         <di:waypoint x="370" y="558" />
@@ -744,7 +782,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_19_di" bpmnElement="Flow_06_19">
-        <di:waypoint x="2360" y="672" />
+        <di:waypoint x="2359" y="672" />
         <di:waypoint x="2460" y="672" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_20_di" bpmnElement="Flow_06_20">
@@ -762,14 +800,6 @@
         <di:waypoint x="625" y="582" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2913" y="736" width="60" height="18" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06_23_di" bpmnElement="Flow_06_23">
-        <di:waypoint x="2905" y="698" />
-        <di:waypoint x="2905" y="902" />
-        <di:waypoint x="5730" y="902" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2913" y="880" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_24_di" bpmnElement="Flow_06_24">
@@ -853,14 +883,6 @@
           <dc:Bounds x="4646" y="534" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06_39_di" bpmnElement="Flow_06_39">
-        <di:waypoint x="4615" y="582" />
-        <di:waypoint x="4615" y="672" />
-        <di:waypoint x="4740" y="672" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4623" y="650" width="60" height="18" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_40_di" bpmnElement="Flow_06_40">
         <di:waypoint x="4870" y="672" />
         <di:waypoint x="4970" y="672" />
@@ -880,11 +902,6 @@
           <dc:Bounds x="5003" y="766" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06_43_di" bpmnElement="Flow_06_43">
-        <di:waypoint x="5250" y="672" />
-        <di:waypoint x="5375" y="672" />
-        <di:waypoint x="5375" y="582" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_44_di" bpmnElement="Flow_06_44">
         <di:waypoint x="5185" y="812" />
         <di:waypoint x="5185" y="988" />
@@ -892,14 +909,6 @@
         <di:waypoint x="625" y="582" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="5193" y="966" width="60" height="18" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06_45_di" bpmnElement="Flow_06_45">
-        <di:waypoint x="5185" y="812" />
-        <di:waypoint x="5185" y="902" />
-        <di:waypoint x="5730" y="902" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="5193" y="880" width="60" height="18" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06_46_di" bpmnElement="Flow_06_46">
@@ -914,6 +923,119 @@
       <bpmndi:BPMNEdge id="Flow_06_48_di" bpmnElement="Flow_06_48">
         <di:waypoint x="5780" y="902" />
         <di:waypoint x="5927" y="902" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19yhja9_di" bpmnElement="Flow_06_39">
+        <di:waypoint x="4615" y="582" />
+        <di:waypoint x="4615" y="647" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4620" y="612" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11zp9u1_di" bpmnElement="Flow_06_39b">
+        <di:waypoint x="4640" y="672" />
+        <di:waypoint x="4740" y="672" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1s9gtmi_di" bpmnElement="Flow_06_43">
+        <di:waypoint x="5250" y="672" />
+        <di:waypoint x="5350" y="672" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1r7emj7_di" bpmnElement="Flow_06_43a">
+        <di:waypoint x="5375" y="647" />
+        <di:waypoint x="5375" y="582" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5386" y="612" width="9" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_025yb7f_di" bpmnElement="Flow_06_43b">
+        <di:waypoint x="5375" y="697" />
+        <di:waypoint x="5375" y="730" />
+        <di:waypoint x="4615" y="730" />
+        <di:waypoint x="4615" y="697" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5384" y="701" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05mgryq_di" bpmnElement="Flow_06_23">
+        <di:waypoint x="2905" y="698" />
+        <di:waypoint x="2905" y="950" />
+        <di:waypoint x="5300" y="950" />
+        <di:waypoint x="5300" y="927" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4092" y="932" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12pakst_di" bpmnElement="Flow_06_45">
+        <di:waypoint x="5185" y="812" />
+        <di:waypoint x="5185" y="902" />
+        <di:waypoint x="5275" y="902" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="5190" y="854" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pnz4m6_di" bpmnElement="Flow_06_45b">
+        <di:waypoint x="5325" y="902" />
+        <di:waypoint x="5425" y="902" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qo3cv0_di" bpmnElement="Flow_06_45c">
+        <di:waypoint x="5555" y="902" />
+        <di:waypoint x="5730" y="902" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Part_06_Lieferant_di" bpmnElement="Part_06_Lieferant" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="5935" height="60" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Part_06_Kunde_di" bpmnElement="Part_06_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="1390" width="5935" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K06_Start_di" bpmnElement="K06_Start">
+        <dc:Bounds x="3267" y="1454" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3230" y="1496" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K06_Kenntnis_di" bpmnElement="K06_Kenntnis">
+        <dc:Bounds x="3410" y="1432" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K06_End_di" bpmnElement="K06_End">
+        <dc:Bounds x="3647" y="1454" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3610" y="1496" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_06_1_di" bpmnElement="Flow_06_1">
+        <di:waypoint x="3303" y="1472" />
+        <di:waypoint x="3410" y="1472" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06_2_di" bpmnElement="Flow_06_2">
+        <di:waypoint x="3540" y="1472" />
+        <di:waypoint x="3647" y="1472" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Buendeln_in_DataObjRef_06_1_di" bpmnElement="T06_Buendeln_in_DataObjRef_06_1">
+        <di:waypoint x="487" y="482" />
+        <di:waypoint x="475" y="518" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Lieferant_in_DataObjRef_06_2_di" bpmnElement="T06_Lieferant_in_DataObjRef_06_2">
+        <di:waypoint x="867" y="482" />
+        <di:waypoint x="855" y="518" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Bestellung_out_DataObjRef_06_3_di" bpmnElement="T06_Bestellung_out_DataObjRef_06_3">
+        <di:waypoint x="1045" y="518" />
+        <di:waypoint x="1057" y="482" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Storno_out_DataObjRef_06_4_di" bpmnElement="T06_Storno_out_DataObjRef_06_4">
+        <di:waypoint x="2544" y="712" />
+        <di:waypoint x="2576" y="1063" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Termin_out_DataObjRef_06_5_di" bpmnElement="T06_Termin_out_DataObjRef_06_5">
+        <di:waypoint x="2565" y="518" />
+        <di:waypoint x="2577" y="482" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Wareneingang_out_DataObjRef_06_6_di" bpmnElement="T06_Wareneingang_out_DataObjRef_06_6">
+        <di:waypoint x="4465" y="518" />
+        <di:waypoint x="4477" y="482" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T06_Wareneingang_out_DataStore_06_1_di" bpmnElement="T06_Wareneingang_out_DataStore_06_1">
+        <di:waypoint x="4385" y="598" />
+        <di:waypoint x="4350" y="1063" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_06_1_di" bpmnElement="MsgFlow_06_1">
         <di:waypoint x="1795" y="518" />
@@ -950,33 +1072,14 @@
           <dc:Bounds x="3293" y="1341" width="130" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Buendeln_in_DataObjRef_06_1_di" bpmnElement="T06_Buendeln_in_DataObjRef_06_1">
-        <di:waypoint x="487" y="482" />
-        <di:waypoint x="475" y="518" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Lieferant_in_DataObjRef_06_2_di" bpmnElement="T06_Lieferant_in_DataObjRef_06_2">
-        <di:waypoint x="867" y="482" />
-        <di:waypoint x="855" y="518" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Bestellung_out_DataObjRef_06_3_di" bpmnElement="T06_Bestellung_out_DataObjRef_06_3">
-        <di:waypoint x="1045" y="518" />
-        <di:waypoint x="1057" y="482" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Storno_out_DataObjRef_06_4_di" bpmnElement="T06_Storno_out_DataObjRef_06_4">
-        <di:waypoint x="2565" y="712" />
-        <di:waypoint x="2577" y="1063" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Termin_out_DataObjRef_06_5_di" bpmnElement="T06_Termin_out_DataObjRef_06_5">
-        <di:waypoint x="2565" y="518" />
-        <di:waypoint x="2577" y="482" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Wareneingang_out_DataObjRef_06_6_di" bpmnElement="T06_Wareneingang_out_DataObjRef_06_6">
-        <di:waypoint x="4465" y="518" />
-        <di:waypoint x="4477" y="482" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T06_Wareneingang_out_DataStore_06_1_di" bpmnElement="T06_Wareneingang_out_DataStore_06_1">
-        <di:waypoint x="4385" y="598" />
-        <di:waypoint x="4350" y="1063" />
+      <bpmndi:BPMNEdge id="Flow_13f4h19_di" bpmnElement="MsgFlow_06_Storno">
+        <di:waypoint x="2560" y="632" />
+        <di:waypoint x="2560" y="615" />
+        <di:waypoint x="2620" y="615" />
+        <di:waypoint x="2620" y="115" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2630" y="300" width="57" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
