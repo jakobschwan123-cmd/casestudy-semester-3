@@ -22,11 +22,11 @@ skinparam sequence {
 hide footbox
 autonumber "0:"
 
+actor Kunde
 actor Kalkulator
 actor Serviceannahme as SM
 participant ": Reparaturauftrag" as RA
 participant ": Kostenvoranschlag" as KVA
-actor Kunde
 
 create KVA
 Kalkulator -->> KVA : new(status = ENTWURF)
