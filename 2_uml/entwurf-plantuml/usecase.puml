@@ -5,16 +5,30 @@ skinparam packageStyle rectangle
 skinparam defaultFontName Arial
 skinparam usecaseFontSize 11
 skinparam actorStyle awesome
-skinparam nodesep 12
-skinparam ranksep 60
-title ud : RepairFlow – Use-Case-Diagramm
+skinparam actorFontSize 10
+skinparam nodesep 10
+skinparam ranksep 50
+title ud : RepairFlow – Use-Case-Diagramm (je Use Case eine Rolle)
 
-actor "Kunde" as Kunde
-actor "Techniker" as Techniker
-actor "Servicemitarbeiter" as Servicemitarbeiter
-actor "Disponent" as Disponent
-actor "Werkstattleiter" as Werkstattleiter
-actor "Werkstattinhaber" as Werkstattinhaber
+' Rollen der Mitarbeiter; Zuordnung zu Servicemitarbeiter, Techniker, Disponent und Werkstattleiter in Doku 5.3
+actor "Kunde" as K1
+actor "Kunde" as K2
+actor "Kunde" as K3
+actor "Serviceannahme" as R03
+actor "Diagnoseprüfer" as R04
+actor "Diagnostiker" as R05
+actor "Kalkulator" as R06
+actor "Reparateur" as R13
+actor "Endkontrolleur" as R14
+actor "Geräteausgabe" as R15
+actor "Reklamationsbearbeiter" as R16
+actor "Werkstattplaner" as R17
+actor "Teiledisponent" as R09
+actor "Einkäufer" as R10
+actor "Wareneingang" as R11
+actor "Bestandsplaner" as R12
+actor "Retourenbearbeiter" as R19
+actor "Betriebsadministrator" as R18
 
 rectangle "RepairFlow" {
   rectangle "Kundenportal (App)" {
@@ -24,7 +38,6 @@ rectangle "RepairFlow" {
   }
   rectangle "Auftrag und Werkstatt" {
     usecase "UC03\nReparaturauftrag anlegen" as UC03
-    usecase "UC17\nWerkstatttermin planen und Techniker zuweisen" as UC17
     usecase "UC04\nDiagnosevorschlag prüfen" as UC04
     usecase "UC05\nDiagnosebefund erfassen" as UC05
     usecase "UC06\nKVA erstellen" as UC06
@@ -32,6 +45,7 @@ rectangle "RepairFlow" {
     usecase "UC14\nAuftrag fertigmelden" as UC14
     usecase "UC15\nAbholung und Abrechnung abwickeln" as UC15
     usecase "UC16\nReklamation bearbeiten" as UC16
+    usecase "UC17\nWerkstatttermin planen und Techniker zuweisen" as UC17
   }
   rectangle "Ersatzteil-Disposition" {
     usecase "UC08\nErsatzteil-Verfügbarkeit prüfen" as UC08
@@ -46,53 +60,54 @@ rectangle "RepairFlow" {
   }
 }
 
-actor "Lieferant" as Lieferant <<extern>>
 actor "KI-Diagnosedienst" as KIDienst <<extern>>
+actor "Lieferant" as L1 <<extern>>
+actor "Lieferant" as L2 <<extern>>
+actor "Lieferant" as L3 <<extern>>
 
-Kunde -right- UC01
-Kunde -right- UC02
-Kunde -right- UC03
-Kunde -right- UC07
-Kunde -right- UC09
-Kunde -right- UC10
-Kunde -right- UC15
-Kunde -right- UC16
-Techniker -right- UC03
-Techniker -right- UC04
-Techniker -right- UC05
-Techniker -right- UC06
-Techniker -right- UC13
-Techniker -right- UC14
-Techniker -right- UC16
-Techniker -right- UC19
-Servicemitarbeiter -right- UC03
-Servicemitarbeiter -right- UC06
-Servicemitarbeiter -right- UC07
-Servicemitarbeiter -right- UC09
-Servicemitarbeiter -right- UC10
-Servicemitarbeiter -right- UC15
-Servicemitarbeiter -right- UC16
-Disponent -right- UC08
-Disponent -right- UC09
-Disponent -right- UC10
-Disponent -right- UC11
-Disponent -right- UC12
-Disponent -right- UC19
-Werkstattleiter -right- UC10
-Werkstattleiter -right- UC16
-Werkstattleiter -right- UC17
-Werkstattleiter -right- UC19
-Werkstattinhaber -right- UC18
-UC10 -right- Lieferant
-UC11 -right- Lieferant
-UC19 -right- Lieferant
+K1 -right- UC01
+K2 -right- UC02
+K3 -right- UC07
+R03 -right- UC03
+R04 -right- UC04
+R05 -right- UC05
+R06 -right- UC06
+R13 -right- UC13
+R14 -right- UC14
+R15 -right- UC15
+R16 -right- UC16
+R17 -right- UC17
+R09 -right- UC09
+R10 -right- UC10
+R11 -right- UC11
+R12 -right- UC12
+R19 -right- UC19
+R18 -right- UC18
 UC01 -right- KIDienst
-Kunde -[hidden]down- Servicemitarbeiter
-Servicemitarbeiter -[hidden]down- Techniker
-Techniker -[hidden]down- Disponent
-Disponent -[hidden]down- Werkstattleiter
-Werkstattleiter -[hidden]down- Werkstattinhaber
-KIDienst -[hidden]down- Lieferant
+UC10 -right- L1
+UC11 -right- L2
+UC19 -right- L3
+
+K1 -[hidden]down- K2
+K2 -[hidden]down- K3
+K3 -[hidden]down- R03
+R03 -[hidden]down- R04
+R04 -[hidden]down- R05
+R05 -[hidden]down- R06
+R06 -[hidden]down- R13
+R13 -[hidden]down- R14
+R14 -[hidden]down- R15
+R15 -[hidden]down- R16
+R16 -[hidden]down- R17
+R17 -[hidden]down- R09
+R09 -[hidden]down- R10
+R10 -[hidden]down- R11
+R11 -[hidden]down- R12
+R12 -[hidden]down- R19
+R19 -[hidden]down- R18
+KIDienst -[hidden]down- L1
+L1 -[hidden]down- L2
+L2 -[hidden]down- L3
 
 UC01 ..> UC08 : <<include>>
 UC09 ..> UC08 : <<include>>

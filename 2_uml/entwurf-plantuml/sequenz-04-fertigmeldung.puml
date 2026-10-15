@@ -7,7 +7,7 @@ skinparam sequenceMessageAlign left
 skinparam maxMessageSize 160
 hide footbox
 
-actor Techniker
+actor Endkontrolleur as Techniker
 participant ": Reparaturauftrag" as RA
 participant ": Reparaturschritt" as RS
 

@@ -25,7 +25,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
 | BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,1; Linter und Layout-Prüfung 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
-| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (8 Akteure) | `2_uml/entwurf-plantuml/usecase.puml` |
+| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (18 Akteure: Kunde, 15 Mitarbeiterrollen, Lieferant, KI-Diagnosedienst; je Use Case eine Rolle, E-24) | `2_uml/entwurf-plantuml/usecase.puml` |
 | Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `2_uml/entwurf-plantuml/klassen.puml` |
 | Sequenzdiagramme | 5 | 6 | `2_uml/entwurf-plantuml/sequenz-01..06-*.puml` |
 | Zustandsdiagramm (Zusatz) | – | 1 | `2_uml/entwurf-plantuml/zustand-reparaturauftrag.puml` |

@@ -7,16 +7,28 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 - **E-19 bestätigen** (Adrian holt die Bestätigung ein, P07/P08): Fristen bis zur Verwertung (vierte Abhol-Erinnerung) und bis zum Inkasso (dritte Mahnung) sowie die Frage, ob `AuftragStatus` einen Wert für verwertete Geräte braucht.
 - **E-20 bestätigen** (Adrian, P05/P06).
 - **E-22 bestätigen** (Adrian, P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
-- **E-23 bestätigen** (alle, 15.10.): Neuverteilung der offenen Aufgaben.
+- **E-23 bestätigen** (alle, 15.10.): Zuständigkeiten für die Fertigstellung.
+- **E-24 bestätigen** (alle, 15.10.): Use-Case-Diagramm mit einer Rolle je Use Case.
 
-## E-23 Neuverteilung der offenen Aufgaben nach Aufwand (15.10.2026)
+## E-24 Use-Case-Diagramm: je Use Case eine Rolle (15.10.2026)
+
+Umsetzung des Dozentenhinweises aus dem Coaching am 15.10. (`04-dozenten-feedback.md`), vorbereitet mit KI-Unterstützung, Bestätigung durch die Gruppe offen.
+
+- **Diagramm:** Jeder Use Case hat genau eine Rolle als primären Akteur. Aus Servicemitarbeiter, Techniker, Disponent, Werkstattleiter und Werkstattinhaber werden 15 Mitarbeiterrollen (Serviceannahme, Diagnoseprüfer, Diagnostiker, Kalkulator, Werkstattplaner, Reparateur, Endkontrolleur, Geräteausgabe, Reklamationsbearbeiter, Teiledisponent, Bestandsplaner, Einkäufer, Wareneingang, Retourenbearbeiter, Betriebsadministrator). Kunde (UC01, UC02, UC07) und Lieferant (UC10, UC11, UC19) bleiben je ein Akteur, werden aber mehrfach dargestellt. UC08 wird nur per include erreicht und hat keinen Akteur. include/extend bleiben wie bisher (2 include, 6 extend). Zählung: 19 Use Cases, 18 Akteure, 22 Akteur-Verbindungen (vorher 35).
+- **Organigramm:** Die Zuordnung Rolle → Klasse (Unterklassen von Mitarbeiter) → BPMN-Lane steht in Doku Tabelle 7. Das Klassendiagramm ändert sich nicht.
+- **Sequenzdiagramme:** Die erste Lebenslinie ist die Rolle des Use Case (SD2 Kalkulator/Serviceannahme/Kunde, SD3 Teiledisponent, SD4 Endkontrolleur, SD5 Reklamationsbearbeiter/Diagnostiker/Werkstattleiter, SD6 Einkäufer). Wer im Use-Case-Diagramm keine Rolle hat, behält den Mitarbeitertyp (Werkstattleiter).
+- **Dateien:** `2_uml/entwurf-plantuml/usecase.puml` (Modell), `usecase_layout.py` → `usecase.png/.svg` (Vorlage mit festem Raster), `modell.xmi` und neu `modell-usecase.xmi` (nur Anwendungsfallmodell, für den Neuimport in VP), SD-Vorlagen und PNGs, Doku 3.1/5.3/5.5/5.6/7.1, Folien 12 und 18.
+- **Visual Paradigm:** Paket „Anwendungsfallmodell“ löschen, `modell-usecase.xmi` importieren, Diagramm neu aufziehen (Anleitung in `2_uml/README.md`). Nicht die ganze `modell.xmi` erneut importieren, sonst gibt es die Klassen doppelt.
+
+## E-23 Zuständigkeiten für die Fertigstellung (15.10.2026)
 
 Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe am 15.10. offen.
 
-- **Ziel:** Bis zur Abgabe soll jede Person ungefähr gleich viel Zeit investiert haben. Annahme: Bis zum 15.10. war der Aufwand ungefähr gleich, verteilt werden nur die offenen Aufgaben (≈ 4 h je Person, Tabelle in `02-team-und-rollen.md`).
-- **Visual Paradigm:** Kilian Klassendiagramm, Konsistenzprüfung und VPP; David Use-Case-Diagramm, SD2, SD4; Maximilian SD1; Jakob SD3; Adrian SD5, SD6. Bisher lagen alle sechs SD und beide Diagramme bei Kilian und David.
-- **Doku:** Nina fügt alle sechs Abbildungen ein (die Zuständigen legen die PNGs ins Repository), Adrian schreibt Kapitel 6, Adrian holt die Bestätigung von E-19/E-20/E-22 ein (vorher Jakob, David, Kilian).
-- **Präsentation:** Jede Person trägt vor, was sie gebaut hat. David übernimmt Folie 12 (Use-Case-Diagramm), Maximilian Folie 14 (SD1), Kilian Folie 16 (Vorgehen und Projektmanagement). Folie 2, Folie 20, Sprechernotizen, Doku Kapitel 1 und `TODO.md` sind angepasst.
+- **Grundsatz:** Nur Kilian und David haben Zugriff auf Visual Paradigm, deshalb liegen alle VP-Diagramme bei ihnen. Die übrigen Arbeiten (BPMN-Abschluss, Dokumentation, Fachkonzept, Entscheidungen, Qualitätssicherung, Präsentation) sind so verteilt, dass jede Person im Gesamtprojekt einen vergleichbaren Anteil verantwortet. Die Zuständigkeiten stehen in Doku Kapitel 1 und `02-team-und-rollen.md`.
+- **Visual Paradigm:** Kilian Klassendiagramm, SD1, SD4, VPP-Datei und Konsistenzprüfung; David Use-Case-Diagramm (E-24), SD2, SD3, SD5, SD6.
+- **Übrige:** Nina Redaktion der Dokumentation (Abbildungen, gelbe Hinweise, Kapitel 1/4/7, PDF) und Abgabe-Archiv; Adrian Fachkonzept (Kapitel 2), Entscheidungslog, Bestätigung E-19/E-20/E-22, Abschnitt 5.2 und Kapitel 6; Maximilian alle zehn BPMN-Dateien im Modeler, Kennzahlen, Abschnitt 5.1; Jakob QA-Checkliste, Reviews, 3.2 und 5.6, Präsentations-PDF.
+- **Präsentation:** Jede Person trägt vor, was sie verantwortet: Nina 1–2, 18–19; David 3, 12, 15; Adrian 4–6, 11; Maximilian 7, 9, 10; Kilian 13, 14, 16; Jakob 8, 17. Folie 2, Folie 20, Sprechernotizen und Doku Kapitel 1 sind angepasst.
+- **Offene Aufgaben:** `TODO.md` listet alle Aufgaben ohne Namen; die Zuteilung erfolgt im Gruppentermin nach den Zuständigkeiten oben.
 
 ## E-22 Abschluss der QA-Befunde Q1–Q3 und B12 (08.10.2026)
 
@@ -62,4 +74,5 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-20 | P05/P06 überarbeitet (Bestellung nur bei Fehlteilen, Kundeninfo durch Service, Warten mit Timer und Mahnung in P06) – Bestätigung offen |
 | E-21 | Gruppenbeschluss vom 05.10.2026 (siehe oben) |
 | E-22 | Ausstieg der Liefermahnung in P06, Empfang der Ersatzlieferung in P10, SD4 an P07 angeglichen – Bestätigung offen |
-| E-23 | Offene Aufgaben ab 15.10.2026 nach Aufwand neu verteilt, Vortrag folgt der Arbeit – Bestätigung offen |
+| E-23 | Zuständigkeiten für die Fertigstellung, Vortrag folgt der Verantwortung – Bestätigung offen |
+| E-24 | Use-Case-Diagramm mit einer Rolle je Use Case, 15 Mitarbeiterrollen, Zuordnung in Doku Tabelle 7 – Bestätigung offen |

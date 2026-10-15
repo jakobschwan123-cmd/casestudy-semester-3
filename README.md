@@ -10,7 +10,7 @@ RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätt
 |---|---|---|
 | [`0_abgabe/`](0_abgabe/) | Anleitung für das Moodle-Archiv und die KI-Angabe | alle (am Ende) |
 | [`1_bpmn/`](1_bpmn/) | Die zehn Kollaborationsdiagramme `p01` … `p10` als `.bpmn` (Quelle, nur im Camunda Modeler bearbeiten) und PNG | Maximilian |
-| [`2_uml/`](2_uml/) | Visual-Paradigm-Projekt (`UML-WWI25B4-Gruppe1.vpp`, kommt), `modell.xmi` für den Import, Anleitung; Vorlagen als PlantUML in `entwurf-plantuml/` | Kilian (verantwortlich), alle mit ihren Sequenzdiagrammen |
+| [`2_uml/`](2_uml/) | Visual-Paradigm-Projekt (`UML-WWI25B4-Gruppe1.vpp`, kommt), `modell.xmi` für den Import, Anleitung; Vorlagen als PlantUML in `entwurf-plantuml/` | Kilian, David |
 | [`3_doku/`](3_doku/) | `Projektdokumentation.docx` und `.pdf` | Nina, alle |
 | [`4_praesentation/`](4_praesentation/) | `Abschlusspraesentation.pptx` und `.pdf` | alle |
 | [`5_team/`](5_team/) | Arbeitsunterlagen: Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, QA-Checkliste, Protokolle, Git-Regeln | alle |
