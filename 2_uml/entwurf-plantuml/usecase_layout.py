@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Zeichnet usecase.svg/.png als Vorlage für Visual Paradigm: je Use Case genau eine Rolle (Dozentenhinweis 15.10.2026).
+"""Zeichnet usecase.svg/.png als Vorlage für Visual Paradigm: je Use Case genau eine Rolle; Lieferant ist kein Akteur, sondern Black Box (Dozentenhinweise 15.10.2026).
 Der PlantUML-Automatiklayout liefert bei 1:1-Verbindungen kein lesbares Bild, deshalb ein festes Raster.
 Aufruf: python3 usecase_layout.py  (schreibt usecase.svg und usecase.png in dieses Verzeichnis)."""
 import os, cairosvg
@@ -20,9 +20,9 @@ ROWS = [
     ('Auftrag und Werkstatt', 'UC14', 'Auftrag fertigmelden', 'Endkontrolleur', None),
     ('Auftrag und Werkstatt', 'UC15', 'Abholung und Abrechnung abwickeln', 'Geräteausgabe', None),
     ('Auftrag und Werkstatt', 'UC16', 'Reklamation bearbeiten', 'Reklamationsbearbeiter', None),
-    ('Ersatzteil-Disposition', 'UC19', 'Retoure abwickeln', 'Retourenbearbeiter', 'Lieferant'),
-    ('Ersatzteil-Disposition', 'UC11', 'Wareneingang buchen', 'Wareneingang', 'Lieferant'),
-    ('Ersatzteil-Disposition', 'UC10', 'Lieferantenbestellung auslösen', 'Einkäufer', 'Lieferant'),
+    ('Ersatzteil-Disposition', 'UC19', 'Retoure abwickeln', 'Retourenbearbeiter', None),
+    ('Ersatzteil-Disposition', 'UC11', 'Wareneingang buchen', 'Wareneingang', None),
+    ('Ersatzteil-Disposition', 'UC10', 'Lieferantenbestellung auslösen', 'Einkäufer', None),
     ('Ersatzteil-Disposition', 'UC09', 'Ersatzteile disponieren und reservieren', 'Teiledisponent', None),
     ('Ersatzteil-Disposition', 'UC12', 'Nachbestellvorschlag erzeugen', 'Bestandsplaner', None),
     ('Ersatzteil-Disposition', 'UC08', 'Ersatzteil-Verfügbarkeit prüfen', None, None),

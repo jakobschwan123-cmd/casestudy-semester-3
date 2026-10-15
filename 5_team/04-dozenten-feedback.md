@@ -6,9 +6,11 @@ Rückmeldungen aus Kickoff und Coaching-Terminen, jeweils mit dem, was daraus fo
 
 Notiert von Kilian am 15.10.2026.
 
+**Lieferant raus, nur als Black Box.** Der Lieferant müsste sonst einen Zugang zu unserem System haben. Folgt daraus: kein Akteur Lieferant im Use-Case-Diagramm; Bestellung, Lieferung und Retoure bleiben Nachrichten an eine Black Box, wie im BPMN-Pool (E-24).
+
 **Zu viele Verbindungen im Use-Case-Diagramm.** Angestrebt werden soll, dass ein Akteur mit einem Use Case agiert. Dafür die Akteure zu Mitarbeiter zusammenfassen und Akteure mehrmals darstellen. Ein Organigramm dahinter denken, das die Rollen verteilt; es ist nicht schlimm, wenn ein Mitarbeiter mehrere Rollen hat. Die Rolle im Use-Case-Diagramm angeben: statt Techniker mit fünf Pfeilen fünf Rollen, die je an einem Use Case hängen.
 
-Folgt daraus: Entscheidung E-24. Use-Case-Diagramm mit 15 Mitarbeiterrollen, Kunde und Lieferant mehrfach dargestellt, Zuordnung Rolle → Klasse → Lane in Doku Tabelle 7, Sequenzdiagramme mit Rollennamen. Umgesetzt in `2_uml/`, Doku 3.1/5.3/5.5/5.6/7.1 und Folie 12.
+Folgt daraus: Entscheidung E-24. Use-Case-Diagramm mit 15 Mitarbeiterrollen, Kunde dreimal dargestellt, Lieferant als Black Box ohne Akteur, Zuordnung Rolle → Klasse → Lane in Doku Tabelle 7, Sequenzdiagramme mit Rollennamen. Umgesetzt in `2_uml/`, Doku 3.1/5.3/5.5/5.6/7.1 und Folie 12.
 
 ## Camunda Cloud (vor dem 12.10.2026)
 
