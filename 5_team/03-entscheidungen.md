@@ -1,6 +1,6 @@
 # Entscheidungslog
 
-Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-23, E-24 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
+Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-28, E-29 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
 
 ## Offen
 
@@ -11,6 +11,17 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 - **E-24 bestätigen** (alle, 15.10.): Use-Case-Diagramm mit einer Rolle je Use Case.
 - **E-25 bestätigen** (alle, 15.10.): Präsentation als Pitch und Zusammenfassung ohne Diagrammbilder.
 - **E-26 bestätigen** (alle, Modeler-Prüfung Maximilian): Korrekturen P01–P05.
+- **E-27 bestätigen** (alle, Modeler-Prüfung Maximilian): Überarbeitung P06; Folgeaufgaben P05 „Alle Teile verfügbar?“, Zustandsdiagramm „Teile bestellt → abgelehnt“, SD6.
+
+## E-27 Überarbeitung von Prozess 06 (15.10.2026)
+
+Adrian (PO, Upload mit bpmn-js) und Jakob (QA, mit KI-Unterstützung). Bestätigung durch die Gruppe offen.
+
+- **Adrian:** „Bestellung stornieren“ sendet die Stornierung an den Lieferanten. Der Timer „Lieferfrist überschritten“ wartet zuerst bis zum Liefertermin, nach jeder Mahnung 14 Tage (`nachfrist`). `anzahlMahnungen` wird beim Anlegen der Bestellung auf 0 gesetzt und bei jeder Mahnung erhöht. Neues Gateway „Ersatzlieferung mangelfrei?“. Ohne Teile endet P06 über „Fehlteil als nicht beschaffbar markieren“ (`teileVollstaendig = false`). PO-Entscheidung: Ist ein Teil nicht beschaffbar, wird der Auftrag abgelehnt und das Gerät über P08 zurückgegeben.
+- **Jakob, Logikfehler 1:** Eine mangelhafte Ersatzlieferung ging ohne Grenze erneut in „10 Retoure abwickeln“. Jetzt zählt „Ersatzlieferung prüfen“ `anzahlErsatzlieferungen` hoch (Start 0 beim Anlegen der Bestellung); das neue Gateway „Zweite Ersatzlieferung mangelhaft?“ führt bei ja zu „Teil weiterhin benötigt?“ (neuer Lieferant oder nicht beschaffbar), bei nein in die zweite Retoure.
+- **Jakob, Logikfehler 2:** „Teil weiterhin benötigt? nein“ lief in „Fehlteil als nicht beschaffbar markieren“, sodass der Auftrag abgelehnt worden wäre, obwohl das Teil nur nicht mehr gebraucht wird. Jetzt führt nein zu „Fehlteile dem Reparaturauftrag zuordnen“ (`teileVollstaendig = true`). Der überflüssige Merge vor „nicht beschaffbar“ entfällt.
+- **Prüfung:** Struktur (Erreichbarkeit, ein Ende, kein Gateway mit Join und Split), bpmn-js-Import ohne Warnung, `bpmnlint:recommended` und `camunda-compat/camunda-cloud-8-7` ohne Befund für alle zehn Dateien; PNG mit bpmn-js neu gerendert.
+- **Kennzahlen:** 133 Aktivitäten (Ø 13,3), 81 automatisiert (61 %), 42 Nachrichtenflüsse, 63 Datenobjekte und -speicher.
 
 ## E-26 Fehleranalyse und Korrekturen P01–P05 (15.10.2026)
 
@@ -101,3 +112,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-24 | Use-Case-Diagramm mit einer Rolle je Use Case, 15 Mitarbeiterrollen, Lieferant als Black Box ohne Akteur, Zuordnung in Doku Tabelle 7 – Bestätigung offen |
 | E-25 | Präsentation als Pitch und Zusammenfassung ohne Diagrammbilder, Sprechtexte je Folie – Bestätigung offen |
 | E-26 | Korrekturen P01–P05 (KI-Vorschlag optional, kein Befund, KVA-Status, Vorreservierungen in P05) – Bestätigung offen |
+| E-27 | Überarbeitung P06 (Storno an Lieferanten, Nachfrist, nicht beschaffbar, begrenzte Retoure) – Bestätigung offen |
