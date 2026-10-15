@@ -20,12 +20,12 @@ Nur Kilian und David haben Zugriff auf Visual Paradigm, deshalb liegen alle VP-D
 
 | Person | Verantwortet im Gesamtprojekt |
 |---|---|
-| Nina | Planung und Termine, Redaktion der Doku (Kapitel 1, 4, 7, Abbildungen, PDF), Abgabe-Archiv, Folien 1–2 und 18–19 |
-| David | Use-Case-Diagramm (Rollenstruktur E-24), SD2, SD3, SD5, SD6, Abgleich Use Cases/SD mit den Prozessen (E-18), P05/P06 (E-20), Folien 3, 12 und 15 |
-| Adrian | Fachkonzept (Kapitel 2), Entscheidungslog und Bestätigungen E-19/E-20/E-22, Abschnitt 5.2, Kapitel 6, Folien 4–6 und 11 |
-| Kilian | Klassendiagramm, SD1, SD4, VP-Projekt, Konsistenz der UML-Modelle, Gesamtprüfungen (E-15, E-17, E-22), Scrum, Folien 13, 14 und 16 |
-| Maximilian | Alle zehn BPMN-Dateien im Camunda Modeler, Kennzahlen, Abschnitt 5.1, Folien 7, 9 und 10 |
-| Jakob | QA-Checkliste, Review aller Pull Requests, Logikfehler P07/P08 (E-19), Abschnitte 3.2 und 5.6, Präsentations-PDF, Folien 8 und 17 |
+| Nina | Planung und Termine, Redaktion der Doku (Kapitel 1, 4, 7, Abbildungen, PDF), Abgabe-Archiv, Folien 1–2 und 16–17 |
+| David | Use-Case-Diagramm (Rollenstruktur E-24), SD2, SD3, SD5, SD6, Abgleich Use Cases/SD mit den Prozessen (E-18), P05/P06 (E-20), Folien 3, 6 und 11 |
+| Adrian | Fachkonzept (Kapitel 2), Entscheidungslog und Bestätigungen E-19/E-20/E-22, Abschnitt 5.2, Kapitel 6, Folien 4, 5 und 7 |
+| Kilian | Klassendiagramm, SD1, SD4, VP-Projekt, Konsistenz der UML-Modelle, Gesamtprüfungen (E-15, E-17, E-22), Scrum, Folien 12 und 13 |
+| Maximilian | Alle zehn BPMN-Dateien im Camunda Modeler, Kennzahlen, Abschnitt 5.1, Folien 8–10 |
+| Jakob | QA-Checkliste, Review aller Pull Requests, Logikfehler P07/P08 (E-19), Abschnitte 3.2 und 5.6, Präsentations-PDF, Folien 14 und 15 |
 
 ## Kommunikation
 
@@ -33,15 +33,15 @@ Abstimmung über die WhatsApp-Gruppe, Dateien ausschließlich über das GitHub-R
 
 ## Präsentation
 
-Die Abschlusspräsentation wird individuell bewertet, alle Gruppenmitglieder müssen vortragen. Beim PDF-Export muss stehen, wer welchen Beitrag verantwortet. Seit dem 15.10.2026 trägt jede Person vor, was sie verantwortet (E-23). Zuordnung (steht auch auf Folie 2 und auf der letzten Folie der Präsentation):
+Die Abschlusspräsentation wird individuell bewertet, alle Gruppenmitglieder müssen vortragen. Beim PDF-Export muss stehen, wer welchen Beitrag verantwortet. Seit dem 15.10.2026 trägt jede Person vor, was sie verantwortet (E-23). Die Präsentation ist seit dem 15.10.2026 als Pitch und Zusammenfassung aufgebaut, ohne Diagrammbilder (E-25); Sprechtexte in `4_praesentation/Sprechtext_Abschlusspraesentation.docx` und in den Notizen. Zuordnung (steht auch auf Folie 2 und auf der letzten Folie):
 
 | Teil | Folien | Vortragende(r) |
 |---|---|---|
-| Einleitung und Agenda, Fazit und Ausblick | 1–2, 18–19 | Nina Sattler |
-| Ausgangslage und Problem; Use-Case-Diagramm; Sequenzdiagramm SD3 | 3, 12, 15 | David Leismann |
-| Startup und Markt, Zustandsautomat, KI-Sofortdiagnose | 4–6, 11 | Adrian Wenzler |
-| Prozesslandkarte, Prozesse 01 und 04 | 7, 9–10 | Maximilian Ewald |
-| Klassendiagramm, Sequenzdiagramm SD1, Vorgehen und Projektmanagement | 13–14, 16 | Kilian Platter |
-| BPMN-Konventionen, Herausforderungen | 8, 17 | Jakob Schwan |
+| Einleitung und Agenda; Geschäftsmodell und Ausblick; Fazit | 1–2, 16–17 | Nina Sattler |
+| Das Problem; Auftragsreise; Rollen und Use Cases | 3, 6, 11 | David Leismann |
+| Lösung, Nutzenversprechen, KI-Sofortdiagnose | 4–5, 7 | Adrian Wenzler |
+| Ergebnisse in Zahlen, Prozesslandkarte, Prozess-Highlights | 8–10 | Maximilian Ewald |
+| Datenmodell; Vorgehen und Projektmanagement | 12–13 | Kilian Platter |
+| Qualität; Herausforderungen und Lernerfahrungen | 14–15 | Jakob Schwan |
 
 Termin laut `Allgemeines.docx` (Moodle): 27.10.2026, 09:00 Uhr, Raum B458. Der 22.10. ist der letzte Gruppentermin (Generalprobe). Sprintplan und Trello-Board: Doku Kapitel 4.
