@@ -1,10 +1,26 @@
 @startuml
 ' BPMN: p06-ersatzteilbestellung.bpmn. Kernablauf: bündeln, freigeben, bestellen, bestätigen oder stornieren, höchstens zwei Mahnungen (E-22, E-27).
-title sqd : UC10 Lieferantenbestellung auslösen (BPMN 06)
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC10 Lieferantenbestellung auslösen]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
 skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
 actor "Einkäufer" as E
 participant ": Ersatzteil" as ET
@@ -15,7 +31,8 @@ actor Lieferant
 
 E -> ET : getVorzugslieferant()
 ET --> E : Lieferant
-E -> BEST : <<create>> (status = OFFEN)
+create BEST
+E -->> BEST : new(status = OFFEN)
 loop je Fehlteil und Nachbestellvorschlag
     E -> BEST : addPosition(teil, menge)
 end

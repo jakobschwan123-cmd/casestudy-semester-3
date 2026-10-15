@@ -1,10 +1,26 @@
 @startuml
 ' BPMN: p01-sofortdiagnose.bpmn. Kernablauf; Rückfragen, Timer und Terminsuche nur als Fragment bzw. in UC17.
-title sqd : UC01 Sofortdiagnose anfordern (BPMN 01)
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC01 Sofortdiagnose anfordern]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
 skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
 actor Kunde
 participant ": Voranmeldung" as VA
@@ -14,7 +30,8 @@ participant ": Kostenvoranschlag" as KVA
 participant ": Lagerbestand" as LB
 actor "KI-Diagnosedienst" as KIDienst
 
-Kunde -> VA : <<create>> erstellen(medien, symptome)
+create VA
+Kunde -->> VA : erstellen(medien, symptome)
 loop je Medienanhang
     VA -> MA : analysieren()
     MA --> VA : auswertbar
@@ -26,11 +43,13 @@ opt Medien nicht auswertbar
         VA -> VA : verwerfen()
     end
 end
-VA -> KI : <<create>> auswerten(medien)
+create KI
+VA -->> KI : auswerten(medien)
 KI -> KIDienst : Medien und Symptome
 KIDienst --> KI : Diagnosevorschlag
 VA -> KI : erzeugeVorabKva()
-KI -> KVA : <<create>> berechneSumme()
+create KVA
+KI -->> KVA : berechneSumme()
 loop je benötigtem Ersatzteil und Filiale
     VA -> LB : pruefeVerfuegbarkeit(anzahl)
 end
