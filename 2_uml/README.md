@@ -8,7 +8,7 @@ Abgegeben wird `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm; sie kommt in diese
 | modell-usecase.xmi | nur das Anwendungsfallmodell (Stand E-24, je Use Case eine Rolle), zum Neuimport, wenn das Klassenmodell schon in VP liegt |
 | entwurf-plantuml/klassen.puml / .png | einziges vollständiges Klassendiagramm; alle Klassen, Operationen und Beziehungen innerhalb einer Abbildung |
 | entwurf-plantuml/usecase.puml, usecase_layout.py / usecase.png, .svg | Use-Case-Diagramm mit einer Rolle je Use Case (E-24). Das PNG erzeugt `usecase_layout.py` (festes Raster: Rollen links, Use Cases nach Bereichen, externe Akteure rechts), weil das PlantUML-Automatiklayout bei 1:1-Verbindungen unlesbar wird; die `.puml` bleibt die Modellquelle |
-| entwurf-plantuml/sequenz-01-sofortdiagnose … sequenz-06-nachbestellvorschlag.puml / .png | sechs Sequenzdiagramme (UC01, UC07, UC09, UC14, UC16, UC10 mit Verweisen auf UC11/UC19; UC12 liefert den Bestellbedarf); gefordert sind fünf |
+| entwurf-plantuml/sequenz-01-sofortdiagnose … sequenz-06-nachbestellvorschlag.puml / .png | sechs Sequenzdiagramme (UC01, UC07, UC09, UC14, UC16, UC10), seit 15.10. auf den Kernablauf gekürzt (E-28): je 7 bis 16 Botschaften, höchstens fünf Fragmente, Ausnahmen als ref; gefordert sind fünf |
 | entwurf-plantuml/zustand-reparaturauftrag.puml / .png | Zustandsdiagramm der Klasse Reparaturauftrag (Zusatz, nicht gefordert) |
 | entwurf-plantuml/systemkontext.puml, systemkontext_layout.py / .png, .svg | Systemkontext für die Doku (Abbildung 1); das PNG erzeugt `systemkontext_layout.py` im festen Raster, die `.puml` beschreibt denselben Inhalt |
 
