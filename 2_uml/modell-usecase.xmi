@@ -51,9 +51,6 @@
       <packagedElement xmi:type="uml:Actor" xmi:id="actor_Betriebsadministrator" name="Betriebsadministrator">
         <ownedComment xmi:type="uml:Comment" xmi:id="cmt_867" body="Mitarbeiterrolle (Werkstattinhaber): verwaltet Werkstattbetrieb, Filialen und Nutzer"/>
       </packagedElement>
-      <packagedElement xmi:type="uml:Actor" xmi:id="actor_Lieferant" name="Lieferant">
-        <ownedComment xmi:type="uml:Comment" xmi:id="cmt_871" body="sekundär, extern: empfängt Bestellungen, liefert, nimmt Retouren an; im Diagramm dreimal dargestellt"/>
-      </packagedElement>
       <packagedElement xmi:type="uml:Actor" xmi:id="actor_KIDienst" name="KI-Diagnosedienst">
         <ownedComment xmi:type="uml:Comment" xmi:id="cmt_881" body="sekundär, extern (System): wertet Foto, Video und Ton aus"/>
       </packagedElement>
@@ -206,18 +203,6 @@
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_868" memberEnd="end_869 end_870">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_869" type="actor_Betriebsadministrator" association="aassoc_868"/>
         <ownedEnd xmi:type="uml:Property" xmi:id="end_870" type="uc_UC18" association="aassoc_868"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="aassoc_872" memberEnd="end_873 end_874">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_873" type="actor_Lieferant" association="aassoc_872"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_874" type="uc_UC10" association="aassoc_872"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="aassoc_875" memberEnd="end_876 end_877">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_876" type="actor_Lieferant" association="aassoc_875"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_877" type="uc_UC11" association="aassoc_875"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="aassoc_878" memberEnd="end_879 end_880">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_879" type="actor_Lieferant" association="aassoc_878"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_880" type="uc_UC19" association="aassoc_878"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_882" memberEnd="end_883 end_884">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_883" type="actor_KIDienst" association="aassoc_882"/>
