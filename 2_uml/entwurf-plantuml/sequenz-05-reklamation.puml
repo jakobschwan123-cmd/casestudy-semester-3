@@ -1,60 +1,36 @@
 @startuml
-' BPMN: p09-reklamation.bpmn
-' BPMN-Nodes: T09_Erfassen T09_Zuordnen T09_Annehmen T09_Pruefen T09_Bewerten GW09_Gewaehr T09_Freigeben T09_Angebot T09_Entscheidung GW09_Angebot T09_Abgelehnt T09_Auftrag T09_Info T09_Reparatur GW09_Teil T09_Retoure T09_Abholung T09_Abschluss
+' BPMN: p09-reklamation.bpmn. Kernablauf: Mangel prüfen, Gewährleistung oder Angebot, Nacharbeitsauftrag, Abschluss.
 title sqd : UC16 Reklamation bearbeiten (BPMN 09)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
-skinparam maxMessageSize 160
+skinparam maxMessageSize 170
 hide footbox
 
 actor Kunde
 actor Reklamationsbearbeiter as SM
 participant ": Reklamation" as REK
-participant "ursprung : Reparaturauftrag" as RA
-participant ": Rechnung" as RE
-actor Diagnostiker as Techniker
+actor Diagnostiker
 actor Werkstattleiter as WL
 participant "nacharbeit : Reparaturauftrag" as NA
 
-Kunde -> Kunde : meldeMangel(a, beschreibung)
 Kunde -> SM : Mangelmeldung (Auftrag, Beschreibung)
-SM -> SM : erfasseReklamation(a, grund)
-SM -> REK : <<create>>
-REK -> RA : getRechnung()
-RA --> REK : rechnung
-REK -> RE : getRechnungsdatum()
-RE --> REK : rechnungsdatum
-Kunde -> SM : Gerät zur Prüfung abgeben
-note over SM, Techniker : Gerät annehmen und Mangel dokumentieren (T09_Annehmen)
-Techniker -> Techniker : pruefeMangel(r)
-Techniker -> REK : pruefeGewaehrleistung()
-REK --> Techniker : istGewaehrleistung
+SM -> REK : <<create>> erfasseReklamation(a, grund)
+Diagnostiker -> REK : pruefeGewaehrleistung()
+REK --> Diagnostiker : istGewaehrleistung
 alt Gewährleistungsfall
-    Techniker -> WL : kostenfreie Nacharbeit zur Freigabe
-    WL -> WL : entscheideReklamation(r)
-    WL --> Techniker : kostenfreie Nacharbeit freigegeben
+    Diagnostiker -> WL : kostenfreie Nacharbeit zur Freigabe
+    WL -> REK : entscheideReklamation(r)
 else kein Gewährleistungsfall
     SM -> Kunde : kostenpflichtiges Angebot
-    Kunde --> SM : Annahme / Ablehnung
-    alt Angebot angenommen
-        note over REK : kostenpflichtige Nacharbeit freigegeben
-    else Angebot abgelehnt
-        SM -> REK : ablehnen()
-        note over REK, NA : Kein Nacharbeitsauftrag und keine Reparatur
-    end
+    Kunde --> SM : Annahme oder Ablehnung
 end
-opt Gewährleistung freigegeben oder Angebot angenommen
-    Techniker -> REK : legeNacharbeitAn(kostenfrei)
-    REK -> NA : <<create>> (kostenfrei)
-    NA -> NA : wechsleStatus(ANGENOMMEN)
-    SM -> NA : benachrichtigeKunde("Nacharbeit: kostenfrei / zum Angebot")
-    NA -> Kunde : Nacharbeit angekündigt
-    ref over Techniker, NA : BPMN 07 / UC13 und UC14\nNacharbeit durchführen: IN_REPARATUR -> FERTIG
-    opt Lieferantenteil defekt
-        ref over Techniker, NA : BPMN 10 / UC19 Retoure abwickeln
-    end
+alt Nacharbeit freigegeben oder Angebot angenommen
+    Diagnostiker -> REK : legeNacharbeitAn(kostenfrei)
+    REK -> NA : <<create>>
+    ref over Diagnostiker, NA : UC13 / UC14 Nacharbeit durchführen (BPMN 07)
+else Angebot abgelehnt
+    SM -> REK : ablehnen()
 end
-ref over Kunde, SM, RA, NA : BPMN 08 / UC15 Abholung und Abrechnung abwickeln\nAuch nach abgelehntem Angebot, dann ohne Nacharbeit
 SM -> REK : schliesseAb()
-REK --> SM : Reklamation abgeschlossen
+note over Kunde, NA : Abholung und Abrechnung über UC15 (BPMN 08)
 @enduml

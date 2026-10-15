@@ -1,82 +1,42 @@
 @startuml
-' BPMN: p06-ersatzteilbestellung.bpmn
-' BPMN-Nodes: T06_Buendeln T06_Lieferant T06_Bestellung GW06_Grenze T06_Freigabe T06_Senden GW06_AB E06_AB E06_ABTimer GW06_Lieferbar T06_Storno T06_Alternative GW06_Alt T06_Termin GW06_Verzoegert T06_KundeInfo GW06_Lief E06_Lieferung E06_LiefTimer GW06_Mahnung T06_Mahnen T06_Wareneingang GW06_Mangelfrei T06_Retoure GW06_Ersatz T06_ErsatzPruefen GW06_Bedarf T06_Zuordnen
+' BPMN: p06-ersatzteilbestellung.bpmn. Kernablauf: bündeln, freigeben, bestellen, bestätigen oder stornieren, höchstens zwei Mahnungen (E-22, E-27).
 title sqd : UC10 Lieferantenbestellung auslösen (BPMN 06)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
-skinparam maxMessageSize 160
+skinparam maxMessageSize 170
 hide footbox
 
-actor "Einkäufer" as Disponent
+actor "Einkäufer" as E
 participant ": Ersatzteil" as ET
 participant ": Lieferantenbestellung" as BEST
-participant ": Bestellposition" as POS
 participant ": Reparaturauftrag" as RA
 actor Werkstattleiter as WL
 actor Lieferant
-actor Serviceannahme as SM
-actor Kunde
 
-note over Disponent, RA : Vorbedingung: Fehlteile aus BPMN 05; offene Nachbestellvorschläge werden mitgebündelt.\nUC12 entsteht bei der Meldebestandsprüfung, nicht erst hier.
-ref over Disponent, RA : Bestellbedarf bündeln (T06_Buendeln)\nKundeninformation aus BPMN 05 ist bereits erfolgt.
-loop erster Lieferant oder verfügbarer alternativer Lieferant
-    Disponent -> ET : getVorzugslieferant()
-    ET --> Disponent : Lieferantenvorschlag
-    note over Disponent, Lieferant : Einkäufer wählt Lieferanten; nach Storno einen alternativen.
-    Disponent -> Disponent : loeseBestellungAus(lieferant)
-    Disponent -> BEST : <<create>> (status = OFFEN)
-    loop je gebündelter Bestellposition
-        Disponent -> BEST : addPosition(teil, menge)
-        BEST -> POS : <<create>>
+E -> ET : getVorzugslieferant()
+ET --> E : Lieferant
+E -> BEST : <<create>> (status = OFFEN)
+loop je Fehlteil und Nachbestellvorschlag
+    E -> BEST : addPosition(teil, menge)
+end
+E -> BEST : berechneBestellwert()
+opt Bestellwert über Freigabegrenze
+    E -> WL : Bestellfreigabe anfordern
+    WL -> BEST : freigeben()
+end
+E -> BEST : uebermittle()
+BEST -> Lieferant : Bestellung
+Lieferant --> BEST : Auftragsbestätigung
+alt bestätigt und lieferbar
+    E -> BEST : bestaetige(liefertermin)
+    E -> RA : wechsleStatus(TEILE_BESTELLT)
+    loop bis Lieferung, höchstens zwei Mahnungen je 14 Tage
+        BEST -> Lieferant : Mahnung
     end
-    Disponent -> BEST : berechneBestellwert()
-    BEST --> Disponent : bestellwert
-    opt bestellwert > freigabegrenze
-        Disponent -> WL : Bestellfreigabe anfordern
-        WL -> WL : gibBestellungFrei(b)
-        WL -> BEST : freigeben()
-    end
-    Disponent -> BEST : uebermittle()
-    BEST -> Lieferant : Bestellung
-    Lieferant --> BEST : Auftragsbestätigung (bestätigt, lieferbar, Liefertermin)
-    note over Disponent, Lieferant : Ohne Auftragsbestätigung binnen 3 Tagen (E06_ABTimer) wie „nicht lieferbar“.
-    alt bestätigt und lieferbar
-        Disponent -> BEST : bestaetige(liefertermin)
-        opt auftragsbezogene Fehlteile
-            Disponent -> RA : wechsleStatus(TEILE_BESTELLT)
-        end
-        opt Reparatur verzögert
-            SM -> RA : benachrichtigeKunde("neuer Liefertermin")
-            RA -> Kunde : Verzögerungsinformation mit Liefertermin
-        end
-        alt Lieferung eingetroffen (nach höchstens zwei Mahnungen)
-            note over Disponent, Lieferant : Nach je 14 Tagen ohne Lieferung anmahnen und weiter warten (T06_Mahnen),\nhöchstens zweimal (GW06_Mahnung).
-            ref over Disponent, BEST, Lieferant : UC11 Lieferung empfangen, Wareneingang prüfen und buchen\nBei Mangel: BPMN 10 / UC19 Retoure abwickeln
-            alt mangelfreie Lieferung oder Ersatz geliefert
-                note over BEST, RA : Ersatzlieferung zuerst prüfen (T06_ErsatzPruefen);\nFehlteile dem Auftrag zuordnen (T06_Zuordnen)
-                break Bestellung abgeschlossen
-                    note over Disponent : Keine weitere Bestellung
-                end
-            else kein Ersatz und Teil weiterhin benötigt
-                note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Bedarf -> Merge_06)
-            else kein Ersatz und Teil nicht mehr benötigt
-                break Bestellung ohne Teilezuordnung abgeschlossen
-                    note over BEST : Bestellbedarf beendet
-                end
-            end
-        else auch nach der zweiten Mahnung keine Lieferung (GW06_Mahnung)
-            Disponent -> BEST : storniere()
-            note over Disponent, Lieferant : Weiter wie ohne Auftragsbestätigung: alternativer Lieferant\n(GW06_Alt -> Merge_06) oder Abschluss ohne Lieferung
-        end
-    else nicht bestätigt, nicht lieferbar oder keine Auftragsbestätigung
-        Disponent -> BEST : storniere()
-        alt alternativer Lieferant verfügbar
-            note over Disponent, Lieferant : Erneute Lieferantenauswahl (GW06_Alt -> Merge_06)
-        else kein alternativer Lieferant verfügbar
-            break Bestellung ohne Lieferung abgeschlossen
-                note over BEST, RA : Kein Status TEILE_BESTELLT aus dieser Bestellung
-            end
-        end
-    end
+    ref over E, BEST, Lieferant : UC11 Wareneingang buchen; bei Mangel UC19 Retoure abwickeln (BPMN 10)
+else nicht lieferbar, keine Bestätigung oder zweite Mahnung ohne Lieferung
+    E -> BEST : storniere()
+    BEST -> Lieferant : Stornierung
+    note over E, BEST : alternativer Lieferant oder Abschluss ohne Lieferung
 end
 @enduml

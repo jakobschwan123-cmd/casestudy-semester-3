@@ -1,56 +1,37 @@
 @startuml
-' BPMN: p04-kostenvoranschlag.bpmn
-' BPMN-Nodes: T04_Positionen T04_Preise T04_Berechnen T04_Pruefen T04_Status T04_Senden E04_Freigabe E04_Ablehnung E04_Timer T04_Erinnerung GW04_Dritte T04_Freigegeben T04_Dispo T04_Abgelehnt T04_Abholung
+' BPMN: p04-kostenvoranschlag.bpmn. Kernablauf: KVA erstellen (UC06), versenden, erinnern, Freigabe oder Ablehnung.
 title sqd : UC07 KVA freigeben / ablehnen (BPMN 04)
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
-skinparam maxMessageSize 160
+skinparam maxMessageSize 170
 hide footbox
 
-actor Kalkulator as Techniker
+actor Kalkulator
 actor Serviceannahme as SM
 participant ": Reparaturauftrag" as RA
 participant ": Kostenvoranschlag" as KVA
-participant ": KvaPosition" as POS
 actor Kunde
 
-group UC06 KVA erstellen: Positionen und Ersatzteilpreise übernehmen
-Techniker -> KVA : <<create>> (status = ENTWURF)
+Kalkulator -> KVA : <<create>> (status = ENTWURF)
 loop je Arbeits- oder Ersatzteilposition
-    Techniker -> KVA : addPosition(p)
-    KVA -> POS : <<create>>
-    KVA -> POS : zwischensumme()
-    POS --> KVA : betrag
+    Kalkulator -> KVA : addPosition(p)
 end
-Techniker -> KVA : berechneSumme()
-KVA --> Techniker : summe
-note over SM, KVA : Serviceannahme prüft den KVA (T04_Pruefen)
-end
+Kalkulator -> KVA : berechneSumme()
+KVA --> Kalkulator : summe
 SM -> RA : wechsleStatus(KVA_OFFEN)
 SM -> KVA : versendeAnKunde()
 KVA -> Kunde : Kostenvoranschlag
-loop solange keine Antwort und weniger als drei Fristabläufe
-    ... 3 Tage ohne Freigabe oder Ablehnung ...
+loop höchstens zweimal: 3 Tage ohne Antwort
     SM -> KVA : protokolliereErinnerung()
-    opt erinnerungen < 3
-        SM -> KVA : versendeAnKunde()
-        KVA -> Kunde : Kostenvoranschlag mit Erinnerung
-    end
+    KVA -> Kunde : Erinnerung
 end
 alt Freigabe erhalten
     Kunde -> KVA : freigeben()
-    KVA -> KVA : setzeStatus(FREIGEGEBEN)
     KVA -> RA : wechsleStatus(FREIGEGEBEN)
-    ref over SM, RA : BPMN 05 / UC09 Ersatzteile disponieren und reservieren
-else Ablehnung erhalten
+    ref over SM, RA : UC09 Ersatzteile disponieren (BPMN 05)
+else Ablehnung erhalten oder dritter Fristablauf
     Kunde -> KVA : ablehnen(grund)
-    KVA -> KVA : setzeStatus(ABGELEHNT)
     KVA -> RA : wechsleStatus(ABGELEHNT)
-    ref over SM, RA, Kunde : BPMN 08 / UC15 Abholung mit Diagnosepauschale
-else dritter Fristablauf ohne Kundenantwort
-    SM -> KVA : ablehnen("keine Antwort nach drei Fristabläufen")
-    KVA -> KVA : setzeStatus(ABGELEHNT)
-    KVA -> RA : wechsleStatus(ABGELEHNT)
-    ref over SM, RA, Kunde : BPMN 08 / UC15 Abholung mit Diagnosepauschale
+    ref over SM, RA, Kunde : UC15 Abholung mit Diagnosepauschale (BPMN 08)
 end
 @enduml
