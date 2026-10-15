@@ -1,6 +1,6 @@
 # Entscheidungslog
 
-Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-28, E-29 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
+Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründungen (E-01 bis E-20) liegt in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/03-entscheidungen-bis-2026-10-05.md`. Neue Entscheidungen kommen oben als E-29, E-30 … dazu, jeweils mit Datum, Entscheidung und Auswirkung in wenigen Zeilen.
 
 ## Offen
 
@@ -11,7 +11,18 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 - **E-24 bestätigen** (alle, 15.10.): Use-Case-Diagramm mit einer Rolle je Use Case.
 - **E-25 bestätigen** (alle, 15.10.): Präsentation als Pitch und Zusammenfassung ohne Diagrammbilder.
 - **E-26 bestätigen** (alle, Modeler-Prüfung Maximilian): Korrekturen P01–P05.
+- **E-28 bestätigen** (alle): Sequenzdiagramme auf den Kernablauf gekürzt.
 - **E-27 bestätigen** (alle, Modeler-Prüfung Maximilian): Überarbeitung P06; Folgeaufgaben P05 „Alle Teile verfügbar?“, Zustandsdiagramm „Teile bestellt → abgelehnt“, SD6.
+
+## E-28 Sequenzdiagramme auf den Kernablauf gekürzt (15.10.2026)
+
+Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+
+- **Warum:** Die bisherigen Vorlagen hatten bis zu 35 Botschaften und 10 Fragmente je Diagramm und wiederholten die Ausnahmen aus den Prozessmodellen. Die Beispiele der Vorlesung (VL 5-71, 5-89 bis 5-91) kommen mit wenigen Lebenslinien und unter zehn Botschaften aus. Gefordert ist je Use Case ein Sequenzdiagramm, kein Umfang.
+- **Neu:** Je Diagramm 2 bis 7 Lebenslinien, 7 bis 16 Botschaften, höchstens fünf Fragmente. Erste Lebenslinie ist die Rolle des Use Case, Botschaften an Objekte bleiben Operationen des Klassendiagramms, Ausnahmen und Folgeprozesse stehen als ref. Fachliche Festlegungen bleiben: SD4 loop 0..2 und Abbruch (E-22), SD3 Vorreservierung aus der Sofortdiagnose (E-26), SD6 höchstens zwei Mahnungen, Storno an den Lieferanten (E-27).
+- **Dateien:** `2_uml/entwurf-plantuml/sequenz-01 … 06.puml/.png` überschrieben. Die alten Fassungen stehen in der Git-Historie (Stand vor diesem Commit).
+- **Darstellung:** Objekterzeugung wie in Visual Paradigm und VL 6 Folie 5-70: gestrichelter Pfeil auf den Kopfkasten, Kasten auf Nachrichtenhöhe, kein «create»-Stereotyp; Botschaften nummeriert. In SD3 ist die Reservierung deshalb ein vorhandenes Objekt (eine Lebenslinie kann nur einmal erzeugt werden).
+- **Folgt daraus:** Nina prüft Doku 5.5 und Tabelle 8 (Beschreibung der sechs SD; „par“ kommt nicht mehr vor). Für Visual Paradigm gilt die neue Vorlage.
 
 ## E-27 Überarbeitung von Prozess 06 (15.10.2026)
 
@@ -113,3 +124,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-25 | Präsentation als Pitch und Zusammenfassung ohne Diagrammbilder, Sprechtexte je Folie – Bestätigung offen |
 | E-26 | Korrekturen P01–P05 (KI-Vorschlag optional, kein Befund, KVA-Status, Vorreservierungen in P05) – Bestätigung offen |
 | E-27 | Überarbeitung P06 (Storno an Lieferanten, Nachfrist, nicht beschaffbar, begrenzte Retoure) – Bestätigung offen |
+| E-28 | Sequenzdiagramme auf den Kernablauf gekürzt (7 bis 16 Botschaften, Ausnahmen als ref) – Bestätigung offen |
