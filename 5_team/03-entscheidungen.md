@@ -4,9 +4,19 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## Offen
 
-- **E-19 bestätigen** (Jakob, P07/P08): Fristen bis zur Verwertung (vierte Abhol-Erinnerung) und bis zum Inkasso (dritte Mahnung) sowie die Frage, ob `AuftragStatus` einen Wert für verwertete Geräte braucht.
-- **E-20 bestätigen** (David, P05/P06).
-- **E-22 bestätigen** (Kilian, P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
+- **E-19 bestätigen** (Adrian holt die Bestätigung ein, P07/P08): Fristen bis zur Verwertung (vierte Abhol-Erinnerung) und bis zum Inkasso (dritte Mahnung) sowie die Frage, ob `AuftragStatus` einen Wert für verwertete Geräte braucht.
+- **E-20 bestätigen** (Adrian, P05/P06).
+- **E-22 bestätigen** (Adrian, P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
+- **E-23 bestätigen** (alle, 15.10.): Neuverteilung der offenen Aufgaben.
+
+## E-23 Neuverteilung der offenen Aufgaben nach Aufwand (15.10.2026)
+
+Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe am 15.10. offen.
+
+- **Ziel:** Bis zur Abgabe soll jede Person ungefähr gleich viel Zeit investiert haben. Annahme: Bis zum 15.10. war der Aufwand ungefähr gleich, verteilt werden nur die offenen Aufgaben (≈ 4 h je Person, Tabelle in `02-team-und-rollen.md`).
+- **Visual Paradigm:** Kilian Klassendiagramm, Konsistenzprüfung und VPP; David Use-Case-Diagramm, SD2, SD4; Maximilian SD1; Jakob SD3; Adrian SD5, SD6. Bisher lagen alle sechs SD und beide Diagramme bei Kilian und David.
+- **Doku:** Nina fügt alle sechs Abbildungen ein (die Zuständigen legen die PNGs ins Repository), Adrian schreibt Kapitel 6, Adrian holt die Bestätigung von E-19/E-20/E-22 ein (vorher Jakob, David, Kilian).
+- **Präsentation:** Jede Person trägt vor, was sie gebaut hat. David übernimmt Folie 12 (Use-Case-Diagramm), Maximilian Folie 14 (SD1), Kilian Folie 16 (Vorgehen und Projektmanagement). Folie 2, Folie 20, Sprechernotizen, Doku Kapitel 1 und `TODO.md` sind angepasst.
 
 ## E-22 Abschluss der QA-Befunde Q1–Q3 und B12 (08.10.2026)
 
@@ -52,3 +62,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-20 | P05/P06 überarbeitet (Bestellung nur bei Fehlteilen, Kundeninfo durch Service, Warten mit Timer und Mahnung in P06) – Bestätigung offen |
 | E-21 | Gruppenbeschluss vom 05.10.2026 (siehe oben) |
 | E-22 | Ausstieg der Liefermahnung in P06, Empfang der Ersatzlieferung in P10, SD4 an P07 angeglichen – Bestätigung offen |
+| E-23 | Offene Aufgaben ab 15.10.2026 nach Aufwand neu verteilt, Vortrag folgt der Arbeit – Bestätigung offen |
