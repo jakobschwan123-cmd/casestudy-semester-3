@@ -9,6 +9,16 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 - **E-22 bestätigen** (Adrian, P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Lieferungs-Mahnung; Empfang der Ersatzlieferung in P10.
 - **E-23 bestätigen** (alle, 15.10.): Zuständigkeiten für die Fertigstellung.
 - **E-24 bestätigen** (alle, 15.10.): Use-Case-Diagramm mit einer Rolle je Use Case.
+- **E-25 bestätigen** (alle, 15.10.): Präsentation als Pitch und Zusammenfassung ohne Diagrammbilder.
+
+## E-25 Präsentation als Pitch und Zusammenfassung (15.10.2026)
+
+Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+
+- **Aufbau:** 17 Folien plus Anhang. Teil 1 ist der Pitch (Problem, Lösung, Nutzen, Auftragsreise, KI-Sofortdiagnose), Teil 2 die Zusammenfassung der Ergebnisse (Kennzahlen, Prozesse, Rollen und Use Cases, Datenmodell, Vorgehen, Qualität, Herausforderungen), zum Schluss Geschäftsmodell, Ausblick und Fazit.
+- **Keine Diagrammbilder:** Die Diagramme liegen in der Projektdokumentation und im Abgabepaket (BPMN-ZIP, VPP). In den Folien stehen Ergebnisse als Zahlen, Rollen, Entwurfsentscheidungen und Prozess-Highlights. Damit entfallen die Bildaufgaben für die Folien.
+- **Sprechtexte:** je Folie in den PowerPoint-Notizen und in `4_praesentation/Sprechtext_Abschlusspraesentation.docx` mit Zeitangaben (gesamt etwa 18 Minuten); jede Person passt ihren Teil an.
+- **Quelle:** `4_praesentation/tools/pres.js` (pptxgenjs) und `tools/sprechtext.py` erzeugen die Datei; Änderungen am Text dort, nicht in der pptx, sonst gehen sie beim nächsten Erzeugen verloren. Wer direkt in PowerPoint ändert, sagt es in der WhatsApp-Gruppe.
 
 ## E-24 Use-Case-Diagramm: je Use Case eine Rolle (15.10.2026)
 
@@ -27,7 +37,7 @@ Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die
 - **Grundsatz:** Nur Kilian und David haben Zugriff auf Visual Paradigm, deshalb liegen alle VP-Diagramme bei ihnen. Die übrigen Arbeiten (BPMN-Abschluss, Dokumentation, Fachkonzept, Entscheidungen, Qualitätssicherung, Präsentation) sind so verteilt, dass jede Person im Gesamtprojekt einen vergleichbaren Anteil verantwortet. Die Zuständigkeiten stehen in Doku Kapitel 1 und `02-team-und-rollen.md`.
 - **Visual Paradigm:** Kilian Klassendiagramm, SD1, SD4, VPP-Datei und Konsistenzprüfung; David Use-Case-Diagramm (E-24), SD2, SD3, SD5, SD6.
 - **Übrige:** Nina Redaktion der Dokumentation (Abbildungen, gelbe Hinweise, Kapitel 1/4/7, PDF) und Abgabe-Archiv; Adrian Fachkonzept (Kapitel 2), Entscheidungslog, Bestätigung E-19/E-20/E-22, Abschnitt 5.2 und Kapitel 6; Maximilian alle zehn BPMN-Dateien im Modeler, Kennzahlen, Abschnitt 5.1; Jakob QA-Checkliste, Reviews, 3.2 und 5.6, Präsentations-PDF.
-- **Präsentation:** Jede Person trägt vor, was sie verantwortet: Nina 1–2, 18–19; David 3, 12, 15; Adrian 4–6, 11; Maximilian 7, 9, 10; Kilian 13, 14, 16; Jakob 8, 17. Folie 2, Folie 20, Sprechernotizen und Doku Kapitel 1 sind angepasst.
+- **Präsentation:** Jede Person trägt vor, was sie verantwortet (Foliennummern nach E-25): Nina 1–2, 16–17; David 3, 6, 11; Adrian 4, 5, 7; Maximilian 8–10; Kilian 12, 13; Jakob 14, 15. Folie 2, Folie 18, Sprechernotizen und Doku Kapitel 1 sind angepasst.
 - **Offene Aufgaben:** `TODO.md` listet alle Aufgaben ohne Namen; die Zuteilung erfolgt im Gruppentermin nach den Zuständigkeiten oben.
 
 ## E-22 Abschluss der QA-Befunde Q1–Q3 und B12 (08.10.2026)
@@ -76,3 +86,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-22 | Ausstieg der Liefermahnung in P06, Empfang der Ersatzlieferung in P10, SD4 an P07 angeglichen – Bestätigung offen |
 | E-23 | Zuständigkeiten für die Fertigstellung, Vortrag folgt der Verantwortung – Bestätigung offen |
 | E-24 | Use-Case-Diagramm mit einer Rolle je Use Case, 15 Mitarbeiterrollen, Zuordnung in Doku Tabelle 7 – Bestätigung offen |
+| E-25 | Präsentation als Pitch und Zusammenfassung ohne Diagrammbilder, Sprechtexte je Folie – Bestätigung offen |

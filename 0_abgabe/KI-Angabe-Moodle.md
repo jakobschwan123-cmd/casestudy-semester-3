@@ -12,7 +12,8 @@ Bei der Fallstudie haben wir KI-Werkzeuge unterstützend eingesetzt, insbesonder
 - Konsistenzprüfungen zwischen BPMN, Use Cases, Klassen- und Sequenzdiagrammen (Gesamtprüfungen vom 26.09. und 05.10.2026, QA-Abgleich am 08.10.2026),
 - Struktur- und Formulierungsvorschläge für Projektdokumentation, Präsentation und Repository-Dokumentation sowie das Erzeugen von Bildern und Dateien daraus,
 - die Neufassung der Projektdokumentation auf rund 20 Seiten (12.10.2026) und ihre sprachliche Überarbeitung (Stil, Rechtschreibung, Grammatik) mit KI-Werkzeugen,
-- die Umstellung des Use-Case-Diagramms auf eine Rolle je Use Case nach dem Dozentenhinweis vom 15.10.2026 (Vorlage, XMI, Anpassung von Sequenzdiagrammen, Dokumentation und Folien).
+- die Umstellung des Use-Case-Diagramms auf eine Rolle je Use Case nach dem Dozentenhinweis vom 15.10.2026 (Vorlage, XMI, Anpassung von Sequenzdiagrammen, Dokumentation und Folien),
+- den Aufbau der Abschlusspräsentation als Pitch und Zusammenfassung mit Sprechtext-Entwürfen je Folie, die jede Person für ihren Teil überarbeitet.
 
 Thema, Perspektive, Prozessauswahl und alle Entscheidungen im Entscheidungslog hat die Gruppe getroffen. Alle KI-Ergebnisse haben wir geprüft, korrigiert und als Gruppe abgenommen; für den Inhalt sind wir verantwortlich.
 

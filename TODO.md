@@ -16,7 +16,7 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jedem f
 - [ ] **Klassendiagramm „cd : RepairFlow“ fertigstellen.** Alle 27 Klassen und 7 Aufzählungen aus dem Paket „Klassenmodell“ auf die Fläche (Paket „Datentypen“ nicht), nach Zonen anordnen (Organisation links, Filiale oben Mitte, Sofortdiagnose links unten, Auftrag Mitte, Disposition rechts, Aufzählungen unten), Stereotypen «mandant» (Werkstattbetrieb) und «stammdaten» (Filiale, Lieferant, Ersatzteil) setzen, prüfen: Person und Mitarbeiter abstrakt (kursiv), 8 Kompositionen mit gefüllter Raute, Multiplizitäten an allen 36 Assoziationen. Keine Klasse umbenennen, keine Operation löschen.
 - [ ] **Sechs Sequenzdiagramme als Unterdiagramme anlegen** (Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram): SD1 unter UC01, SD2 unter UC07, SD3 unter UC09, SD4 unter UC14, SD5 unter UC16, SD6 unter UC10. Vorlagen `sequenz-01…06.png`. Lebenslinien: erste Lebenslinie ist die Rolle des Use Case (z. B. Teiledisponent, Endkontrolleur), Objekte als „: Klassenname“ mit der Klasse aus dem Modell verknüpfen, Botschaften nur aus den Operationen des Klassendiagramms wählen. Fragmente alt/opt/loop/par/break/ref wie in den Vorlagen. SD4 und SD6 in der Fassung nach E-22 (Nacharbeitsschleife 0..2, Storno nach der zweiten Mahnung).
 - [ ] **Konsistenzprüfung** nach Fertigstellung aller SD: Botschaft = Operation, Lebenslinien mit Klasse verknüpft, SD hängt am richtigen Use Case, Rollennamen wie im Use-Case-Diagramm.
-- [ ] **Diagramme exportieren** (File → Export → Active Diagram as Image → PNG, hohe Auflösung): Use-Case-Diagramm → `2_uml/usecase-diagramm.png`, Klassendiagramm → `2_uml/klassendiagramm.png`, SD1 → `2_uml/sequenz-01-sofortdiagnose.png`, SD3 → `2_uml/sequenz-03-reservierung.png`. Diese vier Bilder braucht die Doku (Abb. 4–7) und die Präsentation (Folien 12–15).
+- [ ] **Diagramme exportieren** (File → Export → Active Diagram as Image → PNG, hohe Auflösung): Use-Case-Diagramm → `2_uml/usecase-diagramm.png`, Klassendiagramm → `2_uml/klassendiagramm.png`, SD1 → `2_uml/sequenz-01-sofortdiagnose.png`, SD3 → `2_uml/sequenz-03-reservierung.png`. Diese vier Bilder braucht die Doku (Abb. 4–7).
 - [ ] **VPP-Datei speichern:** File → Save Project As → `2_uml/UML-WWI25B4-Gruppe1.vpp`, per Branch und Pull Request einchecken. Erst, wenn alle Diagramme committet sind. Die Datei kommt so in die Abgabe.
 
 ## B. BPMN im Camunda Modeler
@@ -24,7 +24,7 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jedem f
 - [ ] **Korrektur in `1_bpmn/p04-kostenvoranschlag.bpmn`:** Auf eine freie Stelle außerhalb der Pools klicken, rechts im Properties Panel unter **Documentation** den Text `nach der dritten Erinnerung gilt er als abgelehnt.` ersetzen durch `nach dem dritten Fristablauf ohne Antwort gilt er als abgelehnt.` Grund: Das Modell sendet den KVA und höchstens zwei Erinnerungen, abgelehnt wird nach dem dritten Fristablauf.
 - [ ] **Korrektur in `1_bpmn/p02-auftragsannahme.bpmn`:** Das Datenobjekt „Gerät“ an der Aktivität „Gerät registrieren“ in „Geraet“ umbenennen. Grund: Datenobjekte tragen den Klassennamen, die Klasse heißt `Geraet`. Aktivitätsnamen mit „Gerät“ bleiben.
 - [ ] **Alle zehn Dateien `p01` bis `p10` prüfen und exportieren:** Datei öffnen, unten den Reiter **Problems** öffnen (es dürfen keine Fehler stehen; falls doch Screenshot in die WhatsApp-Gruppe, nicht selbst umbauen), Strg+S, File → Export as image → PNG mit gleichem Dateinamen in `1_bpmn/` überschreiben. P06 und P10 unbedingt im Modeler speichern (E-22). Dann per Branch und Pull Request einreichen.
-- [ ] **Kennzahlen abgleichen** nach allen Änderungen: Doku 5.1, `1_bpmn/README.md` und Folie 7 müssen dieselben Zahlen zeigen (131 Aktivitäten, 79 automatisiert, 41 Nachrichtenflüsse).
+- [ ] **Kennzahlen abgleichen** nach allen Änderungen: Doku 5.1, `1_bpmn/README.md` und Folie 9 müssen dieselben Zahlen zeigen (131 Aktivitäten, 79 automatisiert, 41 Nachrichtenflüsse).
 
 ## C. Entscheidungen (Gruppentermin 15.10.)
 
@@ -47,11 +47,12 @@ Alle offenen Stellen sind gelb markiert. Kapitel 1 enthält die Zuständigkeiten
 
 ## E. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
 
-- [ ] **Folien 12–15: Diagrammbilder** durch die VP-Exporte ersetzen (Folie 12 zeigt bis dahin einen Ausschnitt der Vorlage). Folie 13 Klassendiagramm, 14 SD1, 15 SD3.
-- [ ] **Folien 9 und 10:** Ausschnitte aus P01 und P04 durch Ausschnitte aus dem neuen Modeler-Export ersetzen.
-- [ ] **Eigene Folien vorbereiten.** Zuordnung auf Folie 2 und Folie 20 sowie in den Sprechernotizen (erste Zeile jeder Notiz).
-- [ ] **Generalprobe 22.10.:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten), Fragen üben, insbesondere zur Rollenstruktur im Use-Case-Diagramm und zu den Entwurfsentscheidungen im Klassendiagramm.
-- [ ] **PDF exportieren** nach der Generalprobe (`4_praesentation/Abschlusspraesentation.pdf`). Folie 20 mit der Zuordnung der Vortragenden muss enthalten sein (Pflicht laut Ablauf).
+Die Präsentation ist seit 15.10. ein Pitch mit Ergebniszusammenfassung ohne Diagrammbilder (E-25). Quelle ist `4_praesentation/tools/pres.js` mit `tools/sprechtext.py`; wer Text ändert, ändert ihn dort und erzeugt die Datei neu (`python3 sprechtext.py && node pres.js`), oder sagt in der WhatsApp-Gruppe Bescheid, dass direkt in PowerPoint geändert wurde.
+
+- [ ] **Sprechtext eigener Folien überarbeiten.** Entwurf in `4_praesentation/Sprechtext_Abschlusspraesentation.docx` und in den Notizen. Jede Person formuliert ihren Teil so um, dass er zu ihr passt, und hält die Zeitangabe grob ein (gesamt etwa 18 Minuten). Zuordnung auf Folie 2 und Folie 18.
+- [ ] **Inhalte gegenlesen:** Zahlen auf Folie 8 und 9 (131 Aktivitäten, 60 %, 19 Use Cases, 18 Akteure, 27 Klassen, 36 Assoziationen) nach den letzten Modelländerungen prüfen; Rollennamen auf Folie 11 gegen Doku Tabelle 7.
+- [ ] **Generalprobe 22.10.:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten), Übergaben üben, Fragen üben (Warum eine Rolle je Use Case? Warum Komposition beim Befund, nicht beim Gerät? Was ist automatisiert, was nicht? Wie wurde Konsistenz gesichert?).
+- [ ] **PDF exportieren** nach der Generalprobe (`4_praesentation/Abschlusspraesentation.pdf`). Folie 18 mit der Zuordnung der Vortragenden muss enthalten sein (Pflicht laut Ablauf).
 
 ## F. Qualitätssicherung
 
