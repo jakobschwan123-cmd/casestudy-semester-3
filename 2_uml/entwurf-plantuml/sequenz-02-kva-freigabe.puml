@@ -7,8 +7,8 @@ skinparam sequenceMessageAlign left
 skinparam maxMessageSize 160
 hide footbox
 
-actor Techniker
-actor Servicemitarbeiter as SM
+actor Kalkulator as Techniker
+actor Serviceannahme as SM
 participant ": Reparaturauftrag" as RA
 participant ": Kostenvoranschlag" as KVA
 participant ": KvaPosition" as POS
@@ -24,7 +24,7 @@ loop je Arbeits- oder Ersatzteilposition
 end
 Techniker -> KVA : berechneSumme()
 KVA --> Techniker : summe
-note over SM, KVA : Service / Annahme prüft den KVA (T04_Pruefen)
+note over SM, KVA : Serviceannahme prüft den KVA (T04_Pruefen)
 end
 SM -> RA : wechsleStatus(KVA_OFFEN)
 SM -> KVA : versendeAnKunde()

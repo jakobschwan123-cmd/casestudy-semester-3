@@ -1,124 +1,67 @@
-# To-do bis zur Abgabe
+# Aufgaben bis zur Abgabe
 
-Stand: 12.10.2026. Nächster Gruppentermin: **15.10.2026**. Generalprobe: **22.10.2026**. Präsentation: **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe: **13.11.2026, 23:59 Uhr** über Moodle.
+Stand: 15.10.2026. Diese Liste sammelt alle offenen Aufgaben mit Erklärung, ohne Namen. Die Zuteilung erfolgt im Gruppentermin nach den Zuständigkeiten in `5_team/02-team-und-rollen.md` (E-23). Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern hinter den Punkt und hakt ihn nach Erledigung ab (`- [x]`).
 
-Abhaken, wenn erledigt (`- [x]`), und die Änderung wie immer über Branch und Pull Request einreichen. Wer an Word- oder PowerPoint-Dateien arbeitet, sagt vorher in der WhatsApp-Gruppe Bescheid.
+Termine: Generalprobe **22.10.2026**. Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
+
+Grundregeln: Jede Änderung über Branch und Pull Request, Commit-Stempel `[T05 2026-10-15] …`. Wer an Word- oder PowerPoint-Dateien arbeitet, sagt vorher in der WhatsApp-Gruppe Bescheid, weil diese Dateien nicht zusammengeführt werden können.
 
 ---
 
-## Bis 15.10.2026
+## A. Visual Paradigm (nur mit VP-Zugang)
 
-### Kilian: Visual Paradigm (Klassendiagramm, SD1, SD3, VPP-Datei)
+Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jedem fertigen Diagramm sofort **Commit**. Jeder bearbeitet nur seine eigenen Diagramme. Anleitung mit Klickschritten in `2_uml/README.md`, Vorlagen (PlantUML-Quelle und PNG) in `2_uml/entwurf-plantuml/`.
 
-Vorlagen liegen in `2_uml/entwurf-plantuml/`. Die genauen Klickschritte stehen in `2_uml/README.md`.
+- [ ] **Use-Case-Diagramm nach E-24 neu aufbauen.** Das importierte Modell hat noch die alten acht Akteure. Erst Commit, dann im Model Explorer nur das Paket „Anwendungsfallmodell“ löschen, `2_uml/modell-usecase.xmi` importieren (nicht die ganze `modell.xmi`, sonst Klassen doppelt), neues Diagramm „ud : RepairFlow“ anlegen und nach `usecase.png` anordnen: Rollen links, Use Cases in den vier Bereichen, Lieferant und KI-Diagnosedienst rechts. Kunde und Lieferant dreimal aus dem Model Explorer ziehen (weitere Ansichten desselben Elements). UC08 bekommt keinen Akteur. Muss fertig sein, bevor Sequenzdiagramme angelegt werden, weil die als Unterdiagramme an den Use Cases hängen.
+- [ ] **Klassendiagramm „cd : RepairFlow“ fertigstellen.** Alle 27 Klassen und 7 Aufzählungen aus dem Paket „Klassenmodell“ auf die Fläche (Paket „Datentypen“ nicht), nach Zonen anordnen (Organisation links, Filiale oben Mitte, Sofortdiagnose links unten, Auftrag Mitte, Disposition rechts, Aufzählungen unten), Stereotypen «mandant» (Werkstattbetrieb) und «stammdaten» (Filiale, Lieferant, Ersatzteil) setzen, prüfen: Person und Mitarbeiter abstrakt (kursiv), 8 Kompositionen mit gefüllter Raute, Multiplizitäten an allen 36 Assoziationen. Keine Klasse umbenennen, keine Operation löschen.
+- [ ] **Sechs Sequenzdiagramme als Unterdiagramme anlegen** (Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram): SD1 unter UC01, SD2 unter UC07, SD3 unter UC09, SD4 unter UC14, SD5 unter UC16, SD6 unter UC10. Vorlagen `sequenz-01…06.png`. Lebenslinien: erste Lebenslinie ist die Rolle des Use Case (z. B. Teiledisponent, Endkontrolleur), Objekte als „: Klassenname“ mit der Klasse aus dem Modell verknüpfen, Botschaften nur aus den Operationen des Klassendiagramms wählen. Fragmente alt/opt/loop/par/break/ref wie in den Vorlagen. SD4 und SD6 in der Fassung nach E-22 (Nacharbeitsschleife 0..2, Storno nach der zweiten Mahnung).
+- [ ] **Konsistenzprüfung** nach Fertigstellung aller SD: Botschaft = Operation, Lebenslinien mit Klasse verknüpft, SD hängt am richtigen Use Case, Rollennamen wie im Use-Case-Diagramm.
+- [ ] **Diagramme exportieren** (File → Export → Active Diagram as Image → PNG, hohe Auflösung): Use-Case-Diagramm → `2_uml/usecase-diagramm.png`, Klassendiagramm → `2_uml/klassendiagramm.png`, SD1 → `2_uml/sequenz-01-sofortdiagnose.png`, SD3 → `2_uml/sequenz-03-reservierung.png`. Diese vier Bilder braucht die Doku (Abb. 4–7) und die Präsentation (Folien 12–15).
+- [ ] **VPP-Datei speichern:** File → Save Project As → `2_uml/UML-WWI25B4-Gruppe1.vpp`, per Branch und Pull Request einchecken. Erst, wenn alle Diagramme committet sind. Die Datei kommt so in die Abgabe.
 
-- [ ] Lehre-VPN starten, Visual Paradigm öffnen, im Teamwork Client **Update** auf das Projekt WWI25B4G1 machen.
-- [ ] Klassendiagramm „cd : RepairFlow“ anlegen: alle 27 Klassen und 7 Aufzählungen aus dem Model Explorer auf die Fläche ziehen, nach `klassen.png` anordnen.
-- [ ] SD1 als Unterdiagramm von UC01 „Sofortdiagnose anfordern“ anlegen (Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram), nach `sequenz-01-sofortdiagnose.png` zeichnen.
-- [ ] SD3 als Unterdiagramm von UC09 „Ersatzteile disponieren und reservieren“ anlegen, nach `sequenz-03-reservierung.png`.
-- [ ] Im Teamwork Client **Commit**.
-- [ ] Nachdem auch Davids Diagramme committet sind: File → Save Project As → `2_uml/UML-WWI25B4-Gruppe1.vpp`, per Branch und Pull Request einchecken.
+## B. BPMN im Camunda Modeler
 
-### David: Visual Paradigm (SD2, SD4, SD5, SD6)
+- [ ] **Korrektur in `1_bpmn/p04-kostenvoranschlag.bpmn`:** Auf eine freie Stelle außerhalb der Pools klicken, rechts im Properties Panel unter **Documentation** den Text `nach der dritten Erinnerung gilt er als abgelehnt.` ersetzen durch `nach dem dritten Fristablauf ohne Antwort gilt er als abgelehnt.` Grund: Das Modell sendet den KVA und höchstens zwei Erinnerungen, abgelehnt wird nach dem dritten Fristablauf.
+- [ ] **Korrektur in `1_bpmn/p02-auftragsannahme.bpmn`:** Das Datenobjekt „Gerät“ an der Aktivität „Gerät registrieren“ in „Geraet“ umbenennen. Grund: Datenobjekte tragen den Klassennamen, die Klasse heißt `Geraet`. Aktivitätsnamen mit „Gerät“ bleiben.
+- [ ] **Alle zehn Dateien `p01` bis `p10` prüfen und exportieren:** Datei öffnen, unten den Reiter **Problems** öffnen (es dürfen keine Fehler stehen; falls doch Screenshot in die WhatsApp-Gruppe, nicht selbst umbauen), Strg+S, File → Export as image → PNG mit gleichem Dateinamen in `1_bpmn/` überschreiben. P06 und P10 unbedingt im Modeler speichern (E-22). Dann per Branch und Pull Request einreichen.
+- [ ] **Kennzahlen abgleichen** nach allen Änderungen: Doku 5.1, `1_bpmn/README.md` und Folie 7 müssen dieselben Zahlen zeigen (131 Aktivitäten, 79 automatisiert, 41 Nachrichtenflüsse).
 
-Jedes Sequenzdiagramm als Unterdiagramm seines Use Case anlegen (Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram). Vorlagen in `2_uml/entwurf-plantuml/`.
+## C. Entscheidungen (Gruppentermin 15.10.)
 
-- [ ] SD2 unter UC07 „KVA freigeben / ablehnen“ nach `sequenz-02-kva-freigabe.png`.
-- [ ] SD4 unter UC14 „Auftrag fertigmelden“ nach `sequenz-04-fertigmeldung.png`. Achtung, neue Fassung (E-22): Teile-Disposition über UC09 im ref-Kasten, Schleife „0..2“ für Nacharbeit, danach fertigmelden oder Status ABGELEHNT.
-- [ ] SD5 unter UC16 „Reklamation bearbeiten“ nach `sequenz-05-reklamation.png`.
-- [ ] SD6 unter UC10 „Lieferantenbestellung auslösen“ nach `sequenz-06-nachbestellvorschlag.png`. Achtung, neue Fassung (E-22): Storno nach der zweiten erfolglosen Mahnung.
-- [ ] Im Teamwork Client **Commit** und Kilian Bescheid geben.
-
-### Maximilian: Camunda Modeler (alle zehn BPMN-Dateien plus zwei Korrekturen)
-
-**Zwei Korrekturen, bevor gespeichert wird:**
-
-- [ ] **`1_bpmn/p04-kostenvoranschlag.bpmn`, Beschreibungstext:** Auf eine freie Stelle der Arbeitsfläche außerhalb der Pools klicken. Rechts im Properties Panel unter **Documentation** steht ein Text. Darin
-  `nach der dritten Erinnerung gilt er als abgelehnt.`
-  ersetzen durch
-  `nach dem dritten Fristablauf ohne Antwort gilt er als abgelehnt.`
-  Grund: Das Modell sendet den KVA und höchstens zwei Erinnerungen. Abgelehnt wird nach dem dritten Fristablauf.
-- [ ] **`1_bpmn/p02-auftragsannahme.bpmn`, Datenobjekt:** Das Datenobjekt **„Gerät“** an der Aktivität „Gerät registrieren“ anklicken und den Namen in **„Geraet“** ändern. Grund: Datenobjekte tragen den Klassennamen aus dem Klassendiagramm, und die Klasse heißt `Geraet`. Die Aktivitätsnamen mit „Gerät“ bleiben unverändert.
-
-**Danach für jede der zehn Dateien `p01` bis `p10`:**
-
-- [ ] Datei öffnen (File → Open File… → `1_bpmn/p0X-….bpmn`).
-- [ ] Unten den Reiter **Problems** öffnen. Es dürfen keine Fehler stehen. Falls doch: Screenshot in die WhatsApp-Gruppe, nicht selbst umbauen.
-- [ ] Speichern (Strg+S).
-- [ ] File → **Export as image** → PNG, gleicher Dateiname wie die `.bpmn`-Datei, in `1_bpmn/` überschreiben.
-- [ ] Alles per Branch und Pull Request einreichen.
-
-### Adrian: Entscheidungen bestätigen lassen
-
-Im Gruppentermin am 15.10. abstimmen und das Ergebnis in `5_team/03-entscheidungen.md` unter „Offen“ eintragen (bestätigt oder geändert):
+Ergebnis in `5_team/03-entscheidungen.md` unter „Offen“ eintragen (bestätigt oder geändert):
 
 - [ ] **E-19** (P07/P08): Verwertung des Geräts nach der vierten Abhol-Erinnerung? Inkasso nach der dritten erfolglosen Mahnung? Braucht `AuftragStatus` einen eigenen Wert für verwertete Geräte?
 - [ ] **E-20** (P05/P06): Bestellung nur bei Fehlteilen, Kunde wird vorher vom Service informiert, Warten auf Lieferung mit Timer und Mahnung.
-- [ ] **E-22** (P06/P10/SD4/SD6): Storno nach der **zweiten** erfolglosen Liefermahnung (oder andere Zahl?), Empfang der Ersatzlieferung in P10.
-- [ ] Wenn sich eine Frist ändert: Maximilian und David Bescheid geben (Modell und SD anpassen) und den gelben Hinweis in Abschnitt 5.6 der Doku durch einen Satz mit dem Ergebnis ersetzen.
+- [ ] **E-22** (P06/P10/SD4/SD6): Storno nach der zweiten erfolglosen Liefermahnung (oder andere Zahl?), Empfang der Ersatzlieferung in P10.
+- [ ] **E-23**: Zuständigkeiten für die Fertigstellung (`5_team/02-team-und-rollen.md`).
+- [ ] **E-24**: Use-Case-Diagramm mit einer Rolle je Use Case; Rollennamen in Doku Tabelle 7 durchsehen (passen sie zur Werkstatt?).
+- [ ] Wenn sich eine Frist ändert: BPMN-Modell und betroffenes SD (SD4, SD6) anpassen, Doku 5.6 und `1_bpmn/README.md` nachziehen.
 
-### Alle: eigene Zeile in der Projektdokumentation prüfen
+## D. Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
-- [ ] In `3_doku/Projektdokumentation.docx`, Kapitel 1: die eigene Zeile in Tabelle 1 und in der Beitragsliste prüfen und ergänzen.
+Alle offenen Stellen sind gelb markiert. Kapitel 1 enthält die Zuständigkeiten nach E-23; vor der Abgabe prüft jede Person ihre Zeile und lässt nur stehen, was sie tatsächlich gemacht hat.
 
----
+- [ ] **Sechs Abbildungen einfügen** (gelbe gestrichelte Kästen; Bild einfügen mit der angegebenen Breite, Kasten löschen): Abb. 2 Prozess 01 und Abb. 3 Prozess 04 aus `1_bpmn/p01-sofortdiagnose.png` und `p04-kostenvoranschlag.png` (Modeler-Export), Abb. 4 Use-Case-Diagramm, Abb. 5 Klassendiagramm, Abb. 6 SD1, Abb. 7 SD3 aus den VP-Exporten (Aufgabe A).
+- [ ] **Gelbe Hinweise abarbeiten:** Kapitel 1 (Zeilen geprüft → löschen), 3.1 (VPP und SD als Unterdiagramme fertig → löschen), 3.2 und Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung eintragen, z. B. „Alle zehn Dateien zeigen im Problems-Panel keine Fehler.“), Tabelle 3 Sprint 3 und 4 (Ergebnis vom 15.10. und 22.10.), 5.6 (Ergebnis zu E-19/E-20/E-22 in einem Satz), Kapitel 6 (weitere Herausforderungen ergänzen oder löschen), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen), 7.2 (Entwurf gemeinsam lesen und so umschreiben, dass er die Meinung der Gruppe wiedergibt).
+- [ ] **Abschluss:** Titelseite „Bearbeitungsstand“ auf das aktuelle Datum, mit Strg+F nach „[“ suchen (kein gelber Hinweis darf übrig sein), als PDF speichern (`3_doku/Projektdokumentation.pdf`), im PDF die Seitenzahlen im Inhaltsverzeichnis prüfen (statisches Verzeichnis, verschobene Seiten von Hand anpassen).
 
-## Bis 22.10.2026 (Generalprobe)
+## E. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
 
-### Projektdokumentation fertigstellen (Nina koordiniert, alle liefern zu)
+- [ ] **Folien 12–15: Diagrammbilder** durch die VP-Exporte ersetzen (Folie 12 zeigt bis dahin einen Ausschnitt der Vorlage). Folie 13 Klassendiagramm, 14 SD1, 15 SD3.
+- [ ] **Folien 9 und 10:** Ausschnitte aus P01 und P04 durch Ausschnitte aus dem neuen Modeler-Export ersetzen.
+- [ ] **Eigene Folien vorbereiten.** Zuordnung auf Folie 2 und Folie 20 sowie in den Sprechernotizen (erste Zeile jeder Notiz).
+- [ ] **Generalprobe 22.10.:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten), Fragen üben, insbesondere zur Rollenstruktur im Use-Case-Diagramm und zu den Entwurfsentscheidungen im Klassendiagramm.
+- [ ] **PDF exportieren** nach der Generalprobe (`4_praesentation/Abschlusspraesentation.pdf`). Folie 20 mit der Zuordnung der Vortragenden muss enthalten sein (Pflicht laut Ablauf).
 
-Datei: `3_doku/Projektdokumentation.docx`. Alle offenen Stellen sind gelb markiert.
+## F. Qualitätssicherung
 
-**Sechs Abbildungen einfügen** (gelbe gestrichelte Kästen, Anweisung steht jeweils im Kasten; Bild einfügen, Breite wie angegeben, Kasten löschen):
+- [ ] Jeden Pull Request gegen `5_team/qa-checkliste.md` prüfen, erst dann mergen.
+- [ ] Nach Abschluss von A und B einmal die Konsistenz prüfen: Datenobjekte in BPMN = Klassennamen, Rollen im Use-Case-Diagramm = Tabelle 7 der Doku, SD-Botschaften = Operationen, Statuswerte = `AuftragStatus`.
 
-- [ ] Abb. 2 Prozess 01 und Abb. 3 Prozess 04: Export aus dem Camunda Modeler (**Maximilian**, nach seinen Korrekturen).
-- [ ] Abb. 4 Use-Case-Diagramm, Abb. 5 Klassendiagramm, Abb. 6 SD1, Abb. 7 SD3: in Visual Paradigm File → Export → Active Diagram as Image → PNG (**Kilian**).
-
-**Zehn gelbe Hinweise abarbeiten** (Text ergänzen oder Hinweis löschen):
-
-- [ ] Kapitel 1: alle haben ihre Zeile geprüft (siehe oben) → Hinweis löschen.
-- [ ] 3.1: VPP und die sechs Sequenzdiagramme als Unterdiagramme sind fertig → Hinweis löschen (**Kilian**).
-- [ ] 3.2: Ergebnis der Modeler-Prüfung eintragen, zum Beispiel „Alle zehn Dateien zeigen im Problems-Panel keine Fehler.“ (**Maximilian**).
-- [ ] Tabelle 2, Schritt 4: dasselbe kurz in der Zelle (**Maximilian**).
-- [ ] Tabelle 3, Sprint 3: Ergebnis vom 15.10. eintragen (**Kilian** als Scrum Master).
-- [ ] Tabelle 3, Sprint 4: Ergebnis vom 22.10. eintragen (**Kilian**).
-- [ ] 5.6: Ergebnis der Bestätigung E-19/E-20/E-22 in einem Satz (**Adrian**).
-- [ ] Kapitel 6: weitere Herausforderungen ergänzen oder Hinweis löschen (**alle**, Nina sammelt).
-- [ ] 7.1: Hinweise aus den Coachings am 15.10. und 22.10. mit Umsetzung, sonst Hinweis löschen (**Nina**).
-- [ ] 7.2: Den Entwurf gemeinsam lesen und so umschreiben, dass er eure Meinung wiedergibt (**alle**).
-
-**Zum Schluss:**
-
-- [ ] Titelseite: „Bearbeitungsstand“ auf das aktuelle Datum setzen.
-- [ ] Mit Strg+F nach „[“ suchen: Es darf kein gelber Hinweis mehr übrig sein.
-- [ ] Als PDF speichern (`3_doku/Projektdokumentation.pdf`) und im PDF die Seitenzahlen im Inhaltsverzeichnis prüfen. Das Verzeichnis ist statisch, verschobene Seiten von Hand anpassen.
-
-### Präsentation
-
-Datei: `4_praesentation/Abschlusspraesentation.pptx`.
-
-- [ ] Folien 12–14 (**Kilian**) und 15 (**Jakob**): Die Diagrammbilder durch die Exporte aus Visual Paradigm ersetzen, damit sie zur VPP-Datei passen.
-- [ ] Folien 9 und 10 (**Maximilian**): Die Ausschnitte aus P01 und P04 durch Ausschnitte aus dem neuen Modeler-Export ersetzen.
-- [ ] Generalprobe am 22.10.: komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten), Fragen üben (**alle**).
-- [ ] Danach als PDF exportieren (`4_praesentation/Abschlusspraesentation.pdf`). Folie 20 mit der Zuordnung der Vortragenden muss drin sein.
-
-### Qualitätssicherung (Jakob)
-
-- [ ] Jeden Pull Request gegen `5_team/qa-checkliste.md` prüfen.
-- [ ] Nach allen Änderungen einmal die Kennzahlen in Doku 5.1, `1_bpmn/README.md` und Folie 7 vergleichen (131 Aktivitäten, 79 automatisiert, 41 Nachrichtenflüsse).
-
----
-
-## 27.10.2026: Präsentation
-
-- [ ] 09:00 Uhr, Raum B458, alle tragen ihren Teil vor (Zuordnung auf Folie 20).
-
----
-
-## Bis 13.11.2026: Abgabe (jede Person einzeln)
+## G. Abgabe (bis 13.11.2026, jede Person einzeln)
 
 Anleitung: `0_abgabe/README.md`.
 
-- [ ] Die vier Dateien zusammenstellen und ins Archiv `Fallstudie-WWI25B4-Gruppe1.zip` packen.
+- [ ] Die vier Dateien zusammenstellen (Projekt-PDF, BPMN-ZIP mit umbenannten `.bpmn`-Dateien, VPP, Präsentations-PDF) und als `Fallstudie-WWI25B4-Gruppe1.zip` packen; das fertige Archiv in der WhatsApp-Gruppe bereitstellen.
 - [ ] KI-Angabe aus `0_abgabe/KI-Angabe-Moodle.md` vervollständigen (jede Person ergänzt die Werkzeuge, die sie genutzt hat) und beim Upload angeben.
 - [ ] Jede Person lädt das Archiv selbst in Moodle hoch.

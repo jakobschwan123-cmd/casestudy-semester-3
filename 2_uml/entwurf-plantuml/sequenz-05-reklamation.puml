@@ -8,11 +8,11 @@ skinparam maxMessageSize 160
 hide footbox
 
 actor Kunde
-actor Servicemitarbeiter as SM
+actor Reklamationsbearbeiter as SM
 participant ": Reklamation" as REK
 participant "ursprung : Reparaturauftrag" as RA
 participant ": Rechnung" as RE
-actor Techniker
+actor Diagnostiker as Techniker
 actor Werkstattleiter as WL
 participant "nacharbeit : Reparaturauftrag" as NA
 

@@ -7,13 +7,13 @@ skinparam sequenceMessageAlign left
 skinparam maxMessageSize 160
 hide footbox
 
-actor Disponent
+actor Teiledisponent as Disponent
 participant ": Reparaturauftrag" as RA
 participant ": Kostenvoranschlag" as KVA
 participant "eigen : Lagerbestand" as LB
 participant "andere : Lagerbestand" as AL
 participant ": ErsatzteilReservierung" as RES
-actor Servicemitarbeiter as SM
+actor Serviceannahme as SM
 actor Kunde
 
 Disponent -> KVA : getPositionen()

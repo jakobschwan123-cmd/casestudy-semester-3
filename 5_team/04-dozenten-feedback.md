@@ -2,6 +2,14 @@
 
 Rückmeldungen aus Kickoff und Coaching-Terminen, jeweils mit dem, was daraus folgt. Neueste Einträge oben.
 
+## Coaching 15.10.2026: Use-Case-Diagramm
+
+Notiert von Kilian am 15.10.2026.
+
+**Zu viele Verbindungen im Use-Case-Diagramm.** Angestrebt werden soll, dass ein Akteur mit einem Use Case agiert. Dafür die Akteure zu Mitarbeiter zusammenfassen und Akteure mehrmals darstellen. Ein Organigramm dahinter denken, das die Rollen verteilt; es ist nicht schlimm, wenn ein Mitarbeiter mehrere Rollen hat. Die Rolle im Use-Case-Diagramm angeben: statt Techniker mit fünf Pfeilen fünf Rollen, die je an einem Use Case hängen.
+
+Folgt daraus: Entscheidung E-24. Use-Case-Diagramm mit 15 Mitarbeiterrollen, Kunde und Lieferant mehrfach dargestellt, Zuordnung Rolle → Klasse → Lane in Doku Tabelle 7, Sequenzdiagramme mit Rollennamen. Umgesetzt in `2_uml/`, Doku 3.1/5.3/5.5/5.6/7.1 und Folie 12.
+
 ## Camunda Cloud (vor dem 12.10.2026)
 
 Wir haben mit dem Dozenten abgeklärt, dass wir die im Ablauf genannte Camunda Cloud nicht nutzen und die BPMN-Modelle nur im Git-Repository ablegen. Er meinte, das passt so.

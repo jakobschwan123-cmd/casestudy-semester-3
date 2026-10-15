@@ -7,14 +7,14 @@ skinparam sequenceMessageAlign left
 skinparam maxMessageSize 160
 hide footbox
 
-actor Disponent
+actor "Einkäufer" as Disponent
 participant ": Ersatzteil" as ET
 participant ": Lieferantenbestellung" as BEST
 participant ": Bestellposition" as POS
 participant ": Reparaturauftrag" as RA
 actor Werkstattleiter as WL
 actor Lieferant
-actor Servicemitarbeiter as SM
+actor Serviceannahme as SM
 actor Kunde
 
 note over Disponent, RA : Vorbedingung: Fehlteile aus BPMN 05; offene Nachbestellvorschläge werden mitgebündelt.\nUC12 entsteht bei der Meldebestandsprüfung, nicht erst hier.
@@ -22,7 +22,7 @@ ref over Disponent, RA : Bestellbedarf bündeln (T06_Buendeln)\nKundeninformatio
 loop erster Lieferant oder verfügbarer alternativer Lieferant
     Disponent -> ET : getVorzugslieferant()
     ET --> Disponent : Lieferantenvorschlag
-    note over Disponent, Lieferant : Disponent wählt Lieferanten; nach Storno einen alternativen.
+    note over Disponent, Lieferant : Einkäufer wählt Lieferanten; nach Storno einen alternativen.
     Disponent -> Disponent : loeseBestellungAus(lieferant)
     Disponent -> BEST : <<create>> (status = OFFEN)
     loop je gebündelter Bestellposition

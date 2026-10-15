@@ -1,6 +1,6 @@
 # RepairFlow – Fallstudie Systemanalyse (WWI25B4, Gruppe 1)
 
-RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätten eine SaaS-Plattform mit KI-Sofortdiagnose anbietet. Pilotkunde ist die fiktive FixWerk GmbH. Stand: 12.10.2026.
+RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätten eine SaaS-Plattform mit KI-Sofortdiagnose anbietet. Pilotkunde ist die fiktive FixWerk GmbH. Stand: 15.10.2026.
 
 **Was jetzt zu tun ist, steht in [`TODO.md`](TODO.md).**
 
