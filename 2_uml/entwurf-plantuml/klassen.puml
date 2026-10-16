@@ -38,6 +38,8 @@ class Techniker {
   + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
   + pruefeMangel(r : Reklamation) : boolean
   + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
+  + erstelleKva(a : Reparaturauftrag) : Kostenvoranschlag
+  + fuehreEndkontrolleDurch(a : Reparaturauftrag) : boolean
 }
 class Servicemitarbeiter {
   + nimmGeraetAn(k : Kunde, g : Geraet) : Reparaturauftrag
@@ -50,6 +52,8 @@ class Disponent {
   + reserviereTeil(e : Ersatzteil, menge : int) : ErsatzteilReservierung
   + loeseBestellungAus(l : Lieferant) : Lieferantenbestellung
   + bucheWareneingang(b : Lieferantenbestellung) : void
+  + pruefeMeldebestand(l : Lagerbestand) : Lieferantenbestellung
+  + wickleRetoureAb(b : Lieferantenbestellung, grund : String) : void
 }
 class Werkstattleiter {
   + weiseTechnikerZu(a : Reparaturauftrag, t : Techniker) : void
@@ -106,6 +110,7 @@ class Medienanhang {
 }
 class KIDiagnosevorschlag {
   - vorschlagsnummer : String
+  - vermuteterGeraetetyp : GeraeteTyp
   - wahrscheinlicheUrsache : String
   - konfidenz : double
   - geschaetzterAufwandMin : int
@@ -222,6 +227,8 @@ class Lieferantenbestellung {
   - liefertermin : Date
   - status : BestellStatus
   - retourengrund : String
+  - anzahlMahnungen : int
+  - anzahlErsatzlieferungen : int
   --
   + addPosition(teil : Ersatzteil, menge : int) : void
   + uebermittle() : void
@@ -231,6 +238,7 @@ class Lieferantenbestellung {
   + storniere() : void
   + bestaetige(liefertermin : Date) : void
   + meldeRetoure(grund : String) : void
+  + mahne() : void
 }
 class Bestellposition {
   - menge : int
@@ -243,8 +251,11 @@ class Rechnung {
   - rechnungsdatum : Date
   - bruttobetrag : double
   - zahlungStatus : ZahlungStatus
+  - mahnungen : int
   --
   + berechneBetrag() : double
+  + addLagergebuehr(betrag : double) : void
+  + mahne() : void
   + erfasseZahlung(art : String) : void
   + getRechnungsdatum() : Date
 }
@@ -323,7 +334,7 @@ Kunde "1" -down- "0..*" Voranmeldung : stellt >
 Kunde "1" -down- "0..*" Reparaturauftrag : beauftragt >
 Voranmeldung "1" *-down- "1..*" Medienanhang : enthält >
 Voranmeldung "1" *-down- "0..1" KIDiagnosevorschlag : führt zu >
-Voranmeldung "0..*" -- "1" Filiale : vorgeschlagene Filiale >
+Voranmeldung "0..*" -- "0..1" Filiale : vorgeschlagene Filiale >
 Voranmeldung "0..1" -- "0..1" Reparaturauftrag : wird übernommen in >
 KIDiagnosevorschlag "0..1" -- "0..1" Kostenvoranschlag : erzeugt vorläufigen >
 KIDiagnosevorschlag "0..*" -- "0..*" Ersatzteil : schlägt vor >
@@ -345,7 +356,7 @@ Lagerbestand "0..*" -- "1" Filiale : liegt in >
 ErsatzteilReservierung "0..*" -- "1" Lagerbestand : reserviert auf >
 ErsatzteilReservierung "0..*" -- "0..1" Reparaturauftrag : für >
 ErsatzteilReservierung "0..*" -- "0..1" Voranmeldung : vorreserviert für >
-Lieferant "1" -down- "0..*" Lieferantenbestellung : erhält >
+Lieferant "0..1" -down- "0..*" Lieferantenbestellung : erhält >
 Lieferantenbestellung "1" *-down- "1..*" Bestellposition : besteht aus >
 Bestellposition "0..*" -- "1" Ersatzteil : betrifft >
 Lieferantenbestellung "0..*" -- "1" Filiale : bestellt von >

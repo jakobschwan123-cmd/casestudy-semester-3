@@ -122,6 +122,14 @@
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_77" name="dauer" direction="in" type="type_int"/>
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_78" name="return" direction="return" type="class_Arbeitszeitbuchung"/>
         </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9001" name="erstelleKva" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9002" name="a" direction="in" type="class_Reparaturauftrag"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9003" name="return" direction="return" type="class_Kostenvoranschlag"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9004" name="fuehreEndkontrolleDurch" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9005" name="a" direction="in" type="class_Reparaturauftrag"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9006" name="return" direction="return" type="type_boolean"/>
+        </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="class_Servicemitarbeiter" name="Servicemitarbeiter">
         <generalization xmi:type="uml:Generalization" xmi:id="gen_79" general="class_Mitarbeiter"/>
@@ -160,6 +168,14 @@
         </ownedOperation>
         <ownedOperation xmi:type="uml:Operation" xmi:id="op_104" name="bucheWareneingang" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_105" name="b" direction="in" type="class_Lieferantenbestellung"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9007" name="pruefeMeldebestand" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9008" name="l" direction="in" type="class_Lagerbestand"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9009" name="return" direction="return" type="class_Lieferantenbestellung"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9010" name="wickleRetoureAb" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9011" name="b" direction="in" type="class_Lieferantenbestellung"/>
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9012" name="grund" direction="in" type="type_String"/>
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="class_Werkstattleiter" name="Werkstattleiter">
@@ -268,6 +284,7 @@
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_176" name="konfidenz" visibility="private" type="type_double"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_177" name="geschaetzterAufwandMin" visibility="private" type="type_int"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_178" name="bestaetigt" visibility="private" type="type_boolean"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="attr_9016" name="vermuteterGeraetetyp" visibility="private" type="enum_GeraeteTyp"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="op_179" name="auswerten" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_180" name="medien" direction="in" type="class_Medienanhang">
             <lowerValue xmi:type="uml:LiteralInteger" xmi:id="lv_181" value="0"/>
@@ -443,6 +460,8 @@
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_290" name="liefertermin" visibility="private" type="type_Date"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_291" name="status" visibility="private" type="enum_BestellStatus"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_292" name="retourengrund" visibility="private" type="type_String"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="attr_9013" name="anzahlMahnungen" visibility="private" type="type_int"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="attr_9014" name="anzahlErsatzlieferungen" visibility="private" type="type_int"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="op_293" name="addPosition" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_294" name="teil" direction="in" type="class_Ersatzteil"/>
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_295" name="menge" direction="in" type="type_int"/>
@@ -464,6 +483,8 @@
         <ownedOperation xmi:type="uml:Operation" xmi:id="op_304" name="meldeRetoure" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_305" name="grund" direction="in" type="type_String"/>
         </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9015" name="mahne" visibility="public">
+        </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="class_Bestellposition" name="Bestellposition">
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_306" name="menge" visibility="private" type="type_int"/>
@@ -477,6 +498,7 @@
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_311" name="rechnungsdatum" visibility="private" type="type_Date"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_312" name="bruttobetrag" visibility="private" type="type_double"/>
         <ownedAttribute xmi:type="uml:Property" xmi:id="attr_313" name="zahlungStatus" visibility="private" type="enum_ZahlungStatus"/>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="attr_9017" name="mahnungen" visibility="private" type="type_int"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="op_314" name="berechneBetrag" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_315" name="return" direction="return" type="type_double"/>
         </ownedOperation>
@@ -485,6 +507,11 @@
         </ownedOperation>
         <ownedOperation xmi:type="uml:Operation" xmi:id="op_318" name="getRechnungsdatum" visibility="public">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="par_319" name="return" direction="return" type="type_Date"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9018" name="addLagergebuehr" visibility="public">
+          <ownedParameter xmi:type="uml:Parameter" xmi:id="par_9019" name="betrag" direction="in" type="type_double"/>
+        </ownedOperation>
+        <ownedOperation xmi:type="uml:Operation" xmi:id="op_9020" name="mahne" visibility="public">
         </ownedOperation>
       </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="class_Reklamation" name="Reklamation">
@@ -581,7 +608,7 @@
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="uv_385" value="*"/>
         </ownedEnd>
         <ownedEnd xmi:type="uml:Property" xmi:id="end_383" name="filiale" type="class_Filiale" association="assoc_381" aggregation="none">
-          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="lv_386" value="1"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="lv_386" value="0"/>
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="uv_387" value="1"/>
         </ownedEnd>
       </packagedElement>
@@ -797,7 +824,7 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="assoc_535" name="erhält" memberEnd="end_536 end_537">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_536" name="lieferant" type="class_Lieferant" association="assoc_535" aggregation="none">
-          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="lv_538" value="1"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="lv_538" value="0"/>
           <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="uv_539" value="1"/>
         </ownedEnd>
         <ownedEnd xmi:type="uml:Property" xmi:id="end_537" name="lieferantenbestellung" type="class_Lieferantenbestellung" association="assoc_535" aggregation="none">
@@ -914,9 +941,6 @@
       </packagedElement>
       <packagedElement xmi:type="uml:Actor" xmi:id="actor_Betriebsadministrator" name="Betriebsadministrator">
         <ownedComment xmi:type="uml:Comment" xmi:id="cmt_867" body="Mitarbeiterrolle (Werkstattinhaber): verwaltet Werkstattbetrieb, Filialen und Nutzer"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Actor" xmi:id="actor_Lieferant" name="Lieferant">
-        <ownedComment xmi:type="uml:Comment" xmi:id="cmt_871" body="sekundär, extern: empfängt Bestellungen, liefert, nimmt Retouren an; im Diagramm dreimal dargestellt"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Actor" xmi:id="actor_KIDienst" name="KI-Diagnosedienst">
         <ownedComment xmi:type="uml:Comment" xmi:id="cmt_881" body="sekundär, extern (System): wertet Foto, Video und Ton aus"/>
@@ -1070,18 +1094,6 @@
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_868" memberEnd="end_869 end_870">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_869" type="actor_Betriebsadministrator" association="aassoc_868"/>
         <ownedEnd xmi:type="uml:Property" xmi:id="end_870" type="uc_UC18" association="aassoc_868"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="aassoc_872" memberEnd="end_873 end_874">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_873" type="actor_Lieferant" association="aassoc_872"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_874" type="uc_UC10" association="aassoc_872"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="aassoc_875" memberEnd="end_876 end_877">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_876" type="actor_Lieferant" association="aassoc_875"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_877" type="uc_UC11" association="aassoc_875"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Association" xmi:id="aassoc_878" memberEnd="end_879 end_880">
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_879" type="actor_Lieferant" association="aassoc_878"/>
-        <ownedEnd xmi:type="uml:Property" xmi:id="end_880" type="uc_UC19" association="aassoc_878"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="aassoc_882" memberEnd="end_883 end_884">
         <ownedEnd xmi:type="uml:Property" xmi:id="end_883" type="actor_KIDienst" association="aassoc_882"/>

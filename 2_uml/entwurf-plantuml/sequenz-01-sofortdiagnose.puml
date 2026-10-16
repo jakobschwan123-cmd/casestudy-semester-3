@@ -1,11 +1,26 @@
 @startuml
-' BPMN: p01-sofortdiagnose.bpmn
-' BPMN-Nodes: T01_Voranmeldung T01_Medien GW01_Auswertbar T01_Rueckfrage E01_Neu E01_Timer1 T01_KI T01_VorabKVA T01_Verfuegbarkeit T01_Termin T01_Senden E01_Bestaetigt E01_Abgelehnt E01_Timer T01_Verwerfen T01_Markieren T01_Reservieren T01_Bestaetigung
-title sqd : UC01 Sofortdiagnose anfordern (BPMN 01)
+' BPMN: p01-sofortdiagnose.bpmn. Kernablauf; Rückfragen, Timer und Terminsuche nur als Fragment bzw. in UC17.
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC01 Sofortdiagnose anfordern]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
-skinparam maxMessageSize 160
+skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
 actor Kunde
 participant ": Voranmeldung" as VA
@@ -13,68 +28,36 @@ participant ": Medienanhang" as MA
 participant ": KIDiagnosevorschlag" as KI
 participant ": Kostenvoranschlag" as KVA
 participant ": Lagerbestand" as LB
-participant ": ErsatzteilReservierung" as RES
-participant ": Filiale" as FIL
 actor "KI-Diagnosedienst" as KIDienst
 
-Kunde -> VA : <<create>> erstellen(medien, symptome)
-activate VA
+create VA
+Kunde -->> VA : erstellen(medien, symptome)
 loop je Medienanhang
     VA -> MA : analysieren()
     MA --> VA : auswertbar
 end
-loop solange Medien nicht auswertbar
-    VA -> VA : bessereAufnahmeAnfordern()
+opt Medien nicht auswertbar
     VA -> Kunde : Rückfrage: bessere Aufnahme senden
-    alt neue Aufnahme innerhalb 7 Tagen erhalten
-        Kunde -> VA : speichereMedien(medien)
-        loop je nachgereichtem Medienanhang
-            VA -> MA : analysieren()
-            MA --> VA : auswertbar
-        end
-    else 7 Tage ohne neue Aufnahme
+    Kunde -> VA : speichereMedien(medien)
+    break 7 Tage ohne neue Aufnahme
         VA -> VA : verwerfen()
-        break Voranmeldung verworfen (E01_Timer1)
-            note over VA : Keine KI-Auswertung und keine Reservierung
-        end
     end
 end
-VA -> KI : <<create>>
-VA -> KI : auswerten(medien)
-KI -> KIDienst : auswertbare Medien und Symptome
+create KI
+VA -->> KI : auswerten(medien)
+KI -> KIDienst : Medien und Symptome
 KIDienst --> KI : Diagnosevorschlag
 VA -> KI : erzeugeVorabKva()
-KI -> KVA : <<create>> (status = VORLAEUFIG)
-loop je Arbeits- oder Ersatzteilposition
-    KI -> KVA : addPosition(p)
-end
-KI -> KVA : berechneSumme()
-KVA --> KI : summe
-KI --> VA : Kostenvoranschlag [vorläufig]
-VA -> KI : getBenoetigteTeile()
-KI --> VA : List<Ersatzteil>
-loop je benötigtem Ersatzteil und je Filiale
+create KVA
+KI -->> KVA : berechneSumme()
+loop je benötigtem Ersatzteil und Filiale
     VA -> LB : pruefeVerfuegbarkeit(anzahl)
-    LB --> VA : verfuegbar
 end
-loop je möglicher Filiale
-    VA -> FIL : getAuslastung(von, bis)
-    FIL --> VA : auslastung
-    VA -> FIL : getFreieTermine(ab)
-    FIL --> VA : List<Date>
-end
-VA -> Kunde : Diagnosevorschlag, Vorab-KVA, Filiale und Termin
+VA -> Kunde : Diagnosevorschlag, Vorab-KVA, Termin
 alt Kunde bestätigt innerhalb 7 Tagen (UC02)
     Kunde -> VA : bestaetigen()
-    loop je verfügbarem Ersatzteil
-        VA -> RES : <<create>> vorreserviere()
-        RES -> LB : reserviere(anzahl)
-    end
-    VA -> Kunde : Bestätigung der Voranmeldung
-else Kunde lehnt Termin ab
-    Kunde -> VA : verwerfen()
-else 7 Tage ohne Entscheidung
+    VA -> LB : reserviere(anzahl)
+else Ablehnung oder 7 Tage ohne Antwort
     VA -> VA : verwerfen()
 end
-deactivate VA
 @enduml

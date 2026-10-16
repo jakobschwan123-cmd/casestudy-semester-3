@@ -1,60 +1,61 @@
 @startuml
-' BPMN: p05-ersatzteilreservierung.bpmn
-' BPMN-Nodes: T05_Teileliste Sub_05 S05_Eigen GW05_Eigen S05_Reservieren S05_Andere GW05_Andere S05_ResAndere S05_Umlagerung S05_Fehlteil T05_Bestaetigen T05_Meldebestand GW05_Meldebestand T05_Nachbestellung T05_Beginn T05_Info GW05_Fehlteile T05_Bestellen
-title sqd : UC09 Ersatzteile disponieren und reservieren (BPMN 05)
+' BPMN: p05-ersatzteilreservierung.bpmn. Kernablauf: je Teil eigener Bestand, andere Filiale oder Fehlteil; Vorreservierung aus UC01 (E-26).
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC09 Ersatzteile disponieren und reservieren]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
-skinparam maxMessageSize 160
+skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
-actor Teiledisponent as Disponent
-participant ": Reparaturauftrag" as RA
+actor Teiledisponent as D
 participant ": Kostenvoranschlag" as KVA
+participant ": Reparaturauftrag" as RA
 participant "eigen : Lagerbestand" as LB
 participant "andere : Lagerbestand" as AL
 participant ": ErsatzteilReservierung" as RES
-actor Serviceannahme as SM
 actor Kunde
 
-Disponent -> KVA : getPositionen()
-KVA --> Disponent : List<KvaPosition>
-par je benötigtem Ersatzteil (parallele Mehrfachinstanz Sub_05)
-    Disponent -> LB : pruefeVerfuegbarkeit(anzahl)
-    LB --> Disponent : verfuegbar
+D -> KVA : getPositionen()
+KVA --> D : List<KvaPosition>
+opt Vorreservierung aus der Sofortdiagnose vorhanden
+    D -> RES : reserviere()
+end
+loop je noch offenem Ersatzteil
+    D -> LB : pruefeVerfuegbarkeit(anzahl)
+    LB --> D : verfuegbar
     alt eigener Bestand ausreichend
-        Disponent -> RES : <<create>> reserviere()
+        D -> RES : reserviere()
         RES -> LB : reserviere(anzahl)
-    else eigener Bestand nicht ausreichend
-        loop je anderer Filiale bis Bestand gefunden
-            Disponent -> AL : pruefeVerfuegbarkeit(anzahl)
-            AL --> Disponent : verfuegbar
-        end
-        alt in anderer Filiale verfügbar
-            Disponent -> RES : <<create>> reserviere()
-            RES -> AL : reserviere(anzahl)
-            note over Disponent, AL : Umlagerung anfordern (S05_Umlagerung)
-        else nirgends verfügbar
-            Disponent -> RA : markiereFehlteil(teil, menge)
-            note right of RA : Noch keine Bestellung innerhalb der Teileprüfung
-        end
+    else andere Filiale hat Bestand (Umlagerung)
+        D -> AL : pruefeVerfuegbarkeit(anzahl)
+        D -> RES : reserviere()
+        RES -> AL : reserviere(anzahl)
+    else nirgends verfügbar
+        D -> RA : markiereFehlteil(teil, menge)
     end
 end
-Disponent -> RA : bestaetigeReservierungen()
-loop je betroffenem Lagerbestand nach Abschluss der Teileprüfung
-    Disponent -> LB : istMeldebestandUnterschritten()
-    LB --> Disponent : true / false
-    opt Meldebestand unterschritten (UC12)
-        Disponent -> LB : erzeugeNachbestellvorschlag()
-        LB --> Disponent : Lieferantenbestellung [Vorschlag]
-    end
+D -> RA : bestaetigeReservierungen()
+opt Meldebestand unterschritten (UC12)
+    D -> LB : erzeugeNachbestellvorschlag()
 end
-SM -> RA : ermittleReparaturbeginn()
-RA --> SM : voraussichtlicher Reparaturbeginn
-SM -> RA : benachrichtigeKunde("voraussichtlicher Reparaturbeginn")
+D -> RA : benachrichtigeKunde("voraussichtlicher Reparaturbeginn")
 RA -> Kunde : voraussichtlicher Reparaturbeginn
 opt Fehlteile vorhanden
-    ref over Disponent, RA : BPMN 06 / UC10 Lieferantenbestellung auslösen\nErst nach der Kundeninformation (T05_Info -> GW05_Fehlteile)
+    ref over D, RA : UC10 Lieferantenbestellung auslösen (BPMN 06)
 end
-note over Disponent, LB : Ein Nachbestellvorschlag allein löst keine Bestellung aus;\ner bleibt im Status VORSCHLAG und wird in BPMN 06 mitgebündelt.
-note over Disponent, RA : Reservierung verändert nur den reservierten Bestand.\nStatus TEILE_BESTELLT erst nach bestätigter Bestellung in BPMN 06.
 @enduml

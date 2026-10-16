@@ -1,37 +1,46 @@
 @startuml
-' BPMN: p07-reparaturdurchfuehrung.bpmn
-' BPMN-Nodes: T07_Status T07_Start T07_Doku GW07_Weitere T07_Nachtrag T07_NachtragSenden E07_Entscheidung E07_Timer GW07_Nachtrag T07_Teile T07_Endkontrolle GW07_Qualitaet GW07_Grenze T07_Nacharbeit T07_Abbruch T07_Fertig
-title sqd : UC14 Auftrag fertigmelden (BPMN 07)
+' BPMN: p07-reparaturdurchfuehrung.bpmn. Kernablauf: Endkontrolle, höchstens zwei Nacharbeiten (E-22), fertigmelden oder abbrechen.
+' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
+mainframe sd [sqd: UC14 Auftrag fertigmelden]
 skinparam defaultFontName Arial
 skinparam sequenceMessageAlign left
-skinparam maxMessageSize 160
+skinparam maxMessageSize 170
+skinparam shadowing false
+skinparam sequence {
+  ParticipantBackgroundColor #9FD6F2
+  ParticipantBorderColor #2E6E99
+  ParticipantFontSize 12
+  ActorBackgroundColor white
+  ActorBorderColor black
+  LifeLineBorderColor #444444
+  LifeLineBackgroundColor #9FD6F2
+  GroupBorderColor #333333
+  GroupBackgroundColor white
+  GroupHeaderFontStyle bold
+  ArrowColor black
+}
 hide footbox
+autonumber "0:"
 
-actor Endkontrolleur as Techniker
+actor Endkontrolleur as E
 participant ": Reparaturauftrag" as RA
-participant ": Reparaturschritt" as RS
 
-note over Techniker, RA : Vorbedingung: Status IN_REPARATUR;\nReparaturschritte und Arbeitszeiten werden in UC13 erfasst.
-ref over Techniker, RA, RS : UC13 Reparaturschritte und Arbeitszeit erfassen\nZusatzbefund: Nachtrags-KVA; Freigabe -> Ersatzteile über UC09 disponieren\n(BPMN 05, T07_Teile), danach weitere Schritte;\nAblehnung oder 3-Tage-Timer -> Endkontrolle (BPMN 07)
-Techniker -> RA : alleSchritteAbgeschlossen()
-RA --> Techniker : true / false
-alt Reparaturschritte noch offen
-    ref over Techniker, RA, RS : UC13 Offene Schritte bearbeiten\nNoch keine Fertigmeldung
-else alle Reparaturschritte abgeschlossen
-    note over Techniker, RA : Endkontrolle durchführen und Prüfprotokoll erfassen
-    Techniker -> RA : erfasseEndkontrolle(bestanden)
-    loop 0..2: Qualität nicht in Ordnung (GW07_Qualitaet, GW07_Grenze)
-        ref over Techniker, RA, RS : Nacharbeit durchführen (T07_Nacharbeit)
-        Techniker -> RA : erfasseEndkontrolle(bestanden)
-    end
-    alt Qualität in Ordnung
-        Techniker -> RA : fertigmelden()
-        RA -> RA : wechsleStatus(FERTIG)
-        RA --> Techniker : fertiggemeldet
-    else auch nach der zweiten Nacharbeit nicht in Ordnung (T07_Abbruch)
-        RA -> RA : wechsleStatus(ABGELEHNT)
-        RA --> Techniker : Auftrag abgebrochen
-    end
+note over E, RA : Vorbedingung: Status IN_REPARATUR; Schritte und Arbeitszeit aus UC13
+E -> RA : alleSchritteAbgeschlossen()
+RA --> E : true / false
+opt Reparaturschritte noch offen
+    ref over E, RA : UC13 Reparaturschritt und Arbeitszeit erfassen
 end
-note over Techniker, RA : Abholbenachrichtigung, Rückgabe und Rechnung folgen in BPMN 08 / UC15.\nUC14 versendet keine Kundennachricht und legt keine Rechnung an.
+E -> RA : erfasseEndkontrolle(bestanden)
+loop 0..2: Qualität nicht in Ordnung
+    ref over E, RA : Nacharbeit durchführen (BPMN 07)
+    E -> RA : erfasseEndkontrolle(bestanden)
+end
+alt Qualität in Ordnung
+    E -> RA : fertigmelden()
+    RA -> RA : wechsleStatus(FERTIG)
+else auch nach der zweiten Nacharbeit nicht in Ordnung
+    RA -> RA : wechsleStatus(ABGELEHNT)
+end
+note over E, RA : Abholbenachrichtigung und Rechnung folgen in UC15 (BPMN 08)
 @enduml
