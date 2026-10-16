@@ -1,5 +1,6 @@
 @startuml
 ' BPMN: p06-ersatzteilbestellung.bpmn. Kernablauf: bündeln, freigeben, bestellen, bestätigen oder stornieren, höchstens zwei Mahnungen (E-22, E-27).
+' Lieferant ist Black Box ohne Systemzugang (E-24): kein Akteur, Nachrichten an ihn gehen über Gates am Rahmen.
 ' Darstellung wie in Visual Paradigm: Objekterzeugung als gestrichelter Pfeil auf den Kopfkasten (Kasten sitzt auf Nachrichtenhöhe, VL 6 Folie 5-70), kein <<create>>-Text.
 mainframe sd [sqd: UC10 Lieferantenbestellung auslösen]
 skinparam defaultFontName Arial
@@ -27,7 +28,6 @@ participant ": Ersatzteil" as ET
 participant ": Lieferantenbestellung" as BEST
 participant ": Reparaturauftrag" as RA
 participant ": Werkstattleiter" as WL
-actor Lieferant
 
 E -> ET : getVorzugslieferant()
 ET --> E : Lieferant
@@ -42,18 +42,19 @@ opt Bestellwert über Freigabegrenze
     WL -> BEST : freigeben()
 end
 E -> BEST : uebermittle()
-BEST -> Lieferant : Bestellung
-Lieferant --> BEST : Auftragsbestätigung
+BEST ->] : Bestellung (an Lieferant)
+BEST <--] : Auftragsbestätigung (vom Lieferanten)
 alt bestätigt und lieferbar
     E -> BEST : bestaetige(liefertermin)
     E -> RA : wechsleStatus(TEILE_BESTELLT)
     loop bis Lieferung, höchstens zwei Mahnungen je 14 Tage
-        BEST -> Lieferant : Mahnung
+        E -> BEST : mahne()
+        BEST ->] : Mahnung (an Lieferant)
     end
-    ref over E, BEST, Lieferant : UC11 Wareneingang buchen; bei Mangel UC19 Retoure abwickeln (BPMN 10)
+    ref over E, BEST : UC11 Wareneingang buchen; bei Mangel UC19 Retoure abwickeln (BPMN 10)
 else nicht lieferbar, keine Bestätigung oder zweite Mahnung ohne Lieferung
     E -> BEST : storniere()
-    BEST -> Lieferant : Stornierung
+    BEST ->] : Stornierung (an Lieferant)
     note over E, BEST : alternativer Lieferant oder Abschluss ohne Lieferung
 end
 @enduml
