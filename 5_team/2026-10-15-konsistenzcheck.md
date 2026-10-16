@@ -1,6 +1,6 @@
 # Konsistenzcheck 15.10.2026 (Stand main `fd0f5dc`)
 
-Geprüft von Kilian mit KI-Unterstützung: `3_doku/Projektdokumentation.docx` (Stand Nina, 15.10.) gegen die zehn BPMN-Dateien (Stand E-27), das UML-Modell (`2_uml/`, Stand E-28), die Präsentation (E-25) und den Ablauf der Fallstudie. Zahlen sind aus den Dateien gezählt, nicht abgeschrieben.
+Geprüft von Kilian: `3_doku/Projektdokumentation.docx` (Stand Nina, 15.10.) gegen die zehn BPMN-Dateien (Stand E-27), das UML-Modell (`2_uml/`, Stand E-28), die Präsentation (E-25) und den Ablauf der Fallstudie. Zahlen sind aus den Dateien gezählt, nicht abgeschrieben.
 
 ## Was passt
 

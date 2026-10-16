@@ -17,7 +17,7 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## E-29 Klassendiagramm: Operationen je Rolle, Mahnungen, Gerätetyp (16.10.2026)
 
-Vorschlag von Kilian (Prüfung des Klassendiagramms gegen Tabelle 7, BPMN und Doku mit KI-Unterstützung), Bestätigung durch die Gruppe offen. Änderungsbild: `2_uml/entwurf-plantuml/klassen-aenderungen-2026-10-16.png` (rot = neu).
+Vorschlag von Kilian (Prüfung des Klassendiagramms gegen Tabelle 7, BPMN und Doku), Bestätigung durch die Gruppe offen. Änderungsbild: `2_uml/entwurf-plantuml/klassen-aenderungen-2026-10-16.png` (rot = neu).
 
 - **Warum:** Doku 5.4 sagt, die Unterklassen von Mitarbeiter „tragen die Operationen dieser Rollen“ (Tabelle 7). Vier der 15 Rollen hatten keine Operation in ihrer Klasse: Kalkulator (UC06) und Endkontrolleur (UC14) bei Techniker, Bestandsplaner (UC12) und Retourenbearbeiter (UC19) bei Disponent. Prozess 06 (E-27) zählt Mahnungen und Ersatzlieferungen, Prozess 08 mahnt Rechnungen und bucht Lagergebühren – das Klassenmodell kannte dafür weder Attribut noch Operation, obwohl der KVA für dieselbe Logik `erinnerungen`/`protokolliereErinnerung()` hat. Doku 2.5 und Folie 7 sagen, der KI-Dienst schlägt den Gerätetyp vor; KIDiagnosevorschlag hatte kein Feld dafür.
 - **Neu:** Techniker `erstelleKva(a)`, `fuehreEndkontrolleDurch(a)`; Disponent `pruefeMeldebestand(l)`, `wickleRetoureAb(b, grund)`; Lieferantenbestellung `anzahlMahnungen`, `anzahlErsatzlieferungen`, `mahne()`; Rechnung `mahnungen`, `addLagergebuehr(betrag)`, `mahne()`; KIDiagnosevorschlag `vermuteterGeraetetyp : GeraeteTyp`.
@@ -28,7 +28,7 @@ Vorschlag von Kilian (Prüfung des Klassendiagramms gegen Tabelle 7, BPMN und Do
 
 ## E-28 Sequenzdiagramme auf den Kernablauf gekürzt (15.10.2026)
 
-Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+Vorschlag von Kilian, Bestätigung durch die Gruppe offen.
 
 - **Warum:** Die bisherigen Vorlagen hatten bis zu 35 Botschaften und 10 Fragmente je Diagramm und wiederholten die Ausnahmen aus den Prozessmodellen. Die Beispiele der Vorlesung (VL 5-71, 5-89 bis 5-91) kommen mit wenigen Lebenslinien und unter zehn Botschaften aus. Gefordert ist je Use Case ein Sequenzdiagramm, kein Umfang.
 - **Neu:** Je Diagramm 2 bis 7 Lebenslinien, 7 bis 16 Botschaften, höchstens fünf Fragmente. Erste Lebenslinie ist die Rolle des Use Case, Botschaften an Objekte bleiben Operationen des Klassendiagramms, Ausnahmen und Folgeprozesse stehen als ref. Fachliche Festlegungen bleiben: SD4 loop 0..2 und Abbruch (E-22), SD3 Vorreservierung aus der Sofortdiagnose (E-26), SD6 höchstens zwei Mahnungen, Storno an den Lieferanten (E-27).
@@ -40,7 +40,7 @@ Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die
 
 ## E-27 Überarbeitung von Prozess 06 (15.10.2026)
 
-Adrian (PO, Upload mit bpmn-js) und Jakob (QA, mit KI-Unterstützung). Bestätigung durch die Gruppe offen.
+Adrian (PO, Upload mit bpmn-js) und Jakob (QA). Bestätigung durch die Gruppe offen.
 
 - **Adrian:** „Bestellung stornieren“ sendet die Stornierung an den Lieferanten. Der Timer „Lieferfrist überschritten“ wartet zuerst bis zum Liefertermin, nach jeder Mahnung 14 Tage (`nachfrist`). `anzahlMahnungen` wird beim Anlegen der Bestellung auf 0 gesetzt und bei jeder Mahnung erhöht. Neues Gateway „Ersatzlieferung mangelfrei?“. Ohne Teile endet P06 über „Fehlteil als nicht beschaffbar markieren“ (`teileVollstaendig = false`). PO-Entscheidung: Ist ein Teil nicht beschaffbar, wird der Auftrag abgelehnt und das Gerät über P08 zurückgegeben.
 - **Jakob, Logikfehler 1:** Eine mangelhafte Ersatzlieferung ging ohne Grenze erneut in „10 Retoure abwickeln“. Jetzt zählt „Ersatzlieferung prüfen“ `anzahlErsatzlieferungen` hoch (Start 0 beim Anlegen der Bestellung); das neue Gateway „Zweite Ersatzlieferung mangelhaft?“ führt bei ja zu „Teil weiterhin benötigt?“ (neuer Lieferant oder nicht beschaffbar), bei nein in die zweite Retoure.
@@ -50,7 +50,7 @@ Adrian (PO, Upload mit bpmn-js) und Jakob (QA, mit KI-Unterstützung). Bestätig
 
 ## E-26 Fehleranalyse und Korrekturen P01–P05 (15.10.2026)
 
-Vorschlag von Jakob (Analyse und Umsetzung mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+Vorschlag von Jakob, Bestätigung durch die Gruppe offen.
 
 - **P03:** Neues Gateway „KI-Vorschlag vorhanden?“ vor „KI-Diagnosevorschlag sichten“, weil Aufträge ohne Voranmeldung (P02, Zweig „nein“) keinen KI-Vorschlag haben. Nach „Erweiterte Prüfung durchführen“ fragt „Fehler gefunden?“; bei „nein“ geht es wie bei Unwirtschaftlichkeit zur Reparaturabsage (die Nachricht nennt „kein Befund“ schon bisher).
 - **P04:** Gateway heißt „Dritte Frist verstrichen?“ statt „Dritte Erinnerung ohne Antwort?“ (KVA plus höchstens zwei Erinnerungen, abgelehnt nach dem dritten Fristablauf), Documentation entsprechend. Bei Freigabe und Ablehnung entsteht zusätzlich „Kostenvoranschlag [freigegeben]“ bzw. „[abgelehnt]“, weil P05 den freigegebenen KVA als Eingabe liest. Datenobjekt „KvaPosition“ statt „Kva-Position“.
@@ -62,7 +62,7 @@ Vorschlag von Jakob (Analyse und Umsetzung mit KI-Unterstützung), Bestätigung 
 
 ## E-25 Präsentation als Pitch und Zusammenfassung (15.10.2026)
 
-Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+Vorschlag von Kilian, Bestätigung durch die Gruppe offen.
 
 - **Aufbau:** 17 Folien plus Anhang. Teil 1 ist der Pitch (Problem, Lösung, Nutzen, Auftragsreise, KI-Sofortdiagnose), Teil 2 die Zusammenfassung der Ergebnisse (Kennzahlen, Prozesse, Rollen und Use Cases, Datenmodell, Vorgehen, Qualität, Herausforderungen), zum Schluss Geschäftsmodell, Ausblick und Fazit.
 - **Keine Diagrammbilder:** Die Diagramme liegen in der Projektdokumentation und im Abgabepaket (BPMN-ZIP, VPP). In den Folien stehen Ergebnisse als Zahlen, Rollen, Entwurfsentscheidungen und Prozess-Highlights. Damit entfallen die Bildaufgaben für die Folien.
@@ -71,7 +71,7 @@ Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die
 
 ## E-24 Use-Case-Diagramm: je Use Case eine Rolle (15.10.2026)
 
-Umsetzung des Dozentenhinweises aus dem Coaching am 15.10. (`04-dozenten-feedback.md`), vorbereitet mit KI-Unterstützung, Bestätigung durch die Gruppe offen.
+Umsetzung des Dozentenhinweises aus dem Coaching am 15.10. (`04-dozenten-feedback.md`), Bestätigung durch die Gruppe offen.
 
 - **Diagramm:** Jeder Use Case hat genau eine Rolle als primären Akteur. Aus Servicemitarbeiter, Techniker, Disponent, Werkstattleiter und Werkstattinhaber werden 15 Mitarbeiterrollen (Serviceannahme, Diagnoseprüfer, Diagnostiker, Kalkulator, Werkstattplaner, Reparateur, Endkontrolleur, Geräteausgabe, Reklamationsbearbeiter, Teiledisponent, Bestandsplaner, Einkäufer, Wareneingang, Retourenbearbeiter, Betriebsadministrator). Der Kunde (UC01, UC02, UC07) bleibt ein Akteur. *Nachtrag 16.10.:* In Visual Paradigm wird er einmal gezeichnet, mit drei Verbindungen (statt dreimal wie in der PlantUML-Vorlage); die Zählung ändert sich dadurch nicht (17 Akteure = 15 Rollen + Kunde + KI-Diagnosedienst, 19 Akteur-Verbindungen). Die extend-Bedingungen aus `usecase.puml` werden in VP nicht als Extension Points eingetragen (Aufwand, kein Pflichtbestandteil); Doku 5.3 sagt deshalb nur noch „sechs extend-Beziehungen“, die Bedingungen stehen im Text. Der Lieferant ist kein Akteur mehr (Black Box ohne Systemzugang, Dozentenhinweis vom 15.10.); er kommt wie in BPMN nur über Nachrichten vor. Der KI-Diagnosedienst bleibt als externes System an UC01. UC08 wird nur per include erreicht und hat keinen Akteur. include/extend bleiben wie bisher (2 include, 6 extend). Zählung: 19 Use Cases, 17 Akteure, 19 Akteur-Verbindungen (vorher 35).
 - **Organigramm:** Die Zuordnung Rolle → Klasse (Unterklassen von Mitarbeiter) → BPMN-Lane steht in Doku Tabelle 7. Das Klassendiagramm ändert sich nicht.
@@ -81,7 +81,7 @@ Umsetzung des Dozentenhinweises aus dem Coaching am 15.10. (`04-dozenten-feedbac
 
 ## E-23 Zuständigkeiten für die Fertigstellung (15.10.2026)
 
-Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die Gruppe am 15.10. offen.
+Vorschlag von Kilian, Bestätigung durch die Gruppe am 15.10. offen.
 
 - **Grundsatz:** Nur Kilian und David haben Zugriff auf Visual Paradigm, deshalb liegen alle VP-Diagramme bei ihnen. Die übrigen Arbeiten (BPMN-Abschluss, Dokumentation, Fachkonzept, Entscheidungen, Qualitätssicherung, Präsentation) sind so verteilt, dass jede Person im Gesamtprojekt einen vergleichbaren Anteil verantwortet. Die Zuständigkeiten stehen in Doku Kapitel 1 und `02-team-und-rollen.md`.
 - **Visual Paradigm:** Kilian Klassendiagramm, SD1, SD4, VPP-Datei und Konsistenzprüfung; David Use-Case-Diagramm (E-24), SD2, SD3, SD5, SD6.
@@ -91,7 +91,7 @@ Vorschlag von Kilian (vorbereitet mit KI-Unterstützung), Bestätigung durch die
 
 ## E-22 Abschluss der QA-Befunde Q1–Q3 und B12 (08.10.2026)
 
-Vorschlag von Kilian (umgesetzt mit KI-Unterstützung), Bestätigung durch die Gruppe offen.
+Vorschlag von Kilian, Bestätigung durch die Gruppe offen.
 
 - **P06 (Q1):** Nach „14 Tage verstrichen“ fragt das neue Gateway „Bereits zweimal angemahnt?“. Nein → „Lieferung anmahnen“ und weiter warten, ja → derselbe Weg wie ohne Auftragsbestätigung: „Bestellung stornieren“ → „Alternativen Lieferanten suchen“. Damit hat jede Warteschleife einen Ausstieg. Die Zahl zwei ist ein Vorschlag (analog zur einmaligen Eskalation in P10) und kann am 15.10. geändert werden.
 - **P10 (B12):** Vor „Ersatzlieferung buchen“ steht das Nachrichten-Zwischenereignis „Ersatzlieferung erhalten“ mit Nachrichtenfluss vom Lieferanten.
@@ -102,7 +102,7 @@ Vorschlag von Kilian (umgesetzt mit KI-Unterstützung), Bestätigung durch die G
 
 ## E-21 Gruppenbeschluss vom 05.10.2026
 
-Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützung (Claude) vorbereitet.
+Beschlossen von der ganzen Gruppe am Gruppentermin.
 
 - **Bestätigt:** Perspektive Solution Provider (E-02), KI-Sofortdiagnose (E-03), Prozessliste (E-05), Ablagestruktur (E-11), Korrekturen E-15, Kunde als eigener Prozess (E-16), E-17 vollständig (Rückgabe über P08, Lagergebühr nach der dritten Abhol-Erinnerung, Mahnung nach 14 Tagen, Akteur Servicemitarbeiter, UC19 Retoure), E-18 mit genau einem Klassendiagramm und UC04 als eigenständigem Use Case. Damit sind E-07 und E-14 erledigt.
 - **KI-Nutzung:** Kein KI-Absatz in der Projektdokumentation; den KI-Einsatz geben wir beim Moodle-Upload gesondert an. Absatz in Kapitel 1 und „Dokumanager“ auf Folie 16 entfernt.

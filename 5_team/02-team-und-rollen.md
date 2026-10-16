@@ -10,7 +10,6 @@ Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester).
 | Kilian Platter | Scrum Master und UML-Verantwortlicher | Sprint-Rituale und Trello-Board; Klassendiagramm, SD1 und SD4, VP-Projekt (`.vpp`), Konsistenzprüfung aller Sequenzdiagramme gegen das Klassendiagramm, Diagramm-Exporte |
 | Maximilian Ewald | BPMN-Verantwortlicher | Die 10 Kollaborationsdiagramme im Camunda Modeler (inklusive 09/10), Korrekturen, Prüfung im Problems-Panel, PNG-Export, Prozesskennzahlen, Abschnitt 5.1 |
 | Jakob Schwan | Qualitätsmanager | QA-Checkliste und Review aller Pull Requests, Konsistenz zwischen BPMN, UML und Doku (3.2, 5.6), Kennzahlenabgleich, Export der Präsentation als PDF |
-| Claude | Dokumanager | Projektdokumentation, die Markdown-Dateien in `3_doku/`, Entscheidungslog, Erzeugung der Rohartefakte |
 
 Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (Maximilian/David, Adrian/Nina, Jakob/Kilian), jede Trello-Karte hat genau eine verantwortliche Person und den Teampartner als Prüfer. Für Visual Paradigm prüfen sich Kilian und David gegenseitig (Klassendiagramm, SD1, SD4 → David; Use-Case-Diagramm, SD2, SD3, SD5, SD6 → Kilian).
 
