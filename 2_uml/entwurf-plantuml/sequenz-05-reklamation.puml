@@ -22,8 +22,8 @@ skinparam sequence {
 hide footbox
 autonumber "0:"
 
-actor Kunde
 actor Reklamationsbearbeiter as SM
+actor Kunde
 participant ": Reklamation" as REK
 actor Diagnostiker
 actor Werkstattleiter as WL
@@ -31,12 +31,13 @@ participant "nacharbeit : Reparaturauftrag" as NA
 
 Kunde -> SM : Mangelmeldung (Auftrag, Beschreibung)
 create REK
-SM -->> REK : erfasseReklamation(a, grund)
+SM -->> REK : new(auftrag, grund)
+note right of REK : erfasseReklamation() des\nServicemitarbeiters erzeugt das Objekt
 Diagnostiker -> REK : pruefeGewaehrleistung()
 REK --> Diagnostiker : istGewaehrleistung
 alt Gewährleistungsfall
     Diagnostiker -> WL : kostenfreie Nacharbeit zur Freigabe
-    WL -> REK : entscheideReklamation(r)
+    WL --> Diagnostiker : Nacharbeit freigegeben
 else kein Gewährleistungsfall
     SM -> Kunde : kostenpflichtiges Angebot
     Kunde --> SM : Annahme oder Ablehnung
