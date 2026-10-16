@@ -26,7 +26,7 @@ actor Reklamationsbearbeiter as SM
 actor Kunde
 participant ": Reklamation" as REK
 actor Diagnostiker
-actor Werkstattleiter as WL
+participant ": Werkstattleiter" as WL
 participant "nacharbeit : Reparaturauftrag" as NA
 
 Kunde -> SM : Mangelmeldung (Auftrag, Beschreibung)
@@ -36,7 +36,7 @@ note right of REK : erfasseReklamation() des\nServicemitarbeiters erzeugt das Ob
 Diagnostiker -> REK : pruefeGewaehrleistung()
 REK --> Diagnostiker : istGewaehrleistung
 alt Gewährleistungsfall
-    Diagnostiker -> WL : kostenfreie Nacharbeit zur Freigabe
+    Diagnostiker -> WL : entscheideReklamation(r)
     WL --> Diagnostiker : Nacharbeit freigegeben
 else kein Gewährleistungsfall
     SM -> Kunde : kostenpflichtiges Angebot
