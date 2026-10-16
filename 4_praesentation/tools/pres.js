@@ -184,10 +184,10 @@ async function icon(name, color, size = 256) {
   {
     const s = base('Was wir gebaut haben: Ergebnisse in Zahlen');
     stat(s, 0.5, 1.2, '10', 'BPMN-Kollaborationsdiagramme\n' + TOTAL_ACT + ' Aktivitäten im Werkstatt-Pool', 2.2);
-    stat(s, 2.9, 1.2, '19', 'Use Cases\n18 Rollen und Akteure', 2.2);
+    stat(s, 2.9, 1.2, '19', 'Use Cases\n17 Rollen und Akteure', 2.2);
     stat(s, 5.3, 1.2, '27', 'Klassen\n36 Assoziationen, 7 Aufzählungen', 2.2);
     stat(s, 7.7, 1.2, '6', 'Sequenzdiagramme\n+ Zustandsdiagramm', 2.2);
-    card(s, 0.5, 2.95, 2.9, 2.05, 'FaProjectDiagram', 'Geschäftsprozesse', 'Camunda Modeler, BPMN 2.0, angereichert für Camunda 8. Zehn Prozesse vom ersten Foto bis zur Retoure. 41 Nachrichtenflüsse, 48 Datenobjekte, 12 Datenspeicher.', C.light, C.teal, 10.5);
+    card(s, 0.5, 2.95, 2.9, 2.05, 'FaProjectDiagram', 'Geschäftsprozesse', 'Camunda Modeler, BPMN 2.0, angereichert für Camunda 8. Zehn Prozesse vom ersten Foto bis zur Retoure. 42 Nachrichtenflüsse, 51 Datenobjekte, 12 Datenspeicher.', C.light, C.teal, 10.5);
     card(s, 3.55, 2.95, 2.9, 2.05, 'FaSitemap', 'Objektorientierte Analyse', 'Visual Paradigm: Use-Case-Diagramm, ein vollständiges Klassendiagramm, sechs Sequenzdiagramme als Unterdiagramme der Use Cases, Zustandsdiagramm des Reparaturauftrags.', C.light, C.teal, 10.5);
     card(s, 6.6, 2.95, 2.9, 2.05, 'FaClipboardList', 'Dokumentation', 'Rund 20 Seiten: Projekt, Vorgehen, Projektmanagement, alle Artefakte, Konsistenz der Modelle, Herausforderungen und Feedback.', C.light, C.teal, 10.5);
   }
@@ -216,7 +216,7 @@ async function icon(name, color, size = 256) {
     lead(s, '19 Use Cases in vier Bereichen. Jeder Use Case hat genau eine Rolle (Hinweis aus dem Coaching): lesbar, und die Rollen kehren in den Sequenzdiagrammen wieder.', 1.05, 0.6);
     card(s, 0.5, 1.75, 2.15, 3.25, 'FaMobileAlt', 'Kundenportal', '3 Use Cases\n\nKunde: Sofortdiagnose anfordern, Voranmeldung bestätigen, KVA freigeben / ablehnen\n\nextern: KI-Diagnosedienst', C.warm, C.amber, 10, 12);
     card(s, 2.8, 1.75, 2.15, 3.25, 'FaWrench', 'Auftrag und Werkstatt', '9 Use Cases\n\nServiceannahme, Diagnoseprüfer, Diagnostiker, Kalkulator, Werkstattplaner, Reparateur, Endkontrolleur, Geräteausgabe, Reklamationsbearbeiter', C.light, C.teal, 10, 12);
-    card(s, 5.1, 1.75, 2.15, 3.25, 'FaWarehouse', 'Ersatzteil-Disposition', '6 Use Cases\n\nTeiledisponent, Bestandsplaner, Einkäufer, Wareneingang, Retourenbearbeiter\n\nextern: Lieferant', C.light, C.teal, 10, 12);
+    card(s, 5.1, 1.75, 2.15, 3.25, 'FaWarehouse', 'Ersatzteil-Disposition', '6 Use Cases\n\nTeiledisponent, Bestandsplaner, Einkäufer, Wareneingang, Retourenbearbeiter\n\nLieferant: Black Box, kein Akteur', C.light, C.teal, 10, 12);
     card(s, 7.4, 1.75, 2.1, 3.25, 'FaUserTie', 'Administration', '1 Use Case\n\nBetriebsadministrator: Werkstattbetrieb und Filialen verwalten (Mandant)\n\nRolle → Mitarbeitertyp → Lane: Tabelle 7 der Doku', C.light, C.teal, 10, 12);
   }
   // 12 Datenmodell
@@ -255,7 +255,7 @@ async function icon(name, color, size = 256) {
     const s = base('Qualität: Konventionen, Linter, Konsistenz');
     card(s, 0.5, 1.1, 2.9, 2.5, 'FaClipboardList', 'Konventionen', 'Datenobjekte tragen Klassennamen. Aktivität = Verb + Objekt, Ereignis im Partizip Perfekt. Jede Rolle gehört zu genau einer Lane und einer Klasse. Statuswerte in allen Modellen identisch.', C.light, C.teal, 10.5);
     card(s, 3.55, 1.1, 2.9, 2.5, 'FaShieldAlt', 'Werkzeuge', 'BPMN-Dateien angereichert für Camunda 8: Task-Definitionen, Subscriptions, Timer, FEEL-Bedingungen. Camunda-Linter und bpmnlint: 0 Befunde.', C.light, C.teal, 10.5);
-    card(s, 6.6, 1.1, 2.9, 2.5, 'FaTasks', 'Prüfrunden', 'Gesamtprüfung 26.09., Komplettcheck 05.10. (39 Befunde), QA-Abgleich 08.10. Jeder Pull Request wird gegen die QA-Checkliste geprüft, bevor er gemergt wird.', C.light, C.teal, 10.5);
+    card(s, 6.6, 1.1, 2.9, 2.5, 'FaTasks', 'Prüfrunden', 'Gesamtprüfung 26.09., zweite Prüfrunde 05.10., QA-Abgleich 08.10. Jeder Pull Request wird gegen die QA-Checkliste geprüft, bevor er gemergt wird.', C.light, C.teal, 10.5);
     s.addShape(pres.ShapeType.roundRect, { x: 0.5, y: 3.75, w: 9, h: 1.25, fill: { color: C.warm }, line: { color: C.warm }, rectRadius: 0.08 });
     iconCircle(s, 'FaLightbulb', 0.7, 3.95, 0.5, C.amber);
     s.addText([{ text: 'Beispiel: ', options: { bold: true } }, { text: 'Als die Nacharbeit in Prozess 07 auf zwei Durchläufe begrenzt wurde, musste Sequenzdiagramm SD4 nachziehen (loop 0..2, danach Status abgelehnt). Genau solche Stellen findet die Checkliste: Botschaft = Operation, Lebenslinie = Rolle oder Klasse, Zustand = AuftragStatus.', options: {} }],

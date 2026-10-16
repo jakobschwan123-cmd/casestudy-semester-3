@@ -143,7 +143,7 @@
    "Werkstattbetrieb",
    "Kunde"
   ],
-  "activities": 14,
+  "activities": 15,
   "kinds": {
    "service": 9,
    "subprocess": 1,
@@ -152,7 +152,7 @@
    "send": 1,
    "call": 1
   },
-  "auto": 11,
+  "auto": 12,
   "kunde_activities": 1,
   "kunde_kinds": {
    "manual": 1
@@ -178,14 +178,14 @@
    "Lieferant",
    "Kunde"
   ],
-  "activities": 14,
+  "activities": 15,
   "kinds": {
    "service": 5,
    "user": 5,
    "send": 3,
    "call": 1
   },
-  "auto": 8,
+  "auto": 9,
   "kunde_activities": 1,
   "kunde_kinds": {
    "manual": 1
