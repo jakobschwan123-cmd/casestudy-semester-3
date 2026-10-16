@@ -1,0 +1,80 @@
+@startuml
+' Nur die am 16.10.2026 geänderten Klassen; rot = neu. Zum Nachtragen in Visual Paradigm (E-29).
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Arial
+skinparam classFontSize 11
+hide circle
+title Klassendiagramm – Änderungen 16.10.2026 (rot = neu, E-29)
+
+class Techniker {
+  - qualifikation : String
+  --
+  + pruefeDiagnosevorschlag(v : KIDiagnosevorschlag) : boolean
+  + erfasseBefund(a : Reparaturauftrag) : Fehlerbefund
+  + pruefeMangel(r : Reklamation) : boolean
+  + bucheArbeitszeit(s : Reparaturschritt, dauer : int) : Arbeitszeitbuchung
+  <color:#C00000>+ erstelleKva(a : Reparaturauftrag) : Kostenvoranschlag</color>
+  <color:#C00000>+ fuehreEndkontrolleDurch(a : Reparaturauftrag) : boolean</color>
+}
+class Disponent {
+  + pruefeVerfuegbarkeit(e : Ersatzteil, menge : int) : boolean
+  + reserviereTeil(e : Ersatzteil, menge : int) : ErsatzteilReservierung
+  + loeseBestellungAus(l : Lieferant) : Lieferantenbestellung
+  + bucheWareneingang(b : Lieferantenbestellung) : void
+  <color:#C00000>+ pruefeMeldebestand(l : Lagerbestand) : Lieferantenbestellung</color>
+  <color:#C00000>+ wickleRetoureAb(b : Lieferantenbestellung, grund : String) : void</color>
+}
+class KIDiagnosevorschlag {
+  - vorschlagsnummer : String
+  <color:#C00000>- vermuteterGeraetetyp : GeraeteTyp</color>
+  - wahrscheinlicheUrsache : String
+  - konfidenz : double
+  - geschaetzterAufwandMin : int
+  - bestaetigt : boolean
+  --
+  + auswerten(medien : List<Medienanhang>) : void
+  + erzeugeVorabKva() : Kostenvoranschlag
+  + getBenoetigteTeile() : List<Ersatzteil>
+  + bestaetigen(t : Techniker) : void
+}
+class Lieferantenbestellung {
+  - bestellnummer : String
+  - bestelldatum : Date
+  - liefertermin : Date
+  - status : BestellStatus
+  - retourengrund : String
+  <color:#C00000>- anzahlMahnungen : int</color>
+  <color:#C00000>- anzahlErsatzlieferungen : int</color>
+  --
+  + addPosition(teil : Ersatzteil, menge : int) : void
+  + uebermittle() : void
+  + bucheWareneingang() : void
+  + berechneBestellwert() : double
+  + freigeben() : void
+  + storniere() : void
+  + bestaetige(liefertermin : Date) : void
+  + meldeRetoure(grund : String) : void
+  <color:#C00000>+ mahne() : void</color>
+}
+class Rechnung {
+  - rechnungsnummer : String
+  - rechnungsdatum : Date
+  - bruttobetrag : double
+  - zahlungStatus : ZahlungStatus
+  <color:#C00000>- mahnungen : int</color>
+  --
+  + berechneBetrag() : double
+  + erfasseZahlung(art : String) : void
+  + getRechnungsdatum() : Date
+  <color:#C00000>+ addLagergebuehr(betrag : double) : void</color>
+  <color:#C00000>+ mahne() : void</color>
+}
+class Voranmeldung
+class Filiale <<stammdaten>>
+class Lieferant <<stammdaten>>
+Voranmeldung "0..*" -- "<color:#C00000>0..1</color>" Filiale : vorgeschlagene Filiale >
+Lieferant "<color:#C00000>0..1</color>" -- "0..*" Lieferantenbestellung : erhält >
+Techniker -[hidden]right- Disponent
+Disponent -[hidden]right- KIDiagnosevorschlag
+Rechnung -[hidden]right- Lieferantenbestellung
+@enduml
