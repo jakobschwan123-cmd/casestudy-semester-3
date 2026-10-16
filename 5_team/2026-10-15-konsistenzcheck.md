@@ -1,4 +1,4 @@
-# Konsistenzcheck 15.10.2026 (Stand main `fd0f5dc`)
+# Konsistenzcheck 15.10.2026 (Stand main `fd0f5dc`, Nachtrag 16.10.)
 
 Geprüft von Kilian: `3_doku/Projektdokumentation.docx` (Stand Nina, 15.10.) gegen die zehn BPMN-Dateien (Stand E-27), das UML-Modell (`2_uml/`, Stand E-28), die Präsentation (E-25) und den Ablauf der Fallstudie. Zahlen sind aus den Dateien gezählt, nicht abgeschrieben.
 
@@ -41,5 +41,11 @@ Geprüft von Kilian: `3_doku/Projektdokumentation.docx` (Stand Nina, 15.10.) geg
 | 18 | Abb. 1 Systemkontext | Lieferant als Strichmännchen (Akteur) gezeichnet, obwohl seit E-24 Black Box ohne Systemzugang | Optional: als Kasten „Lieferant (externer Partner)" wie den KI-Dienst zeichnen, damit der Dozent nicht nachfragt | Kilian |
 | 19 | Zustandsdiagramm | Übergang „Teile bestellt → abgelehnt" (Folgeaufgabe aus E-27: Teil nicht beschaffbar) fehlt | In `zustand-reparaturauftrag.puml` ergänzen, falls das Diagramm in VP gezeichnet wird; es ist keine Pflichtabgabe | Kilian |
 | 20 | VPP und Tabelle 5 | `UML-WWI25B4-Gruppe1.vpp` liegt noch nicht in `2_uml/`; Tabelle 5 und 4.3 behaupten es | Nach SD1/SD4: Project → Save Project As | Kilian |
+
+## Stand 16.10.2026 (Nachtrag)
+
+Erledigt im Sammel-PR vom 16.10.: Nr. 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 15, 16, 17 sowie Abb. 2 und 3 (Nr. 11 teilweise). Neu dabei: Doku 5.3 „Der Kunde ist einmal dargestellt und mit UC01, UC02 und UC07 verbunden“ (E-24-Nachtrag), Doku 5.5 und Tabelle 8 mit Werkstattleiter als Objekt und Lost/Found Messages in SD6, Folie 14 und Sprechtext ohne Befundzahl der Prüfrunde vom 05.10.
+
+Noch offen: Nr. 11 (Abb. 4–7 aus den VP-Exporten), 12, 13 (gelbe Hinweise, Gruppe am 22.10.), 18, 19 (optional), 20 (VPP). Hinweis: In der Präsentation sind die Folien 13–15 seit dem 16.10. ausgeblendet (PDF hat 15 Seiten); Folie 2, Folie 18 und Kapitel 1 der Doku nennen sie weiterhin – am 22.10. entscheiden, ob sie gezeigt werden.
 
 Nicht geprüft: Rechtschreibung, Seitenzahlen des Inhaltsverzeichnisses (statisch), Bildqualität.
