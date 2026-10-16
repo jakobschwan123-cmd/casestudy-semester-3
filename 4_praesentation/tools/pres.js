@@ -11,7 +11,7 @@ const Fa = require('react-icons/fa');
 
 const HERE = __dirname;
 const TEXT = JSON.parse(fs.readFileSync(path.join(HERE, 'sprechtext.json'), 'utf8'));
-const STATS = JSON.parse(fs.readFileSync(path.join(HERE, '..', '..', '9_archiv', 'v2_2026-10-05_generatoren-und-pruefungen', 'tools', 'process_stats.json'), 'utf8'));
+const STATS = JSON.parse(fs.readFileSync(path.join(HERE, 'process_stats.json'), 'utf8'));
 const TOTAL_ACT = STATS.reduce((a, s) => a + s.activities, 0);
 const TOTAL_AUTO = STATS.reduce((a, s) => a + s.auto, 0);
 

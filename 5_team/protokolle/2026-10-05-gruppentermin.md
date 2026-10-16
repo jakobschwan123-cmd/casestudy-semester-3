@@ -7,7 +7,7 @@ Ort/Format: Gruppentermin in Präsenz
 
 - BPMN-Prüfung abgeschlossen; Jakob hat Logikfehler in P07/P08 behoben (E-19).
 - UML-Abgleich mit BPMN (E-18) übernommen; nächster Schritt ist die `.vpp`-Datei.
-- Repository aufgeräumt: Prüfprotokolle, alte Befunde, Generatoren und der ausführliche Entscheidungslog liegen in `9_archiv/`.
+- Repository aufgeräumt: Prüfprotokolle, alte Befunde, Generatoren und der ausführliche Entscheidungslog wurden archiviert (seit 16.10.2026 nur noch in der Git-Historie).
 
 ## Entschieden
 

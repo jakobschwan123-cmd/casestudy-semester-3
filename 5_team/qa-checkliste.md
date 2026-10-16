@@ -44,7 +44,7 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 
 ## Prüfstand 05.10.2026
 
-Geprüft von Jakob auf `main` nach PR #4: das Abgleich-Protokoll `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md` gegen die damaligen BPMN-Dateien und PNGs, dazu die Bildstände. Die automatische UML-Prüfung (`9_archiv/v2_2026-10-05_generatoren-und-pruefungen/tools/check_uml.py`) lief für diesen Stand ohne Befund (109 BPMN-Anker).
+Geprüft von Jakob auf `main` nach PR #4: das Abgleich-Protokoll vom 05.10.2026 (Git-Historie) gegen die damaligen BPMN-Dateien und PNGs, dazu die Bildstände. Die automatische UML-Prüfung (`9_archiv/v2_2026-10-05_generatoren-und-pruefungen/tools/check_uml.py`) lief für diesen Stand ohne Befund (109 BPMN-Anker).
 
 Aktualisierung nach PR #6 (`main` auf `cc329e1`): Q4 und Q5 sind erledigt. Alle 20 Diagrammbilder der Projektdokumentation entsprechen den aktuellen PNGs im Repository. Beim Dokumentationsabgleich wurde außerdem der oben abgeschnittene Use-Case-Export aus der unveränderten `.puml` vollständig neu gerendert (Q8). Die Kennzahlen wurden aus den aktuellen BPMN-XML nachgezählt: 131 Werkstatt-Aktivitäten, davon 79 automatisiert, sowie 26 Kundenaktivitäten. Q1 bis Q3 bleiben offen; zusätzlich ist der fehlende Empfang einer Ersatzlieferung in P10 zu klären (B12, siehe offene Frage zu E-20). Die abschließende Prüfung im Camunda Modeler und die VPP-Datei stehen weiterhin aus.
 
