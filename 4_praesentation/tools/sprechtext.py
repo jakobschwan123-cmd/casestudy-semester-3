@@ -56,15 +56,15 @@ T = [
  'wird daraus ein verbindlicher Kostenvoranschlag. Die Medien werden nur mit Einwilligung verarbeitet und nach Abschluss gelöscht.'),
 (8, 'Was wir gebaut haben: Ergebnisse in Zahlen', 'Maximilian', 50,
  'Damit zur zweiten Hälfte: Was steckt hinter dieser Geschichte? Wir haben drei Modelle erstellt, die zusammenpassen. Zehn BPMN-Kollaborationsdiagramme '
- 'mit 131 Aktivitäten im Werkstatt-Pool, dazu die Abläufe des Kunden mit 26 weiteren Aktivitäten. Ein Use-Case-Diagramm mit 19 Use Cases und 18 '
+ 'mit 133 Aktivitäten im Werkstatt-Pool, dazu die Abläufe des Kunden mit 26 weiteren Aktivitäten. Ein Use-Case-Diagramm mit 19 Use Cases und 17 '
  'Akteuren. Ein vollständiges Klassendiagramm mit 27 Klassen und 36 Assoziationen. Sechs Sequenzdiagramme, gefordert waren fünf, und als Zugabe ein '
  'Zustandsdiagramm für den Reparaturauftrag. Alle Modelle liegen im Camunda Modeler und in Visual Paradigm und werden mit der Dokumentation '
  'abgegeben. Ich beginne mit den Geschäftsprozessen.'),
-(9, 'Zehn Prozesse, 60 Prozent automatisiert', 'Maximilian', 70,
+(9, 'Zehn Prozesse, 61 Prozent automatisiert', 'Maximilian', 70,
  'Die zehn Prozesse decken den gesamten Lebenszyklus ab. Prozesse 01 bis 08 sind die durchgehende Auftragsreise: Sofortdiagnose, Annahme, Diagnose, '
  'Kostenvoranschlag, Ersatzteilreservierung, Bestellung, Reparatur und Abholung. 09 und 10 sind die Folgeprozesse Reklamation und Retoure. Jedes '
  'Diagramm ist eine Kollaboration: Der Werkstattbetrieb ist der ausführbare Pool mit den Lanes Service, Techniker, Werkstattleitung und Disposition, '
- 'der Kunde hat seinen eigenen Ablauf, der Lieferant bleibt eine Black Box. Die wichtigste Zahl: 60 Prozent der Aktivitäten führt RepairFlow ohne '
+ 'der Kunde hat seinen eigenen Ablauf, der Lieferant bleibt eine Black Box. Die wichtigste Zahl: 61 Prozent der Aktivitäten führt RepairFlow ohne '
  'manuelle Arbeit aus, also Statuswechsel, Benachrichtigungen, Verfügbarkeitsprüfungen, Berechnungen und Regeln. Was Handwerk ist, bleibt Handwerk: '
  'Diagnose, Reparatur und Endkontrolle sind Aktivitäten des Technikers mit Unterstützung durch das System.'),
 (10, 'Drei Prozess-Highlights', 'Maximilian', 80,
@@ -81,8 +81,8 @@ T = [
  'Retoure; und die Administration des Werkstattbetriebs. Eine Besonderheit geht auf das Coaching zurück: Jeder Use Case hat genau eine Rolle. Statt '
  'eines Technikers mit fünf Verbindungen gibt es jetzt Diagnoseprüfer, Diagnostiker, Kalkulator, Reparateur und Endkontrolleur. Welche Person '
  'welche Rolle ausfüllt, regelt die Werkstatt selbst; im Datenmodell sind die Rollen den Mitarbeitertypen zugeordnet. Das Diagramm ist dadurch sofort '
- 'lesbar, und die Rollen tauchen in den Sequenzdiagrammen wieder auf. Dazu kommen der Kunde und zwei externe Akteure, der Lieferant und der '
- 'KI-Diagnosedienst.'),
+ 'lesbar, und die Rollen tauchen in den Sequenzdiagrammen wieder auf. Dazu kommen der Kunde und der KI-Diagnosedienst als externes System. '
+ 'Der Lieferant ist bewusst kein Akteur: Er hat keinen Zugang zu RepairFlow und bleibt eine Black Box, mit der nur Nachrichten ausgetauscht werden.'),
 (12, 'Das Datenmodell: fünf Entwurfsentscheidungen', 'Kilian', 80,
  'Das Klassendiagramm ist ein einziges, vollständiges Modell mit 27 Klassen. Fünf Entscheidungen prägen es. Erstens: Der Reparaturauftrag ist die '
  'Aggregatwurzel. Befund und Reparaturschritte existieren nur mit ihrem Auftrag und sind deshalb Kompositionen, Kostenvoranschlag und Gerät sind nur '
@@ -96,15 +96,15 @@ T = [
  'Gearbeitet haben wir in Sprints, die sich am Takt der vier Gruppentermine orientiert haben, mit Review, Retrospektive und Planning je Termin. '
  'Nina hat die Projektleitung, David die Stellvertretung und die Sicherungen, Adrian ist Product Owner, ich Scrum Master, Maximilian verantwortet '
  'BPMN, Jakob die Qualität. Alles Schriftliche liegt in einem GitHub-Repository; jede Änderung geht über einen eigenen Branch, einen Pull Request und '
- 'ein Review durch eine zweite Person, bisher zehn gemergte Pull Requests. Das Trello-Board hat eine Liste je Termin und eine Karte je Person und '
+ 'ein Review durch eine zweite Person, bisher 27 gemergte Pull Requests. Das Trello-Board hat eine Liste je Termin und eine Karte je Person und '
  'Aufgabe. Jedes Diagramm wurde im Zweierteam geprüft. Die Meilensteine: Am 02.09. standen alle Diagramme im Entwurf, am 05.10. die Korrekturen aus '
  'zwei Gesamtprüfungen, am 15.10. haben wir die Rollenstruktur umgesetzt, am 22.10. war die Generalprobe. Die Abgabe folgt am 13.11.'),
 (14, 'Qualität: Konventionen, Linter, Konsistenz', 'Jakob', 70,
  'Drei Modelle, die sich auf dieselben Dinge beziehen, laufen schnell auseinander. Dagegen hatten wir drei Mittel. Erstens Konventionen: '
  'Datenobjekte in BPMN tragen die Klassennamen, Aktivitäten heißen Verb plus Objekt, jede Rolle ist genau einer Lane und einer Klasse zugeordnet, und '
  'die Statuswerte sind in allen Modellen identisch. Zweitens Werkzeuge: Die BPMN-Dateien sind für Camunda 8 angereichert, mit Task-Definitionen, '
- 'Timern und Bedingungen. Der Camunda-Linter und bpmnlint melden null Befunde. Drittens Prüfrunden: Eine Gesamtprüfung am 26.09., ein Komplettcheck '
- 'am 05.10. mit 39 Befunden und der QA-Abgleich am 08.10. Jede Änderung wird gegen unsere QA-Checkliste geprüft, bevor sie gemergt wird. Ein '
+ 'Timern und Bedingungen. Der Camunda-Linter und bpmnlint melden null Befunde. Drittens Prüfrunden: Eine Gesamtprüfung am 26.09., eine zweite Prüfrunde '
+ 'am 05.10. und der QA-Abgleich am 08.10. Jede Änderung wird gegen unsere QA-Checkliste geprüft, bevor sie gemergt wird. Ein '
  'Beispiel: Als wir die Nacharbeit in Prozess 07 auf zwei Durchläufe begrenzt haben, musste das Sequenzdiagramm SD4 nachziehen. Genau solche Stellen '
  'findet die Checkliste.'),
 (15, 'Herausforderungen und Lernerfahrungen', 'Jakob', 70,

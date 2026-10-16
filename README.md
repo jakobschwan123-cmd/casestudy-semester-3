@@ -14,7 +14,6 @@ RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätt
 | [`3_doku/`](3_doku/) | `Projektdokumentation.docx` und `.pdf` | Nina, alle |
 | [`4_praesentation/`](4_praesentation/) | `Abschlusspraesentation.pptx` und `.pdf` | alle |
 | [`5_team/`](5_team/) | Arbeitsunterlagen: Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, QA-Checkliste, Protokolle, Git-Regeln | alle |
-| [`9_archiv/`](9_archiv/) | Frühere Stände, versioniert nach Datum; hier wird nicht mehr gearbeitet | – |
 
 ## Arbeitsweise
 
@@ -23,4 +22,4 @@ RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätt
 - BPMN nur im Camunda Modeler bearbeiten, danach das PNG neu exportieren.
 - Word- und PowerPoint-Dateien lassen sich nicht zusammenführen: vor dem Bearbeiten in der WhatsApp-Gruppe Bescheid geben.
 - Entscheidungen, die mehr als eine Person betreffen, kurz in [`5_team/03-entscheidungen.md`](5_team/03-entscheidungen.md) eintragen.
-- Ersetzte Dateien nicht löschen, sondern in einen neuen Versionsordner unter `9_archiv/` verschieben.
+- Ersetzte Dateien werden gelöscht; frühere Stände bleiben in der Git-Historie.
