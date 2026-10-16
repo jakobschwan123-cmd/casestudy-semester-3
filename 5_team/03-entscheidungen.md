@@ -13,6 +13,18 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 - **E-26 bestätigen** (alle, Modeler-Prüfung Maximilian): Korrekturen P01–P05.
 - **E-28 bestätigen** (alle): Sequenzdiagramme auf den Kernablauf gekürzt.
 - **E-27 bestätigen** (alle, Modeler-Prüfung Maximilian): Überarbeitung P06; Folgeaufgaben P05 „Alle Teile verfügbar?“, Zustandsdiagramm „Teile bestellt → abgelehnt“, SD6.
+- **E-29 bestätigen** (alle, Nachtragen in VP David): Klassendiagramm – je Rolle eine Operation, Mahnungen an Bestellung und Rechnung, Gerätetyp im KI-Vorschlag, zwei Multiplizitäten.
+
+## E-29 Klassendiagramm: Operationen je Rolle, Mahnungen, Gerätetyp (16.10.2026)
+
+Vorschlag von Kilian (Prüfung des Klassendiagramms gegen Tabelle 7, BPMN und Doku mit KI-Unterstützung), Bestätigung durch die Gruppe offen. Änderungsbild: `2_uml/entwurf-plantuml/klassen-aenderungen-2026-10-16.png` (rot = neu).
+
+- **Warum:** Doku 5.4 sagt, die Unterklassen von Mitarbeiter „tragen die Operationen dieser Rollen“ (Tabelle 7). Vier der 15 Rollen hatten keine Operation in ihrer Klasse: Kalkulator (UC06) und Endkontrolleur (UC14) bei Techniker, Bestandsplaner (UC12) und Retourenbearbeiter (UC19) bei Disponent. Prozess 06 (E-27) zählt Mahnungen und Ersatzlieferungen, Prozess 08 mahnt Rechnungen und bucht Lagergebühren – das Klassenmodell kannte dafür weder Attribut noch Operation, obwohl der KVA für dieselbe Logik `erinnerungen`/`protokolliereErinnerung()` hat. Doku 2.5 und Folie 7 sagen, der KI-Dienst schlägt den Gerätetyp vor; KIDiagnosevorschlag hatte kein Feld dafür.
+- **Neu:** Techniker `erstelleKva(a)`, `fuehreEndkontrolleDurch(a)`; Disponent `pruefeMeldebestand(l)`, `wickleRetoureAb(b, grund)`; Lieferantenbestellung `anzahlMahnungen`, `anzahlErsatzlieferungen`, `mahne()`; Rechnung `mahnungen`, `addLagergebuehr(betrag)`, `mahne()`; KIDiagnosevorschlag `vermuteterGeraetetyp : GeraeteTyp`.
+- **Multiplizitäten:** Voranmeldung – Filiale „0..1“ statt „1“ (die Filiale wird erst nach der KI-Auswertung vorgeschlagen); Lieferant – Lieferantenbestellung „0..1“ statt „1“ (ein Nachbestellvorschlag hat noch keinen Lieferanten, Status VORSCHLAG).
+- **Nicht geändert:** 27 Klassen, 7 Aufzählungen, 36 Assoziationen, 8 Kompositionen – die Zahlen in Doku 5.4 und auf Folie 8 bleiben. Keine Umbenennung, keine Löschung, Sequenzdiagramme unverändert gültig.
+- **Dateien:** `klassen.puml/.png`, `modell.xmi` (nur als Quelle; kein Neuimport in VP), `klassen-aenderungen-2026-10-16.puml/.png`.
+- **Folgt daraus:** David trägt die 13 Einträge und die zwei Multiplizitäten im VP-Klassendiagramm von Hand nach (TODO A); kein Neuimport, sonst gibt es Dubletten.
 
 ## E-28 Sequenzdiagramme auf den Kernablauf gekürzt (15.10.2026)
 
@@ -125,3 +137,4 @@ Beschlossen von der ganzen Gruppe am Gruppentermin; Eintrag mit KI-Unterstützun
 | E-26 | Korrekturen P01–P05 (KI-Vorschlag optional, kein Befund, KVA-Status, Vorreservierungen in P05) – Bestätigung offen |
 | E-27 | Überarbeitung P06 (Storno an Lieferanten, Nachfrist, nicht beschaffbar, begrenzte Retoure) – Bestätigung offen |
 | E-28 | Sequenzdiagramme auf den Kernablauf gekürzt (7 bis 16 Botschaften, Ausnahmen als ref) – Bestätigung offen |
+| E-29 | Klassendiagramm: Operation je Rolle, Mahnungen an Bestellung und Rechnung, Gerätetyp im KI-Vorschlag, zwei Multiplizitäten – Bestätigung offen |
