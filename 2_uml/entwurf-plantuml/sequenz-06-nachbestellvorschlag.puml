@@ -26,7 +26,7 @@ actor "Einkäufer" as E
 participant ": Ersatzteil" as ET
 participant ": Lieferantenbestellung" as BEST
 participant ": Reparaturauftrag" as RA
-actor Werkstattleiter as WL
+participant ": Werkstattleiter" as WL
 actor Lieferant
 
 E -> ET : getVorzugslieferant()
@@ -38,7 +38,7 @@ loop je Fehlteil und Nachbestellvorschlag
 end
 E -> BEST : berechneBestellwert()
 opt Bestellwert über Freigabegrenze
-    E -> WL : Bestellfreigabe anfordern
+    E -> WL : gibBestellungFrei(b)
     WL -> BEST : freigeben()
 end
 E -> BEST : uebermittle()
