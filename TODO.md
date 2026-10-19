@@ -18,9 +18,9 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jeder �
 - [x] Klassendiagramm „cd : RepairFlow“ mit allen 27 Klassen und 7 Aufzählungen, Stereotypen, E-29-Ergänzungen, Layout ohne Überschneidungen.
 - [x] Sechs Sequenzdiagramme als Unterdiagramme (SD1 UC01, SD2 UC07, SD3 UC09, SD4 UC14, SD5 UC16, SD6 UC10) nach E-28, refs verlinkt.
 - [x] Konsistenzprüfung Botschaft = Operation (inklusive `mahne()` in SD6 nach E-29).
-- [ ] **Letzten Stand committen:** Team → Commit, damit Layout und E-29 auf dem Teamwork-Server liegen. Danach einmal Team → Update und prüfen, ob die Stereotypen «mandant» und «stammdaten» erhalten sind.
-- [ ] **Diagramme exportieren** (Project → Export → Active Diagram as Image → PNG, hohe Auflösung) nach `2_uml/`: `usecase-diagramm.png` (überschreibt den Entwurf), `klassendiagramm.png`, `sequenz-01-sofortdiagnose.png` … `sequenz-06-nachbestellvorschlag.png`. Use-Case-Diagramm, Klassendiagramm, SD1 und SD3 braucht die Doku (Abb. 4–7).
-- [ ] **VPP-Datei speichern:** Project → Save Project As → `2_uml/UML-WWI25B4-Gruppe1.vpp`, zusammen mit den Exporten per Branch und Pull Request einchecken. Die Datei kommt so in die Abgabe.
+- [x] Letzter Stand im Teamwork-Server (Revision 89): Klassendiagramm neu angeordnet, Rückgabetypen korrigiert (`[*]` bei Listen), ref-Rahmen in SD2, SD4, SD5 und SD6 beschriftet. Stereotypen «mandant» und «stammdaten» nach dem Commit geprüft.
+- [x] Diagramme exportiert (220 dpi) nach `2_uml/`: `usecase-diagramm.png`, `klassendiagramm.png`, `sequenz-01-sofortdiagnose.png` … `sequenz-06-nachbestellvorschlag.png`.
+- [x] VPP-Datei `2_uml/UML-WWI25B4-Gruppe1.vpp` exportiert (Project → Export → Visual Paradigm Project). Bei späteren Änderungen in VP: Commit, PNG neu exportieren, VPP neu exportieren.
 
 ## B. BPMN im Camunda Modeler
 
@@ -33,7 +33,7 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jeder �
 
 Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
-- [ ] **Abb. 4–7 einfügen**, sobald die VP-Exporte da sind (Aufgabe A): Abb. 4 Use-Case-Diagramm, Abb. 5 Klassendiagramm (bei Bedarf Querformat), Abb. 6 SD1, Abb. 7 SD3. Bild mit der im Kasten angegebenen Breite einfügen, Kasten löschen.
+- [ ] **Abb. 4–7 einfügen** (die VP-Exporte liegen in `2_uml/`): Abb. 4 `usecase-diagramm.png`, Abb. 5 `klassendiagramm.png` (Querformat-Seite empfohlen), Abb. 6 `sequenz-01-sofortdiagnose.png`, Abb. 7 `sequenz-03-reservierung.png`. Bild mit der im Kasten angegebenen Breite einfügen, Kasten löschen.
 - [ ] **Gelbe Hinweise abarbeiten:** 3.1 (VPP und SD als Unterdiagramme fertig → löschen), 3.1/Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe B), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen). 5.6 ist erledigt (E-30).
 - [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste. Falls die Folien 13–15 ausgeblendet bleiben, Foliennummern anpassen (siehe D).
 - [ ] **Abschluss:** Titelseite „Bearbeitungsstand“ auf das aktuelle Datum, kein „[“ mehr im Text, als PDF speichern (`3_doku/Projektdokumentation.pdf`), Seitenzahlen im Inhaltsverzeichnis im PDF prüfen (statisches Verzeichnis).

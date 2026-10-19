@@ -1,9 +1,12 @@
 # UML-Modelle (objektorientierte Analyse)
 
-Abgegeben wird `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm; sie kommt in diesen Ordner. `modell.xmi` ist die Importdatei für Klassen- und Use-Case-Modell. Die Vorlagen zum Nachzeichnen (PlantUML-Quelle und PNG) liegen in `entwurf-plantuml/`.
+Abgegeben wird `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm (Export des Teamwork-Stands vom 19.10.2026, Revision 89). Die PNG-Exporte der acht VP-Diagramme liegen direkt in diesem Ordner und sind die Quelle für die Abbildungen der Doku. `modell.xmi` ist die Importdatei für Klassen- und Use-Case-Modell. Die Vorlagen zum Nachzeichnen (PlantUML-Quelle und PNG) liegen in `entwurf-plantuml/`.
 
 | Datei | Inhalt |
 |---|---|
+| UML-WWI25B4-Gruppe1.vpp | Visual-Paradigm-Projekt mit Use-Case-Diagramm, Klassendiagramm und den sechs Sequenzdiagrammen (Abgabedatei) |
+| usecase-diagramm.png, klassendiagramm.png | VP-Exporte (220 dpi) für Abb. 4 und Abb. 5 der Doku |
+| sequenz-01-sofortdiagnose.png … sequenz-06-nachbestellvorschlag.png | VP-Exporte der Sequenzdiagramme SD1 (UC01), SD2 (UC07), SD3 (UC09), SD4 (UC14), SD5 (UC16), SD6 (UC10); SD1 und SD3 sind Abb. 6 und Abb. 7 |
 | modell.xmi | XMI 2.1 (UML 2.x) mit Klassenmodell (27 Klassen, 7 Aufzählungen, 36 Assoziationen) und Anwendungsfallmodell (19 Use Cases, 17 Akteure, 19 Akteur-Verbindungen, 2 include, 6 bedingte extend; Lieferant ist Black Box, kein Akteur) für einen kompletten Neuimport in Visual Paradigm |
 | modell-usecase.xmi | nur das Anwendungsfallmodell (Stand E-24, je Use Case eine Rolle), zum Neuimport, wenn das Klassenmodell schon in VP liegt |
 | entwurf-plantuml/klassen.puml / .png | einziges vollständiges Klassendiagramm; alle Klassen, Operationen und Beziehungen innerhalb einer Abbildung |
