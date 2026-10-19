@@ -1,6 +1,6 @@
 # UML-Modelle (objektorientierte Analyse)
 
-Abgegeben wird `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm (Export des Teamwork-Stands vom 19.10.2026, Revision 89). Die PNG-Exporte der acht VP-Diagramme liegen direkt in diesem Ordner und sind die Quelle für die Abbildungen der Doku. `modell.xmi` ist die Importdatei für Klassen- und Use-Case-Modell. Die Vorlagen zum Nachzeichnen (PlantUML-Quelle und PNG) liegen in `entwurf-plantuml/`.
+Abgegeben wird `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm (Export des Teamwork-Stands vom 19.10.2026, Revision 91). Die PNG-Exporte der acht VP-Diagramme liegen direkt in diesem Ordner und sind die Quelle für die Abbildungen der Doku. `modell.xmi` ist die Importdatei für Klassen- und Use-Case-Modell. Die Vorlagen zum Nachzeichnen (PlantUML-Quelle und PNG) liegen in `entwurf-plantuml/`.
 
 | Datei | Inhalt |
 |---|---|
