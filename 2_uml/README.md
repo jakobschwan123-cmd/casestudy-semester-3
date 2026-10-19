@@ -1,40 +1,29 @@
 # UML-Modelle (objektorientierte Analyse)
 
-Abgegeben wird `UML-WWI25B4-Gruppe1.vpp` aus Visual Paradigm (Export des Teamwork-Stands vom 19.10.2026, Revision 91). Die PNG-Exporte der acht VP-Diagramme liegen direkt in diesem Ordner und sind die Quelle für die Abbildungen der Doku. `modell.xmi` ist die Importdatei für Klassen- und Use-Case-Modell. Die Vorlagen zum Nachzeichnen (PlantUML-Quelle und PNG) liegen in `entwurf-plantuml/`.
+Das UML-Modell liegt in Visual Paradigm 18 auf dem Teamwork-Server der DHBW (Repository **WWI25B4G1**, trunk). Abgegeben wird der Export `UML-WWI25B4-Gruppe1.vpp` (Stand 19.10.2026, Teamwork-Revision 91). Die PNGs sind Exporte aus VP und Quelle für die Abbildungen der Doku.
 
 | Datei | Inhalt |
 |---|---|
-| UML-WWI25B4-Gruppe1.vpp | Visual-Paradigm-Projekt mit Use-Case-Diagramm, Klassendiagramm und den sechs Sequenzdiagrammen (Abgabedatei) |
-| usecase-diagramm.png, klassendiagramm.png | VP-Exporte (220 dpi) für Abb. 4 und Abb. 5 der Doku |
-| sequenz-01-sofortdiagnose.png … sequenz-06-nachbestellvorschlag.png | VP-Exporte der Sequenzdiagramme SD1 (UC01), SD2 (UC07), SD3 (UC09), SD4 (UC14), SD5 (UC16), SD6 (UC10); SD1 und SD3 sind Abb. 6 und Abb. 7 |
-| modell.xmi | XMI 2.1 (UML 2.x) mit Klassenmodell (27 Klassen, 7 Aufzählungen, 36 Assoziationen) und Anwendungsfallmodell (19 Use Cases, 17 Akteure, 19 Akteur-Verbindungen, 2 include, 6 bedingte extend; Lieferant ist Black Box, kein Akteur) für einen kompletten Neuimport in Visual Paradigm |
-| modell-usecase.xmi | nur das Anwendungsfallmodell (Stand E-24, je Use Case eine Rolle), zum Neuimport, wenn das Klassenmodell schon in VP liegt |
-| entwurf-plantuml/klassen.puml / .png | einziges vollständiges Klassendiagramm; alle Klassen, Operationen und Beziehungen innerhalb einer Abbildung |
-| entwurf-plantuml/usecase.puml, usecase_layout.py / usecase.png, .svg | Use-Case-Diagramm mit einer Rolle je Use Case (E-24). Das PNG erzeugt `usecase_layout.py` (festes Raster: Rollen links, Use Cases nach Bereichen, externe Akteure rechts), weil das PlantUML-Automatiklayout bei 1:1-Verbindungen unlesbar wird; die `.puml` bleibt die Modellquelle |
-| entwurf-plantuml/sequenz-01-sofortdiagnose … sequenz-06-nachbestellvorschlag.puml / .png | sechs Sequenzdiagramme (UC01, UC07, UC09, UC14, UC16, UC10), seit 15.10. auf den Kernablauf gekürzt (E-28): je 7 bis 16 Botschaften, höchstens fünf Fragmente, Ausnahmen als ref; gefordert sind fünf |
-| entwurf-plantuml/systemkontext.puml, systemkontext_layout.py / .png, .svg | Systemkontext für die Doku (Abbildung 1); das PNG erzeugt `systemkontext_layout.py` im festen Raster, die `.puml` beschreibt denselben Inhalt |
+| UML-WWI25B4-Gruppe1.vpp | Visual-Paradigm-Projekt mit Use-Case-Diagramm, Klassendiagramm und sechs Sequenzdiagrammen als Unterdiagramme der Use Cases (Abgabedatei) |
+| usecase-diagramm.png | ud : RepairFlow, 19 Use Cases, 17 Akteure (Abb. 4) |
+| klassendiagramm.png | cd : RepairFlow, 27 Klassen, 7 Aufzählungen, 36 Assoziationen (Abb. 5) |
+| sequenz-01-sofortdiagnose.png … sequenz-06-nachbestellvorschlag.png | SD1 (UC01), SD2 (UC07), SD3 (UC09), SD4 (UC14), SD5 (UC16), SD6 (UC10); SD1 und SD3 sind Abb. 6 und 7 |
 
-## Vorgehen in Visual Paradigm 18
+Die früheren PlantUML-Vorlagen und XMI-Importdateien sind seit dem 19.10.2026 entfernt, weil das VP-Modell vollständig ist. Sie stehen in der Git-Historie.
 
-Zuständig seit 15.10.2026 (E-23): Kilian Klassendiagramm, SD1, SD4, Konsistenzprüfung und VPP-Datei; David Use-Case-Diagramm, SD2, SD3, SD5 und SD6. Der Import (Schritt 2) ist erledigt, das Klassendiagramm ist angelegt. Vor jeder Sitzung **Update**, nach jedem fertigen Diagramm **Commit**, jeder bearbeitet nur seine eigenen Diagramme.
+## Änderungen am Modell
 
-**Use-Case-Diagramm neu aufbauen (E-24):** Das importierte Anwendungsfallmodell hat noch die alten acht Akteure. Vorgehen: (1) Commit, damit nichts verloren geht. (2) Im Model Explorer nur das Paket „Anwendungsfallmodell“ löschen (aus dem Modell); „Klassenmodell“ und „Datentypen“ bleiben. Das geht gefahrlos, solange noch keine Sequenzdiagramme als Unterdiagramme an den Use Cases hängen. (3) Project → Import → XMI → `modell-usecase.xmi`. Nicht die komplette `modell.xmi`, sonst gibt es alle Klassen doppelt. (4) Neues Use Case Diagram „ud : RepairFlow“, Systemgrenze „RepairFlow“ mit den vier Bereichen als Pakete oder Rechtecke, Elemente aus dem Paket hineinziehen und nach `usecase.png` anordnen: Rollen links, Use Cases in der Mitte, KI-Diagnosedienst rechts neben UC01. Den Kunden dreimal aus dem Model Explorer ziehen; VP legt weitere Ansichten desselben Elements an. Der Lieferant ist kein Akteur (Black Box, E-24). UC08 bekommt keinen Akteur. (5) Commit.
+1. Lehre-VPN starten, Visual Paradigm öffnen, im Teamwork Client **Update**.
+2. Ändern, danach **Commit** (Team → Commit).
+3. Betroffene Diagramme exportieren: Project → Export → Active Diagram as Image → PNG, 220 dpi, ohne Legende, Dateiname wie oben (überschreiben).
+4. VPP neu exportieren: Project → Export → Visual Paradigm Project, alle Diagramme, `2_uml/UML-WWI25B4-Gruppe1.vpp` überschreiben.
+5. PNGs und VPP per Branch und Pull Request einchecken; Doku-Abbildungen bei Bedarf ersetzen.
 
-1. Lehre-VPN starten, Visual Paradigm öffnen, Teamwork Client anmelden, Repository **WWI25B4G1 (trunk)** auschecken und öffnen (Anleitung in `5_team/01-projektkontext.md`).
-2. **Modell importieren:** Project → Import → XMI…, Datei `modell.xmi` wählen. Im Model Explorer erscheinen die Pakete Datentypen, Klassenmodell und Anwendungsfallmodell mit allen Elementen. Falls der Import Fehler meldet: Meldung notieren und in `5_team/protokolle/` ablegen, dann Klassen nach dem PNG von Hand anlegen (die Attribute und Operationen stehen komplett in `klassen.puml`).
-3. **Klassendiagramm anlegen:** neues Class Diagram „cd RepairFlow" in den Standardordner, Klassen und Aufzählungen aus dem Model Explorer auf die Fläche ziehen (mehrere markieren und gemeinsam ziehen). Assoziationen und Generalisierungen werden automatisch mitgezeichnet. Layout nach dem PNG ordnen: links Mandant, Personen und Mitarbeiter-Rollen (Servicemitarbeiter, Techniker, Disponent, Werkstattleiter), Mitte Auftrag, rechts Disposition, Aufzählungen am Rand.
-4. **Use-Case-Diagramm anlegen:** neues Use Case Diagram „ud RepairFlow", Systemgrenze „RepairFlow" zeichnen, Use Cases aus dem Model Explorer hineinziehen, Akteure links (primär) und rechts (Lieferant, KI-Diagnosedienst). include/extend kommen aus dem Modell mit.
-5. **Sequenzdiagramme als Unterdiagramme:** im Use-Case-Diagramm den Use Case rechtsklicken → Sub Diagrams → New Diagram → Sequence Diagram. So verlangt es der Ablauf („Verfeinerungsdiagramm"). Je Use Case eines: UC01 Sofortdiagnose anfordern (SD1, Kilian), UC07 KVA freigeben / ablehnen (SD2, David), UC09 Ersatzteile disponieren und reservieren (SD3, David), UC14 Auftrag fertigmelden (SD4, Kilian), UC16 Reklamation bearbeiten (SD5, David), UC10 Lieferantenbestellung auslösen (SD6, David, Bestellbedarf aus UC12; ref auf UC11/UC19). Lebenslinien: Akteure als Actor, Objekte als „: Klassenname" mit der Klasse aus dem Modell verknüpfen (dann bietet VP die Operationen zur Auswahl an). Fragmente alt/opt/loop/break und ref wie in den PNGs. Objekterzeugung mit dem Werkzeug **Create Message** auf den Kopfkasten der Lebenslinie (gestrichelt, Kasten sitzt dann auf Nachrichtenhöhe – Notation VL 6 Folie 5-70); die PNGs zeigen das seit 15.10. genauso, ein «create»-Text wird nicht eingetragen. Diagrammname `sqd: UCxx Name`, im Diagramm Presentation Options → Message Display Options → Parameter Types ausblenden.
-6. Die Stereotypen «mandant» (Werkstattbetrieb) und «stammdaten» (Filiale, Lieferant, Ersatzteil) überträgt die XMI nicht; in VP von Hand setzen. Die extend-Beziehungen enthalten in `usecase.puml` Erweiterungspunkte und Bedingungen; im VP-Diagramm sind sie bewusst nicht eingetragen (E-24-Nachtrag 16.10.).
-7. Wer das XMI schon vor dem 05.10.2026 importiert hat: neu importieren (einfacher) oder die Änderungen aus E-15, E-17 und E-18 (Entscheidungslog in der Git-Historie) von Hand nachziehen (Servicemitarbeiter, UC19, include/extend, neue Operationen und Assoziationen).
-8. Nach jeder Sitzung Commit in den Teamwork-Server und zusätzlich File → Save Project As als lokale Sicherung `UML-WWI25B4-Gruppe1.vpp` (die Datei kommt so in die Abgabe).
-
-## Herkunft
-
-Zusammenführung aus den beiden Entwürfen vom 02.09.2026 (E-10), korrigiert in E-15, E-17 und E-18. Gearbeitet wird direkt in Visual Paradigm bzw. in den `.puml`-Dateien.
+Bekannte Eigenheit: Stereotypen («mandant» bei Werkstattbetrieb, «stammdaten» bei Filiale, Lieferant, Ersatzteil), ausgeblendete Rollennamen und Fit Size können nach einem Update verloren gehen. Nach jedem Update im Klassendiagramm kurz prüfen.
 
 ## Namensregeln
 
 - Klassen in UpperCamelCase ohne Umlaute (Geraet, KvaPosition, KIDiagnosevorschlag), Attribute und Operationen in lowerCamelCase.
 - Multiplizitäten in UML-Schreibweise (0..*, 1..*), Kompositionen nur dort, wo Teile ohne das Ganze nicht existieren.
+- Jede Botschaft an eine Klassen-Lebenslinie ist eine Operation dieser Klasse.
 - Die BPMN-Datenobjekte verwenden dieselben Namen, zur besseren Lesbarkeit im Diagramm mit Bindestrich getrennt („Kosten-voranschlag [vorläufig]").
