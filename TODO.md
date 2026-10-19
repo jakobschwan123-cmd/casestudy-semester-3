@@ -33,8 +33,8 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jeder �
 
 Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
-- [ ] **Abb. 4–7 einfügen** (die VP-Exporte liegen in `2_uml/`): Abb. 4 `usecase-diagramm.png`, Abb. 5 `klassendiagramm.png` (Querformat-Seite empfohlen), Abb. 6 `sequenz-01-sofortdiagnose.png`, Abb. 7 `sequenz-03-reservierung.png`. Bild mit der im Kasten angegebenen Breite einfügen, Kasten löschen.
-- [ ] **Gelbe Hinweise abarbeiten:** 3.1 (VPP und SD als Unterdiagramme fertig → löschen), 3.1/Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe B), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen). 5.6 ist erledigt (E-30).
+- [x] Abb. 4–7 eingefügt (VP-Exporte aus `2_uml/`), Klassendiagramm auf einer Querformatseite. Im PDF ist es durch Hineinzoomen lesbar, das Bild ist in voller Auflösung eingebettet.
+- [ ] **Gelbe Hinweise abarbeiten:** Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe B), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen). 3.1 und 5.6 sind erledigt.
 - [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste. Falls die Folien 13–15 ausgeblendet bleiben, Foliennummern anpassen (siehe D).
 - [ ] **Abschluss:** Titelseite „Bearbeitungsstand“ auf das aktuelle Datum, kein „[“ mehr im Text, als PDF speichern (`3_doku/Projektdokumentation.pdf`), Seitenzahlen im Inhaltsverzeichnis im PDF prüfen (statisches Verzeichnis).
 
