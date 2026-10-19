@@ -24,11 +24,10 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
-| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,1; Linter und Layout-Prüfung 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
+| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,3; Linter 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
 | Use-Case-Diagramm | ≥ 10 Use Cases | 19 (17 Akteure: Kunde, 15 Mitarbeiterrollen, KI-Diagnosedienst; Lieferant nur Black Box; je Use Case eine Rolle, E-24) | `2_uml/entwurf-plantuml/usecase.puml` |
 | Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `2_uml/entwurf-plantuml/klassen.puml` |
 | Sequenzdiagramme | 5 | 6 | `2_uml/entwurf-plantuml/sequenz-01..06-*.puml` |
-| Zustandsdiagramm (Zusatz) | – | 1 | `2_uml/entwurf-plantuml/zustand-reparaturauftrag.puml` |
 
 ## Unumstößliche Konventionen
 
@@ -37,8 +36,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   Sequenzdiagramme **wortgleich** zu halten. Quelle für Klassen,
   Operationen und Use Cases sind `2_uml/entwurf-plantuml/klassen.puml`, `2_uml/entwurf-plantuml/usecase.puml` und `2_uml/modell.xmi`
   bzw. das Visual-Paradigm-Projekt; für die Prozesse die `.bpmn`-Dateien (E-21).
-  Die Generatoren in `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/tools/` werden nicht mehr verwendet. Bei Änderungen
-  Bilder, Doku und Folien nachziehen.
+  Erzeugungsskripte gibt es nicht mehr (E-21, E-30). Bei Änderungen Bilder, Doku und Folien von Hand nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
   ausmodellierten Prozess, `Kunde` mit eigenem nicht ausführbarem Prozess (E-16),
   `Lieferant` als Empty Pool. **Lanes (4)
@@ -79,7 +77,7 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   (früher `repairflow-klassen.puml`) — der Ordner sagt schon, was es ist.
 - **Zwei Entwürfe, ein Stand.** Kilians V2 (Betreiber-Perspektive, Camunda 7,
   ohne KI) und der Solution-Provider-Entwurf wurden am 02.09.2026 zusammengeführt
-  (`9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/05-vergleich-und-zusammenfuehrung.md`). Nicht wieder auf die
+  (Vergleich in der Git-Historie). Nicht wieder auf die
   Betreiber-Fassung zurückfallen. Gültige Entscheidungen in Kurzform:
   `5_team/03-entscheidungen.md`; ausführlicher Verlauf im Archiv.
 - **Keine Umlaute in Ordner-/Dateinamen.** macOS (NFD) und Linux (NFC)
@@ -104,4 +102,4 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 ## UML-Abgleich E-18 (05.10.2026)
 
-Aktiv gibt es genau ein Klassendiagramm (`2_uml/entwurf-plantuml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Prüfprotokoll: `9_archiv/v2_2026-10-05_generatoren-und-pruefungen/doku/protokolle/2026-10-05-uml-bpmn-abgleich.md`; Strukturprüfung: `python3 tools/check_uml.py`.
+Aktiv gibt es genau ein Klassendiagramm (`2_uml/entwurf-plantuml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Das Prüfprotokoll vom 05.10.2026 liegt in der Git-Historie.

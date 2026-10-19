@@ -39,7 +39,7 @@ Geprüft von Kilian: `3_doku/Projektdokumentation.docx` (Stand Nina, 15.10.) geg
 | 16 | Doku 5.3 | „Unsere erste Fassung hatte sechs Akteure mit bis zu acht Verbindungen" | Es waren acht Akteure (sechs Personen/Rollen, Lieferant, KI-Dienst); Kunde und Techniker hatten je acht Verbindungen. „acht Akteure" | Nina |
 | 17 | Sprechtext Folie 13 | „bisher zehn gemergte Pull Requests" | Zahl am Ende aktualisieren (Stand 15.10.: 25) oder streichen | Kilian |
 | 18 | Abb. 1 Systemkontext | Lieferant als Strichmännchen (Akteur) gezeichnet, obwohl seit E-24 Black Box ohne Systemzugang | Optional: als Kasten „Lieferant (externer Partner)" wie den KI-Dienst zeichnen, damit der Dozent nicht nachfragt | Kilian |
-| 19 | Zustandsdiagramm | Übergang „Teile bestellt → abgelehnt" (Folgeaufgabe aus E-27: Teil nicht beschaffbar) fehlt | In `zustand-reparaturauftrag.puml` ergänzen, falls das Diagramm in VP gezeichnet wird; es ist keine Pflichtabgabe | Kilian |
+| 19 | Zustandsdiagramm (entfällt, E-30: Entwurf gelöscht) | Übergang „Teile bestellt → abgelehnt" (Folgeaufgabe aus E-27: Teil nicht beschaffbar) fehlt | In `zustand-reparaturauftrag.puml` ergänzen, falls das Diagramm in VP gezeichnet wird; es ist keine Pflichtabgabe | Kilian |
 | 20 | VPP und Tabelle 5 | `UML-WWI25B4-Gruppe1.vpp` liegt noch nicht in `2_uml/`; Tabelle 5 und 4.3 behaupten es | Nach SD1/SD4: Project → Save Project As | Kilian |
 
 ## Stand 16.10.2026 (Nachtrag)
