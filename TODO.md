@@ -18,7 +18,7 @@ Lehre-VPN starten, im Teamwork Client vor jeder Sitzung **Update**, nach jeder �
 - [x] Klassendiagramm „cd : RepairFlow“ mit allen 27 Klassen und 7 Aufzählungen, Stereotypen, E-29-Ergänzungen, Layout ohne Überschneidungen.
 - [x] Sechs Sequenzdiagramme als Unterdiagramme (SD1 UC01, SD2 UC07, SD3 UC09, SD4 UC14, SD5 UC16, SD6 UC10) nach E-28, refs verlinkt.
 - [x] Konsistenzprüfung Botschaft = Operation (inklusive `mahne()` in SD6 nach E-29).
-- [x] Letzter Stand im Teamwork-Server (Revision 89): Klassendiagramm neu angeordnet, Rückgabetypen korrigiert (`[*]` bei Listen), ref-Rahmen in SD2, SD4, SD5 und SD6 beschriftet. Stereotypen «mandant» und «stammdaten» nach dem Commit geprüft.
+- [x] Letzter Stand im Teamwork-Server (Revision 91): Klassendiagramm neu angeordnet, Rückgabetypen korrigiert (`[*]` bei Listen), ref-Rahmen in SD2, SD4, SD5 und SD6 beschriftet. Stereotypen «mandant» und «stammdaten» nach dem Commit geprüft.
 - [x] Diagramme exportiert (220 dpi) nach `2_uml/`: `usecase-diagramm.png`, `klassendiagramm.png`, `sequenz-01-sofortdiagnose.png` … `sequenz-06-nachbestellvorschlag.png`.
 - [x] VPP-Datei `2_uml/UML-WWI25B4-Gruppe1.vpp` exportiert (Project → Export → Visual Paradigm Project). Bei späteren Änderungen in VP: Commit, PNG neu exportieren, VPP neu exportieren.
 

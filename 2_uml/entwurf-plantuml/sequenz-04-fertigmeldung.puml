@@ -40,7 +40,7 @@ alt Qualität in Ordnung
     E -> RA : fertigmelden()
     RA -> RA : wechsleStatus(FERTIG)
 else auch nach der zweiten Nacharbeit nicht in Ordnung
-    RA -> RA : wechsleStatus(ABGELEHNT)
+    E -> RA : wechsleStatus(ABGELEHNT)
 end
-note over E, RA : Abholbenachrichtigung und Rechnung folgen in UC15 (BPMN 08)
+note over E, RA : Danach UC15 (BPMN 08): bei FERTIG Abholbenachrichtigung und Rechnung, bei ABGELEHNT Rückgabe des Geräts
 @enduml
