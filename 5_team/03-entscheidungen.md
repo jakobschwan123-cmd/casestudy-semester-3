@@ -19,7 +19,7 @@ Festgelegt von Kilian (Scrum Master) am 19.10.2026, Kenntnisnahme der Gruppe am 
 - **Präsentation (ersetzt die Quellenregel aus E-25):** Die `.pptx` ist das Original, der Generator in `4_praesentation/tools/` ist gelöscht. Die Folien 13–15 bleiben vorerst ausgeblendet; Maximilian überarbeitet die Präsentation und gleicht danach Agenda, Folie 18 und Doku Kapitel 1 an.
 - **Repository:** `9_archiv/` ist gelöscht, frühere Stände liegen nur noch in der Git-Historie. `5_team/CLAUDE.md` bleibt.
 - **Moodle-Angabe:** Der Entwurf in `0_abgabe/KI-Angabe-Moodle.md` bleibt; jede Person ergänzt ihre Werkzeuge.
-- **Folgt daraus:** Doku 5.1 (Beschreibung P03/P05 nach E-26) und 5.6 (Ergebnis der Fristen) angepasst, Sprechtext Folie 8 ohne Zustandsdiagramm. In der `.pptx` streicht Maximilian auf Folie 8 „+ Zustandsdiagramm“ und „Zustandsdiagramm des Reparaturauftrags“ sowie den Satz im Sprechtext.
+- **Folgt daraus:** Doku 5.1 (Beschreibung P03/P05 nach E-26) und 5.6 (Ergebnis der Fristen) angepasst, Sprechtext Folie 8 ohne Zustandsdiagramm. In der `.pptx` werden auf Folie 8 „+ Zustandsdiagramm“, „Zustandsdiagramm des Reparaturauftrags“ und der Satz in der Notiz gestrichen, auf Folie 12 der Halbsatz zum Zustandsdiagramm ersetzt (TODO D), sobald die Überarbeitung der Präsentation abgeschlossen ist.
 
 ## E-29 Klassendiagramm: Operationen je Rolle, Mahnungen, Gerätetyp (16.10.2026)
 
