@@ -25,17 +25,16 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
 | BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,3; Linter 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
-| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (17 Akteure: Kunde, 15 Mitarbeiterrollen, KI-Diagnosedienst; Lieferant nur Black Box; je Use Case eine Rolle, E-24) | `2_uml/entwurf-plantuml/usecase.puml` |
-| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm `2_uml/entwurf-plantuml/klassen.puml` |
-| Sequenzdiagramme | 5 | 6 | `2_uml/entwurf-plantuml/sequenz-01..06-*.puml` |
+| Use-Case-Diagramm | ≥ 10 Use Cases | 19 (17 Akteure: Kunde, 15 Mitarbeiterrollen, KI-Diagnosedienst; Lieferant nur Black Box; je Use Case eine Rolle, E-24) | VP `ud : RepairFlow`, `2_uml/usecase-diagramm.png` |
+| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm, VP `cd : RepairFlow`, `2_uml/klassendiagramm.png` |
+| Sequenzdiagramme | 5 | 6 | VP-Unterdiagramme, `2_uml/sequenz-01..06-*.png` |
 
 ## Unumstößliche Konventionen
 
 - **Namens-Konsistenz über alle Artefakte.** Rollen/Pools, Klassennamen,
   Use-Case-Namen und Statuswerte sind über Doku, BPMN, Use-Case-, Klassen- und
   Sequenzdiagramme **wortgleich** zu halten. Quelle für Klassen,
-  Operationen und Use Cases sind `2_uml/entwurf-plantuml/klassen.puml`, `2_uml/entwurf-plantuml/usecase.puml` und `2_uml/modell.xmi`
-  bzw. das Visual-Paradigm-Projekt; für die Prozesse die `.bpmn`-Dateien (E-21).
+  Operationen und Use Cases ist das Visual-Paradigm-Projekt (Teamwork-Server, Export `2_uml/UML-WWI25B4-Gruppe1.vpp`); für die Prozesse die `.bpmn`-Dateien (E-21).
   Erzeugungsskripte gibt es nicht mehr (E-21, E-30). Bei Änderungen Bilder, Doku und Folien von Hand nachziehen.
 - **Pools (3):** `Werkstattbetrieb (Pilotkunde FixWerk GmbH)` mit dem
   ausmodellierten Prozess, `Kunde` mit eigenem nicht ausführbarem Prozess (E-16),
@@ -57,12 +56,10 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
   prüfen und das PNG neu exportieren. Je Diagramm (Prozessebene) genau ein Start-
   und ein Endereignis (eingebettete Teilprozesse haben ihr eigenes), Ereignisse im Partizip Perfekt, Aktivitäten Verb + Objekt.
 - **Werkzeuge:** BPMN in **Camunda Modeler (Camunda 8)**, UML in **Visual
-  Paradigm 18** (Import über `2_uml/modell.xmi`). Die `.puml`-Dateien liefern
-  validen PlantUML-Code; die `.png` sind Renderings, keine Quellen. Quelle
-  ändern → Rendering neu erzeugen, nie nur das PNG austauschen.
+  Paradigm 18** (Teamwork-Server). Die `.png` in `1_bpmn/` und `2_uml/` sind Exporte, keine Quellen. Quelle
+  ändern → Export neu erzeugen, nie nur das PNG austauschen.
 - **PNG und Quelle gehören zusammen.** Beide liegen im selben Ordner mit
-  identischem Basisnamen (`klassen.puml` ↔ `klassen.png`,
-  `p01-sofortdiagnose.bpmn` ↔ `p01-sofortdiagnose.png`). Namensschema nicht brechen.
+  identischem Basisnamen (`p01-sofortdiagnose.bpmn` ↔ `p01-sofortdiagnose.png`; für UML gilt das VP-Diagramm als Quelle). Namensschema nicht brechen.
 - **Datenobjekte in BPMN tragen Klassennamen**, ggf. mit Zustand in eckigen
   Klammern und Bindestrich für den Umbruch („Kosten-voranschlag [vorläufig]").
   Datenspeicher: `RepairFlow-Datenbank`, `Technikerplan`, `Buchhaltung (DATEV-Export)`.
@@ -102,4 +99,4 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 ## UML-Abgleich E-18 (05.10.2026)
 
-Aktiv gibt es genau ein Klassendiagramm (`2_uml/entwurf-plantuml/klassen.puml/.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Das Prüfprotokoll vom 05.10.2026 liegt in der Git-Historie.
+Aktiv gibt es genau ein Klassendiagramm (VP `cd : RepairFlow`, `2_uml/klassendiagramm.png`). Keine Fokusdiagramme neu erzeugen. UC14 heißt „Auftrag fertigmelden"; Abholbenachrichtigung liegt in P08/UC15 „Abholung und Abrechnung abwickeln". Nacharbeit entsteht in P09 nur bei Freigabe oder angenommenem Angebot. In P05 werden Fehlteile zunächst markiert und erst nach Reservierungsbestätigung, Meldebestandsprüfung und Kundeninformation bestellt. Das Prüfprotokoll vom 05.10.2026 liegt in der Git-Historie.

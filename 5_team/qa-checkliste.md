@@ -24,8 +24,8 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 
 ## UML
 
-- [ ] Genau ein aktives vollständiges Klassendiagramm (`2_uml/entwurf-plantuml/klassen.puml/.png`), keine Fokusvarianten
-- [ ] PNG nach jeder Änderung der `.puml` neu gerendert
+- [ ] Genau ein aktives vollständiges Klassendiagramm (VP `cd : RepairFlow`), keine Fokusvarianten
+- [ ] Nach jeder Änderung in VP: Teamwork-Commit, PNG in `2_uml/` neu exportiert, VPP neu exportiert
 - [ ] Use Cases und Sequenzdiagramme passen zu den BPMN-Prozessen (Zuordnung siehe E-18, auch nach späteren BPMN-Änderungen)
 - [ ] Jede Botschaft an eine Klassen-Lebenslinie ist eine Operation dieser Klasse im Klassendiagramm
 - [ ] Jede Lebenslinie ist eine Klasse oder ein Akteur des Modells; ref-Fragmente verweisen auf existierende Use Cases

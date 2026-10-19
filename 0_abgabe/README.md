@@ -4,12 +4,12 @@ Jede Person lädt das vollständige Archiv `Fallstudie-WWI25B4-Gruppe1.zip` selb
 
 ## Inhalt des Archivs
 
-| Datei im Archiv | Quelle im Repo | Stand 12.10.2026 |
+| Datei im Archiv | Quelle im Repo | Stand 19.10.2026 |
 |---|---|---|
-| `Projekt-WWI25B4-Gruppe1.pdf` | `3_doku/Projektdokumentation.pdf`, umbenennen | Text fertig, Abbildungen und gelbe Hinweise offen (siehe `TODO.md`) |
-| `BPMN-WWI25B4-Gruppe1.zip` | die zehn Dateien `1_bpmn/*.bpmn`, nur XML, ohne PNG, beim Packen umbenennen | fertig bis auf Modeler-Prüfung und zwei Korrekturen (Maximilian) |
-| `UML-WWI25B4-Gruppe1.vpp` | `2_uml/UML-WWI25B4-Gruppe1.vpp` (Visual Paradigm, File → Save Project As) | fehlt noch (Kilian, David) |
-| `Praesentation-WWI25B4-Gruppe1.pdf` | `4_praesentation/Abschlusspraesentation.pdf`, umbenennen; enthält die Zuordnung der Vortragenden (Folie 18) | fertig bis auf neue Diagrammbilder |
+| `Projekt-WWI25B4-Gruppe1.pdf` | `3_doku/Projektdokumentation.pdf`, umbenennen | Abbildungen fertig; gelbe Hinweise zu Modeler-Prüfung und Generalprobe offen (siehe `TODO.md`) |
+| `BPMN-WWI25B4-Gruppe1.zip` | die zehn Dateien `1_bpmn/*.bpmn`, nur XML, ohne PNG, beim Packen umbenennen | fertig bis auf die Modeler-Prüfung (Maximilian) |
+| `UML-WWI25B4-Gruppe1.vpp` | `2_uml/UML-WWI25B4-Gruppe1.vpp` | fertig (Teamwork-Revision 91); nach späteren VP-Änderungen neu exportieren |
+| `Praesentation-WWI25B4-Gruppe1.pdf` | `4_praesentation/Abschlusspraesentation.pdf`, umbenennen; enthält die Zuordnung der Vortragenden | nach der Generalprobe neu exportieren (Jakob) |
 
 ## So wird gepackt
 

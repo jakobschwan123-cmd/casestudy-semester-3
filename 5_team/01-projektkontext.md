@@ -95,7 +95,7 @@ Das GitHub-Repo ist das Artefakt-Repository für BPMN und der Ort für alles Sch
 
 ## Fachliche Konventionen für alle Artefakte
 
-Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: `2_uml/entwurf-plantuml/klassen.puml`, `2_uml/entwurf-plantuml/usecase.puml` und `1_bpmn/README.md`).
+Diese Namen gelten wortgleich in BPMN, UML und Doku (Quelle: Visual-Paradigm-Projekt `2_uml/UML-WWI25B4-Gruppe1.vpp` und `1_bpmn/README.md`).
 
 - Pools: Werkstattbetrieb (Pilotkunde FixWerk GmbH) · Kunde · Lieferant; Lanes: Service / Annahme · Techniker · Werkstattleitung · Ersatzteil-Disposition
 - Zustände von `Reparaturauftrag`: angenommen, in Diagnose, KVA offen, freigegeben, abgelehnt, Teile bestellt, in Reparatur, fertig, abgeholt. Ohne Fehlteile entfällt „Teile bestellt“; ein Nacharbeitsauftrag beginnt ohne erneute Diagnose und KVA. Eine erfolglose zweite Nacharbeit führt in P07 von „in Reparatur“ nach „abgelehnt“ (E-19).
