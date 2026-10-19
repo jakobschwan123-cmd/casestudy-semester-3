@@ -6,7 +6,5 @@
 |---|---|
 | `Abschlusspraesentation.pptx` / `.pdf` | die Präsentation; Sprechtext je Folie in den Notizen, Zuordnung der Vortragenden auf Folie 2 und 18 |
 | `Sprechtext_Abschlusspraesentation.docx` | Sprechtexte mit Zeitangaben, zum Ausdrucken für die Generalprobe |
-| `tools/pres.js` | Generator (pptxgenjs); liest `tools/sprechtext.json` und `tools/process_stats.json` |
-| `tools/sprechtext.py` | Sprechtexte als Quelle; schreibt `sprechtext.json` und die Word-Datei |
 
-Neu erzeugen: `cd 4_praesentation/tools && python3 sprechtext.py && NODE_PATH=<pfad zu node_modules> node pres.js`, dann die pptx als PDF exportieren. Wer direkt in PowerPoint ändert, sagt in der WhatsApp-Gruppe Bescheid, damit die Änderung nicht beim nächsten Erzeugen verloren geht.
+Seit 19.10.2026 (E-30) ist die `.pptx` das Original: Änderungen direkt in PowerPoint, Sprechtext in den Notizen und in der Word-Datei gleich halten. Wer an der Datei arbeitet, sagt vorher in der WhatsApp-Gruppe Bescheid, weil sich PowerPoint-Dateien nicht zusammenführen lassen. Das PDF wird nach der Generalprobe aus PowerPoint exportiert.

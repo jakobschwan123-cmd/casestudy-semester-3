@@ -30,8 +30,7 @@ Gültig ab 05.10.2026 (Jakob, Qualitätsmanager). Abgeleitet aus Doku Kapitel 3.
 - [ ] Jede Botschaft an eine Klassen-Lebenslinie ist eine Operation dieser Klasse im Klassendiagramm
 - [ ] Jede Lebenslinie ist eine Klasse oder ein Akteur des Modells; ref-Fragmente verweisen auf existierende Use Cases
 - [ ] include/extend-Richtung stimmt (Basis → inkludiert, erweiternd → Basis) und ist fachlich begründet
-- [ ] Zustandsdiagramm nutzt nur Zustände der Aufzählung AuftragStatus und Operationen der Klasse Reparaturauftrag
-- [ ] Statuswechsel in BPMN, Sequenzdiagramm und Zustandsdiagramm stimmen überein
+- [ ] Statuswechsel in BPMN und Sequenzdiagrammen nutzen nur Werte der Aufzählung AuftragStatus
 - [ ] In Visual Paradigm committet, `.vpp` gesichert und in `2_uml/` eingecheckt
 
 ## Doku und Präsentation
