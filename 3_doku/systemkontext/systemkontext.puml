@@ -8,9 +8,8 @@ actor "Lieferant" as Lieferant
 rectangle "Werkstattbetrieb (Mandant), z. B. FixWerk GmbH" as WB {
   actor "Servicemitarbeiter\n(Service / Annahme)" as Service
   actor "Techniker" as Techniker
-  actor "Werkstattleiter\n(Werkstattleitung)" as Leitung
+  actor "Werkstattleiter\n(Werkstattleitung, Administration)" as Leitung
   actor "Disponent\n(Ersatzteil-Disposition)" as Dispo
-  actor "Werkstattinhaber" as Inhaber
 }
 rectangle "RepairFlow-Plattform (SaaS)\nRepairFlow GmbH" as RF #EEF3FF {
   rectangle "Kundenportal / App" as App
@@ -23,9 +22,8 @@ rectangle "Buchhaltung / DATEV\n(außerhalb der Systemgrenze)" as DATEV #F5F5F5
 Kunde -- App : Sofortdiagnose, Voranmeldung,\nKVA-Freigabe, Status, Zahlung
 Service -- Auftrag
 Techniker -- Auftrag
-Leitung -- Auftrag
+Leitung -- Auftrag : Filialen, Mitarbeiter, Termine
 Dispo -- DispoM
-Inhaber -- Auftrag : Onboarding, Filialen, Nutzer
 App -- KI : Foto / Video / Ton
 DispoM -- Lieferant : Bestellung, Auftragsbestätigung,\nLieferung, Retoure
 Abr .. DATEV : Export (Schnittstelle)

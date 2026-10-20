@@ -38,9 +38,9 @@ def main():
     bx, by, bw, bh = 40, 150, 300, 480
     o.append(f"<rect x='{bx}' y='{by}' width='{bw}' height='{bh}' fill='#F7F7F7' stroke='black' stroke-width='1.3'/>")
     o.append(f"<text x='{bx+bw/2}' y='{by+20}' text-anchor='middle' font-size='12' font-weight='bold' {FONT}>Werkstattbetrieb (Mandant), z. B. FixWerk GmbH</text>")
-    people = [('Werkstattinhaber', '(Betriebsadministrator)'), ('Werkstattleiter', '(Werkstattleitung)'), ('Servicemitarbeiter', '(Service / Annahme)'),
+    people = [('Werkstattleiter', '(Werkstattleitung, Administration)'), ('Servicemitarbeiter', '(Service / Annahme)'),
               ('Techniker', '(Werkstatt)'), ('Disponent', '(Ersatzteil-Disposition)')]
-    ys = [by + 80 + i * 88 for i in range(5)]
+    ys = [by + 95 + i * 105 for i in range(4)]
     for (n, r), y in zip(people, ys):
         actor(o, 130, y, [n, r])
     # Plattform Mitte
@@ -64,11 +64,10 @@ def main():
     # Mitarbeiter -> Module (gerade Linien, Sammelpunkt am Modul)
     ym = mys[1] + mh / 2
     line(o, 146, ys[0], mx, ym)
-    label(o, 350, ys[0] - 6, ['Onboarding, Filialen, Nutzer'], anchor='start')
+    label(o, 350, ys[0] - 6, ['Filialen, Mitarbeiter, Termine'], anchor='start')
     line(o, 146, ys[1], mx, ym)
     line(o, 146, ys[2], mx, ym)
-    line(o, 146, ys[3], mx, ym)
-    line(o, 146, ys[4], mx, mys[2] + mh / 2)
+    line(o, 146, ys[3], mx, mys[2] + mh / 2)
     label(o, 350, mys[2] + mh / 2 + 20, ['Bestände, Reservierung,', 'Bestellung'], anchor='start')
     # extern rechts
     rx, rw = 980, 240
