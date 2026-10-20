@@ -1,6 +1,6 @@
 # RepairFlow – Kunden-App Mockup (Live-Demo)
 
-Interaktives Mockup der Kunden-App für die **Abschlusspräsentation**. Zeigt die
+Interaktives Mockup der Kunden-App für die **Abschlusspräsentation** (Folie 8, Live-Demo). Zeigt die
 Customer Journey von der Sofortdiagnose (inkl. KI-Assistent) über den vorläufigen
 Kostenvoranschlag und die Voranmeldung bis zum Auftragsstatus.
 

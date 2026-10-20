@@ -44,16 +44,17 @@ Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
 Seit E-30 ist die `.pptx` das Original, es gibt keinen Generator mehr. Änderungen direkt in PowerPoint; Sprechtext in den Notizen und in `Sprechtext_Abschlusspraesentation.docx` gleich halten.
 
-Stand 20.10.: 18 Folien (17 plus Anhang), alle eingeblendet. Die Nummern unten beziehen sich auf diesen Stand.
+Stand 20.10.: 19 Folien (18 plus Anhang), alle eingeblendet. Die Nummern unten beziehen sich auf diesen Stand.
 
 - [x] Doppelte Auftragsreise entfernt, Folie 6 so skaliert, dass alle sechs Phasen auf eine Folie passen.
 - [x] Kennzahlen auf Folien 8 und 9 samt Notizen auf den Stand von `1_bpmn/README.md` und Doku 5.1 gebracht (133 Aktivitäten, Ø 13,3, 61 %, 42 Nachrichtenflüsse, 51 Datenobjekte, P05 15/80 %, P06 15/60 %).
-- [x] Zustandsdiagramm von Folie 8 und 12 gestrichen (E-30).
+- [x] Zustandsdiagramm von Folie 9 und 13 gestrichen (E-30).
 - [x] Redezeit neu verteilt: Nina 2:50, David 3:20, Adrian 3:10, Maximilian 3:20, Kilian 3:10, Jakob 2:20, gesamt 18:10. Notizen aller Folien und Word-Datei sind wortgleich.
-- [x] Folien 13 bis 15 eingeblendet. Folie 13 und 14 ohne Datumsliste, stattdessen der Ablauf je Diagramm (Entwurf im Zweierteam, Review, Abstimmung im Gruppentermin, Pull Request).
-- [x] Agenda (Folie 2) und Zuordnung (Folie 18) passen zur Folienfolge: Nina 1–2 und 16–17, David 3, 6 und 11, Adrian 4–5 und 7, Maximilian 8–10, Kilian 12–13, Jakob 14–15.
+- [x] Folien 14 bis 16 eingeblendet. Folie 14 und 15 ohne Datumsliste, stattdessen der Ablauf je Diagramm (Entwurf im Zweierteam, Review, Abstimmung im Gruppentermin, Pull Request).
+- [x] Agenda (Folie 2) und Zuordnung (Folie 19) passen zur Folienfolge: Nina 1–2 und 17–18, David 3, 6 und 12, Adrian 4–5 und 7–8, Maximilian 9–11, Kilian 13–14, Jakob 15–16.
 - [x] Mockup (`4_praesentation/mockup/`) an das Modell angeglichen: Voranmeldung statt Auftrag, Teile vorreserviert, Preis vorläufig, KVA-Freigabe im Status-Tracking.
-- [ ] **Festlegen, ob und wo das Mockup gezeigt wird** (Vorschlag: Folie 7, KI-Sofortdiagnose) und die Zeit dafür einplanen.
+- [x] Mockup wird auf Folie 8 „Live-Demo: die Kunden-App“ gezeigt (Adrian, 60 s, im Browser aus `4_praesentation/mockup/index.html`). Redezeit: Nina 2:50, David 3:20, Adrian 4:10, Maximilian 3:20, Kilian 3:10, Jakob 2:20, gesamt 19:10.
+- [ ] **Demo vorbereiten:** Browser mit `mockup/index.html` vor der Präsentation öffnen (Vollbild, hineinzoomen), beim Wechsel von Folie 8 zum Browser und zurück üben; Fallback sind die Screenshots auf Folie 8.
 - [ ] **Sprechtext eigener Folien überarbeiten:** Jede Person formuliert ihren Teil so um, dass er zu ihr passt, und hält die Zeitangabe grob ein (gesamt etwa 18 Minuten). Danach die Notiz in der PPTX und die Word-Datei gleich halten.
 - [ ] **Generalprobe 22.10.:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten), Übergaben üben, Fragen üben (Warum eine Rolle je Use Case? Warum ist der Lieferant kein Akteur? Warum Komposition beim Befund, nicht beim Gerät? Was ist automatisiert, was nicht? Wie wurde Konsistenz gesichert? Warum ist der Auftrag nach zwei gescheiterten Nacharbeiten abgelehnt?).
 - [ ] **PDF exportieren** nach der Generalprobe (`4_praesentation/Abschlusspraesentation.pdf`). Die Folie mit der Zuordnung der Vortragenden muss enthalten sein (Pflicht laut Ablauf).
