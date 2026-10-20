@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RepairFlow – Kunden-App (Mockup)</title>
+<style>
+  :root {
+    --brand: #0d9488;        /* Teal */
+    --brand-dark: #0f766e;
+    --brand-light: #ccfbf1;
+    --accent: #2563eb;       /* Blau */
+    --ink: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --ok: #16a34a;
+    --warn: #ea580c;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(15,23,42,.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 18px;
+    padding: 28px 16px;
+    background: radial-gradient(1200px 600px at 50% -10%, #e2f6f3 0%, #eef2f7 45%, #e7ecf3 100%);
+  }
+
+  /* ---------- Phone frame ---------- */
+  .phone {
+    width: 390px;
+    height: 820px;
+    max-height: calc(100vh - 56px);
+    background: #0b1220;
+    border-radius: 46px;
+    padding: 14px;
+    box-shadow: var(--shadow), 0 0 0 2px rgba(15,23,42,.06);
+    position: relative;
+  }
+  .phone::after { /* side button */
+    content: "";
+    position: absolute;
+    right: -3px; top: 190px;
+    width: 3px; height: 72px;
+    background: #0b1220;
+    border-radius: 0 3px 3px 0;
+  }
+  .screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    border-radius: 34px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .notch {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 150px; height: 26px;
+    background: #0b1220;
+    border-radius: 0 0 16px 16px;
+    z-index: 20;
+  }
+  .statusbar {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    flex: 0 0 auto;
+  }
+  .statusbar .dots { letter-spacing: 2px; }
+
+  /* ---------- App chrome ---------- */
+  .appbar {
+    flex: 0 0 auto;
+    padding: 6px 18px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .appbar .logo {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--brand), var(--accent));
+    display: grid; place-items: center;
+    color: #fff; font-weight: 800; font-size: 16px;
+    box-shadow: 0 4px 10px rgba(13,148,136,.35);
+  }
+  .appbar .brand { font-weight: 800; font-size: 17px; letter-spacing: -.2px; }
+  .appbar .brand span { color: var(--brand); }
+  .appbar .spacer { flex: 1; }
+  .appbar .step-pill {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    background: #fff; border: 1px solid var(--line);
+    padding: 4px 9px; border-radius: 999px;
+  }
+
+  .view {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 6px 18px 18px;
+  }
+  .view::-webkit-scrollbar { width: 0; }
+
+  .screen-section { display: none; animation: fade .35s ease; }
+  .screen-section.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px);} to {opacity:1; transform:none;} }
+
+  h1 { font-size: 22px; line-height: 1.2; letter-spacing: -.4px; margin-bottom: 6px; }
+  h2 { font-size: 15px; margin: 2px 0 10px; }
+  p.lead { color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .small { font-size: 12px; color: var(--muted); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 14px;
+  }
+  .card.tight { padding: 12px 14px; }
+
+  label.field { display:block; font-size: 12px; font-weight: 700; color: var(--muted); margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .4px;}
+  textarea, input[type=text] {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    resize: none;
+    background: #fff;
+  }
+  textarea:focus, input:focus { outline: 2px solid var(--brand-light); border-color: var(--brand); }
+
+  .btn {
+    display: inline-flex; align-items:center; justify-content:center; gap:8px;
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 16px;
+    font: inherit; font-weight: 700; font-size: 15px;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn:active { transform: translateY(1px) scale(.995); }
+  .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 8px 18px rgba(13,148,136,.35); }
+  .btn-primary:hover { background: var(--brand-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn-row { display: flex; gap: 10px; margin-top: 14px; }
+  .btn-row .btn { width: auto; flex: 1; }
+
+  .footer-cta { flex: 0 0 auto; padding: 12px 18px calc(18px + env(safe-area-inset-bottom)); background: linear-gradient(to top, var(--bg) 70%, rgba(241,245,249,0)); }
+
+  /* device chooser */
+  .devices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .device {
+    border: 2px solid var(--line); border-radius: 16px; background:#fff;
+    padding: 18px 12px; text-align: center; cursor: pointer; transition: .15s;
+  }
+  .device:hover { border-color: var(--brand); }
+  .device.selected { border-color: var(--brand); background: var(--brand-light); }
+  .device .emoji { font-size: 30px; display:block; margin-bottom: 8px; }
+  .device .name { font-weight: 700; font-size: 14px; }
+  .device .sub { font-size: 11px; color: var(--muted); }
+
+  /* upload */
+  .photo {
+    margin-top: 14px; border-radius: 14px; overflow:hidden; border:1px solid var(--line);
+    background:#fff;
+  }
+  .photo .cap { padding: 8px 12px; font-size: 12px; color: var(--muted); display:flex; align-items:center; gap:6px;}
+  .upload-zone {
+    margin-top: 14px; border: 2px dashed var(--line); border-radius: 14px;
+    padding: 26px 12px; text-align:center; color: var(--muted); font-size: 13px; cursor:pointer; background:#fff;
+    transition:.15s;
+  }
+  .upload-zone:hover { border-color: var(--brand); color: var(--brand-dark); }
+  .upload-zone .ic { font-size: 28px; display:block; margin-bottom:6px; }
+
+  /* AI analyzing */
+  .ai-wrap { text-align:center; padding-top: 24px; }
+  .scanner {
+    width: 150px; height: 150px; margin: 10px auto 18px; border-radius: 24px;
+    background: #0b1220; position: relative; overflow: hidden;
+    display:grid; place-items:center;
+  }
+  .scanner .glyph { font-size: 60px; filter: drop-shadow(0 0 8px rgba(13,148,136,.6)); }
+  .scanner .line {
+    position:absolute; left:0; right:0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--brand), transparent);
+    box-shadow: 0 0 14px 3px rgba(13,148,136,.7);
+    animation: scan 1.6s ease-in-out infinite;
+  }
+  @keyframes scan { 0%{top:6%;} 50%{top:92%;} 100%{top:6%;} }
+  .progress { height: 8px; border-radius: 999px; background: var(--line); overflow:hidden; margin: 18px 0 10px;}
+  .progress > span { display:block; height:100%; width:0%; background: linear-gradient(90deg,var(--brand),var(--accent)); transition: width .4s ease; }
+  .ai-steps { list-style:none; text-align:left; margin-top: 10px; display:grid; gap:8px; }
+  .ai-steps li { font-size: 13px; color: var(--muted); display:flex; align-items:center; gap:8px; opacity:.4; transition:.3s;}
+  .ai-steps li.done { opacity:1; color: var(--ink); }
+  .ai-steps li .tick { width:18px;height:18px;border-radius:50%;background:var(--line);color:#fff;display:grid;place-items:center;font-size:11px;flex:0 0 auto;}
+  .ai-steps li.done .tick { background: var(--ok); }
+
+  /* diagnosis */
+  .diag-head { display:flex; align-items:center; gap:12px; }
+  .diag-head .ai-badge { font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--brand),var(--accent));padding:4px 10px;border-radius:999px;letter-spacing:.3px;}
+  .conf { margin-top: 14px; }
+  .conf .bar { height: 10px; background: var(--line); border-radius: 999px; overflow:hidden; margin-top:6px;}
+  .conf .bar > span { display:block; height:100%; width:92%; background: linear-gradient(90deg,var(--ok),#22c55e); }
+  .kv { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed var(--line); font-size:14px;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--muted);}
+  .kv .v{font-weight:700;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+  .chip{font-size:12px;font-weight:600;background:var(--brand-light);color:var(--brand-dark);padding:6px 10px;border-radius:999px;}
+  .note{margin-top:12px;font-size:12px;color:var(--warn);background:#fff7ed;border:1px solid #fed7aa;padding:10px 12px;border-radius:12px;}
+
+  /* offer */
+  .pos { display:flex; justify-content:space-between; align-items:baseline; padding:11px 0; border-bottom:1px solid var(--line); }
+  .pos:last-of-type{border-bottom:none;}
+  .pos .desc{font-size:14px;}
+  .pos .desc small{display:block;color:var(--muted);font-size:11px;margin-top:2px;}
+  .pos .amt{font-weight:700;font-size:14px;white-space:nowrap;}
+  .total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:14px;border-top:2px solid var(--ink);}
+  .total .lbl{font-weight:700;font-size:15px;}
+  .total .sum{font-weight:800;font-size:26px;color:var(--brand-dark);letter-spacing:-.5px;}
+  .badge-status{display:inline-block;font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;letter-spacing:.3px;}
+  .badge-vorlaeufig{background:#fef9c3;color:#854d0e;}
+  .badge-freigegeben{background:#dcfce7;color:#166534;}
+
+  /* confirm */
+  .success-ring{width:84px;height:84px;border-radius:50%;background:var(--brand-light);display:grid;place-items:center;margin:14px auto 6px;}
+  .success-ring .c{width:60px;height:60px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#fff;font-size:30px;box-shadow:0 8px 18px rgba(22,163,74,.4);}
+  .info-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
+  .info-row:last-child{border-bottom:none;}
+  .info-row .ic{width:40px;height:40px;border-radius:12px;background:var(--brand-light);display:grid;place-items:center;font-size:20px;flex:0 0 auto;}
+  .info-row .t{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .info-row .d{font-weight:700;font-size:14px;}
+
+  /* tracking */
+  .track{list-style:none;margin-top:10px;position:relative;padding-left:8px;}
+  .track li{display:flex;gap:14px;padding-bottom:18px;position:relative;}
+  .track li::before{content:"";position:absolute;left:11px;top:24px;bottom:-2px;width:2px;background:var(--line);}
+  .track li:last-child::before{display:none;}
+  .track .dot{width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--line);display:grid;place-items:center;font-size:12px;color:var(--muted);flex:0 0 auto;z-index:1;}
+  .track li.done .dot{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .track li.current .dot{background:var(--brand);border-color:var(--brand);color:#fff;animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(13,148,136,.5);}70%{box-shadow:0 0 0 10px rgba(13,148,136,0);}100%{box-shadow:0 0 0 0 rgba(13,148,136,0);}}
+  .track .lbl{font-weight:700;font-size:14px;}
+  .track .sub{font-size:12px;color:var(--muted);margin-top:1px;}
+  .track li:not(.done):not(.current) .lbl{color:var(--muted);font-weight:600;}
+  .push{margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow);}
+  .push .ic{font-size:22px;}
+  .push .t{font-weight:700;font-size:13px;}
+  .push .b{font-size:12px;color:var(--muted);}
+
+  /* reset control under phone */
+  .controls{display:flex;gap:10px;align-items:center;}
+  .controls button{
+    font:inherit;font-size:13px;font-weight:600;color:#334155;background:#fff;border:1px solid var(--line);
+    border-radius:999px;padding:9px 16px;cursor:pointer;box-shadow:0 2px 6px rgba(15,23,42,.06);
+  }
+  .controls button:hover{border-color:var(--brand);color:var(--brand-dark);}
+  .hint{font-size:12px;color:#64748b;}
+</style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span id="clock">9:41</span>
+        <span class="dots">RepairFlow</span>
+        <span>📶 🔋</span>
+      </div>
+
+      <div class="appbar">
+        <div class="logo">R</div>
+        <div class="brand">Repair<span>Flow</span></div>
+        <div class="spacer"></div>
+        <div class="step-pill" id="stepPill">1 / 8</div>
+      </div>
+
+      <div class="view" id="view">
+
+        <!-- 1 — Start / Login -->
+        <section class="screen-section active" data-step="1">
+          <div style="padding-top:26px;text-align:center;">
+            <div class="logo" style="width:68px;height:68px;border-radius:20px;font-size:34px;margin:0 auto 18px;"></div>
+            <h1>Willkommen bei RepairFlow</h1>
+            <p class="lead">Dein Gerät ist defekt? Beschreib das Problem, lad ein Foto hoch – unsere KI stellt in Sekunden eine Erstdiagnose und ein Angebot.</p>
+          </div>
+          <div class="card tight" style="margin-top:22px;">
+            <div class="info-row" style="border:none;padding:8px 0;">
+              <div class="ic">👋</div>
+              <div><div class="t">Angemeldet als</div><div class="d">Lena Hoffmann</div></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:14px;">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:4px;">So funktioniert's</div>
+            <div style="display:flex;justify-content:space-between;gap:6px;text-align:center;margin-top:8px;">
+              <div style="flex:1;"><div style="font-size:24px;">📸</div><div class="small">Foto &amp; Problem</div></div>
+              <div style="flex:1;"><div style="font-size:24px;">🤖</div><div class="small">KI-Diagnose</div></div>
+              <div style="flex:1;"><div style="font-size:24px;">💶</div><div class="small">Angebot</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2 — Geräteauswahl -->
+        <section class="screen-section" data-step="2">
+          <h1>Welches Gerät?</h1>
+          <p class="lead">Wähl die Geräteart, die repariert werden soll.</p>
+          <div class="devices">
+            <div class="device" data-dev="Fahrrad"><span class="emoji">🚲</span><div class="name">Fahrrad</div><div class="sub">Mechanik</div></div>
+            <div class="device" data-dev="E-Bike"><span class="emoji">🔋</span><div class="name">E-Bike</div><div class="sub">Akku &amp; Motor</div></div>
+            <div class="device selected" data-dev="Elektronik"><span class="emoji">📱</span><div class="name">Elektronik</div><div class="sub">Smartphone, Tablet …</div></div>
+            <div class="device" data-dev="Sonstiges"><span class="emoji">🔧</span><div class="name">Sonstiges</div><div class="sub">Auf Anfrage</div></div>
+          </div>
+          <div class="card tight" style="margin-top:16px;">
+            <label class="field" style="margin:0 0 6px;">Gerät (optional)</label>
+            <input type="text" id="deviceModel" value="Smartphone – Modell XZ 12">
+          </div>
+        </section>
+
+        <!-- 3 — Problem + Upload -->
+        <section class="screen-section" data-step="3">
+          <h1>Was ist passiert?</h1>
+          <p class="lead">Beschreib das Problem und lad ein Foto oder Video hoch.</p>
+          <label class="field">Problembeschreibung</label>
+          <textarea id="symptom" rows="3">Display gesprungen nach Sturz, Touch reagiert in der oberen Hälfte teilweise nicht mehr.</textarea>
+
+          <div id="uploadZone" class="upload-zone">
+            <span class="ic">📎</span>
+            Foto / Video hinzufügen<br><span class="small">Tippen zum Auswählen</span>
+          </div>
+
+          <div id="photoPreview" class="photo" style="display:none;">
+            <!-- inline SVG: cracked phone display -->
+            <svg viewBox="0 0 320 180" width="100%" height="150" xmlns="http://www.w3.org/2000/svg">
+              <rect width="320" height="180" fill="#0b1220"/>
+              <rect x="118" y="20" width="84" height="140" rx="12" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+              <rect x="124" y="30" width="72" height="118" rx="4" fill="#0ea5a3"/>
+              <g stroke="#e2e8f0" stroke-width="1.4" opacity="0.95" fill="none">
+                <path d="M150 34 L138 70 L162 92 L132 120 L158 146"/>
+                <path d="M150 34 L172 60 L150 84 L182 104 L158 146"/>
+                <path d="M138 70 L172 60 M162 92 L150 84 M132 120 L182 104"/>
+              </g>
+              <circle cx="160" cy="153" r="3" fill="#475569"/>
+            </svg>
+            <div class="cap">🖼️ display_schaden.jpg &nbsp;·&nbsp; 2,4 MB &nbsp;·&nbsp; <span style="color:var(--ok);font-weight:700;">Qualität gut ✓</span></div>
+          </div>
+        </section>
+
+        <!-- 4 — KI analysiert -->
+        <section class="screen-section" data-step="4">
+          <div class="ai-wrap">
+            <div class="diag-head" style="justify-content:center;margin-bottom:6px;">
+              <span class="ai-badge">🤖 KI-Sofortdiagnose</span>
+            </div>
+            <div class="scanner"><span class="glyph">📱</span><div class="line"></div></div>
+            <h2 id="aiStatus">Analyse läuft …</h2>
+            <div class="progress"><span id="aiBar"></span></div>
+            <ul class="ai-steps" id="aiSteps">
+              <li data-i="0"><span class="tick">✓</span> Medien &amp; Beschreibung werden ausgewertet</li>
+              <li data-i="1"><span class="tick">✓</span> Wahrscheinliche Fehlerursache wird ermittelt</li>
+              <li data-i="2"><span class="tick">✓</span> Benötigte Ersatzteile werden bestimmt</li>
+              <li data-i="3"><span class="tick">✓</span> Teileverfügbarkeit (filialübergreifend) wird geprüft</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 5 — Diagnose-Ergebnis -->
+        <section class="screen-section" data-step="5">
+          <div class="diag-head">
+            <span class="ai-badge">🤖 KI-Diagnose</span>
+            <h1 style="font-size:18px;margin:0;">Ergebnis</h1>
+          </div>
+          <div class="card">
+            <div class="kv"><span class="k">Vermutete Ursache</span><span class="v">Displayeinheit defekt</span></div>
+            <div class="kv"><span class="k">Gerätetyp</span><span class="v">Elektronik</span></div>
+            <div class="kv"><span class="k">Geschätzter Aufwand</span><span class="v">≈ 45 Min</span></div>
+            <div class="conf">
+              <div class="kv" style="border:none;padding-bottom:0;"><span class="k">Konfidenz</span><span class="v" style="color:var(--ok);">92 %</span></div>
+              <div class="bar"><span></span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Benötigte Ersatzteile</div>
+            <div class="chips">
+              <span class="chip">Display-Einheit XZ12</span>
+              <span class="chip">Klebe-Set</span>
+              <span class="chip">Dichtung</span>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:var(--ok);font-weight:600;">✓ Alle Teile vorrätig – Filiale Mitte</div>
+          </div>
+          <div class="note">ℹ️ Vorläufige KI-Diagnose. Die finale Prüfung erfolgt durch unsere Techniker:innen vor Ort.</div>
+        </section>
+
+        <!-- 6 — Angebot / KVA -->
+        <section class="screen-section" data-step="6">
+          <div class="diag-head" style="justify-content:space-between;">
+            <h1 style="font-size:20px;margin:0;">Dein Angebot</h1>
+            <span class="badge-status badge-vorlaeufig" id="kvaStatus">Vorläufig</span>
+          </div>
+          <p class="small" style="margin-top:4px;">KVA-Nr. 2026-04711 · gültig bis 01.11.2026</p>
+          <div class="card">
+            <div class="pos"><div class="desc">Display-Einheit XZ12<small>Ersatzteil, inkl. Dichtung</small></div><div class="amt">149,00 €</div></div>
+            <div class="pos"><div class="desc">Klebe-Set &amp; Kleinmaterial<small>Verbrauchsmaterial</small></div><div class="amt">12,00 €</div></div>
+            <div class="pos"><div class="desc">Arbeitszeit<small>0,75 Std × 89,00 €/Std</small></div><div class="amt">66,75 €</div></div>
+            <div class="pos"><div class="desc">Funktionsprüfung &amp; Endkontrolle<small>Pauschale</small></div><div class="amt">15,00 €</div></div>
+            <div class="total">
+              <div>
+                <div class="lbl">Gesamtpreis</div>
+                <div class="small">inkl. 19 % MwSt.</div>
+              </div>
+              <div class="sum">242,75 €</div>
+            </div>
+          </div>
+          <p class="small" style="margin-top:12px;">Mit dem Annehmen beauftragst du die Reparatur zum angegebenen Festpreis. Die Teile werden für dich reserviert.</p>
+        </section>
+
+        <!-- 7 — Bestätigung + Termin -->
+        <section class="screen-section" data-step="7">
+          <div style="text-align:center;">
+            <div class="success-ring"><div class="c">✓</div></div>
+            <h1>Auftrag bestätigt!</h1>
+            <p class="lead">Dein Reparaturauftrag wurde angelegt und die Teile sind reserviert.</p>
+            <span class="badge-status badge-freigegeben" style="margin-top:10px;">Status: Freigegeben</span>
+          </div>
+          <div class="card">
+            <div class="info-row"><div class="ic">🏷️</div><div><div class="t">Auftragsnummer</div><div class="d">RA-2026-04711</div></div></div>
+            <div class="info-row"><div class="ic">📍</div><div><div class="t">Filiale</div><div class="d">RepairFlow Mitte · Hauptstr. 12</div></div></div>
+            <div class="info-row"><div class="ic">📅</div><div><div class="t">Vorgeschlagener Termin</div><div class="d">Mo, 20.10.2026 · 14:30 Uhr</div></div></div>
+            <div class="info-row"><div class="ic">💶</div><div><div class="t">Festpreis</div><div class="d">242,75 €</div></div></div>
+          </div>
+        </section>
+
+        <!-- 8 — Status-Tracking -->
+        <section class="screen-section" data-step="8">
+          <h1>Reparatur-Status</h1>
+          <p class="small">Auftrag RA-2026-04711 · Smartphone XZ 12</p>
+          <div class="push">
+            <div class="ic">🔔</div>
+            <div><div class="t">RepairFlow</div><div class="b">Dein Gerät ist fertig – bereit zur Abholung! 🎉</div></div>
+          </div>
+          <ul class="track">
+            <li class="done"><div class="dot">✓</div><div><div class="lbl">Auftrag angenommen</div><div class="sub">20.10.2026, 14:30</div></div></li>
+            <li class="done"><div class="dot">✓</div><div><div class="lbl">In Diagnose</div><div class="sub">Befund bestätigt</div></div></li>
+            <li class="done"><div class="dot">✓</div><div><div class="lbl">In Reparatur</div><div class="sub">Displaytausch durchgeführt</div></div></li>
+            <li class="current"><div class="dot">●</div><div><div class="lbl">Fertig – Endkontrolle bestanden</div><div class="sub">Bereit zur Abholung</div></div></li>
+            <li><div class="dot"></div><div><div class="lbl">Abgeholt</div><div class="sub">Ausstehend</div></div></li>
+          </ul>
+        </section>
+
+      </div>
+
+      <div class="footer-cta">
+        <button class="btn btn-primary" id="nextBtn">Neue Reparatur starten</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="resetBtn">↺ Demo neu starten</button>
+    <button id="backBtn">← Zurück</button>
+    <span class="hint">Mit „Weiter" durch die Customer Journey klicken</span>
+  </div>
+
+<script>
+(function () {
+  var step = 1;
+  var TOTAL = 8;
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.screen-section'));
+  var nextBtn = document.getElementById('nextBtn');
+  var backBtn = document.getElementById('backBtn');
+  var resetBtn = document.getElementById('resetBtn');
+  var stepPill = document.getElementById('stepPill');
+  var view = document.getElementById('view');
+
+  // Button label + behaviour per step
+  var labels = {
+    1: 'Neue Reparatur starten',
+    2: 'Weiter',
+    3: 'KI-Diagnose starten',
+    4: 'Analyse läuft …',
+    5: 'Angebot ansehen',
+    6: 'Angebot annehmen',
+    7: 'Status verfolgen',
+    8: 'Fertig – Demo abschließen'
+  };
+
+  function render() {
+    sections.forEach(function (s) {
+      s.classList.toggle('active', parseInt(s.getAttribute('data-step'), 10) === step);
+    });
+    stepPill.textContent = step + ' / ' + TOTAL;
+    nextBtn.textContent = labels[step] || 'Weiter';
+    nextBtn.disabled = false;
+    backBtn.style.visibility = step > 1 ? 'visible' : 'hidden';
+    view.scrollTop = 0;
+  }
+
+  function go(n) {
+    step = Math.max(1, Math.min(TOTAL, n));
+    render();
+    if (step === 4) runAiAnimation();
+  }
+
+  // --- AI analysing animation (scripted) ---
+  var aiTimers = [];
+  function clearAi() { aiTimers.forEach(clearTimeout); aiTimers = []; }
+  function runAiAnimation() {
+    clearAi();
+    var bar = document.getElementById('aiBar');
+    var statusEl = document.getElementById('aiStatus');
+    var items = Array.prototype.slice.call(document.querySelectorAll('#aiSteps li'));
+    var msgs = [
+      'Medien werden analysiert …',
+      'Fehlerursache wird ermittelt …',
+      'Ersatzteile werden bestimmt …',
+      'Teileverfügbarkeit wird geprüft …'
+    ];
+    items.forEach(function (li) { li.classList.remove('done'); });
+    bar.style.width = '0%';
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Analyse läuft …';
+
+    var stepDur = 650;
+    items.forEach(function (li, i) {
+      aiTimers.push(setTimeout(function () {
+        li.classList.add('done');
+        statusEl.textContent = msgs[i];
+        bar.style.width = Math.round(((i + 1) / items.length) * 100) + '%';
+      }, stepDur * (i + 1)));
+    });
+    // finish -> auto-advance to diagnosis
+    aiTimers.push(setTimeout(function () {
+      statusEl.textContent = 'Diagnose abgeschlossen ✓';
+      if (step === 4) go(5);
+    }, stepDur * (items.length + 1) + 350));
+  }
+
+  // --- Photo upload interaction ---
+  var uploadZone = document.getElementById('uploadZone');
+  var photoPreview = document.getElementById('photoPreview');
+  if (uploadZone) {
+    uploadZone.addEventListener('click', function () {
+      uploadZone.style.display = 'none';
+      photoPreview.style.display = 'block';
+    });
+  }
+
+  // --- Device chooser ---
+  document.querySelectorAll('.device').forEach(function (d) {
+    d.addEventListener('click', function () {
+      document.querySelectorAll('.device').forEach(function (x) { x.classList.remove('selected'); });
+      d.classList.add('selected');
+    });
+  });
+
+  nextBtn.addEventListener('click', function () {
+    if (step === 4) return; // locked during animation
+    if (step >= TOTAL) { go(1); resetState(); return; }
+    go(step + 1);
+  });
+  backBtn.addEventListener('click', function () { if (step > 1) { clearAi(); go(step - 1); } });
+
+  function resetState() {
+    // reset interactive bits
+    if (uploadZone) { uploadZone.style.display = 'block'; photoPreview.style.display = 'none'; }
+    document.querySelectorAll('.device').forEach(function (x) { x.classList.remove('selected'); });
+    var el = document.querySelector('.device[data-dev="Elektronik"]'); if (el) el.classList.add('selected');
+    var bar = document.getElementById('aiBar'); if (bar) bar.style.width = '0%';
+    document.querySelectorAll('#aiSteps li').forEach(function (li) { li.classList.remove('done'); });
+  }
+
+  resetBtn.addEventListener('click', function () { clearAi(); resetState(); go(1); });
+
+  // keyboard: Enter / ArrowRight = next, ArrowLeft = back (handy when presenting)
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { if (step !== 4) nextBtn.click(); }
+    else if (e.key === 'ArrowLeft') { backBtn.click(); }
+  });
+
+  resetState();
+  render();
+})();
+</script>
+</body>
+</html>
