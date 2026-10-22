@@ -28,6 +28,7 @@ Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
 ## C. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
 
+- [x] **Zustandsdiagramm gestrichen (E-30)** (in PR #45 erledigt): Folie 10 „+ Zustandsdiagramm“, Folie 13 Halbsatz ersetzt („wechselt ihn über wechsleStatus()“), Notiz und Sprechtext Folie 10.
 - [x] **Kennzahlen nach E-32** (in PR #45 erledigt): Folie 10: 134 Aktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte. Folie 11: Prozesstabelle P06–P10, 134 / 13,4 / 61 %. Sprechtexte (Adrian Folie 10/11 „133“ → „134“; 61 Prozent bleibt) in Notizen und Word-Datei gleich halten.
 
 Folienfolge: Nina 1–2 und 17–18, David 3, 6 und 12, Adrian 4–5 und 7–8, Maximilian 9–11, Kilian 13–14, Jakob 15–16, Folie 19 Anhang. Redezeit: Nina 2:50, David 3:20, Adrian 4:10, Maximilian 3:20, Kilian 3:10, Jakob 2:20, gesamt 19:10.
