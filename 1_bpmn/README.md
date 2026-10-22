@@ -27,6 +27,6 @@ Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn`
 - Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
 - Datenobjekte tragen die Klassennamen des Klassendiagramms, der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
 
-## Kennzahlen (Stand E-32)
+## Kennzahlen (Stand E-33)
 
-134 Aktivitäten im Werkstatt-Pool (Ø 13,4 je Diagramm), davon 82 automatisiert (61 %); 25 Aktivitäten in den Kundenabläufen; 44 Nachrichtenflüsse; 51 Datenobjekte und 12 Datenspeicher (63). Je Diagramm (Akt./autom.): 01 12/12, 02 12/4, 03 12/5, 04 11/7, 05 15/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.
+136 Aktivitäten im Werkstatt-Pool (Ø 13,6 je Diagramm), davon 84 automatisiert (62 %); 27 Aktivitäten in den Kundenabläufen; 45 Nachrichtenflüsse; 53 Datenobjekte und 12 Datenspeicher (65). Je Diagramm (Akt./autom.): 01 14/14, 02 12/4, 03 12/5, 04 11/7, 05 15/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.

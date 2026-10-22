@@ -20,6 +20,7 @@ Stand der Artefakte: UML (Use-Case-, Klassen-, sechs Sequenzdiagramme) ist ferti
 
 Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
+- [x] **Kennzahlen nach E-33 (P01 von Adrian):** 5.1: 136 Aktivitäten (Ø 13,6), 27 Kundenaktivitäten, 45 Nachrichtenflüsse, 53 Datenobjekte; 84 automatisiert (rund 62 Prozent). Tabelle 6 Zeile 01: 14 / 14 (100 %). Kurztext 01 ergänzt, Abbildung 2 = neue P01.
 - [x] **Kennzahlen nach E-32** (in PR #45 erledigt, Abbildung 3 = aktuelles P04): 5.1 Kennzahlen-Absatz: 134 Aktivitäten (Ø 13,4), 25 Kundenaktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte und 12 Datenspeicher. Aufteilung: 82 automatisiert (61 %), 32 Benutzer-Aktivitäten, 9 manuell, 10 Aufrufe, 1 Mehrfach-Teilprozess. Tabelle 6: 06 17/11 (65 %), 07 13/6 (46 %), 08 17/11 (65 %), 09 16/8 (50 %), 10 9/6 (67 %).
 - [x] **Prozesskurztexte 5.1** (in PR #45 erledigt; PDF-Export steht noch aus): P06 „erst prüfen, dann buchen“; P09 „Kunde erhält bei Ablehnung eine Absage“; P10 „keine Bestandskorrektur mehr, Ersatz wird in P06 geprüft und gebucht“. Danach PDF exportieren.
 - [ ] **Gelbe Hinweise abarbeiten:** Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe A), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen).
@@ -28,10 +29,11 @@ Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
 ## C. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
 
+- [x] **Kennzahlen nach E-33 (P01 von Adrian):** Folie 10: 136 Aktivitäten, 45 Nachrichtenflüsse, 53 Datenobjekte. Folie 11: P01 14, 136 / 13,6 / 62 %, Titel „62 Prozent“. Notizen und Word-Sprechtext gleich.
 - [x] **Zustandsdiagramm gestrichen (E-30)** (in PR #45 erledigt): Folie 10 „+ Zustandsdiagramm“, Folie 13 Halbsatz ersetzt („wechselt ihn über wechsleStatus()“), Notiz und Sprechtext Folie 10.
 - [x] **Kennzahlen nach E-32** (in PR #45 erledigt): Folie 10: 134 Aktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte. Folie 11: Prozesstabelle P06–P10, 134 / 13,4 / 61 %. Sprechtexte (Adrian Folie 10/11 „133“ → „134“; 61 Prozent bleibt) in Notizen und Word-Datei gleich halten.
 
-Folienfolge: Nina 1–2 und 17–18, David 3, 6 und 12, Adrian 4–5 und 7–8, Maximilian 9–11, Kilian 13–14, Jakob 15–16, Folie 19 Anhang. Redezeit: Nina 2:50, David 3:20, Adrian 4:10, Maximilian 3:20, Kilian 3:10, Jakob 2:20, gesamt 19:10.
+Folienfolge: Nina 1–2 und 16–18, David 3–5, Kilian 6 und 12–13, Maximilian 7–9, Adrian 10–11, Jakob 14–15, Folie 19 Anhang. Redezeit: Nina 3:45, David 3:15, Kilian 4:00, Maximilian 3:40, Adrian 1:50, Jakob 2:10, gesamt 18:40.
 
 - [ ] **Sprechtext eigener Folien überarbeiten:** Jede Person formuliert ihren Teil so um, dass er zu ihr passt, und hält die Zeitangabe grob ein. Danach die Notiz in der PPTX und die Word-Datei gleich halten.
 - [ ] **Demo vorbereiten (Folie 8):** `4_praesentation/mockup/index.html` vor der Präsentation im Browser öffnen (Vollbild, hineinzoomen), Wechsel von Folie 8 zum Browser und zurück üben. Fallback sind die Screenshots auf Folie 8.

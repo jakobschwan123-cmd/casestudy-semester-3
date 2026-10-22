@@ -4,8 +4,20 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## Offen
 
+- **E-33** (P01 von Adrian, 22.10.2026): übernommen; Sichtprüfung von P01 im Camunda Modeler durch Maximilian steht aus.
 - **E-32** (Prüfung P06–P10 gegen die Vorlesung, 22.10.2026): Antworten des Teams umgesetzt (siehe „Entschieden“ in E-32); Bestätigung der Gruppe und Modeler-Prüfung stehen aus.
 - **E-31** (Review P05–P10, 22.10.2026): Vorschlag von Jakob, Bestätigung durch die Gruppe und Sichtprüfung im Camunda Modeler durch Maximilian stehen aus.
+
+## E-33 Überarbeitung P01 Sofortdiagnose (22.10.2026)
+
+Überarbeitung von Adrian (Upload in `BPMN1/`), von Kilian nach `1_bpmn/` übernommen. Baut auf dem Stand E-26 auf.
+
+- **Ablehnung durch den Kunden:** Der Kunde entscheidet „Voranmeldung bestätigen?“ und sendet Zusage oder Ablehnung. Die Werkstatt wartet über ein ereignisbasiertes Gateway auf „Voranmeldung bestätigt“, „Voranmeldung abgelehnt“ oder „7 Tage ohne Antwort verstrichen“.
+- **Verwerfung:** Bei einer Ablehnung wird die Voranmeldung verworfen. Bei einer der beiden Fristen (keine Antwort, keine neue Aufnahme) informiert „Verwerfung an Kunde senden“ den Kunden zusätzlich; im Kundenprozess beendet der Ereignis-Teilprozess „Verwerfung der Voranmeldung“ die Anfrage. Neu im Kundenprozess: „Gerät erneut aufnehmen“ (Manual Task) vor „Neue Aufnahme senden“.
+- **Vorreservierung:** weiterhin erst nach der Bestätigung. Neu: „Alle Teile vorreserviert?“ → nein → „Hinweis auf Nachbestellung ergänzen“.
+- **Prüfung:** bpmnlint (`recommended`, `camunda-cloud-8-7`) ohne Befund.
+- **Kennzahlen:** 136 Aktivitäten (Ø 13,6), 84 automatisiert (62 %), 27 Kundenaktivitäten, 45 Nachrichtenflüsse, 53 Datenobjekte und 12 Datenspeicher. P01 14/14 (100 %).
+- **Folgt daraus:** Doku 5.1 (Kennzahlen, Tabelle 6, Kurztext 01, Abbildung 2), Folien 10/11 und Sprechtext angepasst. SD1 bleibt: Ablehnung, Fristen und Vorreservierung nach Bestätigung sind dort bereits abgebildet; der Hinweis auf Nachbestellung ist ein Detail des Prozesses.
 
 ## E-32 P06–P10 nach den BPMN-Regeln der Vorlesung SYAN-04 (22.10.2026)
 
