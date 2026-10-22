@@ -1,43 +1,37 @@
 # Aufgaben bis zur Abgabe
 
-Stand: 20.10.2026. Diese Liste enthält nur noch die offenen Aufgaben, ohne Namen. Die Zuteilung erfolgt nach den Zuständigkeiten in `5_team/02-team-und-rollen.md`. Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern hinter den Punkt und hakt ihn nach Erledigung ab (`- [x]`).
+Stand: 22.10.2026. Diese Liste enthält nur noch die offenen Aufgaben, ohne Namen. Die Zuteilung erfolgt nach den Zuständigkeiten in `5_team/02-team-und-rollen.md`. Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern hinter den Punkt und hakt ihn nach Erledigung ab (`- [x]`).
 
-Termine: Generalprobe **22.10.2026**. Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
+Termine: Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
 
-Grundregeln: Jede Änderung über Branch und Pull Request, Commit-Stempel `[T05 2026-10-20] …`. Wer an Word- oder PowerPoint-Dateien arbeitet, sagt vorher in der WhatsApp-Gruppe Bescheid, weil diese Dateien nicht zusammengeführt werden können. Die `.pptx` ist das Original der Präsentation; Sprechtext in den Notizen und in `4_praesentation/Sprechtext_Abschlusspraesentation.docx` gleich halten.
+Grundregeln: Jede Änderung über Branch und Pull Request (oder nach Absprache direkt auf `main`), vorher `git pull`. Wer an Word- oder PowerPoint-Dateien arbeitet, sagt vorher in der WhatsApp-Gruppe Bescheid, weil diese Dateien nicht zusammengeführt werden können. Die `.pptx` ist das Original der Präsentation; Sprechtext in den Notizen und in `4_praesentation/Sprechtext_Abschlusspraesentation.docx` gleich halten.
 
-Stand der Artefakte: UML (Use-Case-, Klassen-, sechs Sequenzdiagramme) ist fertig und als PNG und VPP in `2_uml/` abgelegt. Die zehn BPMN-Dateien liegen mit aktuellen PNG-Exporten in `1_bpmn/`. Doku, Präsentation (19 Folien, alle eingeblendet) und Sprechtext sind auf einem Stand; Kennzahlen in Doku und Folien stimmen mit den BPMN-Dateien überein.
-
----
-
-## A. BPMN im Camunda Modeler
-
-- [ ] **Modeler-Prüfung durchführen:** Alle zehn `.bpmn`-Dateien im Camunda Modeler (Camunda 8) öffnen und prüfen, ob das Problems-Panel keine Fehler zeigt. Ergebnis kurz in die WhatsApp-Gruppe. Falls Fehler: Screenshot, nicht selbst umbauen. Falls die Dateien dafür im Modeler gespeichert werden mussten: per Pull Request einreichen und die Kennzahlen nur dann neu zählen, wenn sich Aktivitäten geändert haben.
-- [ ] **Ergebnis in die Doku:** gelben Hinweis in Tabelle 2 Schritt 4 durch einen Satz ersetzen, z. B. „Alle zehn Dateien zeigen im Problems-Panel keine Fehler.“
-- [ ] **PR #45 freigeben:** E-32 in der Gruppe bestätigen, Maximilian öffnet P06–P10 im Camunda Modeler (Problems-Panel), Review durch eine zweite Person, dann mergen.
-
-## B. Projektdokumentation (`3_doku/Projektdokumentation.docx`)
-
-Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
-
-- [x] **Kennzahlen nach E-33 (P01 von Adrian):** 5.1: 136 Aktivitäten (Ø 13,6), 27 Kundenaktivitäten, 45 Nachrichtenflüsse, 53 Datenobjekte; 84 automatisiert (rund 62 Prozent). Tabelle 6 Zeile 01: 14 / 14 (100 %). Kurztext 01 ergänzt, Abbildung 2 = neue P01.
-- [x] **Kennzahlen nach E-32** (in PR #45 erledigt, Abbildung 3 = aktuelles P04): 5.1 Kennzahlen-Absatz: 134 Aktivitäten (Ø 13,4), 25 Kundenaktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte und 12 Datenspeicher. Aufteilung: 82 automatisiert (61 %), 32 Benutzer-Aktivitäten, 9 manuell, 10 Aufrufe, 1 Mehrfach-Teilprozess. Tabelle 6: 06 17/11 (65 %), 07 13/6 (46 %), 08 17/11 (65 %), 09 16/8 (50 %), 10 9/6 (67 %).
-- [x] **Prozesskurztexte 5.1** (in PR #45 erledigt; PDF-Export steht noch aus): P06 „erst prüfen, dann buchen“; P09 „Kunde erhält bei Ablehnung eine Absage“; P10 „keine Bestandskorrektur mehr, Ersatz wird in P06 geprüft und gebucht“. Danach PDF exportieren.
-- [ ] **Gelbe Hinweise abarbeiten:** Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe A), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen).
-- [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste und meldet Korrekturen.
-- [ ] **Abschluss:** kein „[“ mehr im Text, als PDF speichern (`3_doku/Projektdokumentation.pdf`), Seitenzahlen im Inhaltsverzeichnis im PDF prüfen (statisches Verzeichnis; Seite 3 ist voll, jede Ergänzung dort verschiebt die Nummern).
-
-## C. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
-
-- [x] **Kennzahlen nach E-33 (P01 von Adrian):** Folie 10: 136 Aktivitäten, 45 Nachrichtenflüsse, 53 Datenobjekte. Folie 11: P01 14, 136 / 13,6 / 62 %, Titel „62 Prozent“. Notizen und Word-Sprechtext gleich.
-- [x] **Zustandsdiagramm gestrichen (E-30)** (in PR #45 erledigt): Folie 10 „+ Zustandsdiagramm“, Folie 13 Halbsatz ersetzt („wechselt ihn über wechsleStatus()“), Notiz und Sprechtext Folie 10.
-- [x] **Kennzahlen nach E-32** (in PR #45 erledigt): Folie 10: 134 Aktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte. Folie 11: Prozesstabelle P06–P10, 134 / 13,4 / 61 %. Sprechtexte (Adrian Folie 10/11 „133“ → „134“; 61 Prozent bleibt) in Notizen und Word-Datei gleich halten.
+Stand der Artefakte:
+- **BPMN:** zehn Dateien mit PNG in `1_bpmn/`, Stand E-33 (P01 von Adrian übernommen). bpmnlint (Camunda 8.7) ohne Befund.
+- **UML:** Use-Case-, Klassen- und sechs Sequenzdiagramme nach dem UI-Umbau (KundenApp, Werkstattoberflaeche, Suche über den Werkstattbetrieb) als PNG und VPP in `2_uml/`, VP-Teamwork-Server committet.
+- **Doku, Präsentation (19 Folien) und Sprechtext** sind auf einem Stand und untereinander abgeglichen: Kennzahlen (136 Aktivitäten, Ø 13,6, 84 automatisiert = 62 %, 27 Kundenaktivitäten, 45 Nachrichtenflüsse, 53 Datenobjekte, 12 Datenspeicher; 29 Klassen, 40 Assoziationen, 7 Aufzählungen), Sprechtexte zu Folien, Doku und Diagrammen.
+- **PDFs:** Doku- und Präsentations-PDF sind bewusst gelöscht und werden erst ganz am Ende exportiert.
 
 Folienfolge: Nina 1–2 und 16–18, David 3–5, Kilian 6 und 12–13, Maximilian 7–9, Adrian 10–11, Jakob 14–15, Folie 19 Anhang. Redezeit: Nina 3:45, David 3:15, Kilian 4:00, Maximilian 3:40, Adrian 1:50, Jakob 2:10, gesamt 18:40.
 
-- [ ] **Sprechtext eigener Folien überarbeiten:** Jede Person formuliert ihren Teil so um, dass er zu ihr passt, und hält die Zeitangabe grob ein. Danach die Notiz in der PPTX und die Word-Datei gleich halten.
+---
+
+## A. BPMN und Entscheidungslog
+
+- [ ] **Modeler-Prüfung:** Alle zehn `.bpmn`-Dateien im Camunda Modeler (Camunda 8) öffnen, vor allem P01 (E-33) und P06–P10 (E-32), und prüfen, ob das Problems-Panel keine Fehler zeigt. Ergebnis kurz in die WhatsApp-Gruppe. Falls Fehler: Screenshot, nicht selbst umbauen. Mussten Dateien gespeichert werden, per Pull Request einreichen und die Kennzahlen nur neu zählen, wenn sich Aktivitäten geändert haben.
+- [ ] **Entscheidungen bestätigen:** E-31, E-32 und E-33 in der Gruppe bestätigen und in `5_team/03-entscheidungen.md` von „Offen“ nach „Entschieden“ verschieben.
+
+## B. Projektdokumentation (`3_doku/Projektdokumentation.docx`)
+
+- [ ] **Tabelle 3 ausformulieren:** Sprint 4 „Ergebnis“ (derzeit nur „UI-Umbau nach dem Gespräch am 22.10.“) um die Ergebnisse ergänzen, z. B. BPMN nach den Regeln der Vorlesung (E-32), Überarbeitung P01, Oberflächenklassen und Suche in allen Sequenzdiagrammen, Generalprobe. Zeile „Abschluss“: den Zusatz „Weitere Anpassungen in VP.“ prüfen oder streichen.
+- [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste und meldet Korrekturen.
+- [ ] **Abschluss:** als PDF speichern (`3_doku/Projektdokumentation.pdf`) und Seitenzahlen im Inhaltsverzeichnis gegen das PDF prüfen (statisches Verzeichnis; jede Ergänzung kann die Nummern verschieben).
+
+## C. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
+
+- [ ] **Eigene Folien lesen:** Jede Person liest ihre Folien und ihren Sprechtext. Geändert wurden am 22.10. unter anderem Folie 2 (Agenda), 6 (Status „abgelehnt“), 7 (Freigabe der Nacharbeit), 9 (Vorreservierung erst nach Bestätigung), 10/11 (Kennzahlen, 62 %), 13 (Oberflächen), 14 (Reviews) und 15 (Coaching-Hinweise). Wer umformuliert, hält Notiz und Word-Datei gleich und die Zeit grob ein.
 - [ ] **Demo vorbereiten (Folie 8):** `4_praesentation/mockup/index.html` vor der Präsentation im Browser öffnen (Vollbild, hineinzoomen), Wechsel von Folie 8 zum Browser und zurück üben. Fallback sind die Screenshots auf Folie 8.
-- [ ] **Generalprobe 22.10.:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten, Plan 19:10 ohne Puffer; Reserve: Folie 7 um etwa 20 s kürzen), Übergaben üben, Fragen üben (Warum eine Rolle je Use Case? Warum ist der Lieferant kein Akteur? Warum Komposition beim Befund, nicht beim Gerät? Was ist automatisiert, was nicht? Wie wurde Konsistenz gesichert? Warum ist der Auftrag nach zwei gescheiterten Nacharbeiten abgelehnt?).
+- [ ] **Generalprobe:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten, Plan 18:40), Übergaben üben, Fragen üben (Warum eine Rolle je Use Case? Warum ist der Lieferant kein Akteur? Warum Komposition beim Befund, nicht beim Gerät? Wie kommt die Oberfläche an das richtige Objekt? Was ist automatisiert, was nicht? Wie wurde Konsistenz gesichert? Warum ist der Auftrag nach zwei gescheiterten Nacharbeiten abgelehnt?).
 - [ ] **PDF exportieren** nach der Generalprobe aus PowerPoint (`4_praesentation/Abschlusspraesentation.pdf`). Die Folie mit der Zuordnung der Vortragenden muss enthalten sein (Pflicht laut Ablauf).
 
 ## D. Abgabe (bis 13.11.2026, jede Person einzeln)
