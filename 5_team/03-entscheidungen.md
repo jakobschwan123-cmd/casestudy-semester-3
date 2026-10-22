@@ -4,7 +4,21 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## Offen
 
+- **E-32** (Prüfung P06–P10 gegen die Vorlesung, 22.10.2026): Bestätigung der Gruppe und der fünf offenen Punkte unten.
 - **E-31** (Review P05–P10, 22.10.2026): Vorschlag von Jakob, Bestätigung durch die Gruppe und Sichtprüfung im Camunda Modeler durch Maximilian stehen aus.
+
+## E-32 P06–P10 nach den BPMN-Regeln der Vorlesung SYAN-04 (22.10.2026)
+
+Vorschlag von Jakob, Branch `fix/bpmn-p06-p10-vorlesungsregeln`. Jedes Diagramm wurde einzeln gegen die Regeln aus SYAN-04 geprüft (Folien 4-14 bis 4-64).
+
+- **Zeitüberschreitungen (4-27, 4-29, 4-36):** Ereignisse stehen im Fluss zwischen den Aktivitäten, Timeouts laufen über ein ereignisbasiertes Gateway. Die an Aktivitäten angehefteten Timer aus E-31 sind ersetzt: P09 „Kostenpflichtiges Angebot senden“ → Gateway → „Kundenentscheidung erhalten“ / „3 Tage verstrichen“; P10 „Lagerbestand korrigieren“ → Gateway → „Rückmeldung des Lieferanten erhalten“ / „14 Tage verstrichen“ (Umbau von Jakob im Modeler begonnen). Die beiden Receive Tasks entfallen.
+- **Granularität und Benennung (4-21, 4-22):** P06 „Wareneingang prüfen und buchen“ geteilt in „Wareneingang prüfen“ (User Task) und „Wareneingang buchen“ (Service Task, wie UC11). P06 neu „Ersatzteilbedarf prüfen“ vor „Teil weiterhin benötigt?“. P07 „Reparaturschritt starten und Zeit erfassen“ entfällt (nur ein Start-Klick), „Schritt dokumentieren und Zeit stoppen“ heißt „Reparaturschritt und Arbeitszeit erfassen“ (wie UC13), „Endkontrolle durchführen und Prüfprotokoll erfassen“ heißt „Endkontrolle durchführen“. P08 „Erinnerung protokollieren“ entfällt (nur ein Zähler), der Zähler hängt am Zeitereignis.
+- **Kollaboration (4-43, 4-46):** In P08 docken „Mahnung“ und „Bitte um Bewertung“ an Ereignissen im Kundenprozess an; der Kunde wartet über ein ereignisbasiertes Gateway (Bewertungsanfrage, Mahnung oder „4 Wochen ohne Nachricht verstrichen“) und endet immer.
+- **Kantenführung und Gateways (4-51, 4-52):** Layout von P06–P10 überarbeitet (P06 von 24 auf 13 Kreuzungen, keine Kante mehr durch ein Element, Rückkanten nicht mehr am Pool-Rand), doppelte Merges in P08 und P10 zusammengelegt.
+- **Prüfung:** bpmnlint (Camunda 8.7) 0 Befunde für alle zehn Dateien; Syntax, Erreichbarkeit, XOR-Vollständigkeit, Layout ohne Befund; Simulation 32/32 Szenarien.
+- **Kennzahlen:** 133 Aktivitäten (Ø 13,3), 81 automatisiert (61 %), 26 Kundenaktivitäten, 42 Nachrichtenflüsse, 53 Datenobjekte und 12 Datenspeicher. Tabelle 6 je Diagramm (Akt./autom.): 06 17/11 (65 %), 07 13/6 (46 %), 08 16/10 (63 %), 09 15/7 (47 %), 10 10/7 (70 %); 01–05 unverändert.
+- **Offen (Entscheidung der Gruppe):** (1) P07: Arbeitszeit wird mit dem Schritt erfasst statt per Start/Stopp. (2) Gelten die Aktivitäten „Status auf … setzen“ (P02–P08) als zu klein im Sinne von 4-22? (3) P09: eigene Lane „Ersatzteil-Disposition“ für „10 Retoure abwickeln“ und Nachricht „Reklamation abgelehnt“ an den Kunden? (4) P08: Frist „4 Wochen ohne Nachricht“ im Kundenprozess, „Zur Filiale kommen“ (Ortswechsel, 4-22) streichen? (5) P06: Wareneingang erst nach „Lieferung mangelfrei?“ buchen (dann P10 anpassen)?
+- **Folgt daraus:** Doku 5.1 und Tabelle 6 sowie die Folien auf die Kennzahlen oben ziehen (Doku nennt noch 33 Benutzer-Aktivitäten und 9 Aufrufe – jetzt 32 und 10); Maximilian öffnet P06–P10 im Modeler.
 
 ## E-31 Review und Korrekturen P05–P10 (22.10.2026)
 
