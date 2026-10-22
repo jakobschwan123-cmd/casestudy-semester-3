@@ -4,7 +4,30 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## Offen
 
+- **E-32** (Prüfung P06–P10 gegen die Vorlesung, 22.10.2026): Antworten des Teams umgesetzt (siehe „Entschieden“ in E-32); Bestätigung der Gruppe und Modeler-Prüfung stehen aus.
 - **E-31** (Review P05–P10, 22.10.2026): Vorschlag von Jakob, Bestätigung durch die Gruppe und Sichtprüfung im Camunda Modeler durch Maximilian stehen aus.
+
+## E-32 P06–P10 nach den BPMN-Regeln der Vorlesung SYAN-04 (22.10.2026)
+
+Vorschlag von Jakob, Branch `fix/bpmn-p06-p10-vorlesungsregeln`. Jedes Diagramm wurde einzeln gegen die Regeln aus SYAN-04 geprüft (Folien 4-14 bis 4-64).
+
+- **Zeitüberschreitungen (4-27, 4-29, 4-36):** Ereignisse stehen im Fluss zwischen den Aktivitäten, Timeouts laufen über ein ereignisbasiertes Gateway. Die an Aktivitäten angehefteten Timer aus E-31 sind ersetzt: P09 „Kostenpflichtiges Angebot senden“ → Gateway → „Kundenentscheidung erhalten“ / „3 Tage verstrichen“; P10 „Lagerbestand korrigieren“ → Gateway → „Rückmeldung des Lieferanten erhalten“ / „14 Tage verstrichen“ (Umbau von Jakob im Modeler begonnen). Die beiden Receive Tasks entfallen.
+- **Granularität und Benennung (4-21, 4-22):** P06 „Wareneingang prüfen und buchen“ geteilt in „Wareneingang prüfen“ (User Task) und „Wareneingang buchen“ (Service Task, wie UC11). P06 neu „Ersatzteilbedarf prüfen“ vor „Teil weiterhin benötigt?“. P07 „Reparaturschritt starten und Zeit erfassen“ entfällt (nur ein Start-Klick), „Schritt dokumentieren und Zeit stoppen“ heißt „Reparaturschritt und Arbeitszeit erfassen“ (wie UC13), „Endkontrolle durchführen und Prüfprotokoll erfassen“ heißt „Endkontrolle durchführen“. P08 „Erinnerung protokollieren“ entfällt (nur ein Zähler), der Zähler hängt am Zeitereignis.
+- **Kollaboration (4-43, 4-46):** In P08 docken „Mahnung“ und „Bitte um Bewertung“ an Ereignissen im Kundenprozess an; der Kunde wartet über ein ereignisbasiertes Gateway (Bewertungsanfrage, Mahnung oder „4 Wochen ohne Nachricht verstrichen“) und endet immer.
+- **Kantenführung und Gateways (4-51, 4-52):** Layout von P06–P10 überarbeitet (P06 von 24 auf 13 Kreuzungen, keine Kante mehr durch ein Element, Rückkanten nicht mehr am Pool-Rand), doppelte Merges in P08 und P10 zusammengelegt.
+- **Prüfung:** bpmnlint (Camunda 8.7) 0 Befunde für alle zehn Dateien; Syntax, Erreichbarkeit, XOR-Vollständigkeit, Layout ohne Befund; Simulation 32/32 Szenarien.
+- **Entschieden (Feedback des Teams, 22.10.2026):**
+  1. P07: Arbeitszeit wird mit dem Schritt erfasst (passt zu UC13, `Techniker.bucheArbeitszeit()` und SD4) – bleibt.
+  2. Die Aktivitäten „Auftragsstatus auf '…' setzen“ (P02–P08) bleiben: `wechsleStatus()` ist in den Sequenzdiagrammen eine eigene Operation und löst Benachrichtigungen aus; ein Umbau fünf Tage vor der Präsentation würde Kennzahlen, Tabelle 6, Folien 10/11 und Sprechtexte ändern.
+  3a. P09: neue Lane „Ersatzteil-Disposition“ mit „10 Retoure abwickeln“ (jede Rolle gehört zu genau einer Lane).
+  3b. P09: „Kunde über Ablehnung informieren“ (Send Task) an „Absage erhalten“ im Kundenprozess. Dafür informiert P09 den Kunden über die Nacharbeit erst nach „Alle Teile beschaffbar? ja“; der Kunde wartet auf Angebot, Nacharbeit oder Absage, sein Gateway „Angebot angenommen?“ entfällt.
+  4a. P08: Frist „4 Wochen ohne Nachricht verstrichen“ bleibt (länger als jeder Abstand zwischen Mahnungen und Inkasso, je 14 Tage).
+  4b. P08: „Zur Filiale kommen“ gestrichen (Folie 4-22: Aktivität ohne Ortswechsel).
+  4c. P08: Nur die erste Abhol-Benachrichtigung startet den Kundenprozess. Erinnerungen sendet die neue Send Task „Abhol-Erinnerung senden“; der Kunde entscheidet „Abholung jetzt möglich?“ und wartet sonst auf „Erinnerung erhalten“ oder „4 Wochen ohne Erinnerung verstrichen“. Kundenende heißt „Abholung erledigt“.
+  5. P06: Gebucht wird nur mangelfreie Ware – „Wareneingang prüfen“ → „Lieferung mangelfrei?“ → ja → „Wareneingang buchen“; auch die Ersatzlieferung wird erst nach „Ersatzlieferung mangelfrei? ja“ gebucht. P10: „Lagerbestand korrigieren“ entfällt, „Ersatzlieferung buchen“ heißt „Ersatzlieferung entgegennehmen“, „Teil abschreiben“ schreibt keinen Lagerbestand mehr.
+  6. SD4 passt („UC13 Reparaturschritt und Arbeitszeit erfassen“, `erfasseEndkontrolle()`).
+- **Kennzahlen:** 134 Aktivitäten (Ø 13,4), 82 automatisiert (61 %), davon 32 Benutzer-Aktivitäten, 9 manuell, 10 Aufrufe, 1 Mehrfach-Teilprozess; 25 Kundenaktivitäten; 44 Nachrichtenflüsse; 51 Datenobjekte und 12 Datenspeicher. Tabelle 6 (Akt./autom.): 06 17/11 (65 %), 07 13/6 (46 %), 08 17/11 (65 %), 09 16/8 (50 %), 10 9/6 (67 %); 01–05 unverändert.
+- **Folgt daraus:** Doku 5.1, Tabelle 6, Prozesskurztexte P06/P09/P10, Folien 10/11 und Sprechtexte anpassen (siehe TODO); Maximilian öffnet P06–P10 im Modeler.
 
 ## E-31 Review und Korrekturen P05–P10 (22.10.2026)
 

@@ -14,18 +14,22 @@ Stand der Artefakte: UML (Use-Case-, Klassen-, sechs Sequenzdiagramme) ist ferti
 
 - [ ] **Modeler-Prüfung durchführen:** Alle zehn `.bpmn`-Dateien im Camunda Modeler (Camunda 8) öffnen und prüfen, ob das Problems-Panel keine Fehler zeigt. Ergebnis kurz in die WhatsApp-Gruppe. Falls Fehler: Screenshot, nicht selbst umbauen. Falls die Dateien dafür im Modeler gespeichert werden mussten: per Pull Request einreichen und die Kennzahlen nur dann neu zählen, wenn sich Aktivitäten geändert haben.
 - [ ] **Ergebnis in die Doku:** gelben Hinweis in Tabelle 2 Schritt 4 durch einen Satz ersetzen, z. B. „Alle zehn Dateien zeigen im Problems-Panel keine Fehler.“
-- [ ] **E-31 bestätigen:** Korrekturen P04–P10 aus dem Review vom 22.10. (Branch `fix/bpmn-p05-p10-review`) im Modeler ansehen und freigeben.
+- [ ] **PR #45 freigeben:** E-32 in der Gruppe bestätigen, Maximilian öffnet P06–P10 im Camunda Modeler (Problems-Panel), Review durch eine zweite Person, dann mergen.
 
 ## B. Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
 Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
-- [ ] **Kennzahlen nach E-31:** In 5.1 und auf den Folien 135 Aktivitäten (Ø 13,5), 82 automatisiert (61 %), 64 Datenobjekte statt 133/13,3/81/63.
+- [x] **Kennzahlen nach E-32** (in PR #45 erledigt, Abbildung 3 = aktuelles P04): 5.1 Kennzahlen-Absatz: 134 Aktivitäten (Ø 13,4), 25 Kundenaktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte und 12 Datenspeicher. Aufteilung: 82 automatisiert (61 %), 32 Benutzer-Aktivitäten, 9 manuell, 10 Aufrufe, 1 Mehrfach-Teilprozess. Tabelle 6: 06 17/11 (65 %), 07 13/6 (46 %), 08 17/11 (65 %), 09 16/8 (50 %), 10 9/6 (67 %).
+- [x] **Prozesskurztexte 5.1** (in PR #45 erledigt; PDF-Export steht noch aus): P06 „erst prüfen, dann buchen“; P09 „Kunde erhält bei Ablehnung eine Absage“; P10 „keine Bestandskorrektur mehr, Ersatz wird in P06 geprüft und gebucht“. Danach PDF exportieren.
 - [ ] **Gelbe Hinweise abarbeiten:** Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe A), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen).
 - [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste und meldet Korrekturen.
 - [ ] **Abschluss:** kein „[“ mehr im Text, als PDF speichern (`3_doku/Projektdokumentation.pdf`), Seitenzahlen im Inhaltsverzeichnis im PDF prüfen (statisches Verzeichnis; Seite 3 ist voll, jede Ergänzung dort verschiebt die Nummern).
 
 ## C. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
+
+- [x] **Zustandsdiagramm gestrichen (E-30)** (in PR #45 erledigt): Folie 10 „+ Zustandsdiagramm“, Folie 13 Halbsatz ersetzt („wechselt ihn über wechsleStatus()“), Notiz und Sprechtext Folie 10.
+- [x] **Kennzahlen nach E-32** (in PR #45 erledigt): Folie 10: 134 Aktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte. Folie 11: Prozesstabelle P06–P10, 134 / 13,4 / 61 %. Sprechtexte (Adrian Folie 10/11 „133“ → „134“; 61 Prozent bleibt) in Notizen und Word-Datei gleich halten.
 
 Folienfolge: Nina 1–2 und 17–18, David 3, 6 und 12, Adrian 4–5 und 7–8, Maximilian 9–11, Kilian 13–14, Jakob 15–16, Folie 19 Anhang. Redezeit: Nina 2:50, David 3:20, Adrian 4:10, Maximilian 3:20, Kilian 3:10, Jakob 2:20, gesamt 19:10.
 
