@@ -22,10 +22,10 @@ Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn`
 - Pool = Unternehmen: „Werkstattbetrieb (Pilotkunde FixWerk GmbH)“ mit dem ausführbaren Prozess, „Kunde“ mit eigenem, nicht ausführbarem Prozess (E-16), „Lieferant“ als Black Box. Zwischen Pools nur Nachrichtenflüsse.
 - Lanes = Rollen: Service / Annahme, Techniker, Werkstattleitung, Ersatzteil-Disposition. Keine Lane für die Software.
 - Automatisierung über den Aktivitätstyp: Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive Task = Nachricht über RepairFlow, User Task = Mensch mit RepairFlow, Manual Task = außerhalb der Software.
-- Aufrufe zwischen Prozessen: 04 → 05, 05 → 06, 07 → 05 (Nachtrag), 09 → 07, 06/09 → 10, 03/04/09 → 08 (Rückgabe des Geräts immer über 08).
+- Aufrufe zwischen Prozessen: 04 → 05, 05 → 06, 07 → 05 (Nachtrag), 09 → 05 → 07 (Nacharbeit), 06/09 → 10, 03/04/09 → 08 (Rückgabe des Geräts immer über 08).
 - Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
 - Datenobjekte tragen die Klassennamen des Klassendiagramms, der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
 
-## Kennzahlen (Stand E-27)
+## Kennzahlen (Stand E-31)
 
-133 Aktivitäten im Werkstatt-Pool (Ø 13,3 je Diagramm), davon 81 automatisiert (61 %); 26 Aktivitäten in den Kundenabläufen; 42 Nachrichtenflüsse; 63 Datenobjekte und -speicher. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.
+135 Aktivitäten im Werkstatt-Pool (Ø 13,5 je Diagramm), davon 82 automatisiert (61 %); 26 Aktivitäten in den Kundenabläufen; 42 Nachrichtenflüsse; 64 Datenobjekte und -speicher. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.

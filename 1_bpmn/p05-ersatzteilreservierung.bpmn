@@ -218,6 +218,9 @@
     <bpmn:callActivity id="T05_Bestellen" name="06 Ersatzteile bestellen">
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_06" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=teileVollstaendig" target="teileVollstaendig" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_05_26</bpmn:incoming>
       <bpmn:outgoing>Flow_05_28</bpmn:outgoing>

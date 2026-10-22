@@ -103,6 +103,8 @@
         <zeebe:ioMapping>
           <zeebe:output source="=0" target="anzahlMahnungen" />
           <zeebe:output source="=0" target="anzahlErsatzlieferungen" />
+          <zeebe:output source="=bestellwert" target="bestellwert" />
+          <zeebe:output source="=freigabegrenze" target="freigabegrenze" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_6</bpmn:incoming>
@@ -182,6 +184,7 @@
         <zeebe:taskDefinition type="repairflow.t06_termin" />
         <zeebe:ioMapping>
           <zeebe:output source="=liefertermin" target="nachfrist" />
+          <zeebe:output source="=reparaturVerzoegert" target="reparaturVerzoegert" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_17</bpmn:incoming>
@@ -267,6 +270,9 @@
     <bpmn:callActivity id="T06_Retoure" name="10 Retoure abwickeln">
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_10" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=rueckmeldung = &#34;ersatz&#34; and abgeschrieben != true" target="ersatzGeliefert" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_39b</bpmn:incoming>
       <bpmn:outgoing>Flow_06_40</bpmn:outgoing>
@@ -282,6 +288,7 @@
         <zeebe:formDefinition formId="form-t06_ersatzpruefen" />
         <zeebe:ioMapping>
           <zeebe:output source="=anzahlErsatzlieferungen + 1" target="anzahlErsatzlieferungen" />
+          <zeebe:output source="=ersatzMangelfrei" target="ersatzMangelfrei" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_06_41</bpmn:incoming>
@@ -1103,7 +1110,7 @@
         <di:waypoint x="4265" y="748" />
         <di:waypoint x="4265" y="115" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4273" y="421" width="130" height="20" />
+          <dc:Bounds x="4273" y="308" width="60" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_06_5_di" bpmnElement="MsgFlow_06_5">
