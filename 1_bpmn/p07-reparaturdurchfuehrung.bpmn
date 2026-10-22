@@ -162,7 +162,7 @@
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_05" propagateAllChildVariables="false" />
         <zeebe:ioMapping>
-          <zeebe:output source="=teileVollstaendig" target="teileVollstaendig" />
+          <zeebe:output source="=teileVollstaendig != false" target="teileVollstaendig" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_07_37</bpmn:incoming>

@@ -170,7 +170,7 @@
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_05" propagateAllChildVariables="false" />
         <zeebe:ioMapping>
-          <zeebe:output source="=teileVollstaendig" target="teileVollstaendig" />
+          <zeebe:output source="=teileVollstaendig != false" target="teileVollstaendig" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_09_29</bpmn:incoming>
@@ -417,7 +417,7 @@
       <bpmndi:BPMNShape id="GW09_Gewaehr_di" bpmnElement="GW09_Gewaehr" isMarkerVisible="true">
         <dc:Bounds x="1740" y="642" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1612" y="612" width="120" height="27" />
+          <dc:Bounds x="1715" y="608" width="100" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T09_Freigeben_di" bpmnElement="T09_Freigeben">
@@ -432,7 +432,7 @@
       <bpmndi:BPMNShape id="GW09_Angebot_di" bpmnElement="GW09_Angebot" isMarkerVisible="true">
         <dc:Bounds x="2310" y="982" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2182" y="952" width="120" height="27" />
+          <dc:Bounds x="2365" y="950" width="100" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T09_Abgelehnt_di" bpmnElement="T09_Abgelehnt">

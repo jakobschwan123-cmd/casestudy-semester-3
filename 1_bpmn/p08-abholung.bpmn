@@ -71,9 +71,6 @@
     <bpmn:serviceTask id="T08_Rechnung" name="Rechnung aus KVA und Arbeitszeiten erstellen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t08_rechnung" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=true" target="rechnungVorhanden" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_08_19</bpmn:incoming>
       <bpmn:outgoing>Flow_08_22</bpmn:outgoing>
@@ -84,9 +81,6 @@
     <bpmn:serviceTask id="T08_Pauschale" name="Rechnung über Diagnosepauschale erstellen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t08_pauschale" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=true" target="rechnungVorhanden" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_08_20</bpmn:incoming>
       <bpmn:outgoing>Flow_08_23</bpmn:outgoing>
@@ -140,9 +134,6 @@
     <bpmn:serviceTask id="T08_Lager" name="Lagergebühr in Rechnung aufnehmen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t08_lager" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=true" target="rechnungVorhanden" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_08_31</bpmn:incoming>
       <bpmn:outgoing>Flow_08_33</bpmn:outgoing>
@@ -378,10 +369,10 @@
     <bpmn:sequenceFlow id="Flow_08_46" sourceRef="T08_Abgeholt" targetRef="T08_Bestaende" />
     <bpmn:sequenceFlow id="Flow_08_47" sourceRef="T08_Bestaende" targetRef="GW08_Offen" />
     <bpmn:sequenceFlow id="Flow_08_48" sourceRef="GW08_Offen" targetRef="Merge_08z" name="auf Rechnung">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart = "rechnung"</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true and zahlungsart = "rechnung"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_49" sourceRef="GW08_Offen" targetRef="Merge_08v" name="bar / Karte kassiert">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true and zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_50" sourceRef="GW08_Offen" targetRef="Merge_08w" name="keine Rechnung">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden != true</bpmn:conditionExpression>
@@ -646,7 +637,7 @@
       <bpmndi:BPMNShape id="GW08_Offen_di" bpmnElement="GW08_Offen" isMarkerVisible="true">
         <dc:Bounds x="3640" y="702" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3512" y="672" width="120" height="27" />
+          <dc:Bounds x="3600" y="672" width="70" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_08z_di" bpmnElement="Merge_08z" isMarkerVisible="true">
@@ -1212,7 +1203,7 @@
         <di:waypoint x="4645" y="802" />
         <di:waypoint x="4645" y="455" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4653" y="619" width="130" height="20" />
+          <dc:Bounds x="4653" y="520" width="60" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_9_di" bpmnElement="MsgFlow_08_9">

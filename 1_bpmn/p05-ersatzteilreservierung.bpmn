@@ -34,9 +34,6 @@
     <bpmn:serviceTask id="T05_Teileliste" name="Teileliste aus KVA übernehmen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t05_teileliste" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=true" target="teileVollstaendig" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_05_3</bpmn:incoming>
       <bpmn:outgoing>Flow_05_4</bpmn:outgoing>

@@ -51,10 +51,6 @@
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t10_grund" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=false" target="eskaliert" />
-          <zeebe:output source="=false" target="ersatzGeliefert" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10_1</bpmn:incoming>
       <bpmn:outgoing>Flow_10_2</bpmn:outgoing>
@@ -121,6 +117,9 @@
     <bpmn:serviceTask id="T10_Abschreiben" name="Teil abschreiben">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t10_abschreiben" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=true" target="abgeschrieben" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10_29</bpmn:incoming>
             <bpmn:outgoing>Flow_10_12</bpmn:outgoing>
@@ -188,9 +187,6 @@
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t10_ersatz" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=true" target="ersatzGeliefert" />
-        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_10_18</bpmn:incoming>
       <bpmn:outgoing>Flow_10_20</bpmn:outgoing>
@@ -233,10 +229,10 @@
     <bpmn:sequenceFlow id="Flow_10_7" sourceRef="GW10_Warten" targetRef="E10_RMA" />
     <bpmn:sequenceFlow id="Flow_10_8" sourceRef="E10_Timer" targetRef="GW10_Zweite" />
     <bpmn:sequenceFlow id="Flow_10_9" sourceRef="GW10_Zweite" targetRef="T10_Eskalieren" name="nein">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(eskaliert)</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=eskaliert != true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10_10" sourceRef="GW10_Zweite" targetRef="Merge_10b" name="ja">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=eskaliert</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=eskaliert = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10_11" sourceRef="T10_Eskalieren" targetRef="Merge_10" />
     <bpmn:sequenceFlow id="Flow_10_12" sourceRef="T10_Abschreiben" targetRef="Join_10a" />
