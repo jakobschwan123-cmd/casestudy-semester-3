@@ -157,12 +157,12 @@
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_07_37</bpmn:incoming>
-            <bpmn:outgoing>Flow_07_24</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_24</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:exclusiveGateway id="Merge_07n" name="">
       <bpmn:incoming>Flow_07_21</bpmn:incoming>
       <bpmn:incoming>Flow_07_23</bpmn:incoming>
-            <bpmn:outgoing>Flow_07_25</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_25</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="T07_Abgelehnt" name="Nachtrag auf &#39;abgelehnt&#39; setzen">
       <bpmn:extensionElements>
@@ -213,7 +213,7 @@
         <zeebe:taskDefinition type="repairflow.t07_abbruch" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_07_39</bpmn:incoming>
-            <bpmn:outgoing>Flow_07_35</bpmn:outgoing>
+      <bpmn:outgoing>Flow_07_35</bpmn:outgoing>
       <bpmn:dataOutputAssociation id="T07_Abbruch_out_DataObjRef_07_7">
         <bpmn:targetRef>DataObjRef_07_7</bpmn:targetRef>
       </bpmn:dataOutputAssociation>

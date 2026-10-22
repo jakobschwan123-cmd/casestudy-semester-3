@@ -4,7 +4,8 @@
     <bpmn:documentation>Sobald ein Geraet abholbereit ist (repariert, abgelehnt oder nach Nacharbeit), erstellt RepairFlow die Rechnung aus KVA und Arbeitszeiten bzw. ueber die Diagnosepauschale (kostenfreie Nacharbeit ohne Rechnung) und benachrichtigt den Kunden; nach der dritten Erinnerung wird eine Lagergebuehr berechnet, bleibt auch die vierte ohne Abholung, wird die Verwertung des Geraets eingeleitet. Bei der Abholung wird die Zahlung erfasst (bar/Karte sofort, auf Rechnung mit Zahlungsziel, bis zu drei Mahnungen, danach Inkasso), das Geraet uebergeben und der Auftrag geschlossen.</bpmn:documentation>
     <bpmn:participant id="Part_08_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_08" />
     <bpmn:participant id="Part_08_Kunde" name="Kunde" processRef="Proc_08_Kunde" />
-    <bpmn:messageFlow id="MsgFlow_08_1" name="Abhol-Benachrichtigung (ggf. Erinnerung)" sourceRef="T08_Benachrichtigung" targetRef="K08_Start" />
+    <bpmn:messageFlow id="MsgFlow_08_10" name="Abhol-Erinnerung" sourceRef="T08_Erinnern" targetRef="K08_Erinnerung" />
+    <bpmn:messageFlow id="MsgFlow_08_1" name="Abhol-Benachrichtigung" sourceRef="T08_Benachrichtigung" targetRef="K08_Start" />
     <bpmn:messageFlow id="MsgFlow_08_2" name="Abholung" sourceRef="K08_Abholen" targetRef="E08_Kunde" />
     <bpmn:messageFlow id="MsgFlow_08_3" name="Zahlungsart" sourceRef="K08_Art" targetRef="T08_Zahlungsart" />
     <bpmn:messageFlow id="MsgFlow_08_4" name="Barzahlung / Kartenzahlung" sourceRef="K08_Bar" targetRef="T08_Kassieren" />
@@ -17,6 +18,9 @@
   <bpmn:process id="Proc_08" name="08 Abholung, Rechnung und Zahlung" isExecutable="true">
     <bpmn:laneSet id="LaneSet_08">
       <bpmn:lane id="Lane_08_1" name="Service / Annahme">
+        <bpmn:flowNodeRef>T08_Erinnern</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_08y</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_08x</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Start_08</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW08_Abr</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Rechnung</bpmn:flowNodeRef>
@@ -90,9 +94,7 @@
       <bpmn:incoming>Flow_08_21</bpmn:incoming>
       <bpmn:incoming>Flow_08_22</bpmn:incoming>
       <bpmn:incoming>Flow_08_23</bpmn:incoming>
-      <bpmn:incoming>Flow_08_30</bpmn:incoming>
-      <bpmn:incoming>Flow_08_33</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_24</bpmn:outgoing>
+                  <bpmn:outgoing>Flow_08_24</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sendTask id="T08_Benachrichtigung" name="Abhol-Benachrichtigung an Kunde senden">
       <bpmn:extensionElements>
@@ -101,9 +103,26 @@
       <bpmn:incoming>Flow_08_24</bpmn:incoming>
       <bpmn:outgoing>Flow_08_25</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:eventBasedGateway id="GW08_Warten" name="">
+    <bpmn:exclusiveGateway id="Merge_08x" name="">
       <bpmn:incoming>Flow_08_25</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_26</bpmn:outgoing>
+      <bpmn:incoming>Flow_08_76</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_74</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Merge_08y" name="">
+      <bpmn:incoming>Flow_08_30</bpmn:incoming>
+      <bpmn:incoming>Flow_08_33</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_75</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="T08_Erinnern" name="Abhol-Erinnerung senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_erinnern" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_75</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_76</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:eventBasedGateway id="GW08_Warten" name="">
+      <bpmn:incoming>Flow_08_74</bpmn:incoming>
+            <bpmn:outgoing>Flow_08_26</bpmn:outgoing>
       <bpmn:outgoing>Flow_08_27</bpmn:outgoing>
     </bpmn:eventBasedGateway>
     <bpmn:intermediateCatchEvent id="E08_Timer" name="14 Tage nicht abgeholt">
@@ -320,11 +339,11 @@
     <bpmn:sequenceFlow id="Flow_08_22" sourceRef="T08_Rechnung" targetRef="Merge_08" />
     <bpmn:sequenceFlow id="Flow_08_23" sourceRef="T08_Pauschale" targetRef="Merge_08" />
     <bpmn:sequenceFlow id="Flow_08_24" sourceRef="Merge_08" targetRef="T08_Benachrichtigung" />
-    <bpmn:sequenceFlow id="Flow_08_25" sourceRef="T08_Benachrichtigung" targetRef="GW08_Warten" />
+    <bpmn:sequenceFlow id="Flow_08_25" sourceRef="T08_Benachrichtigung" targetRef="Merge_08x" />
     <bpmn:sequenceFlow id="Flow_08_26" sourceRef="GW08_Warten" targetRef="E08_Kunde" />
     <bpmn:sequenceFlow id="Flow_08_27" sourceRef="GW08_Warten" targetRef="E08_Timer" />
     <bpmn:sequenceFlow id="Flow_08_28" sourceRef="E08_Timer" targetRef="GW08_Dritte" />
-    <bpmn:sequenceFlow id="Flow_08_30" sourceRef="GW08_Dritte" targetRef="Merge_08" name="&lt; 3 oder = 4">
+    <bpmn:sequenceFlow id="Flow_08_30" sourceRef="GW08_Dritte" targetRef="Merge_08y" name="&lt; 3 oder = 4">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen &lt; 3 or abholErinnerungen = 4</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_31" sourceRef="GW08_Dritte" targetRef="T08_Lager" name="= 3">
@@ -333,7 +352,7 @@
     <bpmn:sequenceFlow id="Flow_08_32" sourceRef="GW08_Dritte" targetRef="T08_Verwertung" name="&gt; 4">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen &gt; 4</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_33" sourceRef="T08_Lager" targetRef="Merge_08" />
+    <bpmn:sequenceFlow id="Flow_08_33" sourceRef="T08_Lager" targetRef="Merge_08y" />
     <bpmn:sequenceFlow id="Flow_08_34" sourceRef="T08_Verwertung" targetRef="Merge_08f" />
     <bpmn:sequenceFlow id="Flow_08_35" sourceRef="E08_Kunde" targetRef="T08_Holen" />
     <bpmn:sequenceFlow id="Flow_08_36" sourceRef="T08_Holen" targetRef="GW08_Faellig" />
@@ -383,6 +402,9 @@
     <bpmn:sequenceFlow id="Flow_08_62" sourceRef="Merge_08w" targetRef="T08_Bewertung" />
     <bpmn:sequenceFlow id="Flow_08_63" sourceRef="T08_Bewertung" targetRef="Merge_08f" />
     <bpmn:sequenceFlow id="Flow_08_65" sourceRef="Merge_08f" targetRef="End_08" />
+    <bpmn:sequenceFlow id="Flow_08_74" sourceRef="Merge_08x" targetRef="GW08_Warten" />
+    <bpmn:sequenceFlow id="Flow_08_75" sourceRef="Merge_08y" targetRef="T08_Erinnern" />
+    <bpmn:sequenceFlow id="Flow_08_76" sourceRef="T08_Erinnern" targetRef="Merge_08x" />
     <bpmn:dataObjectReference id="DataObjRef_08_1" name="Rechnung [offen]" dataObjectRef="DataObj_08_1" />
     <bpmn:dataObject id="DataObj_08_1" />
     <bpmn:dataObjectReference id="DataObjRef_08_2" name="Rechnung [offen]" dataObjectRef="DataObj_08_2" />
@@ -401,12 +423,35 @@
       <bpmn:outgoing>Flow_08_1</bpmn:outgoing>
       <bpmn:messageEventDefinition id="K08_Start_def" messageRef="Msg_08_3" />
     </bpmn:startEvent>
-    <bpmn:manualTask id="K08_Weg" name="Zur Filiale kommen">
+    <bpmn:exclusiveGateway id="K08_MergeA" name="">
       <bpmn:incoming>Flow_08_1</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_2</bpmn:outgoing>
-    </bpmn:manualTask>
+      <bpmn:incoming>Flow_08_81</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_77</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="K08_GWA" name="Abholung jetzt möglich?">
+      <bpmn:incoming>Flow_08_77</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_78</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_79</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:eventBasedGateway id="K08_WartenA" name="">
+      <bpmn:incoming>Flow_08_79</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_80</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_82</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="K08_Erinnerung" name="Erinnerung erhalten">
+      <bpmn:incoming>Flow_08_80</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_81</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="K08_Erinnerung_def" messageRef="Msg_08_8" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="K08_TimerA" name="4 Wochen ohne Erinnerung verstrichen">
+      <bpmn:incoming>Flow_08_82</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_83</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="K08_TimerA_def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P28D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
     <bpmn:manualTask id="K08_Abholen" name="Abholung in der Filiale anmelden">
-      <bpmn:incoming>Flow_08_2</bpmn:incoming>
+      <bpmn:incoming>Flow_08_78</bpmn:incoming>
       <bpmn:outgoing>Flow_08_3</bpmn:outgoing>
     </bpmn:manualTask>
     <bpmn:exclusiveGateway id="K08_GW1" name="Zahlung fällig?">
@@ -486,15 +531,15 @@
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:exclusiveGateway id="K08_JoinE" name="">
+      <bpmn:incoming>Flow_08_83</bpmn:incoming>
       <bpmn:incoming>Flow_08_70</bpmn:incoming>
       <bpmn:incoming>Flow_08_71</bpmn:incoming>
       <bpmn:outgoing>Flow_08_72</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="K08_End" name="Gerät abgeholt">
+    <bpmn:endEvent id="K08_End" name="Abholung erledigt">
       <bpmn:incoming>Flow_08_72</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_08_1" sourceRef="K08_Start" targetRef="K08_Weg" />
-    <bpmn:sequenceFlow id="Flow_08_2" sourceRef="K08_Weg" targetRef="K08_Abholen" />
+    <bpmn:sequenceFlow id="Flow_08_1" sourceRef="K08_Start" targetRef="K08_MergeA" />
     <bpmn:sequenceFlow id="Flow_08_3" sourceRef="K08_Abholen" targetRef="K08_GW1" />
     <bpmn:sequenceFlow id="Flow_08_4" sourceRef="K08_GW1" targetRef="K08_Art" name="ja">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungFaellig</bpmn:conditionExpression>
@@ -529,6 +574,17 @@
     <bpmn:sequenceFlow id="Flow_08_71" sourceRef="K08_Timer" targetRef="K08_JoinE" />
     <bpmn:sequenceFlow id="Flow_08_72" sourceRef="K08_JoinE" targetRef="K08_End" />
     <bpmn:sequenceFlow id="Flow_08_73" sourceRef="K08_Mahnung" targetRef="K08_MergeZ" />
+    <bpmn:sequenceFlow id="Flow_08_77" sourceRef="K08_MergeA" targetRef="K08_GWA" />
+    <bpmn:sequenceFlow id="Flow_08_78" sourceRef="K08_GWA" targetRef="K08_Abholen" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholungMoeglich</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_79" sourceRef="K08_GWA" targetRef="K08_WartenA" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(abholungMoeglich)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_80" sourceRef="K08_WartenA" targetRef="K08_Erinnerung" />
+    <bpmn:sequenceFlow id="Flow_08_81" sourceRef="K08_Erinnerung" targetRef="K08_MergeA" />
+    <bpmn:sequenceFlow id="Flow_08_82" sourceRef="K08_WartenA" targetRef="K08_TimerA" />
+    <bpmn:sequenceFlow id="Flow_08_83" sourceRef="K08_TimerA" targetRef="K08_JoinE" />
 
   </bpmn:process>
   <bpmn:dataStore id="Store_08_1" name="Buchhaltung (DATEV-Export)" />
@@ -543,7 +599,7 @@
       <zeebe:subscription correlationKey="=vorgangId" />
     </bpmn:extensionElements>
   </bpmn:message>
-  <bpmn:message id="Msg_08_3" name="Abhol-Benachrichtigung (ggf. Erinnerung)">
+  <bpmn:message id="Msg_08_3" name="Abhol-Benachrichtigung">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />
     </bpmn:extensionElements>
@@ -554,6 +610,7 @@
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmn:message id="Msg_08_6" name="Mahnung" />
+  <bpmn:message id="Msg_08_8" name="Abhol-Erinnerung" />
   <bpmn:message id="Msg_08_7" name="Bitte um Bewertung" />
   <bpmn:message id="Msg_08_5" name="Gerät + Erläuterung">
     <bpmn:extensionElements>
@@ -563,16 +620,16 @@
   <bpmndi:BPMNDiagram id="Diagram_08">
     <bpmndi:BPMNPlane id="Plane_08" bpmnElement="Collab_08">
       <bpmndi:BPMNShape id="Part_08_Werkstatt_di" bpmnElement="Part_08_Werkstatt" isHorizontal="true">
-        <dc:Bounds x="120" y="590" width="4840" height="855" />
+        <dc:Bounds x="120" y="590" width="5100" height="855" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_08_1_di" bpmnElement="Lane_08_1" isHorizontal="true">
-        <dc:Bounds x="150" y="590" width="4810" height="685" />
+        <dc:Bounds x="150" y="590" width="5070" height="685" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_08_2_di" bpmnElement="Lane_08_2" isHorizontal="true">
-        <dc:Bounds x="150" y="1275" width="4810" height="170" />
+        <dc:Bounds x="150" y="1275" width="5070" height="170" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Part_08_Kunde_di" bpmnElement="Part_08_Kunde" isHorizontal="true">
-        <dc:Bounds x="120" y="55" width="4840" height="385" />
+        <dc:Bounds x="120" y="55" width="5100" height="385" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_08_di" bpmnElement="Start_08">
         <dc:Bounds x="227" y="837" width="36" height="36" />
@@ -599,123 +656,123 @@
         <dc:Bounds x="940" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Warten_di" bpmnElement="GW08_Warten">
-        <dc:Bounds x="1140" y="830" width="50" height="50" />
+        <dc:Bounds x="1400" y="830" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E08_Timer_di" bpmnElement="E08_Timer">
-        <dc:Bounds x="1147" y="952" width="36" height="36" />
+        <dc:Bounds x="1407" y="952" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1190" y="956" width="80" height="27" />
+          <dc:Bounds x="1450" y="956" width="80" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Dritte_di" bpmnElement="GW08_Dritte" isMarkerVisible="true">
-        <dc:Bounds x="1140" y="1060" width="50" height="50" />
+        <dc:Bounds x="1400" y="1060" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1005" y="1038" width="130" height="14" />
+          <dc:Bounds x="1265" y="1038" width="130" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Lager_di" bpmnElement="T08_Lager">
-        <dc:Bounds x="1100" y="1160" width="130" height="80" />
+        <dc:Bounds x="1360" y="1160" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Verwertung_di" bpmnElement="T08_Verwertung">
-        <dc:Bounds x="1270" y="1045" width="130" height="80" />
+        <dc:Bounds x="1530" y="1045" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E08_Kunde_di" bpmnElement="E08_Kunde">
-        <dc:Bounds x="1327" y="837" width="36" height="36" />
+        <dc:Bounds x="1587" y="837" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1300" y="879" width="90" height="27" />
+          <dc:Bounds x="1560" y="879" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Holen_di" bpmnElement="T08_Holen">
-        <dc:Bounds x="1440" y="1320" width="130" height="80" />
+        <dc:Bounds x="1700" y="1320" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Faellig_di" bpmnElement="GW08_Faellig" isMarkerVisible="true">
-        <dc:Bounds x="1640" y="1335" width="50" height="50" />
+        <dc:Bounds x="1900" y="1335" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1625" y="1389" width="80" height="14" />
+          <dc:Bounds x="1885" y="1389" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Zahlungsart_di" bpmnElement="T08_Zahlungsart">
-        <dc:Bounds x="1760" y="815" width="130" height="80" />
+        <dc:Bounds x="2020" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Zahlungsart_di" bpmnElement="GW08_Zahlungsart" isMarkerVisible="true">
-        <dc:Bounds x="1960" y="830" width="50" height="50" />
+        <dc:Bounds x="2220" y="830" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1912" y="812" width="70" height="14" />
+          <dc:Bounds x="2172" y="812" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Kassieren_di" bpmnElement="T08_Kassieren">
-        <dc:Bounds x="2080" y="815" width="130" height="80" />
+        <dc:Bounds x="2340" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Versand_di" bpmnElement="T08_Versand">
-        <dc:Bounds x="2240" y="930" width="130" height="80" />
+        <dc:Bounds x="2500" y="930" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Join_08a_di" bpmnElement="Join_08a" isMarkerVisible="true">
-        <dc:Bounds x="2440" y="1335" width="50" height="50" />
+        <dc:Bounds x="2700" y="1335" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Uebergabe_di" bpmnElement="T08_Uebergabe">
-        <dc:Bounds x="2560" y="1320" width="130" height="80" />
+        <dc:Bounds x="2820" y="1320" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Abgeholt_di" bpmnElement="T08_Abgeholt">
-        <dc:Bounds x="2750" y="815" width="130" height="80" />
+        <dc:Bounds x="3010" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Bestaende_di" bpmnElement="T08_Bestaende">
-        <dc:Bounds x="2940" y="815" width="130" height="80" />
+        <dc:Bounds x="3200" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Offen_di" bpmnElement="GW08_Offen" isMarkerVisible="true">
-        <dc:Bounds x="3140" y="830" width="50" height="50" />
+        <dc:Bounds x="3400" y="830" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3140" y="812" width="50" height="14" />
+          <dc:Bounds x="3400" y="812" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_08z_di" bpmnElement="Merge_08z" isMarkerVisible="true">
-        <dc:Bounds x="3280" y="830" width="50" height="50" />
+        <dc:Bounds x="3540" y="830" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_WartenZ_di" bpmnElement="GW08_WartenZ">
-        <dc:Bounds x="3530" y="830" width="50" height="50" />
+        <dc:Bounds x="3790" y="830" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E08_Zahlung_di" bpmnElement="E08_Zahlung">
-        <dc:Bounds x="3727" y="837" width="36" height="36" />
+        <dc:Bounds x="3987" y="837" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3690" y="879" width="110" height="14" />
+          <dc:Bounds x="3950" y="879" width="110" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E08_TimerZ_di" bpmnElement="E08_TimerZ">
-        <dc:Bounds x="3537" y="952" width="36" height="36" />
+        <dc:Bounds x="3797" y="952" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3507" y="994" width="96" height="14" />
+          <dc:Bounds x="3767" y="994" width="96" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Mahnstufe_di" bpmnElement="GW08_Mahnstufe" isMarkerVisible="true">
-        <dc:Bounds x="3720" y="945" width="50" height="50" />
+        <dc:Bounds x="3980" y="945" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3685" y="913" width="130" height="14" />
+          <dc:Bounds x="3945" y="913" width="130" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Mahnung_di" bpmnElement="T08_Mahnung">
-        <dc:Bounds x="3380" y="1045" width="130" height="80" />
+        <dc:Bounds x="3640" y="1045" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Inkasso_di" bpmnElement="T08_Inkasso">
-        <dc:Bounds x="3840" y="930" width="130" height="80" />
+        <dc:Bounds x="4100" y="930" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_08v_di" bpmnElement="Merge_08v" isMarkerVisible="true">
-        <dc:Bounds x="4040" y="830" width="50" height="50" />
+        <dc:Bounds x="4300" y="830" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Verbuchen_di" bpmnElement="T08_Verbuchen">
-        <dc:Bounds x="4160" y="815" width="130" height="80" />
+        <dc:Bounds x="4420" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_08w_di" bpmnElement="Merge_08w" isMarkerVisible="true">
-        <dc:Bounds x="4360" y="830" width="50" height="50" />
+        <dc:Bounds x="4620" y="830" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Bewertung_di" bpmnElement="T08_Bewertung">
-        <dc:Bounds x="4480" y="815" width="130" height="80" />
+        <dc:Bounds x="4740" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_08f_di" bpmnElement="Merge_08f" isMarkerVisible="true">
-        <dc:Bounds x="4680" y="945" width="50" height="50" />
+        <dc:Bounds x="4940" y="945" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="End_08_di" bpmnElement="End_08">
-        <dc:Bounds x="4847" y="952" width="36" height="36" />
+        <dc:Bounds x="5107" y="952" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4820" y="994" width="90" height="27" />
+          <dc:Bounds x="5080" y="994" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Start_di" bpmnElement="K08_Start">
@@ -724,88 +781,85 @@
           <dc:Bounds x="940" y="136" width="130" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K08_Weg_di" bpmnElement="K08_Weg">
-        <dc:Bounds x="1090" y="150" width="130" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Abholen_di" bpmnElement="K08_Abholen">
-        <dc:Bounds x="1280" y="150" width="130" height="80" />
+        <dc:Bounds x="1540" y="150" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_GW1_di" bpmnElement="K08_GW1" isMarkerVisible="true">
-        <dc:Bounds x="1640" y="165" width="50" height="50" />
+        <dc:Bounds x="1900" y="165" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1625" y="219" width="80" height="14" />
+          <dc:Bounds x="1885" y="219" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Art_di" bpmnElement="K08_Art">
-        <dc:Bounds x="1760" y="150" width="130" height="80" />
+        <dc:Bounds x="2020" y="150" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_GW_di" bpmnElement="K08_GW" isMarkerVisible="true">
-        <dc:Bounds x="1960" y="165" width="50" height="50" />
+        <dc:Bounds x="2220" y="165" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1950" y="141" width="70" height="14" />
+          <dc:Bounds x="2210" y="141" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Bar_di" bpmnElement="K08_Bar">
-        <dc:Bounds x="2080" y="150" width="130" height="80" />
+        <dc:Bounds x="2340" y="150" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Rechnung_di" bpmnElement="K08_Rechnung">
-        <dc:Bounds x="2287" y="282" width="36" height="36" />
+        <dc:Bounds x="2547" y="282" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2255" y="258" width="100" height="14" />
+          <dc:Bounds x="2515" y="258" width="100" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Join1_di" bpmnElement="K08_Join1" isMarkerVisible="true">
-        <dc:Bounds x="2440" y="165" width="50" height="50" />
+        <dc:Bounds x="2700" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Geraet_di" bpmnElement="K08_Geraet">
-        <dc:Bounds x="2607" y="172" width="36" height="36" />
+        <dc:Bounds x="2867" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2585" y="146" width="80" height="14" />
+          <dc:Bounds x="2845" y="146" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_GW2_di" bpmnElement="K08_GW2" isMarkerVisible="true">
-        <dc:Bounds x="2760" y="165" width="50" height="50" />
+        <dc:Bounds x="3020" y="165" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2740" y="219" width="90" height="14" />
+          <dc:Bounds x="3000" y="219" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_MergeZ_di" bpmnElement="K08_MergeZ" isMarkerVisible="true">
-        <dc:Bounds x="3280" y="165" width="50" height="50" />
+        <dc:Bounds x="3540" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Ueberweisen_di" bpmnElement="K08_Ueberweisen">
-        <dc:Bounds x="3680" y="150" width="130" height="80" />
+        <dc:Bounds x="3940" y="150" width="130" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Join2_di" bpmnElement="K08_Join2" isMarkerVisible="true">
-        <dc:Bounds x="3880" y="165" width="50" height="50" />
+        <dc:Bounds x="4140" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Warten_di" bpmnElement="K08_Warten">
-        <dc:Bounds x="4040" y="165" width="50" height="50" />
+        <dc:Bounds x="4300" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Bewertung_di" bpmnElement="K08_Bewertung">
-        <dc:Bounds x="4527" y="172" width="36" height="36" />
+        <dc:Bounds x="4787" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4490" y="136" width="110" height="27" />
+          <dc:Bounds x="4750" y="136" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Mahnung_di" bpmnElement="K08_Mahnung">
-        <dc:Bounds x="3412" y="382" width="36" height="36" />
+        <dc:Bounds x="3672" y="382" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3385" y="362" width="90" height="14" />
+          <dc:Bounds x="3645" y="362" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Timer_di" bpmnElement="K08_Timer">
-        <dc:Bounds x="4207" y="77" width="36" height="36" />
+        <dc:Bounds x="4467" y="77" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4175" y="117" width="100" height="27" />
+          <dc:Bounds x="4435" y="117" width="100" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_JoinE_di" bpmnElement="K08_JoinE" isMarkerVisible="true">
-        <dc:Bounds x="4680" y="165" width="50" height="50" />
+        <dc:Bounds x="4940" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_End_di" bpmnElement="K08_End">
-        <dc:Bounds x="4847" y="172" width="36" height="36" />
+        <dc:Bounds x="5107" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4825" y="214" width="80" height="14" />
+          <dc:Bounds x="5085" y="214" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_08_1_di" bpmnElement="DataObjRef_08_1">
@@ -821,158 +875,154 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_08_3_di" bpmnElement="DataObjRef_08_3">
-        <dc:Bounds x="2797" y="725" width="36" height="50" />
+        <dc:Bounds x="3057" y="725" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2690" y="735" width="100" height="27" />
+          <dc:Bounds x="2950" y="735" width="100" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_08_4_di" bpmnElement="DataObjRef_08_4">
-        <dc:Bounds x="3600" y="1100" width="36" height="50" />
+        <dc:Bounds x="3860" y="1100" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3642" y="1118" width="105" height="14" />
+          <dc:Bounds x="3902" y="1118" width="105" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_08_5_di" bpmnElement="DataObjRef_08_5">
-        <dc:Bounds x="4207" y="725" width="36" height="50" />
+        <dc:Bounds x="4467" y="725" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4100" y="735" width="100" height="14" />
+          <dc:Bounds x="4360" y="735" width="100" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStore_08_1_di" bpmnElement="DataStore_08_1">
-        <dc:Bounds x="4300" y="725" width="50" height="50" />
+        <dc:Bounds x="4560" y="725" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4355" y="735" width="110" height="27" />
+          <dc:Bounds x="4615" y="735" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStore_08_2_di" bpmnElement="DataStore_08_2">
-        <dc:Bounds x="2790" y="935" width="50" height="50" />
+        <dc:Bounds x="3050" y="935" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2760" y="990" width="110" height="14" />
+          <dc:Bounds x="3020" y="990" width="110" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_08_1_di" bpmnElement="Flow_08_1">
         <di:waypoint x="1023" y="190" />
-        <di:waypoint x="1090" y="190" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_2_di" bpmnElement="Flow_08_2">
-        <di:waypoint x="1220" y="190" />
-        <di:waypoint x="1280" y="190" />
+        <di:waypoint x="1085" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_3_di" bpmnElement="Flow_08_3">
-        <di:waypoint x="1410" y="190" />
-        <di:waypoint x="1640" y="190" />
+        <di:waypoint x="1670" y="190" />
+        <di:waypoint x="1900" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_4_di" bpmnElement="Flow_08_4">
-        <di:waypoint x="1690" y="190" />
-        <di:waypoint x="1760" y="190" />
+        <di:waypoint x="1950" y="190" />
+        <di:waypoint x="2020" y="190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1697" y="170" width="20" height="14" />
+          <dc:Bounds x="1957" y="170" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_5_di" bpmnElement="Flow_08_5">
-        <di:waypoint x="1665" y="165" />
-        <di:waypoint x="1665" y="95" />
-        <di:waypoint x="2465" y="95" />
-        <di:waypoint x="2465" y="165" />
+        <di:waypoint x="1925" y="165" />
+        <di:waypoint x="1925" y="95" />
+        <di:waypoint x="2725" y="95" />
+        <di:waypoint x="2725" y="165" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1672" y="120" width="25" height="14" />
+          <dc:Bounds x="1932" y="120" width="25" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_6_di" bpmnElement="Flow_08_6">
-        <di:waypoint x="1890" y="190" />
-        <di:waypoint x="1960" y="190" />
+        <di:waypoint x="2150" y="190" />
+        <di:waypoint x="2220" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_7_di" bpmnElement="Flow_08_7">
-        <di:waypoint x="2010" y="190" />
-        <di:waypoint x="2080" y="190" />
+        <di:waypoint x="2270" y="190" />
+        <di:waypoint x="2340" y="190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2013" y="170" width="62" height="14" />
+          <dc:Bounds x="2273" y="170" width="62" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_8_di" bpmnElement="Flow_08_8">
-        <di:waypoint x="1985" y="215" />
-        <di:waypoint x="1985" y="300" />
-        <di:waypoint x="2287" y="300" />
+        <di:waypoint x="2245" y="215" />
+        <di:waypoint x="2245" y="300" />
+        <di:waypoint x="2547" y="300" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1992" y="278" width="70" height="14" />
+          <dc:Bounds x="2252" y="278" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_9_di" bpmnElement="Flow_08_9">
-        <di:waypoint x="2210" y="190" />
-        <di:waypoint x="2440" y="190" />
+        <di:waypoint x="2470" y="190" />
+        <di:waypoint x="2700" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_10_di" bpmnElement="Flow_08_10">
-        <di:waypoint x="2323" y="300" />
-        <di:waypoint x="2465" y="300" />
-        <di:waypoint x="2465" y="215" />
+        <di:waypoint x="2583" y="300" />
+        <di:waypoint x="2725" y="300" />
+        <di:waypoint x="2725" y="215" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_11_di" bpmnElement="Flow_08_11">
-        <di:waypoint x="2490" y="190" />
-        <di:waypoint x="2607" y="190" />
+        <di:waypoint x="2750" y="190" />
+        <di:waypoint x="2867" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_12_di" bpmnElement="Flow_08_12">
-        <di:waypoint x="2643" y="190" />
-        <di:waypoint x="2760" y="190" />
+        <di:waypoint x="2903" y="190" />
+        <di:waypoint x="3020" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_13_di" bpmnElement="Flow_08_13">
-        <di:waypoint x="2810" y="190" />
-        <di:waypoint x="3280" y="190" />
+        <di:waypoint x="3070" y="190" />
+        <di:waypoint x="3540" y="190" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2816" y="170" width="20" height="14" />
+          <dc:Bounds x="3076" y="170" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_14_di" bpmnElement="Flow_08_14">
-        <di:waypoint x="2785" y="165" />
-        <di:waypoint x="2785" y="95" />
-        <di:waypoint x="3905" y="95" />
-        <di:waypoint x="3905" y="165" />
+        <di:waypoint x="3045" y="165" />
+        <di:waypoint x="3045" y="95" />
+        <di:waypoint x="4165" y="95" />
+        <di:waypoint x="4165" y="165" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2792" y="120" width="25" height="14" />
+          <dc:Bounds x="3052" y="120" width="25" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_15_di" bpmnElement="Flow_08_15">
-        <di:waypoint x="3810" y="190" />
-        <di:waypoint x="3880" y="190" />
+        <di:waypoint x="4070" y="190" />
+        <di:waypoint x="4140" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_16_di" bpmnElement="Flow_08_16">
-        <di:waypoint x="3930" y="190" />
-        <di:waypoint x="4040" y="190" />
+        <di:waypoint x="4190" y="190" />
+        <di:waypoint x="4300" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_66_di" bpmnElement="Flow_08_66">
-        <di:waypoint x="3330" y="190" />
-        <di:waypoint x="3680" y="190" />
+        <di:waypoint x="3590" y="190" />
+        <di:waypoint x="3940" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_67_di" bpmnElement="Flow_08_67">
-        <di:waypoint x="4090" y="190" />
-        <di:waypoint x="4527" y="190" />
+        <di:waypoint x="4350" y="190" />
+        <di:waypoint x="4787" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_68_di" bpmnElement="Flow_08_68">
-        <di:waypoint x="4065" y="215" />
-        <di:waypoint x="4065" y="400" />
-        <di:waypoint x="3448" y="400" />
+        <di:waypoint x="4325" y="215" />
+        <di:waypoint x="4325" y="400" />
+        <di:waypoint x="3708" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_69_di" bpmnElement="Flow_08_69">
-        <di:waypoint x="4065" y="165" />
-        <di:waypoint x="4065" y="95" />
-        <di:waypoint x="4207" y="95" />
+        <di:waypoint x="4325" y="165" />
+        <di:waypoint x="4325" y="95" />
+        <di:waypoint x="4467" y="95" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_70_di" bpmnElement="Flow_08_70">
-        <di:waypoint x="4563" y="190" />
-        <di:waypoint x="4680" y="190" />
+        <di:waypoint x="4823" y="190" />
+        <di:waypoint x="4940" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_71_di" bpmnElement="Flow_08_71">
-        <di:waypoint x="4243" y="95" />
-        <di:waypoint x="4705" y="95" />
-        <di:waypoint x="4705" y="165" />
+        <di:waypoint x="4503" y="95" />
+        <di:waypoint x="4965" y="95" />
+        <di:waypoint x="4965" y="165" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_72_di" bpmnElement="Flow_08_72">
-        <di:waypoint x="4730" y="190" />
-        <di:waypoint x="4847" y="190" />
+        <di:waypoint x="4990" y="190" />
+        <di:waypoint x="5107" y="190" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_73_di" bpmnElement="Flow_08_73">
-        <di:waypoint x="3412" y="400" />
-        <di:waypoint x="3305" y="400" />
-        <di:waypoint x="3305" y="215" />
+        <di:waypoint x="3672" y="400" />
+        <di:waypoint x="3565" y="400" />
+        <di:waypoint x="3565" y="215" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_18_di" bpmnElement="Flow_08_18">
         <di:waypoint x="263" y="855" />
@@ -1017,275 +1067,274 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_25_di" bpmnElement="Flow_08_25">
         <di:waypoint x="1070" y="855" />
-        <di:waypoint x="1140" y="855" />
+        <di:waypoint x="1130" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_26_di" bpmnElement="Flow_08_26">
-        <di:waypoint x="1190" y="855" />
-        <di:waypoint x="1327" y="855" />
+        <di:waypoint x="1450" y="855" />
+        <di:waypoint x="1587" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_27_di" bpmnElement="Flow_08_27">
-        <di:waypoint x="1165" y="880" />
-        <di:waypoint x="1165" y="952" />
+        <di:waypoint x="1425" y="880" />
+        <di:waypoint x="1425" y="952" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_28_di" bpmnElement="Flow_08_28">
-        <di:waypoint x="1165" y="988" />
-        <di:waypoint x="1165" y="1060" />
+        <di:waypoint x="1425" y="988" />
+        <di:waypoint x="1425" y="1060" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_30_di" bpmnElement="Flow_08_30">
-        <di:waypoint x="1140" y="1085" />
-        <di:waypoint x="815" y="1085" />
-        <di:waypoint x="815" y="880" />
+        <di:waypoint x="1400" y="1085" />
+        <di:waypoint x="1310" y="1085" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1045" y="1066" width="85" height="14" />
+          <dc:Bounds x="1312" y="1066" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_31_di" bpmnElement="Flow_08_31">
-        <di:waypoint x="1165" y="1110" />
-        <di:waypoint x="1165" y="1160" />
+        <di:waypoint x="1425" y="1110" />
+        <di:waypoint x="1425" y="1160" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1172" y="1121" width="30" height="14" />
+          <dc:Bounds x="1432" y="1121" width="30" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_32_di" bpmnElement="Flow_08_32">
-        <di:waypoint x="1190" y="1085" />
-        <di:waypoint x="1270" y="1085" />
+        <di:waypoint x="1450" y="1085" />
+        <di:waypoint x="1530" y="1085" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1200" y="1066" width="30" height="14" />
+          <dc:Bounds x="1460" y="1066" width="30" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_33_di" bpmnElement="Flow_08_33">
-        <di:waypoint x="1100" y="1200" />
-        <di:waypoint x="815" y="1200" />
-        <di:waypoint x="815" y="880" />
+        <di:waypoint x="1360" y="1200" />
+        <di:waypoint x="1285" y="1200" />
+        <di:waypoint x="1285" y="1110" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_34_di" bpmnElement="Flow_08_34">
-        <di:waypoint x="1335" y="1125" />
-        <di:waypoint x="1335" y="1420" />
-        <di:waypoint x="4705" y="1420" />
-        <di:waypoint x="4705" y="995" />
+        <di:waypoint x="1595" y="1125" />
+        <di:waypoint x="1595" y="1420" />
+        <di:waypoint x="4965" y="1420" />
+        <di:waypoint x="4965" y="995" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_35_di" bpmnElement="Flow_08_35">
-        <di:waypoint x="1363" y="855" />
-        <di:waypoint x="1505" y="855" />
-        <di:waypoint x="1505" y="1320" />
+        <di:waypoint x="1623" y="855" />
+        <di:waypoint x="1765" y="855" />
+        <di:waypoint x="1765" y="1320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_36_di" bpmnElement="Flow_08_36">
-        <di:waypoint x="1570" y="1360" />
-        <di:waypoint x="1640" y="1360" />
+        <di:waypoint x="1830" y="1360" />
+        <di:waypoint x="1900" y="1360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_37_di" bpmnElement="Flow_08_37">
-        <di:waypoint x="1665" y="1335" />
-        <di:waypoint x="1665" y="855" />
-        <di:waypoint x="1760" y="855" />
+        <di:waypoint x="1925" y="1335" />
+        <di:waypoint x="1925" y="855" />
+        <di:waypoint x="2020" y="855" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1672" y="1300" width="20" height="14" />
+          <dc:Bounds x="1932" y="1300" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_38_di" bpmnElement="Flow_08_38">
-        <di:waypoint x="1690" y="1360" />
-        <di:waypoint x="2440" y="1360" />
+        <di:waypoint x="1950" y="1360" />
+        <di:waypoint x="2700" y="1360" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1697" y="1340" width="25" height="14" />
+          <dc:Bounds x="1957" y="1340" width="25" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_39_di" bpmnElement="Flow_08_39">
-        <di:waypoint x="1890" y="855" />
-        <di:waypoint x="1960" y="855" />
+        <di:waypoint x="2150" y="855" />
+        <di:waypoint x="2220" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_40_di" bpmnElement="Flow_08_40">
-        <di:waypoint x="2010" y="855" />
-        <di:waypoint x="2080" y="855" />
+        <di:waypoint x="2270" y="855" />
+        <di:waypoint x="2340" y="855" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2013" y="835" width="62" height="14" />
+          <dc:Bounds x="2273" y="835" width="62" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_41_di" bpmnElement="Flow_08_41">
-        <di:waypoint x="1985" y="880" />
-        <di:waypoint x="1985" y="970" />
-        <di:waypoint x="2240" y="970" />
+        <di:waypoint x="2245" y="880" />
+        <di:waypoint x="2245" y="970" />
+        <di:waypoint x="2500" y="970" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1992" y="948" width="70" height="14" />
+          <dc:Bounds x="2252" y="948" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_42_di" bpmnElement="Flow_08_42">
-        <di:waypoint x="2210" y="855" />
-        <di:waypoint x="2465" y="855" />
-        <di:waypoint x="2465" y="1335" />
+        <di:waypoint x="2470" y="855" />
+        <di:waypoint x="2725" y="855" />
+        <di:waypoint x="2725" y="1335" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_43_di" bpmnElement="Flow_08_43">
-        <di:waypoint x="2370" y="970" />
-        <di:waypoint x="2465" y="970" />
-        <di:waypoint x="2465" y="1335" />
+        <di:waypoint x="2630" y="970" />
+        <di:waypoint x="2725" y="970" />
+        <di:waypoint x="2725" y="1335" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_44_di" bpmnElement="Flow_08_44">
-        <di:waypoint x="2490" y="1360" />
-        <di:waypoint x="2560" y="1360" />
+        <di:waypoint x="2750" y="1360" />
+        <di:waypoint x="2820" y="1360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_45_di" bpmnElement="Flow_08_45">
-        <di:waypoint x="2690" y="1360" />
-        <di:waypoint x="2720" y="1360" />
-        <di:waypoint x="2720" y="855" />
-        <di:waypoint x="2750" y="855" />
+        <di:waypoint x="2950" y="1360" />
+        <di:waypoint x="2980" y="1360" />
+        <di:waypoint x="2980" y="855" />
+        <di:waypoint x="3010" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_46_di" bpmnElement="Flow_08_46">
-        <di:waypoint x="2880" y="855" />
-        <di:waypoint x="2940" y="855" />
+        <di:waypoint x="3140" y="855" />
+        <di:waypoint x="3200" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_47_di" bpmnElement="Flow_08_47">
-        <di:waypoint x="3070" y="855" />
-        <di:waypoint x="3140" y="855" />
+        <di:waypoint x="3330" y="855" />
+        <di:waypoint x="3400" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_48_di" bpmnElement="Flow_08_48">
-        <di:waypoint x="3190" y="855" />
-        <di:waypoint x="3280" y="855" />
+        <di:waypoint x="3450" y="855" />
+        <di:waypoint x="3540" y="855" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3195" y="835" width="70" height="14" />
+          <dc:Bounds x="3455" y="835" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_49_di" bpmnElement="Flow_08_49">
-        <di:waypoint x="3165" y="880" />
-        <di:waypoint x="3165" y="1185" />
-        <di:waypoint x="4065" y="1185" />
-        <di:waypoint x="4065" y="880" />
+        <di:waypoint x="3425" y="880" />
+        <di:waypoint x="3425" y="1185" />
+        <di:waypoint x="4325" y="1185" />
+        <di:waypoint x="4325" y="880" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3175" y="1165" width="100" height="14" />
+          <dc:Bounds x="3435" y="1165" width="100" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_50_di" bpmnElement="Flow_08_50">
-        <di:waypoint x="3165" y="880" />
-        <di:waypoint x="3165" y="1235" />
-        <di:waypoint x="4385" y="1235" />
-        <di:waypoint x="4385" y="880" />
+        <di:waypoint x="3425" y="880" />
+        <di:waypoint x="3425" y="1235" />
+        <di:waypoint x="4645" y="1235" />
+        <di:waypoint x="4645" y="880" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3175" y="1215" width="80" height="14" />
+          <dc:Bounds x="3435" y="1215" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_51_di" bpmnElement="Flow_08_51">
-        <di:waypoint x="3330" y="855" />
-        <di:waypoint x="3530" y="855" />
+        <di:waypoint x="3590" y="855" />
+        <di:waypoint x="3790" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_52_di" bpmnElement="Flow_08_52">
-        <di:waypoint x="3580" y="855" />
-        <di:waypoint x="3727" y="855" />
+        <di:waypoint x="3840" y="855" />
+        <di:waypoint x="3987" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_53_di" bpmnElement="Flow_08_53">
-        <di:waypoint x="3555" y="880" />
-        <di:waypoint x="3555" y="952" />
+        <di:waypoint x="3815" y="880" />
+        <di:waypoint x="3815" y="952" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_54_di" bpmnElement="Flow_08_54">
-        <di:waypoint x="3573" y="970" />
-        <di:waypoint x="3720" y="970" />
+        <di:waypoint x="3833" y="970" />
+        <di:waypoint x="3980" y="970" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_55_di" bpmnElement="Flow_08_55">
-        <di:waypoint x="3745" y="995" />
-        <di:waypoint x="3745" y="1085" />
-        <di:waypoint x="3510" y="1085" />
+        <di:waypoint x="4005" y="995" />
+        <di:waypoint x="4005" y="1085" />
+        <di:waypoint x="3770" y="1085" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3752" y="1003" width="25" height="14" />
+          <dc:Bounds x="4012" y="1003" width="25" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_56_di" bpmnElement="Flow_08_56">
-        <di:waypoint x="3770" y="970" />
-        <di:waypoint x="3840" y="970" />
+        <di:waypoint x="4030" y="970" />
+        <di:waypoint x="4100" y="970" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3778" y="950" width="20" height="14" />
+          <dc:Bounds x="4038" y="950" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_57_di" bpmnElement="Flow_08_57">
-        <di:waypoint x="3380" y="1085" />
-        <di:waypoint x="3305" y="1085" />
-        <di:waypoint x="3305" y="880" />
+        <di:waypoint x="3640" y="1085" />
+        <di:waypoint x="3565" y="1085" />
+        <di:waypoint x="3565" y="880" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_58_di" bpmnElement="Flow_08_58">
-        <di:waypoint x="3970" y="970" />
-        <di:waypoint x="4680" y="970" />
+        <di:waypoint x="4230" y="970" />
+        <di:waypoint x="4940" y="970" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_59_di" bpmnElement="Flow_08_59">
-        <di:waypoint x="3763" y="855" />
-        <di:waypoint x="4040" y="855" />
+        <di:waypoint x="4023" y="855" />
+        <di:waypoint x="4300" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_60_di" bpmnElement="Flow_08_60">
-        <di:waypoint x="4090" y="855" />
-        <di:waypoint x="4160" y="855" />
+        <di:waypoint x="4350" y="855" />
+        <di:waypoint x="4420" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_61_di" bpmnElement="Flow_08_61">
-        <di:waypoint x="4290" y="855" />
-        <di:waypoint x="4360" y="855" />
+        <di:waypoint x="4550" y="855" />
+        <di:waypoint x="4620" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_62_di" bpmnElement="Flow_08_62">
-        <di:waypoint x="4410" y="855" />
-        <di:waypoint x="4480" y="855" />
+        <di:waypoint x="4670" y="855" />
+        <di:waypoint x="4740" y="855" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_63_di" bpmnElement="Flow_08_63">
-        <di:waypoint x="4610" y="855" />
-        <di:waypoint x="4705" y="855" />
-        <di:waypoint x="4705" y="945" />
+        <di:waypoint x="4870" y="855" />
+        <di:waypoint x="4965" y="855" />
+        <di:waypoint x="4965" y="945" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08_65_di" bpmnElement="Flow_08_65">
-        <di:waypoint x="4730" y="970" />
-        <di:waypoint x="4847" y="970" />
+        <di:waypoint x="4990" y="970" />
+        <di:waypoint x="5107" y="970" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_1_di" bpmnElement="MsgFlow_08_1">
         <di:waypoint x="1005" y="815" />
         <di:waypoint x="1005" y="208" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1013" y="497" width="130" height="27" />
+          <dc:Bounds x="1013" y="497" width="110" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_2_di" bpmnElement="MsgFlow_08_2">
-        <di:waypoint x="1345" y="230" />
-        <di:waypoint x="1345" y="837" />
+        <di:waypoint x="1605" y="230" />
+        <di:waypoint x="1605" y="837" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1353" y="505" width="60" height="14" />
+          <dc:Bounds x="1613" y="505" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_3_di" bpmnElement="MsgFlow_08_3">
-        <di:waypoint x="1825" y="230" />
-        <di:waypoint x="1825" y="815" />
+        <di:waypoint x="2085" y="230" />
+        <di:waypoint x="2085" y="815" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1833" y="505" width="70" height="14" />
+          <dc:Bounds x="2093" y="505" width="70" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_4_di" bpmnElement="MsgFlow_08_4">
-        <di:waypoint x="2145" y="230" />
-        <di:waypoint x="2145" y="815" />
+        <di:waypoint x="2405" y="230" />
+        <di:waypoint x="2405" y="815" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2153" y="497" width="90" height="27" />
+          <dc:Bounds x="2413" y="497" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_5_di" bpmnElement="MsgFlow_08_5">
-        <di:waypoint x="2305" y="930" />
-        <di:waypoint x="2305" y="318" />
+        <di:waypoint x="2565" y="930" />
+        <di:waypoint x="2565" y="318" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2313" y="505" width="60" height="14" />
+          <dc:Bounds x="2573" y="505" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_6_di" bpmnElement="MsgFlow_08_6">
-        <di:waypoint x="2625" y="1320" />
-        <di:waypoint x="2625" y="208" />
+        <di:waypoint x="2885" y="1320" />
+        <di:waypoint x="2885" y="208" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2633" y="505" width="100" height="14" />
+          <dc:Bounds x="2893" y="505" width="100" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_7_di" bpmnElement="MsgFlow_08_7">
-        <di:waypoint x="3745" y="230" />
-        <di:waypoint x="3745" y="837" />
+        <di:waypoint x="4005" y="230" />
+        <di:waypoint x="4005" y="837" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3753" y="505" width="50" height="14" />
+          <dc:Bounds x="4013" y="505" width="50" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_8_di" bpmnElement="MsgFlow_08_8">
-        <di:waypoint x="3430" y="1045" />
-        <di:waypoint x="3430" y="418" />
+        <di:waypoint x="3690" y="1045" />
+        <di:waypoint x="3690" y="418" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3438" y="505" width="60" height="14" />
+          <dc:Bounds x="3698" y="505" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_08_9_di" bpmnElement="MsgFlow_08_9">
-        <di:waypoint x="4545" y="815" />
-        <di:waypoint x="4545" y="208" />
+        <di:waypoint x="4805" y="815" />
+        <di:waypoint x="4805" y="208" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4553" y="505" width="100" height="14" />
+          <dc:Bounds x="4813" y="505" width="100" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T08_Rechnung_out_DataObjRef_08_1_di" bpmnElement="T08_Rechnung_out_DataObjRef_08_1">
@@ -1297,24 +1346,112 @@
         <di:waypoint x="705" y="702" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T08_Abgeholt_out_DataObjRef_08_3_di" bpmnElement="T08_Abgeholt_out_DataObjRef_08_3">
-        <di:waypoint x="2815" y="815" />
-        <di:waypoint x="2815" y="775" />
+        <di:waypoint x="3075" y="815" />
+        <di:waypoint x="3075" y="775" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T08_Mahnung_out_DataObjRef_08_4_di" bpmnElement="T08_Mahnung_out_DataObjRef_08_4">
-        <di:waypoint x="3510" y="1110" />
-        <di:waypoint x="3600" y="1122" />
+        <di:waypoint x="3770" y="1110" />
+        <di:waypoint x="3860" y="1122" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T08_Verbuchen_out_DataObjRef_08_5_di" bpmnElement="T08_Verbuchen_out_DataObjRef_08_5">
-        <di:waypoint x="4225" y="815" />
-        <di:waypoint x="4225" y="775" />
+        <di:waypoint x="4485" y="815" />
+        <di:waypoint x="4485" y="775" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T08_Verbuchen_out_DataStore_08_1_di" bpmnElement="T08_Verbuchen_out_DataStore_08_1">
-        <di:waypoint x="4280" y="815" />
-        <di:waypoint x="4310" y="775" />
+        <di:waypoint x="4540" y="815" />
+        <di:waypoint x="4570" y="775" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T08_Abgeholt_out_DataStore_08_2_di" bpmnElement="T08_Abgeholt_out_DataStore_08_2">
-        <di:waypoint x="2815" y="895" />
-        <di:waypoint x="2815" y="935" />
+        <di:waypoint x="3075" y="895" />
+        <di:waypoint x="3075" y="935" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Merge_08x_di" bpmnElement="Merge_08x" isMarkerVisible="true">
+        <dc:Bounds x="1130" y="830" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Merge_08y_di" bpmnElement="Merge_08y" isMarkerVisible="true">
+        <dc:Bounds x="1260" y="1060" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T08_Erinnern_di" bpmnElement="T08_Erinnern">
+        <dc:Bounds x="1090" y="1045" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_08_74_di" bpmnElement="Flow_08_74">
+        <di:waypoint x="1180" y="855" />
+        <di:waypoint x="1400" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_75_di" bpmnElement="Flow_08_75">
+        <di:waypoint x="1260" y="1085" />
+        <di:waypoint x="1220" y="1085" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_76_di" bpmnElement="Flow_08_76">
+        <di:waypoint x="1155" y="1045" />
+        <di:waypoint x="1155" y="880" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_10_di" bpmnElement="MsgFlow_08_10">
+        <di:waypoint x="1110" y="1045" />
+        <di:waypoint x="1110" y="333" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1030" y="600" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="K08_MergeA_di" bpmnElement="K08_MergeA" isMarkerVisible="true">
+        <dc:Bounds x="1085" y="165" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_GWA_di" bpmnElement="K08_GWA" isMarkerVisible="true">
+        <dc:Bounds x="1170" y="165" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1148" y="132" width="100" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_WartenA_di" bpmnElement="K08_WartenA">
+        <dc:Bounds x="1170" y="290" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_Erinnerung_di" bpmnElement="K08_Erinnerung">
+        <dc:Bounds x="1092" y="297" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1010" y="300" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_TimerA_di" bpmnElement="K08_TimerA">
+        <dc:Bounds x="1290" y="297" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1332" y="300" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_08_77_di" bpmnElement="Flow_08_77">
+        <di:waypoint x="1135" y="190" />
+        <di:waypoint x="1170" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_78_di" bpmnElement="Flow_08_78">
+        <di:waypoint x="1220" y="190" />
+        <di:waypoint x="1540" y="190" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1226" y="170" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_79_di" bpmnElement="Flow_08_79">
+        <di:waypoint x="1195" y="215" />
+        <di:waypoint x="1195" y="290" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1201" y="240" width="30" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_80_di" bpmnElement="Flow_08_80">
+        <di:waypoint x="1170" y="315" />
+        <di:waypoint x="1128" y="315" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_81_di" bpmnElement="Flow_08_81">
+        <di:waypoint x="1110" y="297" />
+        <di:waypoint x="1110" y="215" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_82_di" bpmnElement="Flow_08_82">
+        <di:waypoint x="1220" y="315" />
+        <di:waypoint x="1290" y="315" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_83_di" bpmnElement="Flow_08_83">
+        <di:waypoint x="1308" y="333" />
+        <di:waypoint x="1308" y="430" />
+        <di:waypoint x="4965" y="430" />
+        <di:waypoint x="4965" y="215" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
