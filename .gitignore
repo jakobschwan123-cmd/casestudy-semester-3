@@ -22,3 +22,6 @@ __pycache__/
 
 # Windows
 Thumbs.db
+
+# lokale VP-Rohexporte
+2_uml/_export/
