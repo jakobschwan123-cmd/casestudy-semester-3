@@ -20,15 +20,15 @@ Stand der Artefakte: UML (Use-Case-, Klassen-, sechs Sequenzdiagramme) ist ferti
 
 Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
-- [ ] **Kennzahlen nach E-32 (erst nach Merge von #45):** 5.1 Kennzahlen-Absatz: 134 Aktivitäten (Ø 13,4), 25 Kundenaktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte und 12 Datenspeicher. Aufteilung: 82 automatisiert (61 %), 32 Benutzer-Aktivitäten, 9 manuell, 10 Aufrufe, 1 Mehrfach-Teilprozess. Tabelle 6: 06 17/11 (65 %), 07 13/6 (46 %), 08 17/11 (65 %), 09 16/8 (50 %), 10 9/6 (67 %).
-- [ ] **Prozesskurztexte 5.1:** P06 „erst prüfen, dann buchen“; P09 „Kunde erhält bei Ablehnung eine Absage“; P10 „keine Bestandskorrektur mehr, Ersatz wird in P06 geprüft und gebucht“. Danach PDF exportieren.
+- [x] **Kennzahlen nach E-32** (in PR #45 erledigt, Abbildung 3 = aktuelles P04): 5.1 Kennzahlen-Absatz: 134 Aktivitäten (Ø 13,4), 25 Kundenaktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte und 12 Datenspeicher. Aufteilung: 82 automatisiert (61 %), 32 Benutzer-Aktivitäten, 9 manuell, 10 Aufrufe, 1 Mehrfach-Teilprozess. Tabelle 6: 06 17/11 (65 %), 07 13/6 (46 %), 08 17/11 (65 %), 09 16/8 (50 %), 10 9/6 (67 %).
+- [x] **Prozesskurztexte 5.1** (in PR #45 erledigt; PDF-Export steht noch aus): P06 „erst prüfen, dann buchen“; P09 „Kunde erhält bei Ablehnung eine Absage“; P10 „keine Bestandskorrektur mehr, Ersatz wird in P06 geprüft und gebucht“. Danach PDF exportieren.
 - [ ] **Gelbe Hinweise abarbeiten:** Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe A), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen).
 - [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste und meldet Korrekturen.
 - [ ] **Abschluss:** kein „[“ mehr im Text, als PDF speichern (`3_doku/Projektdokumentation.pdf`), Seitenzahlen im Inhaltsverzeichnis im PDF prüfen (statisches Verzeichnis; Seite 3 ist voll, jede Ergänzung dort verschiebt die Nummern).
 
 ## C. Präsentation (`4_praesentation/Abschlusspraesentation.pptx`)
 
-- [ ] **Kennzahlen nach E-32:** Folie 10: 134 Aktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte. Folie 11: Prozesstabelle P06–P10, 134 / 13,4 / 61 %. Sprechtexte (Adrian Folie 10/11 „133“ → „134“; 61 Prozent bleibt) in Notizen und Word-Datei gleich halten.
+- [x] **Kennzahlen nach E-32** (in PR #45 erledigt): Folie 10: 134 Aktivitäten, 44 Nachrichtenflüsse, 51 Datenobjekte. Folie 11: Prozesstabelle P06–P10, 134 / 13,4 / 61 %. Sprechtexte (Adrian Folie 10/11 „133“ → „134“; 61 Prozent bleibt) in Notizen und Word-Datei gleich halten.
 
 Folienfolge: Nina 1–2 und 17–18, David 3, 6 und 12, Adrian 4–5 und 7–8, Maximilian 9–11, Kilian 13–14, Jakob 15–16, Folie 19 Anhang. Redezeit: Nina 2:50, David 3:20, Adrian 4:10, Maximilian 3:20, Kilian 3:10, Jakob 2:20, gesamt 19:10.
 
