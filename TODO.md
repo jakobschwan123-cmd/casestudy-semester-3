@@ -14,11 +14,13 @@ Stand der Artefakte: UML (Use-Case-, Klassen-, sechs Sequenzdiagramme) ist ferti
 
 - [ ] **Modeler-Prüfung durchführen:** Alle zehn `.bpmn`-Dateien im Camunda Modeler (Camunda 8) öffnen und prüfen, ob das Problems-Panel keine Fehler zeigt. Ergebnis kurz in die WhatsApp-Gruppe. Falls Fehler: Screenshot, nicht selbst umbauen. Falls die Dateien dafür im Modeler gespeichert werden mussten: per Pull Request einreichen und die Kennzahlen nur dann neu zählen, wenn sich Aktivitäten geändert haben.
 - [ ] **Ergebnis in die Doku:** gelben Hinweis in Tabelle 2 Schritt 4 durch einen Satz ersetzen, z. B. „Alle zehn Dateien zeigen im Problems-Panel keine Fehler.“
+- [ ] **E-31 bestätigen:** Korrekturen P04–P10 aus dem Review vom 22.10. (Branch `fix/bpmn-p05-p10-review`) im Modeler ansehen und freigeben.
 
 ## B. Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
 Offene Stellen sind gelb markiert. Mit Strg+F nach „[“ suchen.
 
+- [ ] **Kennzahlen nach E-31:** In 5.1 und auf den Folien 135 Aktivitäten (Ø 13,5), 82 automatisiert (61 %), 64 Datenobjekte statt 133/13,3/81/63.
 - [ ] **Gelbe Hinweise abarbeiten:** Tabelle 2 Schritt 4 (Ergebnis der Modeler-Prüfung, Aufgabe A), Tabelle 3 Sprint 4 (Ergebnis vom 22.10.), 7.1 (Hinweise aus dem Coaching am 22.10. mit Umsetzung, sonst löschen).
 - [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste und meldet Korrekturen.
 - [ ] **Abschluss:** kein „[“ mehr im Text, als PDF speichern (`3_doku/Projektdokumentation.pdf`), Seitenzahlen im Inhaltsverzeichnis im PDF prüfen (statisches Verzeichnis; Seite 3 ist voll, jede Ergänzung dort verschiebt die Nummern).

@@ -4,7 +4,24 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## Offen
 
-Keine. E-19 bis E-29 sind am 19.10.2026 festgelegt (E-30); die Gruppe nimmt sie am 22.10. zur Kenntnis.
+- **E-31** (Review P05–P10, 22.10.2026): Vorschlag von Jakob, Bestätigung durch die Gruppe und Sichtprüfung im Camunda Modeler durch Maximilian stehen aus.
+
+## E-31 Review und Korrekturen P05–P10 (22.10.2026)
+
+Vorschlag von Jakob (QA), Branch `fix/bpmn-p05-p10-review`. Geändert sind P04–P10; P04 nur, weil dort der Fall „nicht beschaffbar“ aus E-27 ankommt.
+
+- **Rückgabe aus Aufrufen:** Die Aufruf-Aktivitäten übergeben keine Variablen an den Aufrufer (`propagateAllChildVariables="false"`). Deshalb kam `teileVollstaendig` aus P06 nie in P05, P04 oder P07 an, und `ersatzGeliefert` kam nie aus P10 in P06. Jetzt haben die Aufrufe Output-Mappings; P05 setzt `teileVollstaendig = true` als Startwert.
+- **E-27 umgesetzt:** P04 fragt nach „05 Ersatzteile disponieren“ „Alle Teile beschaffbar?“, bei nein läuft der Fall in den bestehenden Weg „Auftragsstatus auf 'abgelehnt' setzen“ → „08 Abholung abwickeln“. In P07 setzt „Nachtragsteile beschaffbar? nein“ den Auftrag auf abgelehnt statt den freigegebenen Nachtrag auf abgelehnt.
+- **P07:** Neue Aktivität „Nachtrag auf 'freigegeben' setzen“ (Kosten-voranschlag [freigegeben], wie in P04), weil P05 einen freigegebenen KVA liest. Doppelter Lane-Eintrag entfernt.
+- **P09:** Vor „07 Reparatur durchführen“ wird „05 Ersatzteile disponieren“ aufgerufen (P07 startet mit „Ersatzteile disponiert“), bei nicht beschaffbaren Teilen gilt die Reklamation als abgelehnt. „Kundenentscheidung empfangen“ hat einen Timer „3 Tage verstrichen“ (wie P04/P07). „08 Abholung abwickeln“ liegt in der Lane Service / Annahme.
+- **P10:** Warten auf die Rückmeldung und auf die Ersatzlieferung endet nach 14 Tagen mit „Teil abschreiben“; „Teil abschreiben“ schreibt den Lagerbestand. `eskaliert` wird sichtbar gesetzt.
+- **P08:** Verwertung erst nach der vierten versendeten Erinnerung, wie in E-19 und Doku 5.6 beschrieben (vorher nach der dritten). Eigener Zähler `abholErinnerungen`, weil ein Aufruf aus P04 dessen `erinnerungen` mitbringt. Lagergebühr erzeugt auch bei kostenfreiem Auftrag eine fällige Rechnung (`rechnungVorhanden`). Der Kundenprozess endet mit „Gerät abgeholt“; Bewertungsanfrage geht wie die Mahnung an den Pool, damit der Kunde nicht ewig wartet.
+- **Kunde (P08, P09):** Übergaben am Tresen („Abholung in der Filiale anmelden“, „Zahlungsart mitteilen“, „Bar oder mit Karte bezahlen“, „Gerät abgeben“) sind Manual Tasks statt Send Tasks (Send Task = Nachricht über RepairFlow).
+- **Layout:** Labels in P06 und P10 verschoben, XOR-Gateways mit X-Markierung, PNGs ×3 neu exportiert.
+- **Prüfung:** `bpmnlint:recommended` und `camunda-compat/camunda-cloud-8-7` ohne Befund für alle zehn Dateien, jeder Knoten erreichbar und mit Weg zum Ende.
+- **Kennzahlen:** 135 Aktivitäten (Ø 13,5), 82 automatisiert (61 %), 26 Kundenaktivitäten, 42 Nachrichtenflüsse, 64 Datenobjekte und -speicher.
+- **Nicht geändert (Entscheidung nötig):** Offene Rechnung nach Verwertung (P08), Nachbestellvorschlag ohne Fehlteile bleibt bis zur nächsten Bestellung liegen (P05/E-20), erneute Info „Reparaturbeginn“ beim Nachtrag (P05), Reihenfolge von Pools und Lanes.
+- **Folgt daraus:** Maximilian öffnet P04–P10 im Modeler (Problems-Panel). Kennzahlen in Doku 5.1 und auf den Folien von 133/13,3/81/63 auf 135/13,5/82/64 ändern, Beschreibung P07/P09 in Doku 5.1 prüfen.
 
 ## E-30 Festlegung der offenen Entscheidungen (19.10.2026)
 

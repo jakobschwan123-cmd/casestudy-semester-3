@@ -11,6 +11,7 @@
   <bpmn:process id="Proc_04" name="04 Kostenvoranschlag und Kundenfreigabe" isExecutable="true">
     <bpmn:laneSet id="LaneSet_04">
       <bpmn:lane id="Lane_04_1" name="Service / Annahme">
+        <bpmn:flowNodeRef>GW04_Teile</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T04_Pruefen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T04_Status</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Merge_04</bpmn:flowNodeRef>
@@ -141,6 +142,7 @@
       <bpmn:outgoing>Flow_04_22</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Merge_04a" name="">
+      <bpmn:incoming>Flow_04_32</bpmn:incoming>
       <bpmn:incoming>Flow_04_22</bpmn:incoming>
       <bpmn:incoming>Flow_04_26</bpmn:incoming>
       <bpmn:outgoing>Flow_04_27</bpmn:outgoing>
@@ -161,10 +163,18 @@
     <bpmn:callActivity id="T04_Dispo" name="05 Ersatzteile disponieren">
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_05" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=teileVollstaendig" target="teileVollstaendig" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_04_24</bpmn:incoming>
       <bpmn:outgoing>Flow_04_25</bpmn:outgoing>
     </bpmn:callActivity>
+    <bpmn:exclusiveGateway id="GW04_Teile" name="Alle Teile beschaffbar?">
+      <bpmn:incoming>Flow_04_25</bpmn:incoming>
+      <bpmn:outgoing>Flow_04_31</bpmn:outgoing>
+      <bpmn:outgoing>Flow_04_32</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="T04_Abgelehnt" name="Auftragsstatus auf 'abgelehnt' setzen">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="repairflow.t04_abgelehnt" />
@@ -186,7 +196,7 @@
       <bpmn:outgoing>Flow_04_29</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:exclusiveGateway id="Join_04" name="">
-      <bpmn:incoming>Flow_04_25</bpmn:incoming>
+            <bpmn:incoming>Flow_04_31</bpmn:incoming>
       <bpmn:incoming>Flow_04_29</bpmn:incoming>
       <bpmn:outgoing>Flow_04_30</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -214,12 +224,18 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_04_23" sourceRef="E04_Freigabe" targetRef="T04_Freigegeben" />
     <bpmn:sequenceFlow id="Flow_04_24" sourceRef="T04_Freigegeben" targetRef="T04_Dispo" />
-    <bpmn:sequenceFlow id="Flow_04_25" sourceRef="T04_Dispo" targetRef="Join_04" />
+    <bpmn:sequenceFlow id="Flow_04_25" sourceRef="T04_Dispo" targetRef="GW04_Teile" />
     <bpmn:sequenceFlow id="Flow_04_26" sourceRef="E04_Ablehnung" targetRef="Merge_04a" />
     <bpmn:sequenceFlow id="Flow_04_27" sourceRef="Merge_04a" targetRef="T04_Abgelehnt" />
     <bpmn:sequenceFlow id="Flow_04_28" sourceRef="T04_Abgelehnt" targetRef="T04_Abholung" />
     <bpmn:sequenceFlow id="Flow_04_29" sourceRef="T04_Abholung" targetRef="Join_04" />
     <bpmn:sequenceFlow id="Flow_04_30" sourceRef="Join_04" targetRef="End_04" />
+    <bpmn:sequenceFlow id="Flow_04_31" sourceRef="GW04_Teile" targetRef="Join_04" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=teileVollstaendig</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_04_32" sourceRef="GW04_Teile" targetRef="Merge_04a" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(teileVollstaendig)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:dataObjectReference id="DataObjRef_04_1" name="KvaPosition" dataObjectRef="DataObj_04_1" />
     <bpmn:dataObject id="DataObj_04_1" />
     <bpmn:dataObjectReference id="DataObjRef_04_2" name="Kosten-voranschlag [Entwurf]" dataObjectRef="DataObj_04_2" />
@@ -580,7 +596,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_25_di" bpmnElement="Flow_04_25">
         <di:waypoint x="2590" y="612" />
-        <di:waypoint x="3070" y="612" />
+        <di:waypoint x="2640" y="612" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_26_di" bpmnElement="Flow_04_26">
         <di:waypoint x="1973" y="728" />
@@ -671,6 +687,28 @@
       <bpmndi:BPMNEdge id="T04_Abgelehnt_out_DataObjRef_04_8_di" bpmnElement="T04_Abgelehnt_out_DataObjRef_04_8">
         <di:waypoint x="2775" y="768" />
         <di:waypoint x="2860" y="1003" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="GW04_Teile_di" bpmnElement="GW04_Teile" isMarkerVisible="true">
+        <dc:Bounds x="2640" y="587" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2615" y="550" width="100" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_04_31_di" bpmnElement="Flow_04_31">
+        <di:waypoint x="2690" y="612" />
+        <di:waypoint x="3070" y="612" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2700" y="590" width="20" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_32_di" bpmnElement="Flow_04_32">
+        <di:waypoint x="2665" y="637" />
+        <di:waypoint x="2665" y="670" />
+        <di:waypoint x="2525" y="670" />
+        <di:waypoint x="2525" y="702" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2672" y="645" width="30" height="18" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
