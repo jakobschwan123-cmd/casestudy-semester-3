@@ -33,6 +33,18 @@ Folienfolge: Nina 1–2 und 16–18, David 3–5, Kilian 6 und 12–13, Maximili
 - [ ] **Generalprobe:** komplett durchsprechen, Zeit messen (Ziel 15–20 Minuten, Plan 18:40), Übergaben üben, Fragen üben (Warum eine Rolle je Use Case? Warum ist der Lieferant kein Akteur? Warum Komposition beim Befund, nicht beim Gerät? Wie kommt die Oberfläche an das richtige Objekt? Was ist automatisiert, was nicht? Wie wurde Konsistenz gesichert? Warum ist der Auftrag nach zwei gescheiterten Nacharbeiten abgelehnt?).
 - [ ] **PDF exportieren** nach der Generalprobe aus PowerPoint (`4_praesentation/Abschlusspraesentation.pdf`). Die Folie mit der Zuordnung der Vortragenden muss enthalten sein (Pflicht laut Ablauf).
 
+## E. Befunde der Gesamtprüfung vom 22.10.2026
+
+Details mit Begründung und Vorschlag: `5_team/pruefbericht-2026-10-22.md` (H = hoch, M = mittel, N = niedrig). Erledigte Punkte hier abhaken.
+
+- [ ] **H1** P06-PNG neu aus dem Camunda Modeler exportieren (aktuelles PNG ist beschädigt) – zusammen mit der Modeler-Prüfung.
+- [ ] **H2/H3** SD3 und SD1 in VP: Weg der Oberfläche zu Lagerbestand und Reservierung zeigen, Reservierung per create erzeugen, Vorreservierung über ErsatzteilReservierung.
+- [ ] **M1–M3, M5, M6, N1–N6** restliche SD-Punkte in VP im selben Durchgang; danach SD-PNGs neu exportieren und Abbildungen 6 und 7 in der Doku ersetzen.
+- [ ] **H4** Kennzahlen nach Abschluss von P03–P05 neu zählen und Doku 5.1/5.2, Tabelle 6, Abbildung 3, Folien 10/11 und Sprechtext nachziehen.
+- [ ] **M4** Sprechtext Folie 13: „die Rollen aus dem Use-Case-Diagramm“ statt „die Mitarbeiter“ (Notiz und Word).
+- [ ] **M7, N7–N9** bei der Modeler-Prüfung mitnehmen (P02 Manual Task, Beschriftungen P01/P08/P09).
+- [ ] **M8, N10–N15** nach Absprache in der Gruppe.
+
 ## D. Abgabe (bis 13.11.2026, jede Person einzeln)
 
 Anleitung: `0_abgabe/README.md`.
