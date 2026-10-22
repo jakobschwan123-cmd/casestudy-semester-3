@@ -23,7 +23,6 @@ Folienfolge: Nina 1–2 und 16–18, David 3–5, Kilian 6 und 12–13, Maximili
 
 ## B. Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
-- [ ] **Tabelle 3 ausformulieren:** Sprint 4 „Ergebnis“ (derzeit nur „UI-Umbau nach dem Gespräch am 22.10.“) um die Ergebnisse ergänzen, z. B. BPMN nach den Regeln der Vorlesung (E-32), Überarbeitung P01, Oberflächenklassen und Suche in allen Sequenzdiagrammen, Generalprobe. Zeile „Abschluss“: den Zusatz „Weitere Anpassungen in VP.“ prüfen oder streichen.
 - [ ] **Kapitel 1 prüfen:** Jede Person liest ihre Zeile in Tabelle 1 und in der Beitragsliste und meldet Korrekturen.
 - [ ] **Abschluss:** als PDF speichern (`3_doku/Projektdokumentation.pdf`) und Seitenzahlen im Inhaltsverzeichnis gegen das PDF prüfen (statisches Verzeichnis; jede Ergänzung kann die Nummern verschieben).
 
