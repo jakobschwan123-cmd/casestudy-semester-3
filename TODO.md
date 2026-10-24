@@ -53,12 +53,11 @@ Reihenfolge: erst prüfen und ändern, dann **einmal** zählen und überall nach
 
 ### Visual Paradigm
 
-Ablauf: Teamwork Update, ändern, Commit; PNG (220 dpi, ohne Legende) und VPP neu exportieren (Anleitung `2_uml/README.md`), dann Doku-Abbildungen 4–7 tauschen.
+Ablauf: Teamwork Update, ändern, Commit; PNG (220 dpi, ohne Legende) und VPP neu exportieren (Anleitung `2_uml/README.md`), dann Doku-Abbildungen 4–7 tauschen. Stand 24.10.: SD2 hat den Pfad „freigegeben, aber nicht alle Teile beschaffbar“ (opt mit Ablehnung, Benachrichtigung und UC15), `Reparaturauftrag.benachrichtigeKunde()` ist entfernt, alles exportiert und committet.
 
-- [ ] **Layout (B30, optional):** ref-Beschriftungen sind uneinheitlich: Verweise auf ein vorhandenes SD zeigen den Diagrammnamen („sqd: UC09 …“), die übrigen sind Text („UC13 Reparaturschritt und Arbeitszeit erfassen“ ohne BPMN-Nummer, „Nacharbeit durchführen (BPMN 07)“ in SD4). Der Text steht nicht im Namen der Interaction Use, sondern muss über die Spezifikation geändert werden. Die SD4-Notiz liegt seit 24.10. unter den Lebenslinien; die Notiz in SD6 liegt bewusst im alt-Zweig.
 - [ ] **SDs nachziehen, falls BPMN-Änderungen die Fachlogik betreffen** (neuer Pfad, Frist, Status, Call Activity im SD-Ausschnitt). SD1 ↔ P01, SD2 ↔ P04, SD3 ↔ P05, SD4 ↔ P07, SD5 ↔ P09, SD6 ↔ P06. Umbenennungen, Lanes und Layout betreffen die SDs nicht.
-- [ ] **Optional (C1, C4):** SD2 Pfad „Teile nicht beschaffbar → abgelehnt“ (passt nicht in den Kunden-Zweig „Ablehnung erhalten“, eigener Zweig nötig); ungenutzte Operationen (`Reparaturauftrag.benachrichtigeKunde()`, Rollen-Operationen, `KundenApp.meldeMangel()`, `Lieferant.bestaetigeBestellung()`) streichen (Gruppenentscheidung).
-- [ ] **U10 (Team: passt so):** nur falls das Use-Case-Diagramm ohnehin geöffnet wird: Linien an den Akteuren andocken, Multiplizität „1 … 1“ an Kunde – „Sofortdiagnose anfordern“ ausblenden.
+- [ ] **Optional:** ref-Beschriftungen vereinheitlichen (Verweise auf vorhandene SDs zeigen „sqd: UC09 …“, die übrigen sind Textfelder im ref-Rahmen, z. B. SD4 „UC13 Reparaturschritt und Arbeitszeit erfassen“ ohne BPMN-Nummer).
+- [ ] **Gruppenentscheidung:** weitere ungenutzte Operationen streichen (Rollen-Operationen von Servicemitarbeiter, Techniker, Disponent, `KundenApp.meldeMangel()`, `Lieferant.bestaetigeBestellung()`). Doku 5.4 sagt, die Rollenklassen tragen die Operationen der Rollen; bei Streichung dort anpassen.
 
 ### Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
@@ -107,7 +106,7 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 1. Schreibweise der Datenobjekte in allen zehn BPMN-Dateien („Reparatur-auftrag“ oder „Reparaturauftrag“/weiche Trennung).
 2. Inhaltliche Doku-Punkte aus Abschnitt B (Beitragsliste, Problem-Zuordnung, Begründungen, Geschäftsmodell).
 3. Backup-Folien mit Diagrammen ja/nein.
-4. Ungenutzte Operationen im Klassendiagramm streichen ja/nein.
+4. Weitere ungenutzte Operationen im Klassendiagramm streichen ja/nein.
 
 Bereits entschieden, bleibt so: Datumsangaben in der Doku, Format der Abbildungen 2–5, Entscheidungslog-Verweise, Klasse für den KI-Diagnosedienst, Kopf-Redezeiten im Sprechtext, Maximilians Texte, keine Zeitangaben bei Maximilians Folien, kein Sprechtext in den PPTX-Notizen.
 
