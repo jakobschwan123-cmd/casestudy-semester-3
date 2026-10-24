@@ -4,12 +4,11 @@ skinparam defaultFontName Arial
 skinparam rectangleFontSize 12
 left to right direction
 actor "Kunde\n(Endkunde der Werkstatt)" as Kunde
-actor "Lieferant" as Lieferant
 rectangle "Werkstattbetrieb (Mandant), z. B. FixWerk GmbH" as WB {
-  actor "Servicemitarbeiter\n(Service / Annahme)" as Service
-  actor "Techniker" as Techniker
-  actor "Werkstattleiter\n(Werkstattleitung, Administration)" as Leitung
-  actor "Disponent\n(Ersatzteil-Disposition)" as Dispo
+  actor "Servicemitarbeiter\n(Lane Service / Annahme)" as Service
+  actor "Techniker\n(Lane Techniker)" as Techniker
+  actor "Werkstattleiter\n(Lane Werkstattleitung)" as Leitung
+  actor "Disponent\n(Lane Ersatzteil-Disposition)" as Dispo
 }
 rectangle "RepairFlow-Plattform (SaaS)\nRepairFlow GmbH" as RF #EEF3FF {
   rectangle "Kundenportal / App" as App
@@ -17,12 +16,13 @@ rectangle "RepairFlow-Plattform (SaaS)\nRepairFlow GmbH" as RF #EEF3FF {
   rectangle "Dispositionsmodul" as DispoM
   rectangle "Abrechnung" as Abr
 }
+rectangle "Lieferant\n(Black Box, ohne Zugang)" as Lieferant #F5F5F5
 rectangle "KI-Diagnosedienst\n(externer Dienst)" as KI #FFF4E5
 rectangle "Buchhaltung / DATEV\n(außerhalb der Systemgrenze)" as DATEV #F5F5F5
 Kunde -- App : Sofortdiagnose, Voranmeldung,\nKVA-Freigabe, Status, Zahlung
 Service -- Auftrag
 Techniker -- Auftrag
-Leitung -- Auftrag : Filialen, Mitarbeiter, Termine
+Leitung -- Auftrag : Termine, Freigaben
 Dispo -- DispoM
 App -- KI : Foto / Video / Ton
 DispoM -- Lieferant : Bestellung, Auftragsbestätigung,\nLieferung, Retoure
