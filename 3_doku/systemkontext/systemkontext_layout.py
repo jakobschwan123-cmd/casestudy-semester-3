@@ -38,8 +38,8 @@ def main():
     bx, by, bw, bh = 40, 150, 300, 480
     o.append(f"<rect x='{bx}' y='{by}' width='{bw}' height='{bh}' fill='#F7F7F7' stroke='black' stroke-width='1.3'/>")
     o.append(f"<text x='{bx+bw/2}' y='{by+20}' text-anchor='middle' font-size='12' font-weight='bold' {FONT}>Werkstattbetrieb (Mandant), z. B. FixWerk GmbH</text>")
-    people = [('Werkstattleiter', '(Werkstattleitung, Administration)'), ('Servicemitarbeiter', '(Service / Annahme)'),
-              ('Techniker', '(Werkstatt)'), ('Disponent', '(Ersatzteil-Disposition)')]
+    people = [('Werkstattleiter', '(Lane Werkstattleitung)'), ('Servicemitarbeiter', '(Lane Service / Annahme)'),
+              ('Techniker', '(Lane Techniker)'), ('Disponent', '(Lane Ersatzteil-Disposition)')]
     ys = [by + 95 + i * 105 for i in range(4)]
     for (n, r), y in zip(people, ys):
         actor(o, 130, y, [n, r])
@@ -64,7 +64,7 @@ def main():
     # Mitarbeiter -> Module (gerade Linien, Sammelpunkt am Modul)
     ym = mys[1] + mh / 2
     line(o, 146, ys[0], mx, ym)
-    label(o, 350, ys[0] - 6, ['Filialen, Mitarbeiter, Termine'], anchor='start')
+    label(o, 350, ys[0] - 6, ['Termine, Freigaben'], anchor='start')
     line(o, 146, ys[1], mx, ym)
     line(o, 146, ys[2], mx, ym)
     line(o, 146, ys[3], mx, mys[2] + mh / 2)
@@ -74,8 +74,8 @@ def main():
     box(o, rx, mys[0] - 4, rw, 52, ['KI-Diagnosedienst', '(externer Dienst)'], fill='#FFF4E5')
     line(o, mx + mw, mys[0] + mh / 2, rx, mys[0] + 22)
     label(o, (mx + mw + rx) / 2, mys[0] + 12, ['Foto / Video / Ton'])
-    actor(o, rx + 60, mys[2] + 10, ['Lieferant'])
-    line(o, mx + mw, mys[2] + mh / 2, rx + 44, mys[2] + 10)
+    box(o, rx, mys[2] - 4, rw, 52, ['Lieferant', '(Black Box, ohne Zugang)'], fill='#F5F5F5')
+    line(o, mx + mw, mys[2] + mh / 2, rx, mys[2] + 22)
     label(o, (mx + mw + rx) / 2, mys[2] - 14, ['Bestellung, Auftragsbestätigung,', 'Lieferung, Retoure'])
     box(o, rx, mys[3] - 4, rw, 52, ['Buchhaltung / DATEV', '(außerhalb der Systemgrenze)'], fill='#F5F5F5', dashed=True)
     line(o, mx + mw, mys[3] + mh / 2, rx, mys[3] + 22, dashed=True)

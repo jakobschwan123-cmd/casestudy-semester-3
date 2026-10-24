@@ -1,6 +1,6 @@
 # RepairFlow – Fallstudie Systemanalyse (WWI25B4, Gruppe 1)
 
-RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätten eine SaaS-Plattform mit KI-Sofortdiagnose anbietet. Pilotkunde ist die fiktive FixWerk GmbH. Stand: 15.10.2026.
+RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätten eine SaaS-Plattform mit KI-Sofortdiagnose anbietet. Pilotkunde ist die fiktive FixWerk GmbH. Stand: 24.10.2026.
 
 **Was jetzt zu tun ist, steht in [`TODO.md`](TODO.md).**
 
@@ -11,8 +11,8 @@ RepairFlow ist ein Software-Startup (Solution Provider), das Reparaturwerkstätt
 | [`0_abgabe/`](0_abgabe/) | Anleitung für das Moodle-Archiv und die KI-Angabe | alle (am Ende) |
 | [`1_bpmn/`](1_bpmn/) | Die zehn Kollaborationsdiagramme `p01` … `p10` als `.bpmn` (Quelle, nur im Camunda Modeler bearbeiten) und PNG | Maximilian |
 | [`2_uml/`](2_uml/) | Visual-Paradigm-Projekt `UML-WWI25B4-Gruppe1.vpp` (Abgabedatei) und die PNG-Exporte aller acht Diagramme | Kilian, David |
-| [`3_doku/`](3_doku/) | `Projektdokumentation.docx` und `.pdf`, Quelle von Abbildung 1 in `systemkontext/` | Nina, alle |
-| [`4_praesentation/`](4_praesentation/) | `Abschlusspraesentation.pptx` und `.pdf` | alle |
+| [`3_doku/`](3_doku/) | `Projektdokumentation.docx` (das PDF entsteht erst zur Abgabe), Quelle von Abbildung 1 in `systemkontext/` | Nina, alle |
+| [`4_praesentation/`](4_praesentation/) | `Abschlusspraesentation.pptx`, Sprechtext und Mockup der Demo (das PDF entsteht nach der Generalprobe) | alle |
 | [`5_team/`](5_team/) | Arbeitsunterlagen: Projektkontext, Team und Rollen, Entscheidungslog, Dozentenfeedback, QA-Checkliste, Protokolle, Git-Regeln | alle |
 
 ## Arbeitsweise
