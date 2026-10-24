@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_05" targetNamespace="http://repairflow.example/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:collaboration id="Collab_05">
+    <bpmn:documentation>Nach der Freigabe des Kostenvoranschlags übernimmt RepairFlow die Teileliste und wandelt die Vorreservierungen aus Prozess 01 in Reservierungen um. Für die übrigen Ersatzteile prüft ein Mehrfach-Teilprozess je Teil den Bestand der eigenen und der anderen Filialen: Das Teil wird reserviert, aus einer anderen Filiale umgelagert und nach dem Eingang eingebucht oder als Fehlteil markiert. Unterschreitet ein Bestand den Meldebestand, entsteht ein Nachbestellvorschlag; er bleibt im Status Vorschlag und wird mit der nächsten Bestellung in Prozess 06 gebündelt, ohne die Reparatur aufzuhalten. Nur bei der ersten Disposition eines Auftrags erhält der Kunde den voraussichtlichen Reparaturbeginn; ruft Prozess 07 (Nachtrag) oder 09 (Nacharbeit) diesen Prozess auf, übergibt er ersteDisposition = false und die Nachricht entfällt. Fehlteile bestellt Prozess 06; sein Ergebnis teileVollstaendig geht an den Aufrufer zurück.</bpmn:documentation>
+    <bpmn:participant id="Part_05_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_05" />
+    <bpmn:participant id="Part_05_Kunde" name="Kunde" processRef="Proc_05_Kunde" />
+    <bpmn:messageFlow id="MsgFlow_05_1" name="Voraussichtlicher Reparaturbeginn" sourceRef="T05_Info" targetRef="K05_Start" />
+  </bpmn:collaboration>
+  <bpmn:process id="Proc_05" name="05 Ersatzteil-Verfügbarkeit und Reservierung" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_05">
+      <bpmn:lane id="Lane_05_1" name="Service / Annahme">
+        <bpmn:flowNodeRef>T05_Beginn</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Info</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_05_2" name="Ersatzteil-Disposition">
+        <bpmn:flowNodeRef>Start_05</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Teileliste</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Vorreservierung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Sub_05</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Bestaetigen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Meldebestand</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW05_Meldebestand</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Nachbestellung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_05m</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW05_Erst</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_05i</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW05_Fehlteile</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T05_Bestellen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_05</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_05</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_05" name="KVA freigegeben">
+      <bpmn:outgoing>Flow_05_3</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="T05_Teileliste" name="Teileliste aus KVA übernehmen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t05_teileliste" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_4</bpmn:outgoing>
+      <bpmn:property id="T05_Teileliste_prop_DataObjRef_05_1" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T05_Teileliste_in_DataObjRef_05_1">
+        <bpmn:sourceRef>DataObjRef_05_1</bpmn:sourceRef>
+        <bpmn:targetRef>T05_Teileliste_prop_DataObjRef_05_1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:property id="T05_Teileliste_prop_DataStore_05_1" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T05_Teileliste_in_DataStore_05_1">
+        <bpmn:sourceRef>DataStore_05_1</bpmn:sourceRef>
+        <bpmn:targetRef>T05_Teileliste_prop_DataStore_05_1</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T05_Vorreservierung" name="Vorreservierungen übernehmen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t05_vorreservierung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_30</bpmn:outgoing>
+      <bpmn:property id="T05_Vorreservierung_prop_DataObjRef_05_5" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T05_Vorreservierung_in_DataObjRef_05_5">
+        <bpmn:sourceRef>DataObjRef_05_5</bpmn:sourceRef>
+        <bpmn:targetRef>T05_Vorreservierung_prop_DataObjRef_05_5</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="T05_Vorreservierung_out_DataObjRef_05_6">
+        <bpmn:targetRef>DataObjRef_05_6</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:subProcess id="Sub_05" name="Verfügbarkeit je Ersatzteil prüfen" triggeredByEvent="false">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input source="=false" target="fehlteil" />
+          <zeebe:input source="=null" target="bestandAusreichend" />
+          <zeebe:input source="=null" target="andereFilialeVerfuegbar" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_30</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_17</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="false">
+        <bpmn:extensionElements>
+          <zeebe:loopCharacteristics inputCollection="=offeneErsatzteile" inputElement="ersatzteil" outputCollection="fehlteilJeErsatzteil" outputElement="=fehlteil" />
+        </bpmn:extensionElements>
+      </bpmn:multiInstanceLoopCharacteristics>
+      <bpmn:startEvent id="S05_Start" name="Ersatzteil ausgewählt">
+        <bpmn:outgoing>Flow_05_5</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:serviceTask id="S05_Eigen" name="Bestand eigene Filiale prüfen">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="repairflow.s05_eigen" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_5</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_6</bpmn:outgoing>
+        <bpmn:property id="S05_Eigen_prop_DataObjRef_05_7" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="S05_Eigen_in_DataObjRef_05_7">
+          <bpmn:sourceRef>DataObjRef_05_7</bpmn:sourceRef>
+          <bpmn:targetRef>S05_Eigen_prop_DataObjRef_05_7</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="GW05_Eigen" name="Eigener Bestand ausreichend?">
+        <bpmn:incoming>Flow_05_6</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_7</bpmn:outgoing>
+        <bpmn:outgoing>Flow_05_8</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:serviceTask id="S05_Reservieren" name="Teil in eigener Filiale reservieren">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="repairflow.s05_reservieren" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_7</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_13</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="S05_Andere" name="Bestand anderer Filialen prüfen">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="repairflow.s05_andere" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_8</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_9</bpmn:outgoing>
+        <bpmn:property id="S05_Andere_prop_DataObjRef_05_7" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="S05_Andere_in_DataObjRef_05_7">
+          <bpmn:sourceRef>DataObjRef_05_7</bpmn:sourceRef>
+          <bpmn:targetRef>S05_Andere_prop_DataObjRef_05_7</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="GW05_Andere" name="In anderer Filiale verfügbar?">
+        <bpmn:incoming>Flow_05_9</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_10</bpmn:outgoing>
+        <bpmn:outgoing>Flow_05_11</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:serviceTask id="S05_ResAndere" name="Teil in anderer Filiale reservieren">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="repairflow.s05_resandere" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_10</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_12</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="S05_Umlagerung" name="Umlagerung anfordern">
+        <bpmn:extensionElements>
+          <zeebe:userTask />
+          <zeebe:formDefinition formId="form-s05_umlagerung" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_12</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_31</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:userTask id="S05_Einbuchen" name="Umgelagertes Teil einbuchen">
+        <bpmn:extensionElements>
+          <zeebe:userTask />
+          <zeebe:formDefinition formId="form-s05_einbuchen" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_31</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_14</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:serviceTask id="S05_Fehlteil" name="Teil als Fehlteil markieren">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="repairflow.s05_fehlteil" />
+          <zeebe:ioMapping>
+            <zeebe:output source="=true" target="fehlteil" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_05_11</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_15</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="S05_Join" name="">
+        <bpmn:incoming>Flow_05_13</bpmn:incoming>
+        <bpmn:incoming>Flow_05_14</bpmn:incoming>
+        <bpmn:incoming>Flow_05_15</bpmn:incoming>
+        <bpmn:outgoing>Flow_05_16</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:endEvent id="S05_End" name="Teil disponiert">
+        <bpmn:incoming>Flow_05_16</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_05_5" sourceRef="S05_Start" targetRef="S05_Eigen" />
+      <bpmn:sequenceFlow id="Flow_05_6" sourceRef="S05_Eigen" targetRef="GW05_Eigen" />
+      <bpmn:sequenceFlow id="Flow_05_7" sourceRef="GW05_Eigen" targetRef="S05_Reservieren" name="ja">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bestandAusreichend</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_05_8" sourceRef="GW05_Eigen" targetRef="S05_Andere" name="nein">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(bestandAusreichend)</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_05_9" sourceRef="S05_Andere" targetRef="GW05_Andere" />
+      <bpmn:sequenceFlow id="Flow_05_10" sourceRef="GW05_Andere" targetRef="S05_ResAndere" name="ja">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=andereFilialeVerfuegbar</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_05_11" sourceRef="GW05_Andere" targetRef="S05_Fehlteil" name="nein">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(andereFilialeVerfuegbar)</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_05_12" sourceRef="S05_ResAndere" targetRef="S05_Umlagerung" />
+      <bpmn:sequenceFlow id="Flow_05_13" sourceRef="S05_Reservieren" targetRef="S05_Join" />
+      <bpmn:sequenceFlow id="Flow_05_31" sourceRef="S05_Umlagerung" targetRef="S05_Einbuchen" />
+      <bpmn:sequenceFlow id="Flow_05_14" sourceRef="S05_Einbuchen" targetRef="S05_Join" />
+      <bpmn:sequenceFlow id="Flow_05_15" sourceRef="S05_Fehlteil" targetRef="S05_Join" />
+      <bpmn:sequenceFlow id="Flow_05_16" sourceRef="S05_Join" targetRef="S05_End" />
+      <bpmn:dataObjectReference id="DataObjRef_05_7" name="Lagerbestand" dataObjectRef="DataObj_05_7" />
+      <bpmn:dataObject id="DataObj_05_7" />
+    </bpmn:subProcess>
+    <bpmn:serviceTask id="T05_Bestaetigen" name="Reservierungen bestätigen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t05_bestaetigen" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_17</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_18</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T05_Bestaetigen_out_DataObjRef_05_2">
+        <bpmn:targetRef>DataObjRef_05_2</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:businessRuleTask id="T05_Meldebestand" name="Meldebestand prüfen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.meldebestand" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_19</bpmn:outgoing>
+      <bpmn:property id="T05_Meldebestand_prop_DataObjRef_05_3" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="T05_Meldebestand_in_DataObjRef_05_3">
+        <bpmn:sourceRef>DataObjRef_05_3</bpmn:sourceRef>
+        <bpmn:targetRef>T05_Meldebestand_prop_DataObjRef_05_3</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:businessRuleTask>
+    <bpmn:exclusiveGateway id="GW05_Meldebestand" name="Meldebestand unterschritten?">
+      <bpmn:incoming>Flow_05_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_20</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05_21</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T05_Nachbestellung" name="Nachbestellvorschlag erzeugen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t05_nachbestellung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_22</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T05_Nachbestellung_out_DataObjRef_05_4">
+        <bpmn:targetRef>DataObjRef_05_4</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Join_05m" name="">
+      <bpmn:incoming>Flow_05_21</bpmn:incoming>
+      <bpmn:incoming>Flow_05_22</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_23</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW05_Erst" name="Erste Teiledisposition?">
+      <bpmn:incoming>Flow_05_23</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_32</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05_33</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T05_Beginn" name="Voraussichtlichen Reparaturbeginn ermitteln">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t05_beginn" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_32</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_24</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="T05_Info" name="Kunde über Reparaturbeginn informieren">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t05_info" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_24</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_25</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="Merge_05i" name="">
+      <bpmn:incoming>Flow_05_25</bpmn:incoming>
+      <bpmn:incoming>Flow_05_33</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_34</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW05_Fehlteile" name="Fehlteile vorhanden?">
+      <bpmn:incoming>Flow_05_34</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_26</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05_27</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:callActivity id="T05_Bestellen" name="06 Ersatzteile bestellen">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="Proc_06" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=teileVollstaendig" target="teileVollstaendig" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05_26</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_28</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:exclusiveGateway id="Join_05" name="">
+      <bpmn:incoming>Flow_05_27</bpmn:incoming>
+      <bpmn:incoming>Flow_05_28</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_29</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_05" name="Ersatzteile disponiert">
+      <bpmn:incoming>Flow_05_29</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_05_3" sourceRef="Start_05" targetRef="T05_Teileliste" />
+    <bpmn:sequenceFlow id="Flow_05_4" sourceRef="T05_Teileliste" targetRef="T05_Vorreservierung" />
+    <bpmn:sequenceFlow id="Flow_05_30" sourceRef="T05_Vorreservierung" targetRef="Sub_05" />
+    <bpmn:sequenceFlow id="Flow_05_17" sourceRef="Sub_05" targetRef="T05_Bestaetigen" />
+    <bpmn:sequenceFlow id="Flow_05_18" sourceRef="T05_Bestaetigen" targetRef="T05_Meldebestand" />
+    <bpmn:sequenceFlow id="Flow_05_19" sourceRef="T05_Meldebestand" targetRef="GW05_Meldebestand" />
+    <bpmn:sequenceFlow id="Flow_05_20" sourceRef="GW05_Meldebestand" targetRef="T05_Nachbestellung" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=meldebestandUnterschritten</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05_21" sourceRef="GW05_Meldebestand" targetRef="Join_05m" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(meldebestandUnterschritten)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05_22" sourceRef="T05_Nachbestellung" targetRef="Join_05m" />
+    <bpmn:sequenceFlow id="Flow_05_23" sourceRef="Join_05m" targetRef="GW05_Erst" />
+    <bpmn:sequenceFlow id="Flow_05_32" sourceRef="GW05_Erst" targetRef="T05_Beginn" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ersteDisposition != false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05_33" sourceRef="GW05_Erst" targetRef="Merge_05i" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ersteDisposition = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05_24" sourceRef="T05_Beginn" targetRef="T05_Info" />
+    <bpmn:sequenceFlow id="Flow_05_25" sourceRef="T05_Info" targetRef="Merge_05i" />
+    <bpmn:sequenceFlow id="Flow_05_34" sourceRef="Merge_05i" targetRef="GW05_Fehlteile" />
+    <bpmn:sequenceFlow id="Flow_05_26" sourceRef="GW05_Fehlteile" targetRef="T05_Bestellen" name="ja">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=list contains(fehlteilJeErsatzteil, true)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05_27" sourceRef="GW05_Fehlteile" targetRef="Join_05" name="nein">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(list contains(fehlteilJeErsatzteil, true))</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05_28" sourceRef="T05_Bestellen" targetRef="Join_05" />
+    <bpmn:sequenceFlow id="Flow_05_29" sourceRef="Join_05" targetRef="End_05" />
+    <bpmn:dataObjectReference id="DataObjRef_05_1" name="Kosten&#173;voranschlag [freigegeben]" dataObjectRef="DataObj_05_1" />
+    <bpmn:dataObject id="DataObj_05_1" />
+    <bpmn:dataObjectReference id="DataObjRef_05_2" name="Ersatzteil-Reservierung [reserviert]" dataObjectRef="DataObj_05_2" />
+    <bpmn:dataObject id="DataObj_05_2" />
+    <bpmn:dataObjectReference id="DataObjRef_05_3" name="Lagerbestand" dataObjectRef="DataObj_05_3" />
+    <bpmn:dataObject id="DataObj_05_3" />
+    <bpmn:dataObjectReference id="DataObjRef_05_4" name="Lieferanten&#173;bestellung [Vorschlag]" dataObjectRef="DataObj_05_4" />
+    <bpmn:dataObject id="DataObj_05_4" />
+    <bpmn:dataObjectReference id="DataObjRef_05_6" name="Ersatzteil-Reservierung [reserviert]" dataObjectRef="DataObj_05_2" />
+    <bpmn:dataObjectReference id="DataObjRef_05_5" name="Ersatzteil-Reservierung [vorreserviert]" dataObjectRef="DataObj_05_5" />
+    <bpmn:dataObject id="DataObj_05_5" />
+    <bpmn:dataStoreReference id="DataStore_05_1" name="RepairFlow-Datenbank" dataStoreRef="Store_05_1" />
+  </bpmn:process>
+  <bpmn:process id="Proc_05_Kunde" name="Kunde" isExecutable="false">
+    <bpmn:startEvent id="K05_Start" name="Reparaturbeginn erhalten">
+      <bpmn:outgoing>Flow_05_1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="K05_Start_def" messageRef="Msg_05_1" />
+    </bpmn:startEvent>
+    <bpmn:manualTask id="K05_Vormerken" name="Reparaturbeginn vormerken">
+      <bpmn:incoming>Flow_05_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_05_2</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="K05_End" name="Termin bekannt">
+      <bpmn:incoming>Flow_05_2</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_05_1" sourceRef="K05_Start" targetRef="K05_Vormerken" />
+    <bpmn:sequenceFlow id="Flow_05_2" sourceRef="K05_Vormerken" targetRef="K05_End" />
+  </bpmn:process>
+  <bpmn:dataStore id="Store_05_1" name="RepairFlow-Datenbank" />
+  <bpmn:message id="Msg_05_1" name="Voraussichtlicher Reparaturbeginn">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="Diagram_05">
+    <bpmndi:BPMNPlane id="Plane_05" bpmnElement="Collab_05">
+      <bpmndi:BPMNShape id="Part_05_Kunde_di" bpmnElement="Part_05_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="4800" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Part_05_Werkstatt_di" bpmnElement="Part_05_Werkstatt" isHorizontal="true">
+        <dc:Bounds x="120" y="360" width="4800" height="705" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_05_1_di" bpmnElement="Lane_05_1" isHorizontal="true">
+        <dc:Bounds x="150" y="360" width="4770" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_05_2_di" bpmnElement="Lane_05_2" isHorizontal="true">
+        <dc:Bounds x="150" y="530" width="4770" height="535" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_05_di" bpmnElement="Start_05">
+        <dc:Bounds x="227" y="650" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="190" y="692" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Teileliste_di" bpmnElement="T05_Teileliste">
+        <dc:Bounds x="370" y="628" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Vorreservierung_di" bpmnElement="T05_Vorreservierung">
+        <dc:Bounds x="560" y="628" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Sub_05_di" bpmnElement="Sub_05" isExpanded="true">
+        <dc:Bounds x="767" y="582" width="1806" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Start_di" bpmnElement="S05_Start">
+        <dc:Bounds x="797" y="650" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="760" y="692" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Eigen_di" bpmnElement="S05_Eigen">
+        <dc:Bounds x="940" y="628" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW05_Eigen_di" bpmnElement="GW05_Eigen" isMarkerVisible="true">
+        <dc:Bounds x="1170" y="642" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1120" y="608" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Reservieren_di" bpmnElement="S05_Reservieren">
+        <dc:Bounds x="1320" y="628" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Andere_di" bpmnElement="S05_Andere">
+        <dc:Bounds x="1320" y="742" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW05_Andere_di" bpmnElement="GW05_Andere" isMarkerVisible="true">
+        <dc:Bounds x="1550" y="758" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1500" y="724" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_ResAndere_di" bpmnElement="S05_ResAndere">
+        <dc:Bounds x="1700" y="742" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Umlagerung_di" bpmnElement="S05_Umlagerung">
+        <dc:Bounds x="1890" y="742" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Einbuchen_di" bpmnElement="S05_Einbuchen">
+        <dc:Bounds x="2080" y="742" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Fehlteil_di" bpmnElement="S05_Fehlteil">
+        <dc:Bounds x="1700" y="858" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_Join_di" bpmnElement="S05_Join" isMarkerVisible="true">
+        <dc:Bounds x="2310" y="642" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="S05_End_di" bpmnElement="S05_End">
+        <dc:Bounds x="2507" y="650" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2470" y="692" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_7_di" bpmnElement="DataObjRef_05_7">
+        <dc:Bounds x="987" y="760" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="945" y="815" width="120" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Bestaetigen_di" bpmnElement="T05_Bestaetigen">
+        <dc:Bounds x="2650" y="628" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Meldebestand_di" bpmnElement="T05_Meldebestand">
+        <dc:Bounds x="2840" y="628" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW05_Meldebestand_di" bpmnElement="GW05_Meldebestand" isMarkerVisible="true">
+        <dc:Bounds x="3070" y="642" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3020" y="608" width="150" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Nachbestellung_di" bpmnElement="T05_Nachbestellung">
+        <dc:Bounds x="3220" y="742" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_05m_di" bpmnElement="Join_05m" isMarkerVisible="true">
+        <dc:Bounds x="3450" y="642" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW05_Erst_di" bpmnElement="GW05_Erst" isMarkerVisible="true">
+        <dc:Bounds x="3560" y="642" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3525" y="697" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Beginn_di" bpmnElement="T05_Beginn">
+        <dc:Bounds x="3690" y="402" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Info_di" bpmnElement="T05_Info">
+        <dc:Bounds x="3900" y="402" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Merge_05i_di" bpmnElement="Merge_05i" isMarkerVisible="true">
+        <dc:Bounds x="4130" y="642" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="GW05_Fehlteile_di" bpmnElement="GW05_Fehlteile" isMarkerVisible="true">
+        <dc:Bounds x="4240" y="642" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4205" y="610" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T05_Bestellen_di" bpmnElement="T05_Bestellen">
+        <dc:Bounds x="4390" y="742" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Join_05_di" bpmnElement="Join_05" isMarkerVisible="true">
+        <dc:Bounds x="4620" y="642" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_05_di" bpmnElement="End_05">
+        <dc:Bounds x="4790" y="650" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4753" y="692" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K05_Start_di" bpmnElement="K05_Start">
+        <dc:Bounds x="3947" y="120" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3910" y="86" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K05_Vormerken_di" bpmnElement="K05_Vormerken">
+        <dc:Bounds x="4090" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K05_End_di" bpmnElement="K05_End">
+        <dc:Bounds x="4327" y="120" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4290" y="162" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_1_di" bpmnElement="DataObjRef_05_1">
+        <dc:Bounds x="469" y="542" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="345" y="554" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_5_di" bpmnElement="DataObjRef_05_5">
+        <dc:Bounds x="659" y="542" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="535" y="548" width="120" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_6_di" bpmnElement="DataObjRef_05_6">
+        <dc:Bounds x="607" y="790" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="565" y="845" width="120" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_2_di" bpmnElement="DataObjRef_05_2">
+        <dc:Bounds x="2749" y="542" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2625" y="548" width="120" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_3_di" bpmnElement="DataObjRef_05_3">
+        <dc:Bounds x="2939" y="1003" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2815" y="1015" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_05_4_di" bpmnElement="DataObjRef_05_4">
+        <dc:Bounds x="3319" y="1003" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3195" y="1015" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_05_1_di" bpmnElement="DataStore_05_1">
+        <dc:Bounds x="335" y="1003" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="211" y="1015" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_05_1_di" bpmnElement="Flow_05_1">
+        <di:waypoint x="3983" y="138" />
+        <di:waypoint x="4090" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_2_di" bpmnElement="Flow_05_2">
+        <di:waypoint x="4220" y="138" />
+        <di:waypoint x="4327" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_3_di" bpmnElement="Flow_05_3">
+        <di:waypoint x="263" y="668" />
+        <di:waypoint x="370" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_4_di" bpmnElement="Flow_05_4">
+        <di:waypoint x="500" y="668" />
+        <di:waypoint x="560" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_30_di" bpmnElement="Flow_05_30">
+        <di:waypoint x="690" y="668" />
+        <di:waypoint x="767" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_5_di" bpmnElement="Flow_05_5">
+        <di:waypoint x="833" y="668" />
+        <di:waypoint x="940" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_6_di" bpmnElement="Flow_05_6">
+        <di:waypoint x="1070" y="668" />
+        <di:waypoint x="1170" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_7_di" bpmnElement="Flow_05_7">
+        <di:waypoint x="1220" y="668" />
+        <di:waypoint x="1320" y="668" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1226" y="644" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_8_di" bpmnElement="Flow_05_8">
+        <di:waypoint x="1195" y="692" />
+        <di:waypoint x="1195" y="782" />
+        <di:waypoint x="1320" y="782" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1203" y="760" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_9_di" bpmnElement="Flow_05_9">
+        <di:waypoint x="1450" y="782" />
+        <di:waypoint x="1550" y="782" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_10_di" bpmnElement="Flow_05_10">
+        <di:waypoint x="1600" y="782" />
+        <di:waypoint x="1700" y="782" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1606" y="758" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_11_di" bpmnElement="Flow_05_11">
+        <di:waypoint x="1575" y="808" />
+        <di:waypoint x="1575" y="898" />
+        <di:waypoint x="1700" y="898" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1583" y="876" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_12_di" bpmnElement="Flow_05_12">
+        <di:waypoint x="1830" y="782" />
+        <di:waypoint x="1890" y="782" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_31_di" bpmnElement="Flow_05_31">
+        <di:waypoint x="2020" y="782" />
+        <di:waypoint x="2080" y="782" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_14_di" bpmnElement="Flow_05_14">
+        <di:waypoint x="2210" y="782" />
+        <di:waypoint x="2335" y="782" />
+        <di:waypoint x="2335" y="692" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_13_di" bpmnElement="Flow_05_13">
+        <di:waypoint x="1450" y="668" />
+        <di:waypoint x="2310" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_15_di" bpmnElement="Flow_05_15">
+        <di:waypoint x="1830" y="898" />
+        <di:waypoint x="2335" y="898" />
+        <di:waypoint x="2335" y="692" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_16_di" bpmnElement="Flow_05_16">
+        <di:waypoint x="2360" y="668" />
+        <di:waypoint x="2507" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_17_di" bpmnElement="Flow_05_17">
+        <di:waypoint x="2573" y="668" />
+        <di:waypoint x="2650" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_18_di" bpmnElement="Flow_05_18">
+        <di:waypoint x="2780" y="668" />
+        <di:waypoint x="2840" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_19_di" bpmnElement="Flow_05_19">
+        <di:waypoint x="2970" y="668" />
+        <di:waypoint x="3070" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_20_di" bpmnElement="Flow_05_20">
+        <di:waypoint x="3095" y="692" />
+        <di:waypoint x="3095" y="782" />
+        <di:waypoint x="3220" y="782" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3103" y="760" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_21_di" bpmnElement="Flow_05_21">
+        <di:waypoint x="3120" y="668" />
+        <di:waypoint x="3450" y="668" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3126" y="644" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_22_di" bpmnElement="Flow_05_22">
+        <di:waypoint x="3350" y="782" />
+        <di:waypoint x="3475" y="782" />
+        <di:waypoint x="3475" y="692" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_23_di" bpmnElement="Flow_05_23">
+        <di:waypoint x="3500" y="668" />
+        <di:waypoint x="3560" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_32_di" bpmnElement="Flow_05_32">
+        <di:waypoint x="3585" y="642" />
+        <di:waypoint x="3585" y="442" />
+        <di:waypoint x="3690" y="442" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3593" y="606" width="30" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_24_di" bpmnElement="Flow_05_24">
+        <di:waypoint x="3840" y="442" />
+        <di:waypoint x="3900" y="442" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_33_di" bpmnElement="Flow_05_33">
+        <di:waypoint x="3610" y="668" />
+        <di:waypoint x="4130" y="668" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3616" y="644" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_25_di" bpmnElement="Flow_05_25">
+        <di:waypoint x="4030" y="442" />
+        <di:waypoint x="4155" y="442" />
+        <di:waypoint x="4155" y="642" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_34_di" bpmnElement="Flow_05_34">
+        <di:waypoint x="4180" y="668" />
+        <di:waypoint x="4240" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_26_di" bpmnElement="Flow_05_26">
+        <di:waypoint x="4265" y="692" />
+        <di:waypoint x="4265" y="782" />
+        <di:waypoint x="4390" y="782" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4273" y="760" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_27_di" bpmnElement="Flow_05_27">
+        <di:waypoint x="4290" y="668" />
+        <di:waypoint x="4620" y="668" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4296" y="644" width="60" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_28_di" bpmnElement="Flow_05_28">
+        <di:waypoint x="4520" y="782" />
+        <di:waypoint x="4645" y="782" />
+        <di:waypoint x="4645" y="692" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05_29_di" bpmnElement="Flow_05_29">
+        <di:waypoint x="4670" y="668" />
+        <di:waypoint x="4790" y="668" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_05_1_di" bpmnElement="MsgFlow_05_1">
+        <di:waypoint x="3965" y="402" />
+        <di:waypoint x="3965" y="156" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3973" y="269" width="130" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Teileliste_in_DataObjRef_05_1_di" bpmnElement="T05_Teileliste_in_DataObjRef_05_1">
+        <di:waypoint x="487" y="592" />
+        <di:waypoint x="475" y="628" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Vorreservierung_in_DataObjRef_05_5_di" bpmnElement="T05_Vorreservierung_in_DataObjRef_05_5">
+        <di:waypoint x="677" y="592" />
+        <di:waypoint x="665" y="628" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Vorreservierung_out_DataObjRef_05_6_di" bpmnElement="T05_Vorreservierung_out_DataObjRef_05_6">
+        <di:waypoint x="625" y="708" />
+        <di:waypoint x="625" y="790" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Teileliste_in_DataStore_05_1_di" bpmnElement="T05_Teileliste_in_DataStore_05_1">
+        <di:waypoint x="360" y="1003" />
+        <di:waypoint x="395" y="708" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="S05_Eigen_in_DataObjRef_05_7_di" bpmnElement="S05_Eigen_in_DataObjRef_05_7">
+        <di:waypoint x="1005" y="760" />
+        <di:waypoint x="1005" y="708" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="S05_Andere_in_DataObjRef_05_7_di" bpmnElement="S05_Andere_in_DataObjRef_05_7">
+        <di:waypoint x="1023" y="795" />
+        <di:waypoint x="1340" y="822" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Bestaetigen_out_DataObjRef_05_2_di" bpmnElement="T05_Bestaetigen_out_DataObjRef_05_2">
+        <di:waypoint x="2755" y="628" />
+        <di:waypoint x="2767" y="592" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Meldebestand_in_DataObjRef_05_3_di" bpmnElement="T05_Meldebestand_in_DataObjRef_05_3">
+        <di:waypoint x="2957" y="1003" />
+        <di:waypoint x="2945" y="708" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T05_Nachbestellung_out_DataObjRef_05_4_di" bpmnElement="T05_Nachbestellung_out_DataObjRef_05_4">
+        <di:waypoint x="3325" y="822" />
+        <di:waypoint x="3337" y="1003" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
