@@ -1,6 +1,6 @@
 # Aufgaben bis zur Abgabe
 
-Stand: 25.10.2026, nach PR #67 (Modeler-Prüfung aller zehn BPMN-Dateien, Folien 16/17/20, Foliennummern). Die Liste enthält nur offene Aufgaben, ohne Namen. Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern dahinter und hakt sie nach Erledigung ab (`- [x]`). Sie ersetzt die alte TODO-Liste vom 22.10.; der Prüfbericht vom 22.10. (`5_team/pruefbericht-2026-10-22.md`) ist bis auf die unten übernommenen Punkte abgearbeitet.
+Stand: 25.10.2026, nach PR #67 (Modeler-Prüfung aller zehn BPMN-Dateien, Folien 16/17/20, Foliennummern). Die Liste enthält nur offene Aufgaben (Erledigtes wird gestrichen, nicht abgehakt), ohne Namen. Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern dahinter und hakt sie nach Erledigung ab (`- [x]`). Sie ersetzt die alte TODO-Liste vom 22.10.; der Prüfbericht vom 22.10. (`5_team/pruefbericht-2026-10-22.md`) ist bis auf die unten übernommenen Punkte abgearbeitet.
 
 Termine: Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
 
@@ -21,42 +21,25 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ### Präsentation und Sprechtext
 
-- [x] **Kennzahlen** (Stand 24.10., nach der Modeler-Prüfung am 25.10. neu gezählt und unverändert) sind überall eingetragen: Folien 12, 13 und 21, Doku 5.1/5.2, Tabelle 6, Sprechtext Adrian, `1_bpmn/README.md`. Ändert die BPMN-Prüfung noch Aktivitäten, wird einmal neu gezählt und an denselben Stellen nachgezogen.
 - [ ] **Davids Teil im Sprechtext (Folien 1–4)** einfügen; dabei „Quelitätssicherung“ (Folie 1) korrigieren.
-- [x] **Rollen wie Folie 18** in Ninas Sprechtext und in Doku-Tabelle 1 übernommen.
-- [x] **Demo (Folie 9):** `4_praesentation/mockup/index.html` vor Beginn in einem zweiten Fenster öffnen, Wechsel mit Alt+Tab üben, Demo auf höchstens 90 Sekunden begrenzen. Es gibt keine Backup-Folien mit Screenshots.
-- [x] **Generalprobe** gemacht.
-- [x] **Maximilians Texte:** „T01_KI“ und „Konfidenz“ entfernt, Übergabe „Was davon heute geht, erklärt Adrian.“
 - [ ] **Antworten auf mögliche Fragen bereitlegen** (Abschnitt F).
+
+### BPMN (Camunda Modeler)
+
+- [ ] **P05 ↔ P09:** Startereignis „KVA freigegeben“ → „Teilebedarf freigegeben“; den Service Task „Teilebedarf freigeben“ (versehentlich umbenannt) → „Freigegebene Teileliste übernehmen“. Doku Tabelle 6 und 5.1 sind schon angepasst.
+- [ ] **P09:** Name „Gerät annehmen und Mangel dokumentieren“ ohne geschützte Leerzeichen neu eintippen, Rechteck stattdessen breiter ziehen, PNG neu.
+- [ ] **P01:** Ereignis-Teilprozess heißt „Verwerfung Verarbeiten“ → „Verwerfung verarbeiten“ (klein), PNG neu; danach Doku-Abbildung 2 tauschen.
+- [ ] **Doku Abb. 2** (P01) nach dem P01-Fix tauschen; Abb. 3 (P04) ist am 25.10. getauscht.
 
 ---
 
 ## B. Vor der Abgabe am 13.11.
 
-### BPMN (Camunda Modeler)
-
-Erledigt am 25.10. (PR #67), offen sind nur die drei Namen unten.
-
-- [x] **P02–P05 im Modeler geprüft;** P02 „Gerät abgeben“ ist jetzt ein Manual Task.
-- [x] **P07:** Ende heißt „Gerät abholbereit“ wie der Start von P08. Statt eines Aufrufs „08 Abholung abwickeln“, weil P09 die Reparatur (07) aufruft und danach selbst 08 aufruft; ein Aufruf in 07 hätte die Abholung dort doppelt gestartet.
-- [x] **P08:** Lane Techniker aufgelöst, Geräteausgabe in Service / Annahme; Gateways als Fragen („Wie wird abgerechnet?“, „Welche Zahlungsart?“, „Wie wurde gezahlt?“, „Wievielte Frist abgelaufen?“); Kanten „1., 2. oder 4. Frist“ / „3. Frist“ / „5. Frist“.
-- [x] **P06:** im Modeler gespeichert, PNG neu (altes PNG war beschädigt); Trennstriche in „Nachbestell-vorschläge“ und „Auftrags-bestätigung“.
-- [ ] **P05 ↔ P09 (offen, Kilian):** Startereignis „KVA freigegeben“ → „Teilebedarf freigegeben“; den Service Task „Teilebedarf freigeben“ (versehentlich umbenannt) → „Freigegebene Teileliste übernehmen“. Doku Tabelle 6 und 5.1 sind schon angepasst.
-- [ ] **P09 (offen, Kilian):** Name „Gerät annehmen und Mangel dokumentieren“ ohne geschützte Leerzeichen neu eintippen, Rechteck stattdessen breiter ziehen, PNG neu.
-- [x] **P04:** „Erinnerung protokollieren“ gibt es im aktuellen P04 nicht mehr, entfällt.
-- [ ] **P01 (offen, Kilian):** Ereignis-Teilprozess heißt „Verwerfung Verarbeiten“ → „Verwerfung verarbeiten“ (klein), PNG neu; danach Doku-Abbildung 2 tauschen.
-- [x] **Alle zehn Dateien** im Modeler geprüft und gespeichert, PNGs neu exportiert, bpmnlint 0 Befunde.
-- [x] **Schreibweise der Datenobjekte:** überall mit Bindestrich wie Doku 3.1 („Reparatur-auftrag“); die weichen Trennzeichen in P03–P05 sehen im Bild gleich aus und bleiben.
-- [x] **Kennzahlen neu gezählt (25.10.):** unverändert, nichts nachzuziehen; `1_bpmn/README.md` mit Stand 25.10.
-- [ ] **Doku Abb. 2** (P01) nach dem P01-Fix tauschen; Abb. 3 (P04) ist am 25.10. getauscht.
-
 ### Visual Paradigm
 
 Ablauf: Teamwork Update, ändern, Commit; PNG (220 dpi, ohne Legende) und VPP neu exportieren (Anleitung `2_uml/README.md`), dann Doku-Abbildungen 4–7 tauschen. Stand 24.10.: SD2 hat den Pfad „freigegeben, aber nicht alle Teile beschaffbar“ (opt mit Ablehnung, Benachrichtigung und UC15), `Reparaturauftrag.benachrichtigeKunde()` ist entfernt, alles exportiert und committet.
 
-- [x] **SDs gegen die BPMN-Änderungen vom 25.10. geprüft:** keine Fachlogik geändert. SD4 verweist schon auf UC15 (BPMN 08) für fertig und abgelehnt; SD3 zeigt den Normalfall nach KVA-Freigabe und bleibt gültig.
 - [ ] **Optional:** ref-Beschriftungen vereinheitlichen (Verweise auf vorhandene SDs zeigen „sqd: UC09 …“, die übrigen sind Textfelder im ref-Rahmen, z. B. SD4 „UC13 Reparaturschritt und Arbeitszeit erfassen“ ohne BPMN-Nummer).
-- [ ] **Gruppenentscheidung:** weitere ungenutzte Operationen streichen (Rollen-Operationen von Servicemitarbeiter, Techniker, Disponent, `KundenApp.meldeMangel()`, `Lieferant.bestaetigeBestellung()`). Doku 5.4 sagt, die Rollenklassen tragen die Operationen der Rollen; bei Streichung dort anpassen.
 
 ### Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
@@ -74,15 +57,6 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 - [ ] **Abbildungen 4–7** erneut tauschen, falls sich VP-Diagramme noch ändern (Seitenverhältnis vom neuen Bild übernehmen).
 - [ ] **Inhaltsverzeichnis** ganz am Ende in Word gegen das PDF prüfen (statisch; am 24.10. in LibreOffice korrigiert: 5.4 → 13, 6 → 17, 7 und 7.1 → 18).
 
-### Präsentation
-
-- [x] Folie 16 „Zwei Prüfprogramme: 0 Fehler“: gemeint sind Camunda-Linter (bpmnlint) und das Problems-Panel des Modelers (Doku Tabelle 2 und 3.1); bei Bedarf auf der Folie nennen.
-- [x] Folien 16 und 17 sagen zweimal „gleiche Namen“ und „keine Fehler im Modeler“; auf Folie 17 dafür Lernerfahrungen aus Doku Kapitel 6 (Pools und Lanes, „KVA-Position“ statt `KvaPosition`).
-- [x] Foliennummern im Master einschalten (Folie 21 verweist auf Nummern).
-- [x] Folie 20 „digitaler Zustandsautomat“ wird nicht erklärt.
-- [x] Folien 6 und 7 („Auftragsreise“): gewollt, Folie 7 ist die Fortsetzung.
-- [ ] Optional: Backup-Folien mit Use-Case-, Klassen- und Sequenzdiagramm für Fragen.
-
 ### Arbeitslisten und Abgabe
 
 - [ ] `0_abgabe/KI-Angabe-Moodle.md`: noch Entwurf, jede Person ergänzt ihre Werkzeuge.
@@ -90,23 +64,11 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 
 ---
 
-## C. Optional
+## E. Gruppenentscheidungen
 
-- [ ] Doku: Klassennamen in Code-Schrift (Zeichenformat „Code“), damit `Werkstattoberflaeche` als Name erkennbar ist.
-- [ ] Doku: kleine Tabelle „Fristen und Grenzen“ in 5.1 (Lagergebühr nach der dritten Abholerinnerung fehlt in 5.6).
-- [ ] Doku: eine Zeile Quellenverweis auf die Vorlesung (3.1 und 5.1 beziehen sich darauf).
-- [ ] Sprechtext: „KVA in 60 Sekunden“ als Zielwert bezeichnen; Adrian „Das ist keine Schwäche, das war eine bewusste Entscheidung“ und „von jeder anderen Werkstattsoftware“ abschwächen.
-- [ ] Mockup Schritt 8 zeigt 6 von 9 Zuständen und „KVA freigegeben“ statt „freigegeben“.
+Offen: die inhaltlichen Doku-Punkte aus Abschnitt B (Beitragsliste, Problem-Zuordnung, Begründungen, Geschäftsmodell).
 
----
-
-## E. Offene Gruppenentscheidungen
-
-1. Inhaltliche Doku-Punkte aus Abschnitt B (Beitragsliste, Problem-Zuordnung, Begründungen, Geschäftsmodell).
-2. Backup-Folien mit Diagrammen ja/nein.
-3. Weitere ungenutzte Operationen im Klassendiagramm streichen ja/nein.
-
-Bereits entschieden, bleibt so: Datenobjekte mit Bindestrich („Reparatur-auftrag“), Datumsangaben in der Doku, Format der Abbildungen 2–5, Entscheidungslog-Verweise, Klasse für den KI-Diagnosedienst, Kopf-Redezeiten im Sprechtext, Maximilians Texte, keine Zeitangaben bei Maximilians Folien, kein Sprechtext in den PPTX-Notizen.
+Entschieden, bleibt so: keine Backup-Folien; Klassendiagramm ohne weitere Streichungen; Datenobjekte mit Bindestrich („Reparatur-auftrag“); Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Entscheidungslog-Verweise, Klasse für den KI-Diagnosedienst, Kopf-Redezeiten im Sprechtext, Maximilians Texte, kein Sprechtext in den PPTX-Notizen.
 
 ---
 
