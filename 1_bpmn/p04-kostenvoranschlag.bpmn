@@ -7,8 +7,8 @@
     <bpmn:messageFlow id="MsgFlow_04_1" name="Kosten­voranschlag" sourceRef="T04_Senden" targetRef="K04_Start" />
     <bpmn:messageFlow id="MsgFlow_04_2" name="Freigabe" sourceRef="K04_Freigabe" targetRef="E04_Freigabe" />
     <bpmn:messageFlow id="MsgFlow_04_3" name="Ablehnung" sourceRef="K04_Ablehnung" targetRef="E04_Ablehnung" />
-    <bpmn:messageFlow id="MsgFlow_04_4" name="Erinnerung" sourceRef="T04_Erinnerung" targetRef="Part_04_Kunde" />
-    <bpmn:messageFlow id="MsgFlow_04_5" name="Reparaturabsage" sourceRef="T04_Absage" targetRef="Part_04_Kunde" />
+    <bpmn:messageFlow id="MsgFlow_04_5" name="Reparaturabsage" sourceRef="T04_Absage" targetRef="K01_SubStart" />
+    <bpmn:messageFlow id="Flow_0q2xxpe" name="Erinnerung" sourceRef="T04_Erinnerung" targetRef="K04_Pruefen" />
   </bpmn:collaboration>
   <bpmn:process id="Proc_04" name="04 Kostenvoranschlag und Kundenfreigabe" isExecutable="true">
     <bpmn:laneSet id="LaneSet_04">
@@ -340,6 +340,16 @@
     <bpmn:sequenceFlow id="Flow_04_5" sourceRef="K04_Freigabe" targetRef="K04_Join" />
     <bpmn:sequenceFlow id="Flow_04_6" sourceRef="K04_Ablehnung" targetRef="K04_Join" />
     <bpmn:sequenceFlow id="Flow_04_7" sourceRef="K04_Join" targetRef="K04_End" />
+    <bpmn:subProcess id="K01_Sub" name="Reparaturabsage verarbeiten" triggeredByEvent="true">
+      <bpmn:startEvent id="K01_SubStart" name="Reparaturabsage erhalten">
+        <bpmn:outgoing>Flow_01_52</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="K01_SubStart_def" messageRef="Msg_01_8" />
+      </bpmn:startEvent>
+      <bpmn:endEvent id="K01_SubEnd" name="KVA verfallen">
+        <bpmn:incoming>Flow_01_52</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_01_52" sourceRef="K01_SubStart" targetRef="K01_SubEnd" />
+    </bpmn:subProcess>
   </bpmn:process>
   <bpmn:dataStore id="Store_04_1" name="RepairFlow-Datenbank" />
   <bpmn:message id="Msg_04_0" name="KVA angestoßen" />
@@ -354,6 +364,11 @@
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmn:message id="Msg_04_3" name="Kostenvoranschlag">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Msg_01_8" name="Voranmeldung verworfen">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />
     </bpmn:extensionElements>
@@ -495,7 +510,7 @@
       <bpmndi:BPMNShape id="DataObjRef_04_4_di" bpmnElement="DataObjRef_04_4">
         <dc:Bounds x="1380" y="487" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1424" y="499" width="120" height="27" />
+          <dc:Bounds x="1454" y="499" width="60" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_04_7_di" bpmnElement="DataObjRef_04_7">
@@ -684,6 +699,26 @@
           <dc:Bounds x="2033" y="162" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K01_Sub_di" bpmnElement="K01_Sub" isExpanded="true">
+        <dc:Bounds x="2400" y="160" width="330" height="160" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K01_SubStart_di" bpmnElement="K01_SubStart">
+        <dc:Bounds x="2432" y="250" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2407" y="217" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K01_SubEnd_di" bpmnElement="K01_SubEnd">
+        <dc:Bounds x="2652" y="250" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2637" y="292" width="66" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_01_52_di" bpmnElement="Flow_01_52">
+        <di:waypoint x="2468" y="268" />
+        <di:waypoint x="2652" y="268" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_1_di" bpmnElement="Flow_04_1">
         <di:waypoint x="1363" y="138" />
         <di:waypoint x="1420" y="138" />
@@ -776,7 +811,7 @@
         <di:waypoint x="1345" y="560" />
         <di:waypoint x="1345" y="156" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1351" y="380" width="100" height="14" />
+          <dc:Bounds x="1371" y="380" width="60" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_04_2_di" bpmnElement="MsgFlow_04_2">
@@ -793,18 +828,22 @@
           <dc:Bounds x="1724" y="410" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_04_4_di" bpmnElement="MsgFlow_04_4">
-        <di:waypoint x="1560" y="900" />
-        <di:waypoint x="1560" y="340" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1566" y="380" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MsgFlow_04_5_di" bpmnElement="MsgFlow_04_5">
         <di:waypoint x="2545" y="560" />
-        <di:waypoint x="2545" y="340" />
+        <di:waypoint x="2545" y="423" />
+        <di:waypoint x="2450" y="423" />
+        <di:waypoint x="2450" y="286" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2551" y="380" width="90" height="14" />
+          <dc:Bounds x="2464" y="373" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0q2xxpe_di" bpmnElement="Flow_0q2xxpe">
+        <di:waypoint x="1559" y="900" />
+        <di:waypoint x="1559" y="539" />
+        <di:waypoint x="1530" y="539" />
+        <di:waypoint x="1530" y="178" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1543" y="403" width="54" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

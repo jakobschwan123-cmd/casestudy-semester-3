@@ -214,7 +214,7 @@
       <bpmn:incoming>Flow_02_21</bpmn:incoming>
       <bpmn:outgoing>Flow_02_27</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:endEvent id="End_02" name="Auftrag angenommen">
+    <bpmn:endEvent id="End_02" name="Auftrag eingeplant">
       <bpmn:incoming>Flow_02_27</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_02_5" sourceRef="Start_02" targetRef="T02_Suchen" />
@@ -393,7 +393,7 @@
       <bpmndi:BPMNShape id="End_02_di" bpmnElement="End_02">
         <dc:Bounds x="3962" y="844" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3925" y="886" width="110" height="14" />
+          <dc:Bounds x="3935" y="886" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStore_02_4_di" bpmnElement="DataStore_02_4">
