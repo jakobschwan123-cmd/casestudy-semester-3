@@ -30,7 +30,7 @@
         <bpmn:flowNodeRef>End_05</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="Start_05" name="Teilebedarf freigeben">
+    <bpmn:startEvent id="Start_05" name="Teilebedarf freigegeben">
       <bpmn:outgoing>Flow_05_3</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="T05_Teileliste" name="Freigegebene Teileliste übernehmen">
@@ -358,7 +358,7 @@
       <bpmndi:BPMNShape id="Start_05_di" bpmnElement="Start_05">
         <dc:Bounds x="227" y="650" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="218" y="692" width="55" height="27" />
+          <dc:Bounds x="216" y="692" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T05_Teileliste_di" bpmnElement="T05_Teileliste">
