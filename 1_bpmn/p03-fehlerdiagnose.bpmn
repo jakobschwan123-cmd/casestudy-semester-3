@@ -312,7 +312,6 @@
     <bpmn:sequenceFlow id="Flow_03_2" sourceRef="K03_Planen" targetRef="K03_End" />
   </bpmn:process>
   <bpmn:dataStore id="Store_03_1" name="RepairFlow-Datenbank" />
-  <bpmn:message id="Msg_03_0" name="Auftrag eingeplant" />
   <bpmn:message id="Msg_03_1" name="Reparaturabsage">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />

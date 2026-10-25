@@ -1,6 +1,6 @@
 # Aufgaben bis zur Abgabe
 
-Stand: 25.10.2026, nach der Prüfung vom 25.10. (Folien 2, 11, 14, 24, Sprechtext, Doku Kapitel 1, 5.4–5.6 korrigiert). Die Liste enthält nur offene Aufgaben; Erledigtes wird gestrichen, nicht abgehakt.
+Stand: 25.10.2026, nach den Modell-Anpassungen vom 25.10. (P02–P04 im Modeler, SD3, SD5, SD6 und Klassendiagramm in VP, Doku nachgezogen). Die Liste enthält nur offene Aufgaben; Erledigtes wird gestrichen, nicht abgehakt.
 
 Termine: Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
 
@@ -8,21 +8,17 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ## Stand der Artefakte
 
-- **BPMN:** Alle zehn Dateien im Camunda Modeler geprüft und gespeichert, PNGs neu exportiert (PR #67, #69, #70); bpmnlint 0 Befunde. Zählung (Aktivitäten = Tasks, Call Activities und Teilprozess im Werkstatt-Pool; automatisiert = Service, Script, Business Rule, Send, Receive; `zeebe:userTask` nicht doppelt zählen): **143 Aktivitäten (Ø 14,3), 89 automatisiert = 62 %, 34 User Tasks, 9 Manual Tasks, 10 Call Activities und 1 Teilprozess, 28 Kundenaktivitäten, 48 Nachrichtenflüsse, 58 Datenobjekte, 14 Datenspeicher.** Je Diagramm (Aktivitäten/automatisiert): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Doku (5.1, 5.2, Tabelle 6), PPTX (Folien 15 und 16), Sprechtext Adrian und `1_bpmn/README.md` sind auf diesem Stand.
-- **UML:** Use-Case-, Klassen- und sechs Sequenzdiagramme fertig, PNGs und VPP am 24.10. exportiert, Teamwork-Server committet. Gegen die BPMN-Änderungen vom 25.10. geprüft: keine Änderung nötig.
-- **Doku:** Inhaltlich fertig (PR #72): Beitragsliste, 2.2 mit Zuordnung Problem → Modul, 2.6 Ausblick, 5.2 mit Begründung der manuellen Aktivitäten, Tabelle 3, Kapitel 6, Abbildungen 1–7 aus den aktuellen Exporten, Inhaltsverzeichnis mit 2.6.
+- **BPMN:** Alle zehn Dateien im Camunda Modeler geprüft und gespeichert, PNGs neu exportiert (PR #67, #69, #70, #79); bpmnlint 0 Befunde. Zählung (Aktivitäten = Tasks, Call Activities und Teilprozess im Werkstatt-Pool; automatisiert = Service, Script, Business Rule, Send, Receive; `zeebe:userTask` nicht doppelt zählen): **143 Aktivitäten (Ø 14,3), 89 automatisiert = 62 %, 34 User Tasks, 9 Manual Tasks, 10 Call Activities und 1 Teilprozess, 29 Kundenaktivitäten, 48 Nachrichtenflüsse, 58 Datenobjekte, 14 Datenspeicher.** Je Diagramm (Aktivitäten/automatisiert): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Doku (5.1, 5.2, Tabelle 6), PPTX (Folien 15 und 16), Sprechtext Adrian und `1_bpmn/README.md` sind auf diesem Stand.
+- **UML:** Use-Case-, Klassen- und sechs Sequenzdiagramme fertig. Am 25.10. an die Prozesse angeglichen: SD3 (andere Filialen nur bei zu wenig eigenem Bestand, Reparaturbeginn nur bei der ersten Disposition), SD5 (Ablehnung durch den Kunden über die KundenApp, bei Fristablauf oder fehlenden Teilen über die Werkstattoberfläche), SD6 (Bestätigung, Mahnung, Storno und Statuswechsel automatisch, ohne Einkäufer), `wechsleStatus(...)` überall ohne Parameternamen; Klassendiagramm ohne die nicht mehr genutzten Operationen `bestaetigeBestellung`, `mahneBestellung`, `storniereBestellung`, `oeffneBestellung` (Werkstattoberflaeche) und `sucheBestellung` (Werkstattbetrieb). PNGs und VPP exportiert, Teamwork-Server committet.
+- **Doku:** Inhaltlich fertig (PR #72), am 25.10. an die Modelle angepasst: 5.1 (29 Kundenaktivitäten, Prozess 04 mit Reparaturabsage), Tabelle 6 Zeile 02 „Auftrag eingeplant“, Tabelle 8 (SD3, SD5, SD6), 5.4 (Werkstattbetrieb), Abb. 3, 5 und 7 neu.
 - **PPTX:** 24 Folien (PR #73): David 1–7, Kilian 8 und 17–18, Maximilian 9–12, Adrian 13–16, Jakob 19–20, Nina 21–23, Folie 24 Beiträge der Vortragenden. Notizen enthalten nur die Vortragenden.
-- **Sprechtext:** vollständig für die Folien 1–23, Überschriften mit den Foliennummern der PPTX.
+- **Sprechtext:** vollständig für die Folien 1–23, Überschriften mit den Foliennummern der PPTX. Folie 18 am 25.10. an das Klassendiagramm angepasst (Werkstattbetrieb kennt Aufträge und Reklamationen).
 - **PDFs:** entstehen erst ganz am Ende.
 
 ---
 
 ## B. Vor der Abgabe am 13.11.
 
-- [ ] **P04:** Nachrichtenfluss „Erinnerung“ auf „KVA in der App prüfen“ ziehen; für „Reparaturabsage“ im Kunden-Pool einen Ereignis-Teilprozess wie in P01 („Reparaturabsage erhalten“ → „KVA verfallen“). Danach Kundenaktivitäten 28 → 29 in Doku 5.1, `1_bpmn/README.md`, diese Datei; Doku Abb. 3 tauschen.
-- [ ] **P02 → P03:** Ende von P02 in „Auftrag eingeplant“ umbenennen, Start von P03 als einfaches Startereignis; Doku Tabelle 6 Zeile 02 nachziehen; PNGs p02, p03.
-- [ ] **Sequenzdiagramme:** SD5 (Ablehnung durch den Kunden über die KundenApp, Fristablauf und fehlende Teile über die Werkstattoberfläche), SD6 (Bestätigung, Mahnung, Storno automatisch wie in P06), SD3 (andere Filialen nur bei zu wenig eigenem Bestand, Reparaturbeginn nur bei der ersten Disposition); dabei `wechsleStatus(...)` in allen Sequenzdiagrammen einheitlich ohne bzw. mit „neu =“ schreiben (SD2, SD4, SD6); PNGs und VPP neu, Doku Abb. 7 tauschen.
-- [ ] **BPMN-Dokumentationstexte:** Umlaute in p06–p10, Gedankenstriche in p10.
 - [ ] **PPTX vor dem PDF-Export:** Datei → Auf Probleme überprüfen → Dokument prüfen (Notizen behalten), Autor „Gruppe 1 WWI25B4“.
 - [ ] **Inhaltsverzeichnis der Doku** ganz am Ende in Word gegen das PDF prüfen (statisch; nach dem neuen Abschnitt 2.6 alle Seitenzahlen prüfen).
 - [ ] `0_abgabe/KI-Angabe-Moodle.md`: noch Entwurf, jede Person ergänzt ihre Werkzeuge (Titelbild ist eingetragen).
@@ -32,7 +28,7 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ## E. Gruppenentscheidungen (entschieden, bleibt so)
 
-Keine Backup-Folien; keine sichtbaren Foliennummern in der PPTX; KI-generiertes Titelbild bleibt und steht in der KI-Angabe; Folien 17 und 21 am Vortragsrechner geprüft, passt; Mockup zeigt Filiale und Terminvorschlag vor dem Bestätigen (Termin 28.10.2026); P09 „Gerät annehmen und Mangel dokumentieren“ bleibt in der Form vom 25.10.; ref-Beschriftungen in den Sequenzdiagrammen bleiben; Klassendiagramm ohne weitere Streichungen; Sprechtext: Gedankenstriche, Kontrastsätze und Wiederholungen bleiben, Folien 9–12 ohne Zeitangaben; Folie 21 und Bild auf Folien 9/10 bleiben; BPMN-PNG-Labels (p05, p07, p08, p09) bleiben; Datenobjekt „Gerät“ mit Umlaut; Schrift Calibri/Segoe UI bleibt; Doku Abb. 6/7 im aktuellen Format; Multiplizität „1“ im Use-Case-Diagramm; VP-Lizenzkennung in den UML-PNGs; Mockup-Details (Persona, „Sonstiges“, Reihenfolge) bleiben; Datenobjekte mit Bindestrich („Reparatur-auftrag“); kein Hinweis in 3.2, dass das Entscheidungslog nicht abgegeben wird; kein Satz zu Boundary-Klassen in 5.4; Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Klasse für den KI-Diagnosedienst, kein Sprechtext in den PPTX-Notizen.
+Keine Backup-Folien; keine sichtbaren Foliennummern in der PPTX; KI-generiertes Titelbild bleibt und steht in der KI-Angabe; Folien 17 und 21 am Vortragsrechner geprüft, passt; Mockup zeigt Filiale und Terminvorschlag vor dem Bestätigen (Termin 28.10.2026); P09 „Gerät annehmen und Mangel dokumentieren“ bleibt in der Form vom 25.10.; ref-Beschriftungen in den Sequenzdiagrammen bleiben; Klassendiagramm: außer den fünf Bestell-Operationen nach SD6 keine weiteren Streichungen; Sprechtext: Gedankenstriche, Kontrastsätze und Wiederholungen bleiben, Folien 9–12 ohne Zeitangaben; Folie 21 und Bild auf Folien 9/10 bleiben; BPMN-PNG-Labels (p05, p07, p08, p09) bleiben; Datenobjekt „Gerät“ mit Umlaut; Schrift Calibri/Segoe UI bleibt; Doku Abb. 6/7 im aktuellen Format; Multiplizität „1“ im Use-Case-Diagramm; VP-Lizenzkennung in den UML-PNGs; Mockup-Details (Persona, „Sonstiges“, Reihenfolge) bleiben; Datenobjekte mit Bindestrich („Reparatur-auftrag“); kein Hinweis in 3.2, dass das Entscheidungslog nicht abgegeben wird; kein Satz zu Boundary-Klassen in 5.4; Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Klasse für den KI-Diagnosedienst, kein Sprechtext in den PPTX-Notizen.
 
 ---
 
