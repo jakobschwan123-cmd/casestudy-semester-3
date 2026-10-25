@@ -130,7 +130,7 @@
 <bpmn:eventBasedGateway id="GW10_WartenR" name="">
       <bpmn:incoming>Flow_10_14</bpmn:incoming>
       <bpmn:outgoing>Flow_10_30</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1nvqfon</bpmn:outgoing>
+      <bpmn:outgoing>Flow_10_28</bpmn:outgoing>
     </bpmn:eventBasedGateway>
     <bpmn:intermediateCatchEvent id="E10_Rueckmeldung" name="Rückmeldung des Lieferanten erhalten">
       <bpmn:incoming>Flow_10_30</bpmn:incoming>
@@ -246,13 +246,13 @@
     <bpmn:dataObject id="DataObj_10_4" />
     <bpmn:dataStoreReference id="DataStore_10_1" name="RepairFlow-Datenbank" dataStoreRef="Store_10_1" />
     <bpmn:intermediateCatchEvent id="B10_Timer" name="14 Tage verstrichen">
-      <bpmn:incoming>Flow_1nvqfon</bpmn:incoming>
+      <bpmn:incoming>Flow_10_28</bpmn:incoming>
       <bpmn:outgoing>Flow_10_24</bpmn:outgoing>
       <bpmn:timerEventDefinition id="B10_Timer_def">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_1nvqfon" sourceRef="GW10_WartenR" targetRef="B10_Timer" />
+    <bpmn:sequenceFlow id="Flow_10_28" sourceRef="GW10_WartenR" targetRef="B10_Timer" />
   </bpmn:process>
   <bpmn:dataStore id="Store_10_1" name="RepairFlow-Datenbank" />
   <bpmn:message id="Msg_10_1" name="RMA-Freigabe">
@@ -531,7 +531,7 @@
         <di:waypoint x="2570" y="257" />
         <di:waypoint x="2650" y="257" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1nvqfon_di" bpmnElement="Flow_1nvqfon">
+      <bpmndi:BPMNEdge id="Flow_10_28_di" bpmnElement="Flow_10_28">
         <di:waypoint x="2110" y="457" />
         <di:waypoint x="2110" y="426" />
       </bpmndi:BPMNEdge>
