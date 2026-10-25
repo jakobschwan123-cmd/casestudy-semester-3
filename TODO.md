@@ -1,6 +1,6 @@
 # Aufgaben bis zur Abgabe
 
-Stand: 25.10.2026, nach PR #67 (Modeler-Prüfung aller zehn BPMN-Dateien, Folien 16/17/20, Foliennummern). Die Liste enthält nur offene Aufgaben (Erledigtes wird gestrichen, nicht abgehakt), ohne Namen. Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern dahinter und hakt sie nach Erledigung ab (`- [x]`). Sie ersetzt die alte TODO-Liste vom 22.10.; der Prüfbericht vom 22.10. (`5_team/pruefbericht-2026-10-22.md`) ist bis auf die unten übernommenen Punkte abgearbeitet.
+Stand: 25.10.2026, nach PR #70 (Modeler-Prüfung und Namenskorrekturen aller zehn BPMN-Dateien, Folien 16/17/20, Foliennummern). Die Liste enthält nur offene Aufgaben (Erledigtes wird gestrichen, nicht abgehakt), ohne Namen. Wer eine Aufgabe übernimmt, schreibt den Namen in Klammern dahinter und hakt sie nach Erledigung ab (`- [x]`). Sie ersetzt die alte TODO-Liste vom 22.10.; der Prüfbericht vom 22.10. (`5_team/pruefbericht-2026-10-22.md`) ist bis auf die unten übernommenen Punkte abgearbeitet.
 
 Termine: Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
 
@@ -8,9 +8,9 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ## Stand der Artefakte
 
-- **BPMN:** Alle zehn Dateien am 25.10. im Camunda Modeler geprüft, korrigiert und gespeichert, PNGs neu exportiert (PR #67); bpmnlint 0 Befunde. Die Zählung blieb dabei unverändert. Zählung des aktuellen `1_bpmn/` (Aktivitäten = Tasks, Call Activities und Teilprozess im Werkstatt-Pool; automatisiert = Service, Script, Business Rule, Send, Receive; `zeebe:userTask` nicht doppelt zählen): **143 Aktivitäten (Ø 14,3), 89 automatisiert = 62 %, 34 User Tasks, 9 Manual Tasks, 10 Call Activities und 1 Teilprozess, 28 Kundenaktivitäten, 48 Nachrichtenflüsse, 58 Datenobjekte, 14 Datenspeicher.** Je Diagramm (Aktivitäten/automatisiert): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Doku (5.1, 5.2, Tabelle 6), PPTX (Folien 12, 13, 21), Sprechtext Adrian und `1_bpmn/README.md` sind auf diesem Stand. Ändern sich Diagramme bei der BPMN-Prüfung, neu zählen.
+- **BPMN:** Alle zehn Dateien am 25.10. im Camunda Modeler geprüft, korrigiert und gespeichert, PNGs neu exportiert (PR #67); bpmnlint 0 Befunde. Namen in P01, P05 und P09 am 25.10. nachkorrigiert (PR #69/#70). Die Zählung blieb dabei unverändert. Zählung des aktuellen `1_bpmn/` (Aktivitäten = Tasks, Call Activities und Teilprozess im Werkstatt-Pool; automatisiert = Service, Script, Business Rule, Send, Receive; `zeebe:userTask` nicht doppelt zählen): **143 Aktivitäten (Ø 14,3), 89 automatisiert = 62 %, 34 User Tasks, 9 Manual Tasks, 10 Call Activities und 1 Teilprozess, 28 Kundenaktivitäten, 48 Nachrichtenflüsse, 58 Datenobjekte, 14 Datenspeicher.** Je Diagramm (Aktivitäten/automatisiert): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Doku (5.1, 5.2, Tabelle 6), PPTX (Folien 12, 13, 21), Sprechtext Adrian und `1_bpmn/README.md` sind auf diesem Stand. Ändern sich Diagramme bei der BPMN-Prüfung, neu zählen.
 - **UML:** Prüflisten-Punkte U1–U9, U11 und U12 sind in VP umgesetzt, zuletzt SD1 (`getBenoetigteTeile()`, `teil.getLagerbestaende()`, `res.vorreserviere()`), der SD5-Guard ohne doppelte Klammern, SD3 `reserviere()` für r und u, SD5 `new(r, kostenfrei)`. PNGs und VPP am 24.10. exportiert, Teamwork-Server committet.
-- **Doku:** Fakten am 24.10. korrigiert (14-Tage-Nachfrist P06, Techniker-Satz 5.3, 14 Mitarbeiterrollen in 5.4, Tabelle 8 ohne Terminvorschlag, einheitlich „Service / Annahme“ und „Use Case“, Formatreste). Kennzahlen und Tabelle 6 auf dem Stand oben. Alle Abbildungen 1–7 stammen aus den aktuellen Exporten (Abb. 1 neu: Lieferant als Black Box, Lanes wie Tabelle 7). Inhaltsverzeichnis in LibreOffice geprüft. Am 25.10.: Tabelle 1 (David „Stellvertretende Projektleitung, UML“ wie Folie 18), Tabelle 6 (Start 05 „Teilebedarf freigegeben“, Ende 07 „Gerät abholbereit“), Absatz zum Prozessverbund in 5.1, Abbildung 3 (P04) neu.
+- **Doku:** Fakten am 24.10. korrigiert (14-Tage-Nachfrist P06, Techniker-Satz 5.3, 14 Mitarbeiterrollen in 5.4, Tabelle 8 ohne Terminvorschlag, einheitlich „Service / Annahme“ und „Use Case“, Formatreste). Kennzahlen und Tabelle 6 auf dem Stand oben. Alle Abbildungen 1–7 stammen aus den aktuellen Exporten (Abb. 1 neu: Lieferant als Black Box, Lanes wie Tabelle 7). Inhaltsverzeichnis in LibreOffice geprüft. Am 25.10.: Tabelle 1 (David „Stellvertretende Projektleitung, UML“ wie Folie 18), Tabelle 6 (Start 05 „Teilebedarf freigegeben“, Ende 07 „Gerät abholbereit“), Absatz zum Prozessverbund in 5.1, Abbildungen 2 (P01) und 3 (P04) neu.
 - **Sprechtext:** ab Folie 5 überarbeitet (Dubletten, fehlende Überschrift, Foliennummern wie die PPTX vom 24.10., Adrians Fachfehler und Kennzahlen, Tippfehler, Nina Folie 19 gekürzt). Am 24./25.10.: Maximilians Text (Folien 6–9), Ninas Rollen wie Folie 18, Jakob Folie 16/17 (Prüfprogramme benannt, Lernerfahrungen statt Doppelung). Davids Teil (Folien 1–4) wird noch überarbeitet.
 - **PPTX (Stand Maximilian, PR #62):** 21 Folien. Am 24.10. korrigiert: die ausgeblendeten Demo-Screens (bisher Folien 10–18) entfernt, es gibt nur die eine Demo-Folie 9; Foliennummern auf Folie 21 angepasst; Kennzahlen Folien 12, 13 und 21; Titel Folien 10/11 „KI-Sofortdiagnose“ statt „KI-Sofortanalyse“; Folie 14 Komma; Folie 16 „Jede Mitarbeiterrolle …“; Folie 19 „KI-gestützte“; Notizen der Folien 10–13 nur noch „Vortragende(r): Adrian“ (Folie 10 stand auf Maximilian, Folie 21 ordnet sie Adrian zu). Am 25.10.: Folie 16 nennt Camunda-Linter und Modeler-Prüfung, Folie 17 „Pools und Lanes“ und „Überschriebene Diagramme“ statt der Doppelungen, Foliennummern eingeschaltet, Folie 20 erklärt den digitalen Zustandsautomaten.
 - **PDFs:** entstehen erst ganz am Ende.
@@ -24,22 +24,9 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 - [ ] **Davids Teil im Sprechtext (Folien 1–4)** einfügen; dabei „Quelitätssicherung“ (Folie 1) korrigieren.
 - [ ] **Antworten auf mögliche Fragen bereitlegen** (Abschnitt F).
 
-### BPMN (Camunda Modeler)
-
-- [ ] **P05 ↔ P09:** Startereignis „KVA freigegeben“ → „Teilebedarf freigegeben“; den Service Task „Teilebedarf freigeben“ (versehentlich umbenannt) → „Freigegebene Teileliste übernehmen“. Doku Tabelle 6 und 5.1 sind schon angepasst.
-- [ ] **P09:** Name „Gerät annehmen und Mangel dokumentieren“ ohne geschützte Leerzeichen neu eintippen, Rechteck stattdessen breiter ziehen, PNG neu.
-- [ ] **P01:** Ereignis-Teilprozess heißt „Verwerfung Verarbeiten“ → „Verwerfung verarbeiten“ (klein), PNG neu; danach Doku-Abbildung 2 tauschen.
-- [ ] **Doku Abb. 2** (P01) nach dem P01-Fix tauschen; Abb. 3 (P04) ist am 25.10. getauscht.
-
 ---
 
 ## B. Vor der Abgabe am 13.11.
-
-### Visual Paradigm
-
-Ablauf: Teamwork Update, ändern, Commit; PNG (220 dpi, ohne Legende) und VPP neu exportieren (Anleitung `2_uml/README.md`), dann Doku-Abbildungen 4–7 tauschen. Stand 24.10.: SD2 hat den Pfad „freigegeben, aber nicht alle Teile beschaffbar“ (opt mit Ablehnung, Benachrichtigung und UC15), `Reparaturauftrag.benachrichtigeKunde()` ist entfernt, alles exportiert und committet.
-
-- [ ] **Optional:** ref-Beschriftungen vereinheitlichen (Verweise auf vorhandene SDs zeigen „sqd: UC09 …“, die übrigen sind Textfelder im ref-Rahmen, z. B. SD4 „UC13 Reparaturschritt und Arbeitszeit erfassen“ ohne BPMN-Nummer).
 
 ### Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
@@ -54,7 +41,6 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 - [ ] **3.2, Entscheidungslog:** wird mehrfach als Beleg genannt, ist aber nicht Teil der Abgabe. Halbsatz „(im Projekt-Repository, nicht Teil der Abgabe)“.
 - [ ] **Kapitel 6:** „Die Konflikte wurden an zwei Stellen gleichzeitig gelöst.“ ist unverständlich (streichen oder sagen, wer was gemacht hat); „Repo“ → „Repository“.
 - [ ] **Geschäftsmodell und Ausblick:** Folie 19 (Abo, KI-gestützte Disposition, Techniker-Copilot, Geräteakte) steht nur knapp in 2.2, der Ausblick gar nicht in der Doku. Kurzer Absatz in Kapitel 2 oder 7.
-- [ ] **Abbildungen 4–7** erneut tauschen, falls sich VP-Diagramme noch ändern (Seitenverhältnis vom neuen Bild übernehmen).
 - [ ] **Inhaltsverzeichnis** ganz am Ende in Word gegen das PDF prüfen (statisch; am 24.10. in LibreOffice korrigiert: 5.4 → 13, 6 → 17, 7 und 7.1 → 18).
 
 ### Arbeitslisten und Abgabe
@@ -68,7 +54,7 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 
 Offen: die inhaltlichen Doku-Punkte aus Abschnitt B (Beitragsliste, Problem-Zuordnung, Begründungen, Geschäftsmodell).
 
-Entschieden, bleibt so: keine Backup-Folien; Klassendiagramm ohne weitere Streichungen; Datenobjekte mit Bindestrich („Reparatur-auftrag“); Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Entscheidungslog-Verweise, Klasse für den KI-Diagnosedienst, Kopf-Redezeiten im Sprechtext, Maximilians Texte, kein Sprechtext in den PPTX-Notizen.
+Entschieden, bleibt so: keine Backup-Folien; P09 „Gerät annehmen und Mangel dokumentieren“ bleibt in der Form vom 25.10.; ref-Beschriftungen in den Sequenzdiagrammen bleiben; Klassendiagramm ohne weitere Streichungen; Datenobjekte mit Bindestrich („Reparatur-auftrag“); Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Entscheidungslog-Verweise, Klasse für den KI-Diagnosedienst, Kopf-Redezeiten im Sprechtext, Maximilians Texte, kein Sprechtext in den PPTX-Notizen.
 
 ---
 
