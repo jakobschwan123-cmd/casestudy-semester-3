@@ -393,7 +393,7 @@
     <bpmn:endEvent id="K01_End" name="Anfrage erledigt">
       <bpmn:incoming>Flow_01_16</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:subProcess id="K01_Sub" name="Verwerfung Verarbeiten" triggeredByEvent="true">
+    <bpmn:subProcess id="K01_Sub" name="Verwerfung verarbeiten" triggeredByEvent="true">
       <bpmn:startEvent id="K01_SubStart" name="Verwerfung erhalten">
         <bpmn:outgoing>Flow_01_52</bpmn:outgoing>
         <bpmn:messageEventDefinition id="K01_SubStart_def" messageRef="Msg_01_8" />
