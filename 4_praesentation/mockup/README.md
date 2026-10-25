@@ -1,6 +1,6 @@
 # RepairFlow – Kunden-App Mockup (Live-Demo)
 
-Interaktives Mockup der Kunden-App für die **Abschlusspräsentation** (Folie 8, Live-Demo). Zeigt die
+Interaktives Mockup der Kunden-App für die **Abschlusspräsentation** (Folie 12, Live-Demo). Zeigt die
 Customer Journey von der Sofortdiagnose (inkl. KI-Assistent) über den vorläufigen
 Kostenvoranschlag und die Voranmeldung bis zum Auftragsstatus.
 
@@ -26,7 +26,7 @@ kein Internet, kein Build nötig – läuft komplett offline.
 3. **Problem + Foto** – Symptombeschreibung & Medien-Upload (`Voranmeldung`)
 4. **KI-Assistent analysiert** – inszenierte Analyse-Animation (`T01_KI`)
 5. **KI-Diagnose** – Ursache, Konfidenz 92 %, Aufwand, Teile (`KIDiagnosevorschlag`)
-6. **Angebot / Kostenvoranschlag** – Positionen + Gesamtpreis (`Kostenvoranschlag`)
+6. **Angebot / Kostenvoranschlag** – Positionen + Gesamtpreis, Filiale und Terminvorschlag; Button „Voranmeldung bestätigen“ (`Kostenvoranschlag`)
 7. **Bestätigung + Termin** – Voranmeldung, Filiale, Termin; Preis vorläufig, Teile vorreserviert (Prozess 01, UC02)
 8. **Status-Tracking** – Fortschritt entlang der `AuftragStatus`-Kette
 
