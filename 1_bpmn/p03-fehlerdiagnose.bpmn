@@ -15,7 +15,6 @@
         <bpmn:flowNodeRef>T03_Abholung</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_03_2" name="Techniker">
-        <bpmn:flowNodeRef>Start_03</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Ev03_Termin</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_Status</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T03_KILaden</bpmn:flowNodeRef>
@@ -36,12 +35,9 @@
         <bpmn:flowNodeRef>Ev03_KVA</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Join_03</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>End_03</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Start_03</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="Start_03" name="Auftrag eingeplant">
-      <bpmn:outgoing>Flow_03_3</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="Start_03_def" messageRef="Msg_03_0" />
-    </bpmn:startEvent>
     <bpmn:intermediateCatchEvent id="Ev03_Termin" name="Werkstatttermin erreicht">
       <bpmn:incoming>Flow_03_3</bpmn:incoming>
       <bpmn:outgoing>Flow_03_28</bpmn:outgoing>
@@ -296,6 +292,9 @@
     <bpmn:dataObjectReference id="DataObjRef_03_5" name="Fehlerbefund" dataObjectRef="DataObj_03_3" />
     <bpmn:dataObjectReference id="DataObjRef_03_4" name="Reparatur-auftrag [abgelehnt]" dataObjectRef="DataObj_03_4" />
     <bpmn:dataObject id="DataObj_03_4" />
+    <bpmn:startEvent id="Start_03" name="Auftrag eingeplant">
+      <bpmn:outgoing>Flow_03_3</bpmn:outgoing>
+    </bpmn:startEvent>
   </bpmn:process>
   <bpmn:process id="Proc_03_Kunde" name="Kunde" isExecutable="false">
     <bpmn:startEvent id="K03_Start" name="Reparaturabsage erhalten">
@@ -329,12 +328,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_03_1_di" bpmnElement="Lane_03_1" isHorizontal="true">
         <dc:Bounds x="150" y="360" width="3430" height="225" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Start_03_di" bpmnElement="Start_03">
-        <dc:Bounds x="227" y="822" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="190" y="864" width="110" height="27" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Ev03_Termin_di" bpmnElement="Ev03_Termin">
         <dc:Bounds x="320" y="822" width="36" height="36" />
@@ -463,6 +456,12 @@
         <dc:Bounds x="3080" y="372" width="36" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2973" y="384" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gw5bht_di" bpmnElement="Start_03">
+        <dc:Bounds x="227" y="822" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="200" y="864" width="90" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_03_3_di" bpmnElement="Flow_03_3">
