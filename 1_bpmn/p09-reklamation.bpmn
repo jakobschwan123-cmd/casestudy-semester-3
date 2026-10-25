@@ -297,7 +297,7 @@
     <bpmn:dataObjectReference id="DataObjRef_09_4" name="Reparatur-auftrag [angenommen]" dataObjectRef="DataObj_09_4" />
     <bpmn:dataObject id="DataObj_09_4" />
     <bpmn:dataStoreReference id="DataStore_09_1" name="RepairFlow-Datenbank" dataStoreRef="Store_09_1" />
-    <bpmn:userTask id="T09_Annehmen" name="Gerät annehmen    und Mangel dokumentieren">
+    <bpmn:userTask id="T09_Annehmen" name="Gerät annehmen und Mangel dokumentieren">
       <bpmn:extensionElements>
         <zeebe:userTask />
         <zeebe:formDefinition formId="form-t09_annehmen" />
