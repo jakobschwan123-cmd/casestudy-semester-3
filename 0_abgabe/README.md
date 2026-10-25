@@ -4,12 +4,14 @@ Jede Person lädt das vollständige Archiv `Fallstudie-WWI25B4-Gruppe1.zip` selb
 
 ## Inhalt des Archivs
 
-| Datei im Archiv | Quelle im Repo | Stand 24.10.2026 |
+| Datei im Archiv | Quelle im Repo | Hinweis |
 |---|---|---|
-| `Projekt-WWI25B4-Gruppe1.pdf` | `3_doku/Projektdokumentation.pdf`, umbenennen | noch zu erstellen; offene Punkte in `TODO.md`, Checkliste „Vor dem PDF-Export“ |
-| `BPMN-WWI25B4-Gruppe1.zip` | die zehn Dateien `1_bpmn/*.bpmn`, nur XML, ohne PNG, beim Packen umbenennen | P02–P05 aktualisiert; P06–P10, Modeler-Prüfung und Kennzahlen offen (`TODO.md`) |
-| `UML-WWI25B4-Gruppe1.vpp` | `2_uml/UML-WWI25B4-Gruppe1.vpp` | exportiert am 24.10.2026; nach weiteren VP-Änderungen neu exportieren |
-| `Praesentation-WWI25B4-Gruppe1.pdf` | `4_praesentation/Abschlusspraesentation.pdf`, umbenennen; enthält die Zuordnung der Vortragenden | nach der Generalprobe exportieren, mit Folie 19 (Zuordnung) |
+| `Projekt-WWI25B4-Gruppe1.pdf` | `3_doku/Projektdokumentation.pdf`, umbenennen | erst ganz am Ende aus Word exportieren, vorher Checkliste „Vor dem PDF-Export“ in `TODO.md` |
+| `BPMN-WWI25B4-Gruppe1.zip` | die zehn Dateien `1_bpmn/*.bpmn`, nur XML, ohne PNG, beim Packen umbenennen | Stand der Modelle und Kennzahlen in `1_bpmn/README.md` |
+| `UML-WWI25B4-Gruppe1.vpp` | `2_uml/UML-WWI25B4-Gruppe1.vpp` | nach jeder VP-Änderung neu exportieren |
+| `Praesentation-WWI25B4-Gruppe1.pdf` | `4_praesentation/Abschlusspraesentation.pdf`, umbenennen | aus PowerPoint exportieren, mit Folie 24 (Beiträge der Vortragenden); vorher in PowerPoint „Dokument prüfen“ |
+
+Offene Punkte stehen in `TODO.md`.
 
 ## So wird gepackt
 
