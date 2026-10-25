@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_08" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_08" targetNamespace="http://repairflow.example/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_08">
     <bpmn:documentation>Sobald ein Geraet abholbereit ist (repariert, abgelehnt oder nach Nacharbeit), erstellt RepairFlow die Rechnung aus KVA und Arbeitszeiten bzw. ueber die Diagnosepauschale (kostenfreie Nacharbeit ohne Rechnung) und benachrichtigt den Kunden; nach der dritten Erinnerung wird eine Lagergebuehr berechnet, bleibt auch die vierte ohne Abholung, wird die Verwertung des Geraets eingeleitet. Bei der Abholung wird die Zahlung erfasst (bar/Karte sofort, auf Rechnung mit Zahlungsziel, bis zu drei Mahnungen, danach Inkasso), das Geraet uebergeben und der Auftrag geschlossen.</bpmn:documentation>
     <bpmn:participant id="Part_08_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_08" />
@@ -18,25 +18,29 @@
   <bpmn:process id="Proc_08" name="08 Abholung, Rechnung und Zahlung" isExecutable="true">
     <bpmn:laneSet id="LaneSet_08">
       <bpmn:lane id="Lane_08_1" name="Service / Annahme">
-        <bpmn:flowNodeRef>T08_Erinnern</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Merge_08y</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Merge_08x</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Start_08</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW08_Abr</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Rechnung</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Pauschale</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Merge_08</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Benachrichtigung</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_08x</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Merge_08y</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T08_Erinnern</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW08_Warten</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>E08_Timer</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW08_Dritte</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Lager</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Verwertung</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>E08_Kunde</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T08_Holen</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>GW08_Faellig</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Zahlungsart</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW08_Zahlungsart</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Kassieren</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Versand</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Join_08a</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T08_Uebergabe</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Abgeholt</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>T08_Bestaende</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>GW08_Offen</bpmn:flowNodeRef>
@@ -54,243 +58,118 @@
         <bpmn:flowNodeRef>Merge_08f</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>End_08</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_08_2" name="Techniker">
-        <bpmn:flowNodeRef>T08_Holen</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>GW08_Faellig</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Join_08a</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>T08_Uebergabe</bpmn:flowNodeRef>
-      </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:startEvent id="Start_08" name="Gerät abholbereit">
-      <bpmn:outgoing>Flow_08_18</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:exclusiveGateway id="GW08_Abr" name="Abrechnung?">
-      <bpmn:incoming>Flow_08_18</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_19</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_20</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_21</bpmn:outgoing>
+    <bpmn:sequenceFlow id="Flow_08_65" sourceRef="Merge_08f" targetRef="End_08" />
+    <bpmn:sequenceFlow id="Flow_08_63" sourceRef="T08_Bewertung" targetRef="Merge_08f" />
+    <bpmn:sequenceFlow id="Flow_08_62" sourceRef="Merge_08w" targetRef="T08_Bewertung" />
+    <bpmn:sequenceFlow id="Flow_08_61" sourceRef="T08_Verbuchen" targetRef="Merge_08w" />
+    <bpmn:sequenceFlow id="Flow_08_60" sourceRef="Merge_08v" targetRef="T08_Verbuchen" />
+    <bpmn:sequenceFlow id="Flow_08_58" sourceRef="T08_Inkasso" targetRef="Merge_08f" />
+    <bpmn:sequenceFlow id="Flow_08_56" name="ja" sourceRef="GW08_Mahnstufe" targetRef="T08_Inkasso">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=mahnungen &gt;= 3</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_55" name="nein" sourceRef="GW08_Mahnstufe" targetRef="T08_Mahnung">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=mahnungen &lt; 3</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_54" sourceRef="E08_TimerZ" targetRef="GW08_Mahnstufe" />
+    <bpmn:sequenceFlow id="Flow_08_59" sourceRef="E08_Zahlung" targetRef="Merge_08v" />
+    <bpmn:sequenceFlow id="Flow_08_53" sourceRef="GW08_WartenZ" targetRef="E08_TimerZ" />
+    <bpmn:sequenceFlow id="Flow_08_52" sourceRef="GW08_WartenZ" targetRef="E08_Zahlung" />
+    <bpmn:sequenceFlow id="Flow_08_51" sourceRef="Merge_08z" targetRef="GW08_WartenZ" />
+    <bpmn:sequenceFlow id="Flow_08_57" sourceRef="T08_Mahnung" targetRef="Merge_08z" />
+    <bpmn:sequenceFlow id="Flow_08_50" name="keine Rechnung" sourceRef="GW08_Offen" targetRef="Merge_08w">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden != true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_49" name="bar / Karte kassiert" sourceRef="GW08_Offen" targetRef="Merge_08v">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true and zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_48" name="auf Rechnung" sourceRef="GW08_Offen" targetRef="Merge_08z">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true and zahlungsart = "rechnung"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_47" sourceRef="T08_Bestaende" targetRef="GW08_Offen" />
+    <bpmn:sequenceFlow id="Flow_08_46" sourceRef="T08_Abgeholt" targetRef="T08_Bestaende" />
+    <bpmn:sequenceFlow id="Flow_08_45" sourceRef="T08_Uebergabe" targetRef="T08_Abgeholt" />
+    <bpmn:sequenceFlow id="Flow_08_44" sourceRef="Join_08a" targetRef="T08_Uebergabe" />
+    <bpmn:sequenceFlow id="Flow_08_43" sourceRef="T08_Versand" targetRef="Join_08a" />
+    <bpmn:sequenceFlow id="Flow_08_42" sourceRef="T08_Kassieren" targetRef="Join_08a" />
+    <bpmn:sequenceFlow id="Flow_08_41" name="auf Rechnung" sourceRef="GW08_Zahlungsart" targetRef="T08_Versand">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart = "rechnung"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_40" name="bar / Karte" sourceRef="GW08_Zahlungsart" targetRef="T08_Kassieren">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_39" sourceRef="T08_Zahlungsart" targetRef="GW08_Zahlungsart" />
+    <bpmn:sequenceFlow id="Flow_08_38" name="nein" sourceRef="GW08_Faellig" targetRef="Join_08a">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden != true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_37" name="ja" sourceRef="GW08_Faellig" targetRef="T08_Zahlungsart">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_36" sourceRef="T08_Holen" targetRef="GW08_Faellig" />
+    <bpmn:sequenceFlow id="Flow_08_35" sourceRef="E08_Kunde" targetRef="T08_Holen" />
+    <bpmn:sequenceFlow id="Flow_08_34" sourceRef="T08_Verwertung" targetRef="Merge_08f" />
+    <bpmn:sequenceFlow id="Flow_08_32" name="5. Frist" sourceRef="GW08_Dritte" targetRef="T08_Verwertung">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen &gt; 4</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_31" name="3. Frist" sourceRef="GW08_Dritte" targetRef="T08_Lager">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen = 3</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_28" sourceRef="E08_Timer" targetRef="GW08_Dritte" />
+    <bpmn:sequenceFlow id="Flow_08_27" sourceRef="GW08_Warten" targetRef="E08_Timer" />
+    <bpmn:sequenceFlow id="Flow_08_26" sourceRef="GW08_Warten" targetRef="E08_Kunde" />
+    <bpmn:sequenceFlow id="Flow_08_75" sourceRef="Merge_08y" targetRef="T08_Erinnern" />
+    <bpmn:sequenceFlow id="Flow_08_33" sourceRef="T08_Lager" targetRef="Merge_08y" />
+    <bpmn:sequenceFlow id="Flow_08_30" name="1., 2. oder 4. Frist" sourceRef="GW08_Dritte" targetRef="Merge_08y">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen &lt; 3 or abholErinnerungen = 4</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_74" sourceRef="Merge_08x" targetRef="GW08_Warten" />
+    <bpmn:sequenceFlow id="Flow_08_76" sourceRef="T08_Erinnern" targetRef="Merge_08x" />
+    <bpmn:sequenceFlow id="Flow_08_25" sourceRef="T08_Benachrichtigung" targetRef="Merge_08x" />
+    <bpmn:sequenceFlow id="Flow_08_24" sourceRef="Merge_08" targetRef="T08_Benachrichtigung" />
+    <bpmn:sequenceFlow id="Flow_08_23" sourceRef="T08_Pauschale" targetRef="Merge_08" />
+    <bpmn:sequenceFlow id="Flow_08_22" sourceRef="T08_Rechnung" targetRef="Merge_08" />
+    <bpmn:sequenceFlow id="Flow_08_21" name="kostenfrei" sourceRef="GW08_Abr" targetRef="Merge_08">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abrechnung = "kostenfrei"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_20" name="Diagnosepauschale" sourceRef="GW08_Abr" targetRef="T08_Pauschale">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abrechnung = "pauschale"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_19" name="Reparatur" sourceRef="GW08_Abr" targetRef="T08_Rechnung">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abrechnung = "reparatur"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_08_18" sourceRef="Start_08" targetRef="GW08_Abr" />
+    <bpmn:dataStoreReference id="DataStore_08_2" name="RepairFlow-Datenbank" dataStoreRef="Store_08_2" />
+    <bpmn:dataStoreReference id="DataStore_08_1" name="Buchhaltung (DATEV-Export)" dataStoreRef="Store_08_1" />
+    <bpmn:dataObjectReference id="DataObjRef_08_5" name="Rechnung [bezahlt]" dataObjectRef="DataObj_08_5" />
+    <bpmn:dataObject id="DataObj_08_5" />
+    <bpmn:dataObjectReference id="DataObjRef_08_4" name="Rechnung [Mahnung]" dataObjectRef="DataObj_08_4" />
+    <bpmn:dataObject id="DataObj_08_4" />
+    <bpmn:dataObjectReference id="DataObjRef_08_3" name="Reparatur-auftrag [abgeholt]" dataObjectRef="DataObj_08_3" />
+    <bpmn:dataObject id="DataObj_08_3" />
+    <bpmn:dataObjectReference id="DataObjRef_08_2" name="Rechnung [offen]" dataObjectRef="DataObj_08_2" />
+    <bpmn:dataObject id="DataObj_08_2" />
+    <bpmn:dataObjectReference id="DataObjRef_08_1" name="Rechnung [offen]" dataObjectRef="DataObj_08_1" />
+    <bpmn:dataObject id="DataObj_08_1" />
+    <bpmn:endEvent id="End_08" name="Auftrag abgeschlossen">
+      <bpmn:incoming>Flow_08_65</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Merge_08f" name="">
+      <bpmn:incoming>Flow_08_63</bpmn:incoming>
+      <bpmn:incoming>Flow_08_34</bpmn:incoming>
+      <bpmn:incoming>Flow_08_58</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_65</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="T08_Rechnung" name="Rechnung aus KVA und Arbeitszeiten erstellen">
+    <bpmn:sendTask id="T08_Bewertung" name="Bewertungsanfrage an Kunde senden">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_rechnung" />
+        <zeebe:taskDefinition type="repairflow.t08_bewertung" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_19</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_22</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="T08_Rechnung_out_DataObjRef_08_1">
-        <bpmn:targetRef>DataObjRef_08_1</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="T08_Pauschale" name="Rechnung über Diagnosepauschale erstellen">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_pauschale" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_20</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_23</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="T08_Pauschale_out_DataObjRef_08_2">
-        <bpmn:targetRef>DataObjRef_08_2</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Merge_08" name="">
-      <bpmn:incoming>Flow_08_21</bpmn:incoming>
-      <bpmn:incoming>Flow_08_22</bpmn:incoming>
-      <bpmn:incoming>Flow_08_23</bpmn:incoming>
-                  <bpmn:outgoing>Flow_08_24</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="T08_Benachrichtigung" name="Abhol-Benachrichtigung an Kunde senden">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_benachrichtigung" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_24</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_25</bpmn:outgoing>
+      <bpmn:incoming>Flow_08_62</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_63</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:exclusiveGateway id="Merge_08x" name="">
-      <bpmn:incoming>Flow_08_25</bpmn:incoming>
-      <bpmn:incoming>Flow_08_76</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_74</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Merge_08y" name="">
-      <bpmn:incoming>Flow_08_30</bpmn:incoming>
-      <bpmn:incoming>Flow_08_33</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_75</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="T08_Erinnern" name="Abhol-Erinnerung senden">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_erinnern" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_75</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_76</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:eventBasedGateway id="GW08_Warten" name="">
-      <bpmn:incoming>Flow_08_74</bpmn:incoming>
-            <bpmn:outgoing>Flow_08_26</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_27</bpmn:outgoing>
-    </bpmn:eventBasedGateway>
-    <bpmn:intermediateCatchEvent id="E08_Timer" name="14 Tage nicht abgeholt">
-      <bpmn:extensionElements>
-        <zeebe:ioMapping>
-          <zeebe:output source="=if abholErinnerungen = null then 1 else abholErinnerungen + 1" target="abholErinnerungen" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_27</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_28</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="E08_Timer_def">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:exclusiveGateway id="GW08_Dritte" name="Anzahl Erinnerungen?">
-      <bpmn:incoming>Flow_08_28</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_30</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_31</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_32</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="T08_Lager" name="Lagergebühr in Rechnung aufnehmen">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_lager" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_31</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_33</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="T08_Verwertung" name="Verwertung des Geräts einleiten">
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="form-t08_verwertung" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_32</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_34</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:intermediateCatchEvent id="E08_Kunde" name="Kunde zur Abholung erschienen">
-      <bpmn:incoming>Flow_08_26</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_35</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="E08_Kunde_def" messageRef="Msg_08_1" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:manualTask id="T08_Holen" name="Gerät aus dem Lager holen">
-      <bpmn:incoming>Flow_08_35</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_36</bpmn:outgoing>
-    </bpmn:manualTask>
-    <bpmn:exclusiveGateway id="GW08_Faellig" name="Zahlung fällig?">
-      <bpmn:incoming>Flow_08_36</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_37</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_38</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="T08_Zahlungsart" name="Zahlungsart erfassen">
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="form-t08_zahlungsart" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_37</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_39</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="GW08_Zahlungsart" name="Zahlungsart?">
-      <bpmn:incoming>Flow_08_39</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_40</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_41</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="T08_Kassieren" name="Zahlung kassieren">
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="form-t08_kassieren" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_40</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_42</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:sendTask id="T08_Versand" name="Rechnung mit Zahlungsziel versenden">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_versand" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_41</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_43</bpmn:outgoing>
-    </bpmn:sendTask>
-    <bpmn:exclusiveGateway id="Join_08a" name="">
-      <bpmn:incoming>Flow_08_38</bpmn:incoming>
-      <bpmn:incoming>Flow_08_42</bpmn:incoming>
-      <bpmn:incoming>Flow_08_43</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_44</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:manualTask id="T08_Uebergabe" name="Reparatur erläutern und Gerät übergeben">
-      <bpmn:incoming>Flow_08_44</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_45</bpmn:outgoing>
-    </bpmn:manualTask>
-    <bpmn:serviceTask id="T08_Abgeholt" name="Auftrag auf 'abgeholt' setzen und schließen">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_abgeholt" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_45</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_46</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="T08_Abgeholt_out_DataObjRef_08_3">
-        <bpmn:targetRef>DataObjRef_08_3</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-      <bpmn:dataOutputAssociation id="T08_Abgeholt_out_DataStore_08_2">
-        <bpmn:targetRef>DataStore_08_2</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="T08_Bestaende" name="Reservierungen und Bestände abschließen">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_bestaende" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=0" target="mahnungen" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_46</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_47</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="GW08_Offen" name="Zahlung?">
-      <bpmn:incoming>Flow_08_47</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_48</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_49</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_50</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Merge_08z" name="">
-      <bpmn:incoming>Flow_08_48</bpmn:incoming>
-      <bpmn:incoming>Flow_08_57</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_51</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:eventBasedGateway id="GW08_WartenZ" name="">
-      <bpmn:incoming>Flow_08_51</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_52</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_53</bpmn:outgoing>
-    </bpmn:eventBasedGateway>
-    <bpmn:intermediateCatchEvent id="E08_Zahlung" name="Zahlung eingegangen">
-      <bpmn:incoming>Flow_08_52</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_59</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="E08_Zahlung_def" messageRef="Msg_08_2" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="E08_TimerZ" name="14 Tage verstrichen">
-      <bpmn:incoming>Flow_08_53</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_54</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="E08_TimerZ_def">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
-    <bpmn:exclusiveGateway id="GW08_Mahnstufe" name="Dritte Mahnung erfolglos?">
-      <bpmn:incoming>Flow_08_54</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_55</bpmn:outgoing>
-      <bpmn:outgoing>Flow_08_56</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="T08_Mahnung" name="Mahnung senden">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_mahnung" />
-        <zeebe:ioMapping>
-          <zeebe:output source="=mahnungen + 1" target="mahnungen" />
-        </zeebe:ioMapping>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_55</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_57</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="T08_Mahnung_out_DataObjRef_08_4">
-        <bpmn:targetRef>DataObjRef_08_4</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:sendTask>
-    <bpmn:userTask id="T08_Inkasso" name="Forderung an Inkasso übergeben">
-      <bpmn:extensionElements>
-        <zeebe:userTask />
-        <zeebe:formDefinition formId="form-t08_inkasso" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_56</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_58</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Merge_08v" name="">
-      <bpmn:incoming>Flow_08_49</bpmn:incoming>
-      <bpmn:incoming>Flow_08_59</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_60</bpmn:outgoing>
+    <bpmn:exclusiveGateway id="Merge_08w" name="">
+      <bpmn:incoming>Flow_08_50</bpmn:incoming>
+      <bpmn:incoming>Flow_08_61</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_62</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="T08_Verbuchen" name="Zahlung verbuchen">
       <bpmn:extensionElements>
@@ -305,118 +184,237 @@
         <bpmn:targetRef>DataStore_08_1</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Merge_08w" name="">
-      <bpmn:incoming>Flow_08_50</bpmn:incoming>
-      <bpmn:incoming>Flow_08_61</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_62</bpmn:outgoing>
+    <bpmn:exclusiveGateway id="Merge_08v" name="">
+      <bpmn:incoming>Flow_08_49</bpmn:incoming>
+      <bpmn:incoming>Flow_08_59</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_60</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="T08_Bewertung" name="Bewertungsanfrage an Kunde senden">
+    <bpmn:userTask id="T08_Inkasso" name="Forderung an Inkasso übergeben">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="repairflow.t08_bewertung" />
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t08_inkasso" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_08_62</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_63</bpmn:outgoing>
+      <bpmn:incoming>Flow_08_56</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_58</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sendTask id="T08_Mahnung" name="Mahnung senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_mahnung" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=mahnungen + 1" target="mahnungen" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_55</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_57</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T08_Mahnung_out_DataObjRef_08_4">
+        <bpmn:targetRef>DataObjRef_08_4</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
     </bpmn:sendTask>
-    <bpmn:exclusiveGateway id="Merge_08f" name="">
-      <bpmn:incoming>Flow_08_63</bpmn:incoming>
-      <bpmn:incoming>Flow_08_34</bpmn:incoming>
-      <bpmn:incoming>Flow_08_58</bpmn:incoming>
-      <bpmn:outgoing>Flow_08_65</bpmn:outgoing>
+    <bpmn:exclusiveGateway id="GW08_Mahnstufe" name="Dritte Mahnung erfolglos?">
+      <bpmn:incoming>Flow_08_54</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_55</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_56</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="End_08" name="Auftrag abgeschlossen">
-      <bpmn:incoming>Flow_08_65</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_08_18" sourceRef="Start_08" targetRef="GW08_Abr" />
-    <bpmn:sequenceFlow id="Flow_08_19" sourceRef="GW08_Abr" targetRef="T08_Rechnung" name="Reparatur">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abrechnung = "reparatur"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_20" sourceRef="GW08_Abr" targetRef="T08_Pauschale" name="Diagnosepauschale">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abrechnung = "pauschale"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_21" sourceRef="GW08_Abr" targetRef="Merge_08" name="kostenfrei">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abrechnung = "kostenfrei"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_22" sourceRef="T08_Rechnung" targetRef="Merge_08" />
-    <bpmn:sequenceFlow id="Flow_08_23" sourceRef="T08_Pauschale" targetRef="Merge_08" />
-    <bpmn:sequenceFlow id="Flow_08_24" sourceRef="Merge_08" targetRef="T08_Benachrichtigung" />
-    <bpmn:sequenceFlow id="Flow_08_25" sourceRef="T08_Benachrichtigung" targetRef="Merge_08x" />
-    <bpmn:sequenceFlow id="Flow_08_26" sourceRef="GW08_Warten" targetRef="E08_Kunde" />
-    <bpmn:sequenceFlow id="Flow_08_27" sourceRef="GW08_Warten" targetRef="E08_Timer" />
-    <bpmn:sequenceFlow id="Flow_08_28" sourceRef="E08_Timer" targetRef="GW08_Dritte" />
-    <bpmn:sequenceFlow id="Flow_08_30" sourceRef="GW08_Dritte" targetRef="Merge_08y" name="&lt; 3 oder = 4">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen &lt; 3 or abholErinnerungen = 4</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_31" sourceRef="GW08_Dritte" targetRef="T08_Lager" name="= 3">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen = 3</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_32" sourceRef="GW08_Dritte" targetRef="T08_Verwertung" name="&gt; 4">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholErinnerungen &gt; 4</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_33" sourceRef="T08_Lager" targetRef="Merge_08y" />
-    <bpmn:sequenceFlow id="Flow_08_34" sourceRef="T08_Verwertung" targetRef="Merge_08f" />
-    <bpmn:sequenceFlow id="Flow_08_35" sourceRef="E08_Kunde" targetRef="T08_Holen" />
-    <bpmn:sequenceFlow id="Flow_08_36" sourceRef="T08_Holen" targetRef="GW08_Faellig" />
-    <bpmn:sequenceFlow id="Flow_08_37" sourceRef="GW08_Faellig" targetRef="T08_Zahlungsart" name="ja">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_38" sourceRef="GW08_Faellig" targetRef="Join_08a" name="nein">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden != true</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_39" sourceRef="T08_Zahlungsart" targetRef="GW08_Zahlungsart" />
-    <bpmn:sequenceFlow id="Flow_08_40" sourceRef="GW08_Zahlungsart" targetRef="T08_Kassieren" name="bar / Karte">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_41" sourceRef="GW08_Zahlungsart" targetRef="T08_Versand" name="auf Rechnung">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart = "rechnung"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_42" sourceRef="T08_Kassieren" targetRef="Join_08a" />
-    <bpmn:sequenceFlow id="Flow_08_43" sourceRef="T08_Versand" targetRef="Join_08a" />
-    <bpmn:sequenceFlow id="Flow_08_44" sourceRef="Join_08a" targetRef="T08_Uebergabe" />
-    <bpmn:sequenceFlow id="Flow_08_45" sourceRef="T08_Uebergabe" targetRef="T08_Abgeholt" />
-    <bpmn:sequenceFlow id="Flow_08_46" sourceRef="T08_Abgeholt" targetRef="T08_Bestaende" />
-    <bpmn:sequenceFlow id="Flow_08_47" sourceRef="T08_Bestaende" targetRef="GW08_Offen" />
-    <bpmn:sequenceFlow id="Flow_08_48" sourceRef="GW08_Offen" targetRef="Merge_08z" name="auf Rechnung">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true and zahlungsart = "rechnung"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_49" sourceRef="GW08_Offen" targetRef="Merge_08v" name="bar / Karte kassiert">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden = true and zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_50" sourceRef="GW08_Offen" targetRef="Merge_08w" name="keine Rechnung">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungVorhanden != true</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_51" sourceRef="Merge_08z" targetRef="GW08_WartenZ" />
-    <bpmn:sequenceFlow id="Flow_08_52" sourceRef="GW08_WartenZ" targetRef="E08_Zahlung" />
-    <bpmn:sequenceFlow id="Flow_08_53" sourceRef="GW08_WartenZ" targetRef="E08_TimerZ" />
-    <bpmn:sequenceFlow id="Flow_08_54" sourceRef="E08_TimerZ" targetRef="GW08_Mahnstufe" />
-    <bpmn:sequenceFlow id="Flow_08_55" sourceRef="GW08_Mahnstufe" targetRef="T08_Mahnung" name="nein">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=mahnungen &lt; 3</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_56" sourceRef="GW08_Mahnstufe" targetRef="T08_Inkasso" name="ja">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=mahnungen &gt;= 3</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_57" sourceRef="T08_Mahnung" targetRef="Merge_08z" />
-    <bpmn:sequenceFlow id="Flow_08_58" sourceRef="T08_Inkasso" targetRef="Merge_08f" />
-    <bpmn:sequenceFlow id="Flow_08_59" sourceRef="E08_Zahlung" targetRef="Merge_08v" />
-    <bpmn:sequenceFlow id="Flow_08_60" sourceRef="Merge_08v" targetRef="T08_Verbuchen" />
-    <bpmn:sequenceFlow id="Flow_08_61" sourceRef="T08_Verbuchen" targetRef="Merge_08w" />
-    <bpmn:sequenceFlow id="Flow_08_62" sourceRef="Merge_08w" targetRef="T08_Bewertung" />
-    <bpmn:sequenceFlow id="Flow_08_63" sourceRef="T08_Bewertung" targetRef="Merge_08f" />
-    <bpmn:sequenceFlow id="Flow_08_65" sourceRef="Merge_08f" targetRef="End_08" />
-    <bpmn:sequenceFlow id="Flow_08_74" sourceRef="Merge_08x" targetRef="GW08_Warten" />
-    <bpmn:sequenceFlow id="Flow_08_75" sourceRef="Merge_08y" targetRef="T08_Erinnern" />
-    <bpmn:sequenceFlow id="Flow_08_76" sourceRef="T08_Erinnern" targetRef="Merge_08x" />
-    <bpmn:dataObjectReference id="DataObjRef_08_1" name="Rechnung [offen]" dataObjectRef="DataObj_08_1" />
-    <bpmn:dataObject id="DataObj_08_1" />
-    <bpmn:dataObjectReference id="DataObjRef_08_2" name="Rechnung [offen]" dataObjectRef="DataObj_08_2" />
-    <bpmn:dataObject id="DataObj_08_2" />
-    <bpmn:dataObjectReference id="DataObjRef_08_3" name="Reparatur-auftrag [abgeholt]" dataObjectRef="DataObj_08_3" />
-    <bpmn:dataObject id="DataObj_08_3" />
-    <bpmn:dataObjectReference id="DataObjRef_08_4" name="Rechnung [Mahnung]" dataObjectRef="DataObj_08_4" />
-    <bpmn:dataObject id="DataObj_08_4" />
-    <bpmn:dataObjectReference id="DataObjRef_08_5" name="Rechnung [bezahlt]" dataObjectRef="DataObj_08_5" />
-    <bpmn:dataObject id="DataObj_08_5" />
-    <bpmn:dataStoreReference id="DataStore_08_1" name="Buchhaltung (DATEV-Export)" dataStoreRef="Store_08_1" />
-    <bpmn:dataStoreReference id="DataStore_08_2" name="RepairFlow-Datenbank" dataStoreRef="Store_08_2" />
+    <bpmn:intermediateCatchEvent id="E08_TimerZ" name="14 Tage verstrichen">
+      <bpmn:incoming>Flow_08_53</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_54</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="E08_TimerZ_def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="E08_Zahlung" name="Zahlung eingegangen">
+      <bpmn:incoming>Flow_08_52</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_59</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="E08_Zahlung_def" messageRef="Msg_08_2" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:eventBasedGateway id="GW08_WartenZ" name="">
+      <bpmn:incoming>Flow_08_51</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_52</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_53</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:exclusiveGateway id="Merge_08z" name="">
+      <bpmn:incoming>Flow_08_48</bpmn:incoming>
+      <bpmn:incoming>Flow_08_57</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_51</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="GW08_Offen" name="Wie wurde gezahlt?">
+      <bpmn:incoming>Flow_08_47</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_48</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_49</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_50</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T08_Bestaende" name="Reservierungen und Bestände abschließen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_bestaende" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=0" target="mahnungen" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_46</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_47</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T08_Abgeholt" name="Auftrag auf &#39;abgeholt&#39; setzen und schließen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_abgeholt" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_45</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_46</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T08_Abgeholt_out_DataObjRef_08_3">
+        <bpmn:targetRef>DataObjRef_08_3</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+      <bpmn:dataOutputAssociation id="T08_Abgeholt_out_DataStore_08_2">
+        <bpmn:targetRef>DataStore_08_2</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:manualTask id="T08_Uebergabe" name="Reparatur erläutern und Gerät übergeben">
+      <bpmn:incoming>Flow_08_44</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_45</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Join_08a" name="">
+      <bpmn:incoming>Flow_08_38</bpmn:incoming>
+      <bpmn:incoming>Flow_08_42</bpmn:incoming>
+      <bpmn:incoming>Flow_08_43</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_44</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="T08_Versand" name="Rechnung mit Zahlungsziel versenden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_versand" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_41</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_43</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:userTask id="T08_Kassieren" name="Zahlung kassieren">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t08_kassieren" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_40</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_42</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW08_Zahlungsart" name="Welche Zahlungsart?">
+      <bpmn:incoming>Flow_08_39</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_40</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_41</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="T08_Zahlungsart" name="Zahlungsart erfassen">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t08_zahlungsart" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_37</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_39</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="GW08_Faellig" name="Zahlung fällig?">
+      <bpmn:incoming>Flow_08_36</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_37</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_38</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T08_Holen" name="Gerät aus dem Lager holen">
+      <bpmn:incoming>Flow_08_35</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_36</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:intermediateCatchEvent id="E08_Kunde" name="Kunde zur Abholung erschienen">
+      <bpmn:incoming>Flow_08_26</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_35</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="E08_Kunde_def" messageRef="Msg_08_1" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="T08_Verwertung" name="Verwertung des Geräts einleiten">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="form-t08_verwertung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_32</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_34</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="T08_Lager" name="Lagergebühr in Rechnung aufnehmen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_lager" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_31</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_33</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="GW08_Dritte" name="Wievielte Frist abgelaufen?">
+      <bpmn:incoming>Flow_08_28</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_30</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_31</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_32</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:intermediateCatchEvent id="E08_Timer" name="14 Tage nicht abgeholt">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=if abholErinnerungen = null then 1 else abholErinnerungen + 1" target="abholErinnerungen" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_27</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_28</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="E08_Timer_def">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P14D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:eventBasedGateway id="GW08_Warten" name="">
+      <bpmn:incoming>Flow_08_74</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_26</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_27</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:sendTask id="T08_Erinnern" name="Abhol-Erinnerung senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_erinnern" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_75</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_76</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="Merge_08y" name="">
+      <bpmn:incoming>Flow_08_30</bpmn:incoming>
+      <bpmn:incoming>Flow_08_33</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_75</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Merge_08x" name="">
+      <bpmn:incoming>Flow_08_25</bpmn:incoming>
+      <bpmn:incoming>Flow_08_76</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_74</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sendTask id="T08_Benachrichtigung" name="Abhol-Benachrichtigung an Kunde senden">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_benachrichtigung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_24</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_25</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="Merge_08" name="">
+      <bpmn:incoming>Flow_08_21</bpmn:incoming>
+      <bpmn:incoming>Flow_08_22</bpmn:incoming>
+      <bpmn:incoming>Flow_08_23</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_24</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="T08_Pauschale" name="Rechnung über Diagnosepauschale erstellen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_pauschale" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_20</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_23</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T08_Pauschale_out_DataObjRef_08_2">
+        <bpmn:targetRef>DataObjRef_08_2</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="T08_Rechnung" name="Rechnung aus KVA und Arbeitszeiten erstellen">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="repairflow.t08_rechnung" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08_19</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_22</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="T08_Rechnung_out_DataObjRef_08_1">
+        <bpmn:targetRef>DataObjRef_08_1</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="GW08_Abr" name="Wie wird abgerechnet?">
+      <bpmn:incoming>Flow_08_18</bpmn:incoming>
+      <bpmn:outgoing>Flow_08_19</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_20</bpmn:outgoing>
+      <bpmn:outgoing>Flow_08_21</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:startEvent id="Start_08" name="Gerät abholbereit">
+      <bpmn:outgoing>Flow_08_18</bpmn:outgoing>
+    </bpmn:startEvent>
   </bpmn:process>
   <bpmn:process id="Proc_08_Kunde" name="Kunde" isExecutable="false">
     <bpmn:startEvent id="K08_Start" name="Abholbenachrichtigung erhalten">
@@ -463,7 +461,7 @@
       <bpmn:incoming>Flow_08_4</bpmn:incoming>
       <bpmn:outgoing>Flow_08_6</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:exclusiveGateway id="K08_GW" name="Zahlungsart?">
+    <bpmn:exclusiveGateway id="K08_GW" name="Welche Zahlungsart?">
       <bpmn:incoming>Flow_08_6</bpmn:incoming>
       <bpmn:outgoing>Flow_08_7</bpmn:outgoing>
       <bpmn:outgoing>Flow_08_8</bpmn:outgoing>
@@ -541,27 +539,27 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_08_1" sourceRef="K08_Start" targetRef="K08_MergeA" />
     <bpmn:sequenceFlow id="Flow_08_3" sourceRef="K08_Abholen" targetRef="K08_GW1" />
-    <bpmn:sequenceFlow id="Flow_08_4" sourceRef="K08_GW1" targetRef="K08_Art" name="ja">
+    <bpmn:sequenceFlow id="Flow_08_4" name="ja" sourceRef="K08_GW1" targetRef="K08_Art">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungFaellig</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_5" sourceRef="K08_GW1" targetRef="K08_Join1" name="nein">
+    <bpmn:sequenceFlow id="Flow_08_5" name="nein" sourceRef="K08_GW1" targetRef="K08_Join1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(zahlungFaellig)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_6" sourceRef="K08_Art" targetRef="K08_GW" />
-    <bpmn:sequenceFlow id="Flow_08_7" sourceRef="K08_GW" targetRef="K08_Bar" name="bar / Karte">
+    <bpmn:sequenceFlow id="Flow_08_7" name="bar / Karte" sourceRef="K08_GW" targetRef="K08_Bar">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart in ["bar", "karte"]</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_8" sourceRef="K08_GW" targetRef="K08_Rechnung" name="auf Rechnung">
+    <bpmn:sequenceFlow id="Flow_08_8" name="auf Rechnung" sourceRef="K08_GW" targetRef="K08_Rechnung">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=zahlungsart = "rechnung"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_9" sourceRef="K08_Bar" targetRef="K08_Join1" />
     <bpmn:sequenceFlow id="Flow_08_10" sourceRef="K08_Rechnung" targetRef="K08_Join1" />
     <bpmn:sequenceFlow id="Flow_08_11" sourceRef="K08_Join1" targetRef="K08_Geraet" />
     <bpmn:sequenceFlow id="Flow_08_12" sourceRef="K08_Geraet" targetRef="K08_GW2" />
-    <bpmn:sequenceFlow id="Flow_08_13" sourceRef="K08_GW2" targetRef="K08_MergeZ" name="ja">
+    <bpmn:sequenceFlow id="Flow_08_13" name="ja" sourceRef="K08_GW2" targetRef="K08_MergeZ">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=rechnungOffen</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_14" sourceRef="K08_GW2" targetRef="K08_Join2" name="nein">
+    <bpmn:sequenceFlow id="Flow_08_14" name="nein" sourceRef="K08_GW2" targetRef="K08_Join2">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(rechnungOffen)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_15" sourceRef="K08_Ueberweisen" targetRef="K08_Join2" />
@@ -575,17 +573,16 @@
     <bpmn:sequenceFlow id="Flow_08_72" sourceRef="K08_JoinE" targetRef="K08_End" />
     <bpmn:sequenceFlow id="Flow_08_73" sourceRef="K08_Mahnung" targetRef="K08_MergeZ" />
     <bpmn:sequenceFlow id="Flow_08_77" sourceRef="K08_MergeA" targetRef="K08_GWA" />
-    <bpmn:sequenceFlow id="Flow_08_78" sourceRef="K08_GWA" targetRef="K08_Abholen" name="ja">
+    <bpmn:sequenceFlow id="Flow_08_78" name="ja" sourceRef="K08_GWA" targetRef="K08_Abholen">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=abholungMoeglich</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08_79" sourceRef="K08_GWA" targetRef="K08_WartenA" name="nein">
+    <bpmn:sequenceFlow id="Flow_08_79" name="nein" sourceRef="K08_GWA" targetRef="K08_WartenA">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(abholungMoeglich)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_08_80" sourceRef="K08_WartenA" targetRef="K08_Erinnerung" />
     <bpmn:sequenceFlow id="Flow_08_81" sourceRef="K08_Erinnerung" targetRef="K08_MergeA" />
     <bpmn:sequenceFlow id="Flow_08_82" sourceRef="K08_WartenA" targetRef="K08_TimerA" />
     <bpmn:sequenceFlow id="Flow_08_83" sourceRef="K08_TimerA" targetRef="K08_JoinE" />
-
   </bpmn:process>
   <bpmn:dataStore id="Store_08_1" name="Buchhaltung (DATEV-Export)" />
   <bpmn:dataStore id="Store_08_2" name="RepairFlow-Datenbank" />
@@ -620,27 +617,21 @@
   <bpmndi:BPMNDiagram id="Diagram_08">
     <bpmndi:BPMNPlane id="Plane_08" bpmnElement="Collab_08">
       <bpmndi:BPMNShape id="Part_08_Werkstatt_di" bpmnElement="Part_08_Werkstatt" isHorizontal="true">
-        <dc:Bounds x="120" y="590" width="5100" height="855" />
+        <dc:Bounds x="120" y="590" width="5100" height="890" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_08_1_di" bpmnElement="Lane_08_1" isHorizontal="true">
-        <dc:Bounds x="150" y="590" width="5070" height="685" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_08_2_di" bpmnElement="Lane_08_2" isHorizontal="true">
-        <dc:Bounds x="150" y="1275" width="5070" height="170" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Part_08_Kunde_di" bpmnElement="Part_08_Kunde" isHorizontal="true">
-        <dc:Bounds x="120" y="55" width="5100" height="385" />
+        <dc:Bounds x="150" y="590" width="5070" height="890" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Start_08_di" bpmnElement="Start_08">
         <dc:Bounds x="227" y="837" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="195" y="879" width="100" height="14" />
+          <dc:Bounds x="203" y="879" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Abr_di" bpmnElement="GW08_Abr" isMarkerVisible="true">
         <dc:Bounds x="410" y="830" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="400" y="884" width="70" height="14" />
+          <dc:Bounds x="401" y="884" width="68" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Rechnung_di" bpmnElement="T08_Rechnung">
@@ -655,19 +646,28 @@
       <bpmndi:BPMNShape id="T08_Benachrichtigung_di" bpmnElement="T08_Benachrichtigung">
         <dc:Bounds x="940" y="815" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Merge_08x_di" bpmnElement="Merge_08x" isMarkerVisible="true">
+        <dc:Bounds x="1130" y="830" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Merge_08y_di" bpmnElement="Merge_08y" isMarkerVisible="true">
+        <dc:Bounds x="1260" y="1060" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T08_Erinnern_di" bpmnElement="T08_Erinnern">
+        <dc:Bounds x="1090" y="1045" width="130" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Warten_di" bpmnElement="GW08_Warten">
         <dc:Bounds x="1400" y="830" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E08_Timer_di" bpmnElement="E08_Timer">
         <dc:Bounds x="1407" y="952" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1450" y="956" width="80" height="27" />
+          <dc:Bounds x="1457" y="956" width="66" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Dritte_di" bpmnElement="GW08_Dritte" isMarkerVisible="true">
         <dc:Bounds x="1400" y="1060" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1265" y="1038" width="130" height="14" />
+          <dc:Bounds x="1345" y="1021" width="70" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Lager_di" bpmnElement="T08_Lager">
@@ -679,7 +679,7 @@
       <bpmndi:BPMNShape id="E08_Kunde_di" bpmnElement="E08_Kunde">
         <dc:Bounds x="1587" y="837" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1560" y="879" width="90" height="27" />
+          <dc:Bounds x="1578" y="879" width="54" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Holen_di" bpmnElement="T08_Holen">
@@ -688,7 +688,7 @@
       <bpmndi:BPMNShape id="GW08_Faellig_di" bpmnElement="GW08_Faellig" isMarkerVisible="true">
         <dc:Bounds x="1900" y="1335" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1885" y="1389" width="80" height="14" />
+          <dc:Bounds x="1889" y="1389" width="72" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Zahlungsart_di" bpmnElement="T08_Zahlungsart">
@@ -697,7 +697,7 @@
       <bpmndi:BPMNShape id="GW08_Zahlungsart_di" bpmnElement="GW08_Zahlungsart" isMarkerVisible="true">
         <dc:Bounds x="2220" y="830" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2172" y="812" width="70" height="14" />
+          <dc:Bounds x="2173" y="810" width="65" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Kassieren_di" bpmnElement="T08_Kassieren">
@@ -721,7 +721,7 @@
       <bpmndi:BPMNShape id="GW08_Offen_di" bpmnElement="GW08_Offen" isMarkerVisible="true">
         <dc:Bounds x="3400" y="830" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3400" y="812" width="50" height="14" />
+          <dc:Bounds x="3399" y="803" width="52" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Merge_08z_di" bpmnElement="Merge_08z" isMarkerVisible="true">
@@ -733,19 +733,19 @@
       <bpmndi:BPMNShape id="E08_Zahlung_di" bpmnElement="E08_Zahlung">
         <dc:Bounds x="3987" y="837" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3950" y="879" width="110" height="14" />
+          <dc:Bounds x="3973" y="879" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="E08_TimerZ_di" bpmnElement="E08_TimerZ">
         <dc:Bounds x="3797" y="952" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3767" y="994" width="96" height="14" />
+          <dc:Bounds x="3788" y="994" width="54" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="GW08_Mahnstufe_di" bpmnElement="GW08_Mahnstufe" isMarkerVisible="true">
         <dc:Bounds x="3980" y="945" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3945" y="913" width="130" height="14" />
+          <dc:Bounds x="3972" y="913" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T08_Mahnung_di" bpmnElement="T08_Mahnung">
@@ -772,13 +772,345 @@
       <bpmndi:BPMNShape id="End_08_di" bpmnElement="End_08">
         <dc:Bounds x="5107" y="952" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="5080" y="994" width="90" height="27" />
+          <dc:Bounds x="5088" y="994" width="74" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_08_1_di" bpmnElement="DataObjRef_08_1">
+        <dc:Bounds x="597" y="925" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499" y="943" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_08_2_di" bpmnElement="DataObjRef_08_2">
+        <dc:Bounds x="705" y="670" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="679" y="648" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_08_3_di" bpmnElement="DataObjRef_08_3">
+        <dc:Bounds x="3057" y="725" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2957" y="735" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_08_4_di" bpmnElement="DataObjRef_08_4">
+        <dc:Bounds x="3860" y="1100" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3929" y="1118" width="52" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_08_5_di" bpmnElement="DataObjRef_08_5">
+        <dc:Bounds x="4467" y="725" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4385" y="735" width="51" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_08_1_di" bpmnElement="DataStore_08_1">
+        <dc:Bounds x="4560" y="725" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4631" y="735" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_08_2_di" bpmnElement="DataStore_08_2">
+        <dc:Bounds x="3050" y="935" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3045" y="990" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_08_18_di" bpmnElement="Flow_08_18">
+        <di:waypoint x="263" y="855" />
+        <di:waypoint x="410" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_19_di" bpmnElement="Flow_08_19">
+        <di:waypoint x="460" y="855" />
+        <di:waypoint x="550" y="855" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="473" y="835" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_20_di" bpmnElement="Flow_08_20">
+        <di:waypoint x="435" y="830" />
+        <di:waypoint x="435" y="735" />
+        <di:waypoint x="550" y="735" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="450" y="713" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_21_di" bpmnElement="Flow_08_21">
+        <di:waypoint x="435" y="830" />
+        <di:waypoint x="435" y="625" />
+        <di:waypoint x="815" y="625" />
+        <di:waypoint x="815" y="830" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="451" y="605" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_22_di" bpmnElement="Flow_08_22">
+        <di:waypoint x="680" y="855" />
+        <di:waypoint x="790" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_23_di" bpmnElement="Flow_08_23">
+        <di:waypoint x="680" y="735" />
+        <di:waypoint x="815" y="735" />
+        <di:waypoint x="815" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_24_di" bpmnElement="Flow_08_24">
+        <di:waypoint x="840" y="855" />
+        <di:waypoint x="940" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_25_di" bpmnElement="Flow_08_25">
+        <di:waypoint x="1070" y="855" />
+        <di:waypoint x="1130" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_26_di" bpmnElement="Flow_08_26">
+        <di:waypoint x="1450" y="855" />
+        <di:waypoint x="1587" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_27_di" bpmnElement="Flow_08_27">
+        <di:waypoint x="1425" y="880" />
+        <di:waypoint x="1425" y="952" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_28_di" bpmnElement="Flow_08_28">
+        <di:waypoint x="1425" y="988" />
+        <di:waypoint x="1425" y="1060" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_30_di" bpmnElement="Flow_08_30">
+        <di:waypoint x="1400" y="1085" />
+        <di:waypoint x="1310" y="1085" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1312" y="1066" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_31_di" bpmnElement="Flow_08_31">
+        <di:waypoint x="1425" y="1110" />
+        <di:waypoint x="1425" y="1160" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1430" y="1121" width="34" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_32_di" bpmnElement="Flow_08_32">
+        <di:waypoint x="1450" y="1085" />
+        <di:waypoint x="1530" y="1085" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1458" y="1066" width="34" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_33_di" bpmnElement="Flow_08_33">
+        <di:waypoint x="1360" y="1200" />
+        <di:waypoint x="1285" y="1200" />
+        <di:waypoint x="1285" y="1110" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_34_di" bpmnElement="Flow_08_34">
+        <di:waypoint x="1595" y="1125" />
+        <di:waypoint x="1595" y="1420" />
+        <di:waypoint x="4965" y="1420" />
+        <di:waypoint x="4965" y="995" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_35_di" bpmnElement="Flow_08_35">
+        <di:waypoint x="1623" y="855" />
+        <di:waypoint x="1765" y="855" />
+        <di:waypoint x="1765" y="1320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_36_di" bpmnElement="Flow_08_36">
+        <di:waypoint x="1830" y="1360" />
+        <di:waypoint x="1900" y="1360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_37_di" bpmnElement="Flow_08_37">
+        <di:waypoint x="1925" y="1335" />
+        <di:waypoint x="1925" y="855" />
+        <di:waypoint x="2020" y="855" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1938" y="1300" width="9" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_38_di" bpmnElement="Flow_08_38">
+        <di:waypoint x="1950" y="1360" />
+        <di:waypoint x="2700" y="1360" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1959" y="1340" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_39_di" bpmnElement="Flow_08_39">
+        <di:waypoint x="2150" y="855" />
+        <di:waypoint x="2220" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_40_di" bpmnElement="Flow_08_40">
+        <di:waypoint x="2270" y="855" />
+        <di:waypoint x="2340" y="855" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2278" y="835" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_41_di" bpmnElement="Flow_08_41">
+        <di:waypoint x="2245" y="880" />
+        <di:waypoint x="2245" y="970" />
+        <di:waypoint x="2500" y="970" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2253" y="948" width="69" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_42_di" bpmnElement="Flow_08_42">
+        <di:waypoint x="2470" y="855" />
+        <di:waypoint x="2725" y="855" />
+        <di:waypoint x="2725" y="1335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_43_di" bpmnElement="Flow_08_43">
+        <di:waypoint x="2630" y="970" />
+        <di:waypoint x="2725" y="970" />
+        <di:waypoint x="2725" y="1335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_44_di" bpmnElement="Flow_08_44">
+        <di:waypoint x="2750" y="1360" />
+        <di:waypoint x="2820" y="1360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_45_di" bpmnElement="Flow_08_45">
+        <di:waypoint x="2950" y="1360" />
+        <di:waypoint x="2980" y="1360" />
+        <di:waypoint x="2980" y="855" />
+        <di:waypoint x="3010" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_46_di" bpmnElement="Flow_08_46">
+        <di:waypoint x="3140" y="855" />
+        <di:waypoint x="3200" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_47_di" bpmnElement="Flow_08_47">
+        <di:waypoint x="3330" y="855" />
+        <di:waypoint x="3400" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_48_di" bpmnElement="Flow_08_48">
+        <di:waypoint x="3450" y="855" />
+        <di:waypoint x="3540" y="855" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3456" y="835" width="69" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_49_di" bpmnElement="Flow_08_49">
+        <di:waypoint x="3425" y="880" />
+        <di:waypoint x="3425" y="1185" />
+        <di:waypoint x="4325" y="1185" />
+        <di:waypoint x="4325" y="880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3459" y="1165" width="52" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_50_di" bpmnElement="Flow_08_50">
+        <di:waypoint x="3425" y="880" />
+        <di:waypoint x="3425" y="1235" />
+        <di:waypoint x="4645" y="1235" />
+        <di:waypoint x="4645" y="880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3435" y="1215" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_51_di" bpmnElement="Flow_08_51">
+        <di:waypoint x="3590" y="855" />
+        <di:waypoint x="3790" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_52_di" bpmnElement="Flow_08_52">
+        <di:waypoint x="3840" y="855" />
+        <di:waypoint x="3987" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_53_di" bpmnElement="Flow_08_53">
+        <di:waypoint x="3815" y="880" />
+        <di:waypoint x="3815" y="952" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_54_di" bpmnElement="Flow_08_54">
+        <di:waypoint x="3833" y="970" />
+        <di:waypoint x="3980" y="970" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_55_di" bpmnElement="Flow_08_55">
+        <di:waypoint x="4005" y="995" />
+        <di:waypoint x="4005" y="1085" />
+        <di:waypoint x="3770" y="1085" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4014" y="1003" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_56_di" bpmnElement="Flow_08_56">
+        <di:waypoint x="4030" y="970" />
+        <di:waypoint x="4100" y="970" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4044" y="950" width="9" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_57_di" bpmnElement="Flow_08_57">
+        <di:waypoint x="3640" y="1085" />
+        <di:waypoint x="3565" y="1085" />
+        <di:waypoint x="3565" y="880" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_58_di" bpmnElement="Flow_08_58">
+        <di:waypoint x="4230" y="970" />
+        <di:waypoint x="4940" y="970" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_59_di" bpmnElement="Flow_08_59">
+        <di:waypoint x="4023" y="855" />
+        <di:waypoint x="4300" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_60_di" bpmnElement="Flow_08_60">
+        <di:waypoint x="4350" y="855" />
+        <di:waypoint x="4420" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_61_di" bpmnElement="Flow_08_61">
+        <di:waypoint x="4550" y="855" />
+        <di:waypoint x="4620" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_62_di" bpmnElement="Flow_08_62">
+        <di:waypoint x="4670" y="855" />
+        <di:waypoint x="4740" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_63_di" bpmnElement="Flow_08_63">
+        <di:waypoint x="4870" y="855" />
+        <di:waypoint x="4965" y="855" />
+        <di:waypoint x="4965" y="945" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_65_di" bpmnElement="Flow_08_65">
+        <di:waypoint x="4990" y="970" />
+        <di:waypoint x="5107" y="970" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_74_di" bpmnElement="Flow_08_74">
+        <di:waypoint x="1180" y="855" />
+        <di:waypoint x="1400" y="855" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_75_di" bpmnElement="Flow_08_75">
+        <di:waypoint x="1260" y="1085" />
+        <di:waypoint x="1220" y="1085" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08_76_di" bpmnElement="Flow_08_76">
+        <di:waypoint x="1155" y="1045" />
+        <di:waypoint x="1155" y="880" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Part_08_Kunde_di" bpmnElement="Part_08_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="5100" height="385" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Start_di" bpmnElement="K08_Start">
         <dc:Bounds x="987" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="940" y="136" width="130" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_MergeA_di" bpmnElement="K08_MergeA" isMarkerVisible="true">
+        <dc:Bounds x="1085" y="165" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_GWA_di" bpmnElement="K08_GWA" isMarkerVisible="true">
+        <dc:Bounds x="1170" y="165" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1148" y="132" width="100" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_WartenA_di" bpmnElement="K08_WartenA">
+        <dc:Bounds x="1170" y="290" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_Erinnerung_di" bpmnElement="K08_Erinnerung">
+        <dc:Bounds x="1092" y="297" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1010" y="300" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K08_TimerA_di" bpmnElement="K08_TimerA">
+        <dc:Bounds x="1290" y="297" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1332" y="300" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Abholen_di" bpmnElement="K08_Abholen">
@@ -796,7 +1128,7 @@
       <bpmndi:BPMNShape id="K08_GW_di" bpmnElement="K08_GW" isMarkerVisible="true">
         <dc:Bounds x="2220" y="165" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2210" y="141" width="70" height="14" />
+          <dc:Bounds x="2213" y="136" width="65" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="K08_Bar_di" bpmnElement="K08_Bar">
@@ -860,48 +1192,6 @@
         <dc:Bounds x="5107" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="5085" y="214" width="80" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_08_1_di" bpmnElement="DataObjRef_08_1">
-        <dc:Bounds x="597" y="925" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="488" y="943" width="105" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_08_2_di" bpmnElement="DataObjRef_08_2">
-        <dc:Bounds x="705" y="670" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="668" y="648" width="105" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_08_3_di" bpmnElement="DataObjRef_08_3">
-        <dc:Bounds x="3057" y="725" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2950" y="735" width="100" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_08_4_di" bpmnElement="DataObjRef_08_4">
-        <dc:Bounds x="3860" y="1100" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3902" y="1118" width="105" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_08_5_di" bpmnElement="DataObjRef_08_5">
-        <dc:Bounds x="4467" y="725" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4360" y="735" width="100" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStore_08_1_di" bpmnElement="DataStore_08_1">
-        <dc:Bounds x="4560" y="725" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4615" y="735" width="110" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStore_08_2_di" bpmnElement="DataStore_08_2">
-        <dc:Bounds x="3050" y="935" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3020" y="990" width="110" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_08_1_di" bpmnElement="Flow_08_1">
@@ -1024,399 +1314,6 @@
         <di:waypoint x="3565" y="400" />
         <di:waypoint x="3565" y="215" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_18_di" bpmnElement="Flow_08_18">
-        <di:waypoint x="263" y="855" />
-        <di:waypoint x="410" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_19_di" bpmnElement="Flow_08_19">
-        <di:waypoint x="460" y="855" />
-        <di:waypoint x="550" y="855" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="470" y="835" width="55" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_20_di" bpmnElement="Flow_08_20">
-        <di:waypoint x="435" y="830" />
-        <di:waypoint x="435" y="735" />
-        <di:waypoint x="550" y="735" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="442" y="713" width="105" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_21_di" bpmnElement="Flow_08_21">
-        <di:waypoint x="435" y="830" />
-        <di:waypoint x="435" y="625" />
-        <di:waypoint x="815" y="625" />
-        <di:waypoint x="815" y="830" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="445" y="605" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_22_di" bpmnElement="Flow_08_22">
-        <di:waypoint x="680" y="855" />
-        <di:waypoint x="790" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_23_di" bpmnElement="Flow_08_23">
-        <di:waypoint x="680" y="735" />
-        <di:waypoint x="815" y="735" />
-        <di:waypoint x="815" y="830" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_24_di" bpmnElement="Flow_08_24">
-        <di:waypoint x="840" y="855" />
-        <di:waypoint x="940" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_25_di" bpmnElement="Flow_08_25">
-        <di:waypoint x="1070" y="855" />
-        <di:waypoint x="1130" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_26_di" bpmnElement="Flow_08_26">
-        <di:waypoint x="1450" y="855" />
-        <di:waypoint x="1587" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_27_di" bpmnElement="Flow_08_27">
-        <di:waypoint x="1425" y="880" />
-        <di:waypoint x="1425" y="952" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_28_di" bpmnElement="Flow_08_28">
-        <di:waypoint x="1425" y="988" />
-        <di:waypoint x="1425" y="1060" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_30_di" bpmnElement="Flow_08_30">
-        <di:waypoint x="1400" y="1085" />
-        <di:waypoint x="1310" y="1085" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1312" y="1066" width="85" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_31_di" bpmnElement="Flow_08_31">
-        <di:waypoint x="1425" y="1110" />
-        <di:waypoint x="1425" y="1160" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1432" y="1121" width="30" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_32_di" bpmnElement="Flow_08_32">
-        <di:waypoint x="1450" y="1085" />
-        <di:waypoint x="1530" y="1085" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1460" y="1066" width="30" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_33_di" bpmnElement="Flow_08_33">
-        <di:waypoint x="1360" y="1200" />
-        <di:waypoint x="1285" y="1200" />
-        <di:waypoint x="1285" y="1110" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_34_di" bpmnElement="Flow_08_34">
-        <di:waypoint x="1595" y="1125" />
-        <di:waypoint x="1595" y="1420" />
-        <di:waypoint x="4965" y="1420" />
-        <di:waypoint x="4965" y="995" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_35_di" bpmnElement="Flow_08_35">
-        <di:waypoint x="1623" y="855" />
-        <di:waypoint x="1765" y="855" />
-        <di:waypoint x="1765" y="1320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_36_di" bpmnElement="Flow_08_36">
-        <di:waypoint x="1830" y="1360" />
-        <di:waypoint x="1900" y="1360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_37_di" bpmnElement="Flow_08_37">
-        <di:waypoint x="1925" y="1335" />
-        <di:waypoint x="1925" y="855" />
-        <di:waypoint x="2020" y="855" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1932" y="1300" width="20" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_38_di" bpmnElement="Flow_08_38">
-        <di:waypoint x="1950" y="1360" />
-        <di:waypoint x="2700" y="1360" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1957" y="1340" width="25" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_39_di" bpmnElement="Flow_08_39">
-        <di:waypoint x="2150" y="855" />
-        <di:waypoint x="2220" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_40_di" bpmnElement="Flow_08_40">
-        <di:waypoint x="2270" y="855" />
-        <di:waypoint x="2340" y="855" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2273" y="835" width="62" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_41_di" bpmnElement="Flow_08_41">
-        <di:waypoint x="2245" y="880" />
-        <di:waypoint x="2245" y="970" />
-        <di:waypoint x="2500" y="970" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2252" y="948" width="70" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_42_di" bpmnElement="Flow_08_42">
-        <di:waypoint x="2470" y="855" />
-        <di:waypoint x="2725" y="855" />
-        <di:waypoint x="2725" y="1335" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_43_di" bpmnElement="Flow_08_43">
-        <di:waypoint x="2630" y="970" />
-        <di:waypoint x="2725" y="970" />
-        <di:waypoint x="2725" y="1335" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_44_di" bpmnElement="Flow_08_44">
-        <di:waypoint x="2750" y="1360" />
-        <di:waypoint x="2820" y="1360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_45_di" bpmnElement="Flow_08_45">
-        <di:waypoint x="2950" y="1360" />
-        <di:waypoint x="2980" y="1360" />
-        <di:waypoint x="2980" y="855" />
-        <di:waypoint x="3010" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_46_di" bpmnElement="Flow_08_46">
-        <di:waypoint x="3140" y="855" />
-        <di:waypoint x="3200" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_47_di" bpmnElement="Flow_08_47">
-        <di:waypoint x="3330" y="855" />
-        <di:waypoint x="3400" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_48_di" bpmnElement="Flow_08_48">
-        <di:waypoint x="3450" y="855" />
-        <di:waypoint x="3540" y="855" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3455" y="835" width="70" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_49_di" bpmnElement="Flow_08_49">
-        <di:waypoint x="3425" y="880" />
-        <di:waypoint x="3425" y="1185" />
-        <di:waypoint x="4325" y="1185" />
-        <di:waypoint x="4325" y="880" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3435" y="1165" width="100" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_50_di" bpmnElement="Flow_08_50">
-        <di:waypoint x="3425" y="880" />
-        <di:waypoint x="3425" y="1235" />
-        <di:waypoint x="4645" y="1235" />
-        <di:waypoint x="4645" y="880" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3435" y="1215" width="80" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_51_di" bpmnElement="Flow_08_51">
-        <di:waypoint x="3590" y="855" />
-        <di:waypoint x="3790" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_52_di" bpmnElement="Flow_08_52">
-        <di:waypoint x="3840" y="855" />
-        <di:waypoint x="3987" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_53_di" bpmnElement="Flow_08_53">
-        <di:waypoint x="3815" y="880" />
-        <di:waypoint x="3815" y="952" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_54_di" bpmnElement="Flow_08_54">
-        <di:waypoint x="3833" y="970" />
-        <di:waypoint x="3980" y="970" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_55_di" bpmnElement="Flow_08_55">
-        <di:waypoint x="4005" y="995" />
-        <di:waypoint x="4005" y="1085" />
-        <di:waypoint x="3770" y="1085" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4012" y="1003" width="25" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_56_di" bpmnElement="Flow_08_56">
-        <di:waypoint x="4030" y="970" />
-        <di:waypoint x="4100" y="970" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4038" y="950" width="20" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_57_di" bpmnElement="Flow_08_57">
-        <di:waypoint x="3640" y="1085" />
-        <di:waypoint x="3565" y="1085" />
-        <di:waypoint x="3565" y="880" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_58_di" bpmnElement="Flow_08_58">
-        <di:waypoint x="4230" y="970" />
-        <di:waypoint x="4940" y="970" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_59_di" bpmnElement="Flow_08_59">
-        <di:waypoint x="4023" y="855" />
-        <di:waypoint x="4300" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_60_di" bpmnElement="Flow_08_60">
-        <di:waypoint x="4350" y="855" />
-        <di:waypoint x="4420" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_61_di" bpmnElement="Flow_08_61">
-        <di:waypoint x="4550" y="855" />
-        <di:waypoint x="4620" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_62_di" bpmnElement="Flow_08_62">
-        <di:waypoint x="4670" y="855" />
-        <di:waypoint x="4740" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_63_di" bpmnElement="Flow_08_63">
-        <di:waypoint x="4870" y="855" />
-        <di:waypoint x="4965" y="855" />
-        <di:waypoint x="4965" y="945" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_65_di" bpmnElement="Flow_08_65">
-        <di:waypoint x="4990" y="970" />
-        <di:waypoint x="5107" y="970" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_1_di" bpmnElement="MsgFlow_08_1">
-        <di:waypoint x="1005" y="815" />
-        <di:waypoint x="1005" y="208" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1013" y="497" width="110" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_2_di" bpmnElement="MsgFlow_08_2">
-        <di:waypoint x="1605" y="230" />
-        <di:waypoint x="1605" y="837" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1613" y="505" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_3_di" bpmnElement="MsgFlow_08_3">
-        <di:waypoint x="2085" y="230" />
-        <di:waypoint x="2085" y="815" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2093" y="505" width="70" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_4_di" bpmnElement="MsgFlow_08_4">
-        <di:waypoint x="2405" y="230" />
-        <di:waypoint x="2405" y="815" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2413" y="497" width="90" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_5_di" bpmnElement="MsgFlow_08_5">
-        <di:waypoint x="2565" y="930" />
-        <di:waypoint x="2565" y="318" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2573" y="505" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_6_di" bpmnElement="MsgFlow_08_6">
-        <di:waypoint x="2885" y="1320" />
-        <di:waypoint x="2885" y="208" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2893" y="505" width="100" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_7_di" bpmnElement="MsgFlow_08_7">
-        <di:waypoint x="4005" y="230" />
-        <di:waypoint x="4005" y="837" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4013" y="505" width="50" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_8_di" bpmnElement="MsgFlow_08_8">
-        <di:waypoint x="3690" y="1045" />
-        <di:waypoint x="3690" y="418" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3698" y="505" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_9_di" bpmnElement="MsgFlow_08_9">
-        <di:waypoint x="4805" y="815" />
-        <di:waypoint x="4805" y="208" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="4813" y="505" width="100" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Rechnung_out_DataObjRef_08_1_di" bpmnElement="T08_Rechnung_out_DataObjRef_08_1">
-        <di:waypoint x="615" y="895" />
-        <di:waypoint x="615" y="925" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Pauschale_out_DataObjRef_08_2_di" bpmnElement="T08_Pauschale_out_DataObjRef_08_2">
-        <di:waypoint x="680" y="712" />
-        <di:waypoint x="705" y="702" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Abgeholt_out_DataObjRef_08_3_di" bpmnElement="T08_Abgeholt_out_DataObjRef_08_3">
-        <di:waypoint x="3075" y="815" />
-        <di:waypoint x="3075" y="775" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Mahnung_out_DataObjRef_08_4_di" bpmnElement="T08_Mahnung_out_DataObjRef_08_4">
-        <di:waypoint x="3770" y="1110" />
-        <di:waypoint x="3860" y="1122" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Verbuchen_out_DataObjRef_08_5_di" bpmnElement="T08_Verbuchen_out_DataObjRef_08_5">
-        <di:waypoint x="4485" y="815" />
-        <di:waypoint x="4485" y="775" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Verbuchen_out_DataStore_08_1_di" bpmnElement="T08_Verbuchen_out_DataStore_08_1">
-        <di:waypoint x="4540" y="815" />
-        <di:waypoint x="4570" y="775" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T08_Abgeholt_out_DataStore_08_2_di" bpmnElement="T08_Abgeholt_out_DataStore_08_2">
-        <di:waypoint x="3075" y="895" />
-        <di:waypoint x="3075" y="935" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Merge_08x_di" bpmnElement="Merge_08x" isMarkerVisible="true">
-        <dc:Bounds x="1130" y="830" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Merge_08y_di" bpmnElement="Merge_08y" isMarkerVisible="true">
-        <dc:Bounds x="1260" y="1060" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="T08_Erinnern_di" bpmnElement="T08_Erinnern">
-        <dc:Bounds x="1090" y="1045" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_08_74_di" bpmnElement="Flow_08_74">
-        <di:waypoint x="1180" y="855" />
-        <di:waypoint x="1400" y="855" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_75_di" bpmnElement="Flow_08_75">
-        <di:waypoint x="1260" y="1085" />
-        <di:waypoint x="1220" y="1085" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08_76_di" bpmnElement="Flow_08_76">
-        <di:waypoint x="1155" y="1045" />
-        <di:waypoint x="1155" y="880" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="MsgFlow_08_10_di" bpmnElement="MsgFlow_08_10">
-        <di:waypoint x="1110" y="1045" />
-        <di:waypoint x="1110" y="333" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1030" y="600" width="72" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="K08_MergeA_di" bpmnElement="K08_MergeA" isMarkerVisible="true">
-        <dc:Bounds x="1085" y="165" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K08_GWA_di" bpmnElement="K08_GWA" isMarkerVisible="true">
-        <dc:Bounds x="1170" y="165" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1148" y="132" width="100" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K08_WartenA_di" bpmnElement="K08_WartenA">
-        <dc:Bounds x="1170" y="290" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K08_Erinnerung_di" bpmnElement="K08_Erinnerung">
-        <dc:Bounds x="1092" y="297" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1010" y="300" width="78" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K08_TimerA_di" bpmnElement="K08_TimerA">
-        <dc:Bounds x="1290" y="297" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1332" y="300" width="110" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_08_77_di" bpmnElement="Flow_08_77">
         <di:waypoint x="1135" y="190" />
         <di:waypoint x="1170" y="190" />
@@ -1452,6 +1349,104 @@
         <di:waypoint x="1308" y="430" />
         <di:waypoint x="4965" y="430" />
         <di:waypoint x="4965" y="215" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Rechnung_out_DataObjRef_08_1_di" bpmnElement="T08_Rechnung_out_DataObjRef_08_1">
+        <di:waypoint x="615" y="895" />
+        <di:waypoint x="615" y="925" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Pauschale_out_DataObjRef_08_2_di" bpmnElement="T08_Pauschale_out_DataObjRef_08_2">
+        <di:waypoint x="680" y="712" />
+        <di:waypoint x="705" y="702" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Abgeholt_out_DataObjRef_08_3_di" bpmnElement="T08_Abgeholt_out_DataObjRef_08_3">
+        <di:waypoint x="3075" y="815" />
+        <di:waypoint x="3075" y="775" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Abgeholt_out_DataStore_08_2_di" bpmnElement="T08_Abgeholt_out_DataStore_08_2">
+        <di:waypoint x="3075" y="895" />
+        <di:waypoint x="3075" y="935" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Mahnung_out_DataObjRef_08_4_di" bpmnElement="T08_Mahnung_out_DataObjRef_08_4">
+        <di:waypoint x="3770" y="1110" />
+        <di:waypoint x="3860" y="1122" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Verbuchen_out_DataObjRef_08_5_di" bpmnElement="T08_Verbuchen_out_DataObjRef_08_5">
+        <di:waypoint x="4485" y="815" />
+        <di:waypoint x="4485" y="775" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T08_Verbuchen_out_DataStore_08_1_di" bpmnElement="T08_Verbuchen_out_DataStore_08_1">
+        <di:waypoint x="4540" y="815" />
+        <di:waypoint x="4570" y="775" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_10_di" bpmnElement="MsgFlow_08_10">
+        <di:waypoint x="1110" y="1045" />
+        <di:waypoint x="1110" y="333" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1023" y="600" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_1_di" bpmnElement="MsgFlow_08_1">
+        <di:waypoint x="1005" y="815" />
+        <di:waypoint x="1005" y="208" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1025" y="497" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_2_di" bpmnElement="MsgFlow_08_2">
+        <di:waypoint x="1605" y="230" />
+        <di:waypoint x="1605" y="837" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1620" y="505" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_3_di" bpmnElement="MsgFlow_08_3">
+        <di:waypoint x="2085" y="230" />
+        <di:waypoint x="2085" y="815" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2099" y="505" width="59" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_4_di" bpmnElement="MsgFlow_08_4">
+        <di:waypoint x="2405" y="230" />
+        <di:waypoint x="2405" y="815" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2423" y="497" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_5_di" bpmnElement="MsgFlow_08_5">
+        <di:waypoint x="2565" y="930" />
+        <di:waypoint x="2565" y="318" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2578" y="505" width="51" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_6_di" bpmnElement="MsgFlow_08_6">
+        <di:waypoint x="2885" y="1320" />
+        <di:waypoint x="2885" y="208" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2915" y="505" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_7_di" bpmnElement="MsgFlow_08_7">
+        <di:waypoint x="4005" y="230" />
+        <di:waypoint x="4005" y="837" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4018" y="505" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_8_di" bpmnElement="MsgFlow_08_8">
+        <di:waypoint x="3690" y="1045" />
+        <di:waypoint x="3690" y="418" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3705" y="505" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_08_9_di" bpmnElement="MsgFlow_08_9">
+        <di:waypoint x="4805" y="815" />
+        <di:waypoint x="4805" y="208" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4837" y="505" width="53" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
