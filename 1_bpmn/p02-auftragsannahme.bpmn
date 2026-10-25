@@ -269,10 +269,6 @@
       <bpmn:incoming>Flow_02_1</bpmn:incoming>
       <bpmn:outgoing>Flow_02_2</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:sendTask id="K02_Abgeben" name="Gerät abgeben">
-      <bpmn:incoming>Flow_02_2</bpmn:incoming>
-      <bpmn:outgoing>Flow_02_3</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:receiveTask id="K02_Beleg" name="Annahmebeleg empfangen" messageRef="Msg_02_2">
       <bpmn:incoming>Flow_02_3</bpmn:incoming>
       <bpmn:outgoing>Flow_02_4</bpmn:outgoing>
@@ -289,6 +285,10 @@
     <bpmn:sequenceFlow id="Flow_02_3" sourceRef="K02_Abgeben" targetRef="K02_Beleg" />
     <bpmn:sequenceFlow id="Flow_02_4" sourceRef="K02_Beleg" targetRef="K02_Termin" />
     <bpmn:sequenceFlow id="Flow_02_28" sourceRef="K02_Termin" targetRef="K02_End" />
+    <bpmn:manualTask id="K02_Abgeben" name="Gerät abgeben">
+      <bpmn:incoming>Flow_02_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_02_3</bpmn:outgoing>
+    </bpmn:manualTask>
   </bpmn:process>
   <bpmn:dataStore id="Store_02_1" name="RepairFlow-Datenbank" />
   <bpmn:dataStore id="Store_02_2" name="Technikerplan" />
@@ -394,6 +394,54 @@
         <dc:Bounds x="3962" y="844" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3925" y="886" width="110" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_4_di" bpmnElement="DataStore_02_4">
+        <dc:Bounds x="740" y="690" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="616" y="702" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_1_di" bpmnElement="DataObjRef_02_1">
+        <dc:Bounds x="1099" y="372" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="975" y="384" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_4_di" bpmnElement="DataObjRef_02_4">
+        <dc:Bounds x="1099" y="690" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1052" y="708" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_2_di" bpmnElement="DataObjRef_02_2">
+        <dc:Bounds x="1537" y="372" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1580" y="390" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_02_3_di" bpmnElement="DataObjRef_02_3">
+        <dc:Bounds x="2009" y="372" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1885" y="384" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_1_di" bpmnElement="DataStore_02_1">
+        <dc:Bounds x="1950" y="690" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1826" y="702" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_2_di" bpmnElement="DataStore_02_2">
+        <dc:Bounds x="2440" y="1070" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2316" y="1082" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStore_02_3_di" bpmnElement="DataStore_02_3">
+        <dc:Bounds x="3525" y="1070" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3401" y="1082" width="120" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_02_5_di" bpmnElement="Flow_02_5">
@@ -505,54 +553,53 @@
         <di:waypoint x="3900" y="862" />
         <di:waypoint x="3962" y="862" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="DataStore_02_4_di" bpmnElement="DataStore_02_4">
-        <dc:Bounds x="740" y="690" width="50" height="50" />
+      <bpmndi:BPMNShape id="Part_02_Kunde_di" bpmnElement="Part_02_Kunde" isHorizontal="true">
+        <dc:Bounds x="120" y="55" width="3950" height="170" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Start_di" bpmnElement="K02_Start">
+        <dc:Bounds x="227" y="120" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="616" y="702" width="120" height="27" />
+          <dc:Bounds x="190" y="162" width="110" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_02_1_di" bpmnElement="DataObjRef_02_1">
-        <dc:Bounds x="1099" y="372" width="36" height="50" />
+      <bpmndi:BPMNShape id="K02_Bringen_di" bpmnElement="K02_Bringen">
+        <dc:Bounds x="370" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Beleg_di" bpmnElement="K02_Beleg">
+        <dc:Bounds x="2100" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_Termin_di" bpmnElement="K02_Termin">
+        <dc:Bounds x="3770" y="98" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K02_End_di" bpmnElement="K02_End">
+        <dc:Bounds x="3962" y="120" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="975" y="384" width="120" height="27" />
+          <dc:Bounds x="3925" y="162" width="110" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_02_4_di" bpmnElement="DataObjRef_02_4">
-        <dc:Bounds x="1099" y="690" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1052" y="708" width="40" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_09t9k08_di" bpmnElement="K02_Abgeben">
+        <dc:Bounds x="575" y="98" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_02_2_di" bpmnElement="DataObjRef_02_2">
-        <dc:Bounds x="1537" y="372" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1580" y="390" width="40" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_02_3_di" bpmnElement="DataObjRef_02_3">
-        <dc:Bounds x="2009" y="372" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1885" y="384" width="120" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStore_02_1_di" bpmnElement="DataStore_02_1">
-        <dc:Bounds x="1950" y="690" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1826" y="702" width="120" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStore_02_2_di" bpmnElement="DataStore_02_2">
-        <dc:Bounds x="2440" y="1070" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2316" y="1082" width="120" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStore_02_3_di" bpmnElement="DataStore_02_3">
-        <dc:Bounds x="3525" y="1070" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3401" y="1082" width="120" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_02_1_di" bpmnElement="Flow_02_1">
+        <di:waypoint x="263" y="138" />
+        <di:waypoint x="370" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_2_di" bpmnElement="Flow_02_2">
+        <di:waypoint x="500" y="138" />
+        <di:waypoint x="575" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_3_di" bpmnElement="Flow_02_3">
+        <di:waypoint x="675" y="138" />
+        <di:waypoint x="2100" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_4_di" bpmnElement="Flow_02_4">
+        <di:waypoint x="2230" y="138" />
+        <di:waypoint x="3770" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02_28_di" bpmnElement="Flow_02_28">
+        <di:waypoint x="3900" y="138" />
+        <di:waypoint x="3962" y="138" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T02_Suchen_in_DataStore_02_4_di" bpmnElement="T02_Suchen_in_DataStore_02_4">
         <di:waypoint x="765" y="690" />
         <di:waypoint x="765" y="538" />
@@ -613,53 +660,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3850" y="296" width="90" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Part_02_Kunde_di" bpmnElement="Part_02_Kunde" isHorizontal="true">
-        <dc:Bounds x="120" y="55" width="3950" height="170" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Start_di" bpmnElement="K02_Start">
-        <dc:Bounds x="227" y="120" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="190" y="162" width="110" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Bringen_di" bpmnElement="K02_Bringen">
-        <dc:Bounds x="370" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Abgeben_di" bpmnElement="K02_Abgeben">
-        <dc:Bounds x="560" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Beleg_di" bpmnElement="K02_Beleg">
-        <dc:Bounds x="2100" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_Termin_di" bpmnElement="K02_Termin">
-        <dc:Bounds x="3770" y="98" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K02_End_di" bpmnElement="K02_End">
-        <dc:Bounds x="3962" y="120" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3925" y="162" width="110" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_02_1_di" bpmnElement="Flow_02_1">
-        <di:waypoint x="263" y="138" />
-        <di:waypoint x="370" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_2_di" bpmnElement="Flow_02_2">
-        <di:waypoint x="500" y="138" />
-        <di:waypoint x="560" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_3_di" bpmnElement="Flow_02_3">
-        <di:waypoint x="690" y="138" />
-        <di:waypoint x="2100" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_4_di" bpmnElement="Flow_02_4">
-        <di:waypoint x="2230" y="138" />
-        <di:waypoint x="3770" y="138" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02_28_di" bpmnElement="Flow_02_28">
-        <di:waypoint x="3900" y="138" />
-        <di:waypoint x="3962" y="138" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

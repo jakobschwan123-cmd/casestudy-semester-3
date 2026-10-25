@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_07" targetNamespace="http://repairflow.example/bpmn" exporter="RepairFlow BPMN Generator" exporterVersion="1.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_07" targetNamespace="http://repairflow.example/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_07">
     <bpmn:documentation>Der Techniker entnimmt die reservierten Teile und arbeitet die Reparaturschritte mit Zeiterfassung ab. Zusatzbefunde fuehren zu einem Nachtrags-KVA, den der Kunde freigeben muss; die Teile fuer einen freigegebenen Nachtrag werden ueber Prozess 05 disponiert und entnommen. Ohne Antwort innerhalb von drei Tagen gilt der Nachtrag als abgelehnt. Nach Endkontrolle wird der Auftrag auf 'fertig' gesetzt; scheitert auch die zweite Nacharbeit, wird die Reparatur abgebrochen und der Auftrag auf 'abgelehnt' gesetzt. Auch Nacharbeiten aus Prozess 09 laufen ueber diesen Prozess.</bpmn:documentation>
     <bpmn:participant id="Part_07_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_07" />
@@ -247,7 +247,7 @@
       <bpmn:incoming>Flow_07_35</bpmn:incoming>
       <bpmn:outgoing>Flow_07_36</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="End_07" name="Reparatur abgeschlossen">
+    <bpmn:endEvent id="End_07" name="Gerät abholbereit">
       <bpmn:incoming>Flow_07_36</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_07_4" sourceRef="Start_07" targetRef="T07_Status" />
@@ -447,6 +447,9 @@
       <bpmndi:BPMNShape id="T07_Abgelehnt_di" bpmnElement="T07_Abgelehnt">
         <dc:Bounds x="2810" y="640" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T07_Freigegeben_di" bpmnElement="T07_Freigegeben">
+        <dc:Bounds x="2840" y="442" width="130" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Join_07_di" bpmnElement="Join_07" isMarkerVisible="true">
         <dc:Bounds x="3460" y="993" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -468,6 +471,9 @@
       <bpmndi:BPMNShape id="T07_Abbruch_di" bpmnElement="T07_Abbruch">
         <dc:Bounds x="4290" y="1093" width="130" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Merge_07a_di" bpmnElement="Merge_07a" isMarkerVisible="true">
+        <dc:Bounds x="4190" y="1108" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="T07_Nacharbeit_di" bpmnElement="T07_Nacharbeit">
         <dc:Bounds x="3990" y="1207" width="130" height="80" />
       </bpmndi:BPMNShape>
@@ -480,7 +486,7 @@
       <bpmndi:BPMNShape id="End_07_di" bpmnElement="End_07">
         <dc:Bounds x="4717" y="999" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="4680" y="1041" width="110" height="27" />
+          <dc:Bounds x="4693" y="1041" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_07_1_di" bpmnElement="DataObjRef_07_1">
@@ -511,6 +517,12 @@
         <dc:Bounds x="2909" y="745" width="36" height="50" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2785" y="757" width="120" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjRef_07_8_di" bpmnElement="DataObjRef_07_8">
+        <dc:Bounds x="2922" y="545" width="36" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2800" y="557" width="118" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjRef_07_6_di" bpmnElement="DataObjRef_07_6">
@@ -700,6 +712,14 @@
         <di:waypoint x="4570" y="1017" />
         <di:waypoint x="4717" y="1017" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_37_di" bpmnElement="Flow_07_37">
+        <di:waypoint x="2970" y="482" />
+        <di:waypoint x="3040" y="482" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07_39_di" bpmnElement="Flow_07_39">
+        <di:waypoint x="4240" y="1133" />
+        <di:waypoint x="4290" y="1133" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_07_24_di" bpmnElement="Flow_07_24">
         <di:waypoint x="3170" y="482" />
         <di:waypoint x="3240" y="482" />
@@ -778,6 +798,10 @@
         <di:waypoint x="2915" y="720" />
         <di:waypoint x="2927" y="745" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="T07_Freigegeben_out_DataObjRef_07_8_di" bpmnElement="T07_Freigegeben_out_DataObjRef_07_8">
+        <di:waypoint x="2920" y="522" />
+        <di:waypoint x="2936" y="545" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T07_Abbruch_out_DataObjRef_07_7_di" bpmnElement="T07_Abbruch_out_DataObjRef_07_7">
         <di:waypoint x="4395" y="1173" />
         <di:waypoint x="4407" y="1338" />
@@ -799,30 +823,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2533" y="291" width="130" height="20" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="T07_Freigegeben_di" bpmnElement="T07_Freigegeben">
-        <dc:Bounds x="2840" y="442" width="130" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Merge_07a_di" bpmnElement="Merge_07a" isMarkerVisible="true">
-        <dc:Bounds x="4190" y="1108" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataObjRef_07_8_di" bpmnElement="DataObjRef_07_8">
-        <dc:Bounds x="2922" y="545" width="36" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2800" y="557" width="118" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_07_37_di" bpmnElement="Flow_07_37">
-        <di:waypoint x="2970" y="482" />
-        <di:waypoint x="3040" y="482" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_07_39_di" bpmnElement="Flow_07_39">
-        <di:waypoint x="4240" y="1133" />
-        <di:waypoint x="4290" y="1133" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="T07_Freigegeben_out_DataObjRef_07_8_di" bpmnElement="T07_Freigegeben_out_DataObjRef_07_8">
-        <di:waypoint x="2920" y="522" />
-        <di:waypoint x="2936" y="545" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
