@@ -8,11 +8,11 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ## Stand der Artefakte
 
-- **BPMN:** P01 und P06–P10 Stand 22.10., P02–P05 überarbeitet (PR #60). Zählung des aktuellen `1_bpmn/` (Aktivitäten = Tasks, Call Activities und Teilprozess im Werkstatt-Pool; automatisiert = Service, Script, Business Rule, Send, Receive; `zeebe:userTask` nicht doppelt zählen): **143 Aktivitäten (Ø 14,3), 89 automatisiert = 62 %, 34 User Tasks, 9 Manual Tasks, 10 Call Activities und 1 Teilprozess, 28 Kundenaktivitäten, 48 Nachrichtenflüsse, 58 Datenobjekte, 14 Datenspeicher.** Je Diagramm (Aktivitäten/automatisiert): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Doku (5.1, 5.2, Tabelle 6), PPTX (Folien 21, 22, 30), Sprechtext Adrian und `1_bpmn/README.md` sind auf diesem Stand. Ändern sich Diagramme bei der BPMN-Prüfung, neu zählen.
-- **UML:** Prüflisten-Punkte U1–U9, U11 und U12 sind in VP umgesetzt, zuletzt SD1 (`getBenoetigteTeile()`, `teil.getLagerbestaende()`, `res.vorreserviere()`) und der SD5-Guard ohne doppelte Klammern. PNGs und VPP am 24.10. exportiert, Teamwork-Server committet.
+- **BPMN:** P01 und P06–P10 Stand 22.10., P02–P05 überarbeitet (PR #60). Zählung des aktuellen `1_bpmn/` (Aktivitäten = Tasks, Call Activities und Teilprozess im Werkstatt-Pool; automatisiert = Service, Script, Business Rule, Send, Receive; `zeebe:userTask` nicht doppelt zählen): **143 Aktivitäten (Ø 14,3), 89 automatisiert = 62 %, 34 User Tasks, 9 Manual Tasks, 10 Call Activities und 1 Teilprozess, 28 Kundenaktivitäten, 48 Nachrichtenflüsse, 58 Datenobjekte, 14 Datenspeicher.** Je Diagramm (Aktivitäten/automatisiert): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Doku (5.1, 5.2, Tabelle 6), PPTX (Folien 12, 13, 21), Sprechtext Adrian und `1_bpmn/README.md` sind auf diesem Stand. Ändern sich Diagramme bei der BPMN-Prüfung, neu zählen.
+- **UML:** Prüflisten-Punkte U1–U9, U11 und U12 sind in VP umgesetzt, zuletzt SD1 (`getBenoetigteTeile()`, `teil.getLagerbestaende()`, `res.vorreserviere()`), der SD5-Guard ohne doppelte Klammern, SD3 `reserviere()` für r und u, SD5 `new(r, kostenfrei)`. PNGs und VPP am 24.10. exportiert, Teamwork-Server committet.
 - **Doku:** Fakten am 24.10. korrigiert (14-Tage-Nachfrist P06, Techniker-Satz 5.3, 14 Mitarbeiterrollen in 5.4, Tabelle 8 ohne Terminvorschlag, einheitlich „Service / Annahme“ und „Use Case“, Formatreste). Kennzahlen und Tabelle 6 auf dem Stand oben. Alle Abbildungen 1–7 stammen aus den aktuellen Exporten (Abb. 1 neu: Lieferant als Black Box, Lanes wie Tabelle 7). Inhaltsverzeichnis in LibreOffice geprüft.
-- **Sprechtext:** ab Folie 5 überarbeitet (Dubletten, fehlende Überschrift, Foliennummern wie die PPTX vom 24.10., Adrians Fachfehler und Kennzahlen, Tippfehler, Nina Folie 28 gekürzt). Davids Teil (Folien 1–4) wird noch überarbeitet.
-- **PPTX (Stand Maximilian, PR #62):** 30 Folien, davon 10–18 ausgeblendete Demo-Screens. Am 24.10. korrigiert: Kennzahlen Folien 21, 22 und 30, Titel Folien 19/20 „KI-Sofortdiagnose“ statt „KI-Sofortanalyse“, Folie 23 Komma, Folie 25 „Jede Mitarbeiterrolle …“, Folie 28 „KI-gestützte“, Notizen der Folien 19–22 nur noch „Vortragende(r): Adrian“ (Folie 19 stand auf Maximilian, Folie 30 ordnet sie Adrian zu).
+- **Sprechtext:** ab Folie 5 überarbeitet (Dubletten, fehlende Überschrift, Foliennummern wie die PPTX vom 24.10., Adrians Fachfehler und Kennzahlen, Tippfehler, Nina Folie 19 gekürzt). Davids Teil (Folien 1–4) wird noch überarbeitet.
+- **PPTX (Stand Maximilian, PR #62):** 21 Folien. Am 24.10. korrigiert: die ausgeblendeten Demo-Screens (bisher Folien 10–18) entfernt, es gibt nur die eine Demo-Folie 9; Foliennummern auf Folie 21 angepasst; Kennzahlen Folien 12, 13 und 21; Titel Folien 10/11 „KI-Sofortdiagnose“ statt „KI-Sofortanalyse“; Folie 14 Komma; Folie 16 „Jede Mitarbeiterrolle …“; Folie 19 „KI-gestützte“; Notizen der Folien 10–13 nur noch „Vortragende(r): Adrian“ (Folie 10 stand auf Maximilian, Folie 21 ordnet sie Adrian zu).
 - **PDFs:** entstehen erst ganz am Ende.
 
 ---
@@ -21,12 +21,12 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ### Präsentation und Sprechtext
 
-- [ ] **Kennzahlen erneut nachziehen, falls die BPMN-Prüfung Aktivitäten ändert:** Folien 21, 22 (Tabelle, 143, 62,2 %) und 30, Doku 5.1/5.2, Tabelle 6, Sprechtext Adrian, `1_bpmn/README.md`.
-- [ ] **PDF der Präsentation:** Die Demo-Screens 10–18 sind ausgeblendet und fehlen im PDF. Dann stimmen die Foliennummern auf Folie 30 (Maximilian 6–18, Adrian 19–22 …) im PDF nicht mehr. Entweder die Screens im PDF mit ausgeben oder Folie 30 für das PDF anpassen.
+- [x] **Kennzahlen** (Stand 24.10., alle zehn BPMN-Dateien) sind überall eingetragen: Folien 12, 13 und 21, Doku 5.1/5.2, Tabelle 6, Sprechtext Adrian, `1_bpmn/README.md`. Ändert die BPMN-Prüfung noch Aktivitäten, wird einmal neu gezählt und an denselben Stellen nachgezogen.
 - [ ] **Davids Teil im Sprechtext (Folien 1–4)** einfügen; dabei „Quelitätssicherung“ (Folie 1) korrigieren.
-- [ ] **Sprecherzuteilung** in `5_team/02-team-und-rollen.md` an Folie 30 angleichen: David 1–4, Kilian 5 und 23–24, Maximilian 6–18 (10–18 Demo-Screens), Adrian 19–22, Jakob 25–26, Nina 27–29, Folie 30 Anhang.
-- [ ] **Demo (Folie 9):** `4_praesentation/mockup/index.html` vor Beginn in einem zweiten Fenster öffnen, Wechsel mit Alt+Tab üben, Demo auf höchstens 90 Sekunden begrenzen. Die ausgeblendeten Folien 10–18 können als Rückfall dienen, falls der Browser streikt.
-- [ ] **Generalprobe mit Stoppuhr.** Rechnerisch rund 19 Minuten reine Sprechzeit plus Demo, Ziel 15–20 Minuten. Größte Hebel: Nacherzählung der Demo (Folie 9), Beispiel auf Folie 19 (E-Bike/Batterie passt nicht zum Demo-Gerät Smartphone), Wiederholung des KI-Ablaufs auf den Folien 5, 6, 9, 19 und 29.
+- [ ] **Rollen auf Folie 18 und im Sprechtext (Nina) angleichen:** Folie 18 sagt „David: Stellvertretung und UML“, „Kilian: Scrum Master und UML“, der Sprechtext „David die Stellvertretung und die Sicherungen“ und „Kilian Scrum Master“; Doku Tabelle 1 mitprüfen.
+- [ ] **Sprecherzuteilung** in `5_team/02-team-und-rollen.md` an Folie 21 angleichen: David 1–4, Kilian 5 und 14–15, Maximilian 6–9, Adrian 10–13, Jakob 16–17, Nina 18–20, Folie 21 Anhang.
+- [ ] **Demo (Folie 9):** `4_praesentation/mockup/index.html` vor Beginn in einem zweiten Fenster öffnen, Wechsel mit Alt+Tab üben, Demo auf höchstens 90 Sekunden begrenzen. Es gibt keine Backup-Folien mit Screenshots.
+- [ ] **Generalprobe mit Stoppuhr.** Rechnerisch rund 19 Minuten reine Sprechzeit plus Demo, Ziel 15–20 Minuten. Größte Hebel: Nacherzählung der Demo (Folie 9), Beispiel auf Folie 10 (E-Bike/Batterie passt nicht zum Demo-Gerät Smartphone), Wiederholung des KI-Ablaufs auf den Folien 5, 6, 9, 10 und 20.
 - [ ] **Optional, Maximilians Texte:** Modell-ID „T01_KI“ und „Konfidenz“ aus dem Demo-Text nehmen; Übergabe „Was technisch dahintersteckt, erklärt Adrian.“ passt nicht zu Adrians Folie, besser „Was davon heute geht, erklärt Adrian.“
 - [ ] **Antworten auf mögliche Fragen bereitlegen** (Abschnitt F).
 
@@ -48,17 +48,16 @@ Reihenfolge: erst prüfen und ändern, dann **einmal** zählen und überall nach
 - [ ] **P01:** Kundenpool „Verwerfung der Voranmeldung“ als Ereignis benennen.
 - [ ] **Alle zehn Dateien** im Modeler öffnen, Problems-Panel prüfen, speichern (setzt den Exporter; Doku 3.1 sagt „im Camunda Modeler erstellt“). PNGs neu exportieren.
 - [ ] **Schreibweise der Datenobjekte** vereinheitlichen (Gruppenentscheidung, siehe E): P02–P05 von Adrian nutzen weiche Trennzeichen bzw. „Reparaturauftrag“, die übrigen „Reparatur-auftrag“. Danach Doku 3.1 und `2_uml/README.md` (Namensregel) anpassen.
-- [ ] **Kennzahlen einmal zählen und nachziehen:** Doku 5.1 (Absatz 1), 5.2 (Absatz 1, „zehn rufen …“), Tabelle 6, `1_bpmn/README.md`, Folien 21, 22 und 30, Sprechtext Adrian, diese Datei.
+- [ ] **Kennzahlen einmal zählen und nachziehen:** Doku 5.1 (Absatz 1), 5.2 (Absatz 1, „zehn rufen …“), Tabelle 6, `1_bpmn/README.md`, Folien 12, 13 und 21, Sprechtext Adrian, diese Datei.
 - [ ] **Doku Abb. 2 und 3** (P01, P04) ersetzen, falls sich diese PNGs noch ändern.
 
 ### Visual Paradigm
 
-Ablauf: Teamwork Update, ändern, Commit; PNG (220 dpi, ohne Legende) und VPP neu exportieren (Anleitung `2_uml/README.md`), dann Doku-Abbildungen 4–7 tauschen.
+Ablauf: Teamwork Update, ändern, Commit; PNG (220 dpi, ohne Legende) und VPP neu exportieren (Anleitung `2_uml/README.md`), dann Doku-Abbildungen 4–7 tauschen. Stand 24.10.: SD2 hat den Pfad „freigegeben, aber nicht alle Teile beschaffbar“ (opt mit Ablehnung, Benachrichtigung und UC15), `Reparaturauftrag.benachrichtigeKunde()` ist entfernt, alles exportiert und committet.
 
-- [ ] **Layout (B30):** ref-Beschriftungen einheitlich „UCxx Name (BPMN yy)“ (SD2, SD3, SD4, SD5 nutzen heute verschiedene Schreibweisen). SD2: ref „UC15 Abholung mit Diagnosepauschale (BPMN 08)“ wird von der Lebenslinie `:Werkstattbetrieb` gekreuzt, über „Add/Remove Covered LifeLines…“ oder Verschieben lösen. SD4–SD6: Notizen am unteren Rand unter die Lebenslinien verschieben.
 - [ ] **SDs nachziehen, falls BPMN-Änderungen die Fachlogik betreffen** (neuer Pfad, Frist, Status, Call Activity im SD-Ausschnitt). SD1 ↔ P01, SD2 ↔ P04, SD3 ↔ P05, SD4 ↔ P07, SD5 ↔ P09, SD6 ↔ P06. Umbenennungen, Lanes und Layout betreffen die SDs nicht.
-- [ ] **Optional (C1–C4):** SD2 Pfad „Teile nicht beschaffbar → abgelehnt“; SD5 `new()` → `new(r, kostenfrei)`; SD3 `reserviere()` für die erzeugten Reservierungen; ungenutzte Operationen (`Reparaturauftrag.benachrichtigeKunde()`, Rollen-Operationen, `KundenApp.meldeMangel()`, `Lieferant.bestaetigeBestellung()`) streichen (Gruppenentscheidung).
-- [ ] **U10 (Team: passt so):** nur falls das Use-Case-Diagramm ohnehin geöffnet wird: Linien an den Akteuren andocken, Multiplizität „1 … 1“ an Kunde – „Sofortdiagnose anfordern“ ausblenden.
+- [ ] **Optional:** ref-Beschriftungen vereinheitlichen (Verweise auf vorhandene SDs zeigen „sqd: UC09 …“, die übrigen sind Textfelder im ref-Rahmen, z. B. SD4 „UC13 Reparaturschritt und Arbeitszeit erfassen“ ohne BPMN-Nummer).
+- [ ] **Gruppenentscheidung:** weitere ungenutzte Operationen streichen (Rollen-Operationen von Servicemitarbeiter, Techniker, Disponent, `KundenApp.meldeMangel()`, `Lieferant.bestaetigeBestellung()`). Doku 5.4 sagt, die Rollenklassen tragen die Operationen der Rollen; bei Streichung dort anpassen.
 
 ### Projektdokumentation (`3_doku/Projektdokumentation.docx`)
 
@@ -72,23 +71,23 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 - [ ] **Tabelle 3 (Sprints):** Sprint 4 (16.10.–22.10.) nennt als Ergebnis den „UI-Umbau nach dem Gespräch am 22.10.“ (letzter Tag), „Weitere Anpassungen in VP“ in der Zeile Abschluss liest sich wie offen, 7.1 sagt „Coaching“, Tabelle 3 „Gespräch“. Datumsangaben bleiben (Team-Entscheidung).
 - [ ] **3.2, Entscheidungslog:** wird mehrfach als Beleg genannt, ist aber nicht Teil der Abgabe. Halbsatz „(im Projekt-Repository, nicht Teil der Abgabe)“.
 - [ ] **Kapitel 6:** „Die Konflikte wurden an zwei Stellen gleichzeitig gelöst.“ ist unverständlich (streichen oder sagen, wer was gemacht hat); „Repo“ → „Repository“.
-- [ ] **Geschäftsmodell und Ausblick:** Folie 28 (Abo, KI-gestützte Disposition, Techniker-Copilot, Geräteakte) steht nur knapp in 2.2, der Ausblick gar nicht in der Doku. Kurzer Absatz in Kapitel 2 oder 7.
+- [ ] **Geschäftsmodell und Ausblick:** Folie 19 (Abo, KI-gestützte Disposition, Techniker-Copilot, Geräteakte) steht nur knapp in 2.2, der Ausblick gar nicht in der Doku. Kurzer Absatz in Kapitel 2 oder 7.
 - [ ] **Abbildungen 4–7** erneut tauschen, falls sich VP-Diagramme noch ändern (Seitenverhältnis vom neuen Bild übernehmen).
 - [ ] **Inhaltsverzeichnis** ganz am Ende in Word gegen das PDF prüfen (statisch; am 24.10. in LibreOffice korrigiert: 5.4 → 13, 6 → 17, 7 und 7.1 → 18).
 
 ### Präsentation, nach Rückmeldung aus dem 27.10.
 
-- [ ] Folie 25 „Zwei Prüfprogramme: 0 Fehler“: gemeint sind Camunda-Linter (bpmnlint) und das Problems-Panel des Modelers (Doku Tabelle 2 und 3.1); bei Bedarf auf der Folie nennen.
-- [ ] Folien 25 und 26 sagen zweimal „gleiche Namen“ und „keine Fehler im Modeler“; auf Folie 26 dafür Lernerfahrungen aus Doku Kapitel 6 (Pools und Lanes, „KVA-Position“ statt `KvaPosition`).
-- [ ] Foliennummern im Master einschalten (Folie 30 verweist auf Nummern).
-- [ ] Folie 29 „digitaler Zustandsautomat“ wird nicht erklärt.
+- [ ] Folie 16 „Zwei Prüfprogramme: 0 Fehler“: gemeint sind Camunda-Linter (bpmnlint) und das Problems-Panel des Modelers (Doku Tabelle 2 und 3.1); bei Bedarf auf der Folie nennen.
+- [ ] Folien 16 und 17 sagen zweimal „gleiche Namen“ und „keine Fehler im Modeler“; auf Folie 17 dafür Lernerfahrungen aus Doku Kapitel 6 (Pools und Lanes, „KVA-Position“ statt `KvaPosition`).
+- [ ] Foliennummern im Master einschalten (Folie 21 verweist auf Nummern).
+- [ ] Folie 20 „digitaler Zustandsautomat“ wird nicht erklärt.
 - [ ] Folien 6 und 7 haben denselben Text („Auftragsreise“); prüfen, ob gewollt.
 - [ ] Optional: Backup-Folien mit Use-Case-, Klassen- und Sequenzdiagramm für Fragen.
 
 ### Arbeitslisten und Abgabe
 
 - [ ] `0_abgabe/KI-Angabe-Moodle.md`: noch Entwurf, jede Person ergänzt ihre Werkzeuge.
-- [ ] Abgabepaket nach `0_abgabe/README.md`: Doku-PDF, BPMN-ZIP (umbenannte `.bpmn`), VPP (nach dem letzten VP-Export), Präsentations-PDF mit Folie 30 (Zuordnung), dann `Fallstudie-WWI25B4-Gruppe1.zip`. Jede Person lädt selbst hoch.
+- [ ] Abgabepaket nach `0_abgabe/README.md`: Doku-PDF, BPMN-ZIP (umbenannte `.bpmn`), VPP (nach dem letzten VP-Export), Präsentations-PDF mit Folie 21 (Zuordnung), dann `Fallstudie-WWI25B4-Gruppe1.zip`. Jede Person lädt selbst hoch.
 
 ---
 
@@ -107,7 +106,7 @@ Inhaltliche Punkte, die die Gruppe entscheiden soll; die Vorschläge stammen aus
 1. Schreibweise der Datenobjekte in allen zehn BPMN-Dateien („Reparatur-auftrag“ oder „Reparaturauftrag“/weiche Trennung).
 2. Inhaltliche Doku-Punkte aus Abschnitt B (Beitragsliste, Problem-Zuordnung, Begründungen, Geschäftsmodell).
 3. Backup-Folien mit Diagrammen ja/nein.
-4. Ungenutzte Operationen im Klassendiagramm streichen ja/nein.
+4. Weitere ungenutzte Operationen im Klassendiagramm streichen ja/nein.
 
 Bereits entschieden, bleibt so: Datumsangaben in der Doku, Format der Abbildungen 2–5, Entscheidungslog-Verweise, Klasse für den KI-Diagnosedienst, Kopf-Redezeiten im Sprechtext, Maximilians Texte, keine Zeitangaben bei Maximilians Folien, kein Sprechtext in den PPTX-Notizen.
 
@@ -126,7 +125,7 @@ Bereits entschieden, bleibt so: Datumsangaben in der Doku, Format der Abbildunge
 
 1. „Zeigen Sie das Use-Case- oder Klassendiagramm.“ (Kein Bild in der Präsentation; Doku oder VP bereithalten.)
 2. „Welche Use Cases haben ein Sequenzdiagramm, und warum diese?“ SD1 = UC01, SD2 = UC07, SD3 = UC09, SD4 = UC14, SD5 = UC16, SD6 = UC10.
-3. „Was sind die zwei Prüfprogramme?“ (Folie 25: Camunda-Linter und Problems-Panel des Modelers)
+3. „Was sind die zwei Prüfprogramme?“ (Folie 16: Camunda-Linter und Problems-Panel des Modelers)
 4. „Warum ist der Kunde ein eigener Pool mit Ablauf, der Lieferant aber eine Black Box?“ (Doku Kapitel 6)
 5. „Wie kommt die Oberfläche an das richtige Objekt?“ (Suche über den Werkstattbetrieb, SD1)
 6. „Warum ist P02 am niedrigsten automatisiert?“
