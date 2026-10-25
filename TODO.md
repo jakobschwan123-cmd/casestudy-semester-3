@@ -1,6 +1,6 @@
 # Aufgaben bis zur Abgabe
 
-Stand: 25.10.2026, nach PR #73 (Davids Folien 1–7). Die Liste enthält nur offene Aufgaben; Erledigtes wird gestrichen, nicht abgehakt.
+Stand: 25.10.2026, nach der Prüfung vom 25.10. (Folien 2, 11, 14, 24, Sprechtext, Doku Kapitel 1, 5.4–5.6 korrigiert). Die Liste enthält nur offene Aufgaben; Erledigtes wird gestrichen, nicht abgehakt.
 
 Termine: Präsentation **27.10.2026, 09:00 Uhr, Raum B458**. Abgabe **13.11.2026, 23:59 Uhr** über Moodle.
 
@@ -19,12 +19,20 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ## A. Vor der Präsentation am 27.10.
 
+- [ ] **Titelbild Folie 1:** Das Bild ist KI-generiert. Gruppe entscheidet: behalten oder durch ein eigenes Foto ersetzen. In beiden Fällen in `0_abgabe/KI-Angabe-Moodle.md` nennen.
+- [ ] **Mockup:** In Schritt 6 Filiale und Terminvorschlag vor dem Bestätigen zeigen, Button „Voranmeldung bestätigen“; Termin und Statusdatum nach dem 27.10. legen; `mockup/README.md` Schritt 6. Mit Maximilian abstimmen.
+- [ ] **Vortragsrechner:** Folie 17 („Betriebsadministrator“, „KI-Diagnosedienst“) und Folie 21 (Chevrons) auf Umbrüche prüfen; Folien 1–7 sind Calibri, 8–24 Segoe UI.
 - [ ] **Antworten auf mögliche Fragen bereitlegen** (Abschnitt F).
 
 ---
 
 ## B. Vor der Abgabe am 13.11.
 
+- [ ] **P04:** Nachrichtenfluss „Erinnerung“ auf „KVA in der App prüfen“ ziehen; für „Reparaturabsage“ im Kunden-Pool einen Ereignis-Teilprozess wie in P01 („Reparaturabsage erhalten“ → „KVA verfallen“). Danach Kundenaktivitäten 28 → 29 in Doku 5.1, `1_bpmn/README.md`, diese Datei; Doku Abb. 3 tauschen.
+- [ ] **P02 → P03:** Ende von P02 in „Auftrag eingeplant“ umbenennen, Start von P03 als einfaches Startereignis; Doku Tabelle 6 Zeile 02 nachziehen; PNGs p02, p03.
+- [ ] **Sequenzdiagramme:** SD5 (Ablehnung durch den Kunden über die KundenApp, Fristablauf und fehlende Teile über die Werkstattoberfläche), SD6 (Bestätigung, Mahnung, Storno automatisch wie in P06), SD3 (andere Filialen nur bei zu wenig eigenem Bestand, Reparaturbeginn nur bei der ersten Disposition); PNGs und VPP neu, Doku Abb. 7 tauschen.
+- [ ] **BPMN-Dokumentationstexte:** Umlaute in p06–p10, Gedankenstriche in p10.
+- [ ] **PPTX vor dem PDF-Export:** Datei → Auf Probleme überprüfen → Dokument prüfen (Notizen behalten), Autor „Gruppe 1 WWI25B4“.
 - [ ] **Inhaltsverzeichnis der Doku** ganz am Ende in Word gegen das PDF prüfen (statisch; nach dem neuen Abschnitt 2.6 alle Seitenzahlen prüfen).
 - [ ] `0_abgabe/KI-Angabe-Moodle.md`: noch Entwurf, jede Person ergänzt ihre Werkzeuge.
 - [ ] Abgabepaket nach `0_abgabe/README.md`: Doku-PDF, BPMN-ZIP (umbenannte `.bpmn`), VPP, Präsentations-PDF mit Folie 24 (Zuordnung der Vortragenden), dann `Fallstudie-WWI25B4-Gruppe1.zip`. Jede Person lädt selbst hoch.
