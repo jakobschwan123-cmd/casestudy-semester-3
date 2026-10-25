@@ -17,13 +17,6 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ---
 
-## A. Vor der Präsentation am 27.10.
-
-- [ ] **Vortragsrechner:** Folie 17 („Betriebsadministrator“, „KI-Diagnosedienst“) und Folie 21 (Chevrons) auf Umbrüche prüfen; Folien 1–7 sind Calibri, 8–24 Segoe UI.
-- [ ] **Antworten auf mögliche Fragen bereitlegen** (Abschnitt F).
-
----
-
 ## B. Vor der Abgabe am 13.11.
 
 - [ ] **P04:** Nachrichtenfluss „Erinnerung“ auf „KVA in der App prüfen“ ziehen; für „Reparaturabsage“ im Kunden-Pool einen Ereignis-Teilprozess wie in P01 („Reparaturabsage erhalten“ → „KVA verfallen“). Danach Kundenaktivitäten 28 → 29 in Doku 5.1, `1_bpmn/README.md`, diese Datei; Doku Abb. 3 tauschen.
@@ -39,7 +32,7 @@ Grundregeln: Jede Änderung über Branch und Pull Request, vorher `git pull`. We
 
 ## E. Gruppenentscheidungen (entschieden, bleibt so)
 
-Keine Backup-Folien; keine sichtbaren Foliennummern in der PPTX; KI-generiertes Titelbild bleibt und steht in der KI-Angabe; Folien 17 und 21 werden nur am Vortragsrechner geprüft; Mockup zeigt Filiale und Terminvorschlag vor dem Bestätigen (Termin 28.10.2026); P09 „Gerät annehmen und Mangel dokumentieren“ bleibt in der Form vom 25.10.; ref-Beschriftungen in den Sequenzdiagrammen bleiben; Klassendiagramm ohne weitere Streichungen; Datenobjekte mit Bindestrich („Reparatur-auftrag“); kein Hinweis in 3.2, dass das Entscheidungslog nicht abgegeben wird; kein Satz zu Boundary-Klassen in 5.4; Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Klasse für den KI-Diagnosedienst, kein Sprechtext in den PPTX-Notizen.
+Keine Backup-Folien; keine sichtbaren Foliennummern in der PPTX; KI-generiertes Titelbild bleibt und steht in der KI-Angabe; Folien 17 und 21 am Vortragsrechner geprüft, passt; Mockup zeigt Filiale und Terminvorschlag vor dem Bestätigen (Termin 28.10.2026); P09 „Gerät annehmen und Mangel dokumentieren“ bleibt in der Form vom 25.10.; ref-Beschriftungen in den Sequenzdiagrammen bleiben; Klassendiagramm ohne weitere Streichungen; Datenobjekte mit Bindestrich („Reparatur-auftrag“); kein Hinweis in 3.2, dass das Entscheidungslog nicht abgegeben wird; kein Satz zu Boundary-Klassen in 5.4; Klassennamen in der Doku ohne Code-Schrift, keine Tabelle „Fristen und Grenzen“, kein eigener Quellenverweis; „KVA in 60 Sekunden“ im Sprechtext und Mockup Schritt 8 bleiben; Datumsangaben in der Doku, Format der Abbildungen 2–5, Klasse für den KI-Diagnosedienst, kein Sprechtext in den PPTX-Notizen.
 
 ---
 
@@ -52,7 +45,7 @@ Keine Backup-Folien; keine sichtbaren Foliennummern in der PPTX; KI-generiertes 
 
 ---
 
-## F. Mögliche Fragen am 27.10.
+## F. Mögliche Fragen am 27.10. (durchgegangen)
 
 1. „Zeigen Sie das Use-Case- oder Klassendiagramm.“ (Kein Bild in der Präsentation; Doku oder VP bereithalten.)
 2. „Welche Use Cases haben ein Sequenzdiagramm, und warum diese?“ SD1 = UC01, SD2 = UC07, SD3 = UC09, SD4 = UC14, SD5 = UC16, SD6 = UC10.
