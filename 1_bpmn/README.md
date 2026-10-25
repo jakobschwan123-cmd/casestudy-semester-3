@@ -22,11 +22,11 @@ Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn`
 - Pool = Unternehmen: „Werkstattbetrieb (Pilotkunde FixWerk GmbH)“ mit dem ausführbaren Prozess, „Kunde“ mit eigenem, nicht ausführbarem Prozess (E-16), „Lieferant“ als Black Box. Zwischen Pools nur Nachrichtenflüsse.
 - Lanes = Rollen: Service / Annahme, Techniker, Werkstattleitung, Ersatzteil-Disposition. Keine Lane für die Software.
 - Automatisierung über den Aktivitätstyp: Service Task = RepairFlow allein, Business Rule Task = Regel oder KI, Send/Receive Task = Nachricht über RepairFlow, User Task = Mensch mit RepairFlow, Manual Task = außerhalb der Software.
-- Aufrufe zwischen Prozessen: 04 → 05, 05 → 06, 07 → 05 (Nachtrag), 09 → 05 → 07 (Nacharbeit; Kunde erst nach „Alle Teile beschaffbar?“ informiert), 06/09 → 10, 03/04/09 → 08 (Rückgabe des Geräts immer über 08).
+- Aufrufe zwischen Prozessen: 04 → 05, 05 → 06, 07 → 05 (Nachtrag), 09 → 05 → 07 (Nacharbeit; Kunde erst nach „Alle Teile beschaffbar?“ informiert), 06/09 → 10, 03/04/09 → 08 (Rückgabe des Geräts immer über 08). 07 endet mit „Gerät abholbereit“, dem Start von 08. 05 startet mit „Teilebedarf freigegeben“, weil es aus 04 (KVA) und aus 09 (Nacharbeit ohne KVA) aufgerufen wird.
 - Zeitüberschreitungen nur über ein ereignisbasiertes Gateway mit Zeit-Zwischenereignis im Fluss (Vorlesung 4-36), keine an Aktivitäten angehefteten Ereignisse.
-- Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt.
-- Datenobjekte tragen die Klassennamen des Klassendiagramms, der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
+- Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt, Verzweigungen als Frage.
+- Datenobjekte tragen die Klassennamen des Klassendiagramms, im Diagramm zur Lesbarkeit mit Bindestrich getrennt („Reparatur-auftrag [freigegeben]“); der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
 
-## Kennzahlen (Stand 24.10.2026, nach Übernahme von P02–P05)
+## Kennzahlen (Stand 25.10.2026, nach der Modeler-Prüfung aller zehn Dateien)
 
-143 Aktivitäten im Werkstatt-Pool (Ø 14,3 je Diagramm), davon 89 automatisiert (62 %); 28 Aktivitäten in den Kundenabläufen; 48 Nachrichtenflüsse; 58 Datenobjekte und 14 Datenspeicher (72). Je Diagramm (Akt./autom.): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Ändert sich ein Diagramm, die Zahlen in Doku 5.1 und auf den Folien prüfen.
+143 Aktivitäten im Werkstatt-Pool (Ø 14,3 je Diagramm), davon 89 automatisiert (62 %); 28 Aktivitäten in den Kundenabläufen; 48 Nachrichtenflüsse; 58 Datenobjekte und 14 Datenspeicher (72). Je Diagramm (Akt./autom.): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Alle zehn Dateien sind im Camunda Modeler gespeichert; bpmnlint (`recommended` + Camunda 8.7) meldet 0 Befunde. Ändert sich ein Diagramm, die Zahlen in Doku 5.1/5.2, Tabelle 6 und auf den Folien 12, 13 und 21 prüfen.
