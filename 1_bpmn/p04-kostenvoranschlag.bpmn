@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_04" targetNamespace="http://repairflow.example/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_04">
-    <bpmn:documentation>RepairFlow startet den Kostenvoranschlag, sobald die Fehlerdiagnose (Prozess 03) ihn angestoßen hat. Der Techniker erfasst die KVA-Positionen aus dem Fehlerbefund, RepairFlow übernimmt die Ersatzteilpreise und berechnet den Kostenvoranschlag, die Annahme prüft ihn. RepairFlow setzt den Auftragsstatus auf „KVA offen“ und sendet den Kostenvoranschlag an den Kunden. Antwortet der Kunde drei Tage lang nicht, erhält er eine Erinnerung; nach dem dritten Fristablauf ohne Antwort gilt der Kostenvoranschlag als abgelehnt. Gibt der Kunde ihn frei, setzt RepairFlow den Status auf „freigegeben“ und disponiert die Ersatzteile über Prozess 05. Ist die Frist abgelaufen oder sind nicht alle Teile beschaffbar, erhält der Kunde eine Reparaturabsage. In diesen Fällen und nach einer Ablehnung durch den Kunden setzt RepairFlow den Status auf „abgelehnt“, und das Gerät geht über Prozess 08 mit Diagnosepauschale zur Abholung.</bpmn:documentation>
+    <bpmn:documentation>RepairFlow startet den Kostenvoranschlag, sobald die Fehlerdiagnose (Prozess 03) ihn angestoßen hat. Der Techniker erfasst die KVA-Positionen aus dem Fehlerbefund, RepairFlow übernimmt die Ersatzteilpreise und berechnet den Kostenvoranschlag, die Annahme prüft ihn. RepairFlow setzt den Auftragsstatus auf „KVA offen“ und sendet den Kostenvoranschlag an den Kunden. Antwortet der Kunde drei Tage lang nicht, erhält er eine Erinnerung; nach dem dritten Fristablauf ohne Antwort gilt der Kostenvoranschlag als abgelehnt. Gibt der Kunde ihn frei, setzt RepairFlow den Status auf „freigegeben“ und disponiert die Ersatzteile über Prozess 05; der Kunde wartet danach auf den Reparaturbeginn oder eine Reparaturabsage. Ist die Frist abgelaufen oder sind nicht alle Teile beschaffbar, erhält der Kunde eine Reparaturabsage. In diesen Fällen und nach einer Ablehnung durch den Kunden setzt RepairFlow den Status auf „abgelehnt“, und das Gerät geht über Prozess 08 mit Diagnosepauschale zur Abholung.</bpmn:documentation>
     <bpmn:participant id="Part_04_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_04" />
     <bpmn:participant id="Part_04_Kunde" name="Kunde" processRef="Proc_04_Kunde" />
     <bpmn:messageFlow id="MsgFlow_04_1" name="Kosten­voranschlag" sourceRef="T04_Senden" targetRef="K04_Start" />
     <bpmn:messageFlow id="MsgFlow_04_2" name="Freigabe" sourceRef="K04_Freigabe" targetRef="E04_Freigabe" />
     <bpmn:messageFlow id="MsgFlow_04_3" name="Ablehnung" sourceRef="K04_Ablehnung" targetRef="E04_Ablehnung" />
     <bpmn:messageFlow id="MsgFlow_04_5" name="Reparaturabsage" sourceRef="T04_Absage" targetRef="K04_SubStart" />
+    <bpmn:messageFlow id="MsgFlow_04_6" name="Reparaturabsage" sourceRef="T04_Absage" targetRef="K04_AbsageErhalten" />
     <bpmn:messageFlow id="MsgFlow_04_4" name="Erinnerung" sourceRef="T04_Erinnerung" targetRef="K04_Pruefen" />
   </bpmn:collaboration>
   <bpmn:process id="Proc_04" name="04 Kostenvoranschlag und Kundenfreigabe" isExecutable="true">
@@ -317,12 +318,28 @@
       <bpmn:incoming>Flow_04_3</bpmn:incoming>
       <bpmn:outgoing>Flow_04_5</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:eventBasedGateway id="K04_Warten" name="">
+      <bpmn:incoming>Flow_04_5</bpmn:incoming>
+      <bpmn:outgoing>Flow_04_36</bpmn:outgoing>
+      <bpmn:outgoing>Flow_04_37</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="K04_Beginn" name="Reparaturbeginn erhalten">
+      <bpmn:incoming>Flow_04_36</bpmn:incoming>
+      <bpmn:outgoing>Flow_04_38</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="K04_Beginn_def" messageRef="Msg_04_6" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="K04_AbsageErhalten" name="Reparaturabsage erhalten">
+      <bpmn:incoming>Flow_04_37</bpmn:incoming>
+      <bpmn:outgoing>Flow_04_39</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="K04_AbsageErhalten_def" messageRef="Msg_04_5" />
+    </bpmn:intermediateCatchEvent>
     <bpmn:sendTask id="K04_Ablehnung" name="Ablehnung senden">
       <bpmn:incoming>Flow_04_4</bpmn:incoming>
       <bpmn:outgoing>Flow_04_6</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:exclusiveGateway id="K04_Join" name="">
-      <bpmn:incoming>Flow_04_5</bpmn:incoming>
+      <bpmn:incoming>Flow_04_38</bpmn:incoming>
+      <bpmn:incoming>Flow_04_39</bpmn:incoming>
       <bpmn:incoming>Flow_04_6</bpmn:incoming>
       <bpmn:outgoing>Flow_04_7</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -337,9 +354,17 @@
     <bpmn:sequenceFlow id="Flow_04_4" name="nein" sourceRef="K04_GW" targetRef="K04_Ablehnung">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(kvaFreigeben)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_04_5" sourceRef="K04_Freigabe" targetRef="K04_Join" />
+    <bpmn:sequenceFlow id="Flow_04_5" sourceRef="K04_Freigabe" targetRef="K04_Warten" />
+    <bpmn:sequenceFlow id="Flow_04_36" sourceRef="K04_Warten" targetRef="K04_Beginn" />
+    <bpmn:sequenceFlow id="Flow_04_37" sourceRef="K04_Warten" targetRef="K04_AbsageErhalten" />
+    <bpmn:sequenceFlow id="Flow_04_38" sourceRef="K04_Beginn" targetRef="K04_Join" />
+    <bpmn:sequenceFlow id="Flow_04_39" sourceRef="K04_AbsageErhalten" targetRef="K04_Join" />
     <bpmn:sequenceFlow id="Flow_04_6" sourceRef="K04_Ablehnung" targetRef="K04_Join" />
     <bpmn:sequenceFlow id="Flow_04_7" sourceRef="K04_Join" targetRef="K04_End" />
+    <bpmn:textAnnotation id="K04_Hinweis">
+      <bpmn:text>Nachricht aus Prozess 05</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="K04_Hinweis_Assoc" associationDirection="None" sourceRef="K04_Beginn" targetRef="K04_Hinweis" />
     <bpmn:subProcess id="K04_Sub" name="Reparaturabsage verarbeiten" triggeredByEvent="true">
       <bpmn:startEvent id="K04_SubStart" name="Reparaturabsage erhalten">
         <bpmn:outgoing>Flow_04_35</bpmn:outgoing>
@@ -364,6 +389,11 @@
     </bpmn:extensionElements>
   </bpmn:message>
   <bpmn:message id="Msg_04_3" name="Kostenvoranschlag">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Msg_04_6" name="Reparaturbeginn">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />
     </bpmn:extensionElements>
@@ -690,15 +720,64 @@
       <bpmndi:BPMNShape id="K04_Ablehnung_di" bpmnElement="K04_Ablehnung">
         <dc:Bounds x="1653" y="212" width="130" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K04_Join_di" bpmnElement="K04_Join" isMarkerVisible="true">
-        <dc:Bounds x="1950" y="113" width="50" height="50" />
+      <bpmndi:BPMNShape id="K04_Warten_di" bpmnElement="K04_Warten">
+        <dc:Bounds x="1930" y="113" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K04_End_di" bpmnElement="K04_End">
-        <dc:Bounds x="2070" y="120" width="36" height="36" />
+      <bpmndi:BPMNShape id="K04_Beginn_di" bpmnElement="K04_Beginn">
+        <dc:Bounds x="2032" y="120" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2033" y="162" width="110" height="27" />
+          <dc:Bounds x="1995" y="86" width="110" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K04_AbsageErhalten_di" bpmnElement="K04_AbsageErhalten">
+        <dc:Bounds x="2032" y="168" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2072" y="194" width="95" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K04_Join_di" bpmnElement="K04_Join" isMarkerVisible="true">
+        <dc:Bounds x="2150" y="113" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K04_End_di" bpmnElement="K04_End">
+        <dc:Bounds x="2260" y="120" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2223" y="162" width="110" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="K04_Hinweis_di" bpmnElement="K04_Hinweis">
+        <dc:Bounds x="2110" y="60" width="160" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="K04_Hinweis_Assoc_di" bpmnElement="K04_Hinweis_Assoc">
+        <di:waypoint x="2064" y="128" />
+        <di:waypoint x="2110" y="80" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_36_di" bpmnElement="Flow_04_36">
+        <di:waypoint x="1980" y="138" />
+        <di:waypoint x="2032" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_37_di" bpmnElement="Flow_04_37">
+        <di:waypoint x="1955" y="163" />
+        <di:waypoint x="1955" y="186" />
+        <di:waypoint x="2032" y="186" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_38_di" bpmnElement="Flow_04_38">
+        <di:waypoint x="2068" y="138" />
+        <di:waypoint x="2150" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04_39_di" bpmnElement="Flow_04_39">
+        <di:waypoint x="2068" y="186" />
+        <di:waypoint x="2175" y="186" />
+        <di:waypoint x="2175" y="163" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MsgFlow_04_6_di" bpmnElement="MsgFlow_04_6">
+        <di:waypoint x="2500" y="560" />
+        <di:waypoint x="2500" y="440" />
+        <di:waypoint x="2050" y="440" />
+        <di:waypoint x="2050" y="204" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2240" y="446" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="K04_Sub_di" bpmnElement="K04_Sub" isExpanded="true">
         <dc:Bounds x="2400" y="160" width="330" height="160" />
         <bpmndi:BPMNLabel />
@@ -744,16 +823,16 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_5_di" bpmnElement="Flow_04_5">
         <di:waypoint x="1873" y="138" />
-        <di:waypoint x="1950" y="138" />
+        <di:waypoint x="1930" y="138" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_6_di" bpmnElement="Flow_04_6">
         <di:waypoint x="1783" y="252" />
-        <di:waypoint x="1975" y="252" />
-        <di:waypoint x="1975" y="163" />
+        <di:waypoint x="2175" y="252" />
+        <di:waypoint x="2175" y="186" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04_7_di" bpmnElement="Flow_04_7">
-        <di:waypoint x="2000" y="138" />
-        <di:waypoint x="2070" y="138" />
+        <di:waypoint x="2200" y="138" />
+        <di:waypoint x="2260" y="138" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="T04_Positionen_in_DataObjRef_04_9_di" bpmnElement="T04_Positionen_in_DataObjRef_04_9">
         <di:waypoint x="348" y="1220" />
