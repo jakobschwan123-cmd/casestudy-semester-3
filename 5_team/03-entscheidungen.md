@@ -4,9 +4,7 @@ Kurzfassung der gültigen Entscheidungen. Der vollständige Verlauf mit Begründ
 
 ## Offen
 
-- **E-33** (P01 von Adrian, 22.10.2026): übernommen; Sichtprüfung von P01 im Camunda Modeler durch Maximilian steht aus.
-- **E-32** (Prüfung P06–P10 gegen die Vorlesung, 22.10.2026): Antworten des Teams umgesetzt (siehe „Entschieden“ in E-32); Bestätigung der Gruppe und Modeler-Prüfung stehen aus.
-- **E-31** (Review P05–P10, 22.10.2026): Vorschlag von Jakob, Bestätigung durch die Gruppe und Sichtprüfung im Camunda Modeler durch Maximilian stehen aus.
+Keine. E-31 bis E-33 sind abgeschlossen: Alle zehn BPMN-Dateien wurden am 25.10.2026 im Camunda Modeler geprüft und gespeichert (Commit `2176f72`), die Gruppe hat die Änderungen bestätigt (Stand 27.10.2026).
 
 ## E-33 Überarbeitung P01 Sofortdiagnose (22.10.2026)
 
