@@ -27,6 +27,6 @@ Für die Abgabe werden die Dateien nach Ablauf benannt (`01-Sofortdiagnose.bpmn`
 - Je Prozessebene ein Start- und ein Endereignis; Ereignisse im Partizip Perfekt, Aktivitäten als Verb + Objekt, Verzweigungen als Frage.
 - Datenobjekte tragen die Klassennamen des Klassendiagramms, im Diagramm zur Lesbarkeit mit Bindestrich getrennt („Reparatur-auftrag [freigegeben]“); der Zustand in eckigen Klammern ist ein Wert der zugehörigen Aufzählung.
 
-## Kennzahlen (Stand 25.10.2026, nach der Modeler-Prüfung aller zehn Dateien)
+## Kennzahlen (Stand 27.10.2026, nach der Modeler-Prüfung aller zehn Dateien am 25.10.)
 
-143 Aktivitäten im Werkstatt-Pool (Ø 14,3 je Diagramm), davon 89 automatisiert (62 %); 29 Aktivitäten in den Kundenabläufen; 48 Nachrichtenflüsse; 58 Datenobjekte und 14 Datenspeicher (72). Je Diagramm (Akt./autom.): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Alle zehn Dateien sind im Camunda Modeler gespeichert; bpmnlint (`recommended` + Camunda 8.7) meldet 0 Befunde. Ändert sich ein Diagramm, die Zahlen in Doku 5.1/5.2, Tabelle 6 und auf den Folien 15 und 16 prüfen.
+143 Aktivitäten im Werkstatt-Pool (Ø 14,3 je Diagramm), davon 89 automatisiert (62 %); 29 Aktivitäten in den Kundenabläufen; 49 Nachrichtenflüsse; 58 Datenobjekte und 14 Datenspeicher (72). Je Diagramm (Akt./autom.): 01 14/14, 02 16/7, 03 13/6, 04 12/8, 05 16/12, 06 17/11, 07 13/6, 08 17/11, 09 16/8, 10 9/6. Alle zehn Dateien sind im Camunda Modeler gespeichert; bpmnlint (`recommended` + Camunda 8.7) meldet 0 Befunde. Ändert sich ein Diagramm, die Zahlen in Doku 5.1/5.2, Tabelle 6 und auf den Folien 15 und 16 prüfen.

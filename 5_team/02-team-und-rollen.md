@@ -2,16 +2,7 @@
 
 Gruppe 1, Kurs WWI25B4, Fallstudie Systemanalyse (Methoden der WI, 3. Semester). Rollen am Gruppentermin 02.09.2026 festgelegt (E-13), bestätigt am 05.10.2026 (E-21). Zuständigkeiten für die Fertigstellung am 15.10.2026 festgelegt (E-23).
 
-| Person | Rolle | Zuständig für |
-|---|---|---|
-| Nina Sattler | Projektleiterin | Gesamtplanung und Termine; Redaktion der Projektdokumentation (Kapitel 1, 4 und 7, Abbildungen einfügen, gelbe Hinweise einsammeln, Inhaltsverzeichnis, PDF); Abgabe-Archiv |
-| David Leismann | Stellvertretende Projektleitung, Backup-Beauftragter | Sicherung der Repositories (Git, VP-Server); Use-Case-Diagramm (E-24) sowie SD2, SD3, SD5 und SD6 in Visual Paradigm |
-| Adrian Wenzler | Product Owner | Fachkonzept (Doku Kapitel 2) und Produktentscheidungen; Entscheidungslog pflegen, Bestätigung E-19/E-20/E-22 einholen; Abschnitt 5.2 und Kapitel 6 |
-| Kilian Platter | Scrum Master und UML-Verantwortlicher | Sprint-Rituale und Trello-Board; Klassendiagramm, SD1 und SD4, VP-Projekt (`.vpp`), Konsistenzprüfung aller Sequenzdiagramme gegen das Klassendiagramm, Diagramm-Exporte |
-| Maximilian Ewald | BPMN-Verantwortlicher | Die 10 Kollaborationsdiagramme im Camunda Modeler (inklusive 09/10), Korrekturen, Prüfung im Problems-Panel, PNG-Export, Prozesskennzahlen, Abschnitt 5.1 |
-| Jakob Schwan | Qualitätsmanager | QA-Checkliste und Review aller Pull Requests, Konsistenz zwischen BPMN, UML und Doku (3.2, 5.6), Kennzahlenabgleich, Export der Präsentation als PDF |
-
-Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (Maximilian/David, Adrian/Nina, Jakob/Kilian), jede Trello-Karte hat genau eine verantwortliche Person und den Teampartner als Prüfer. Für Visual Paradigm prüfen sich Kilian und David gegenseitig (Klassendiagramm, SD1, SD4 → David; Use-Case-Diagramm, SD2, SD3, SD5, SD6 → Kilian).
+Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (Maximilian/David, Adrian/Nina, Jakob/Kilian), jede Trello-Karte hat genau eine verantwortliche Person und den Teampartner als Prüfer.
 
 ## Zuständigkeiten ab 15.10.2026 (E-23)
 
