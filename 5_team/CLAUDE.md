@@ -24,9 +24,9 @@ Grenze ist die Grundlage des Use-Case-Diagramms — nicht aufweichen.
 
 | Artefakt | Kriterium | Ist | Ort |
 |----------|-----------|-----|-----|
-| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 13,3; Linter 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
+| BPMN-Kollaborationsdiagramme | 10 Prozesse, ~10 Aktivitäten | 10 (Ø 14,3; Linter 0 Befunde) | `1_bpmn/p01-…p10-*.bpmn` |
 | Use-Case-Diagramm | ≥ 10 Use Cases | 19 (17 Akteure: Kunde, 15 Mitarbeiterrollen, KI-Diagnosedienst; Lieferant nur Black Box; je Use Case eine Rolle, E-24) | VP `ud : RepairFlow`, `2_uml/usecase-diagramm.png` |
-| Klassendiagramm | ≥ 10 Klassen | 27 (+ 7 Enums) | genau ein vollständiges Diagramm, VP `cd : RepairFlow`, `2_uml/klassendiagramm.png` |
+| Klassendiagramm | ≥ 10 Klassen | 29 (+ 7 Enums) | genau ein vollständiges Diagramm, VP `cd : RepairFlow`, `2_uml/klassendiagramm.png` |
 | Sequenzdiagramme | 5 | 6 | VP-Unterdiagramme, `2_uml/sequenz-01..06-*.png` |
 
 ## Unumstößliche Konventionen

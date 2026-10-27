@@ -153,6 +153,7 @@
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_05" propagateAllChildVariables="false" />
         <zeebe:ioMapping>
+          <zeebe:input source="=false" target="ersteDisposition" />
           <zeebe:output source="=teileVollstaendig != false" target="teileVollstaendig" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
