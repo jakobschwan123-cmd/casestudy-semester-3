@@ -342,6 +342,7 @@
       <bpmn:incoming>Flow_04_38</bpmn:incoming>
       <bpmn:incoming>Flow_04_39</bpmn:incoming>
       <bpmn:incoming>Flow_04_6</bpmn:incoming>
+      <bpmn:incoming>Flow_04_35</bpmn:incoming>
       <bpmn:outgoing>Flow_04_7</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:endEvent id="K04_End" name="KVA entschieden">
@@ -370,10 +371,7 @@
       <bpmn:outgoing>Flow_04_35</bpmn:outgoing>
       <bpmn:messageEventDefinition id="K04_AbsageVorFreigabe_def" messageRef="Msg_04_5" />
     </bpmn:boundaryEvent>
-    <bpmn:endEvent id="K04_Verfallen" name="KVA verfallen">
-      <bpmn:incoming>Flow_04_35</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_04_35" sourceRef="K04_AbsageVorFreigabe" targetRef="K04_Verfallen" />
+    <bpmn:sequenceFlow id="Flow_04_35" sourceRef="K04_AbsageVorFreigabe" targetRef="K04_Join" />
   </bpmn:process>
   <bpmn:dataStore id="Store_04_1" name="RepairFlow-Datenbank" />
   <bpmn:message id="Msg_04_0" name="KVA angestoßen" />
@@ -713,16 +711,11 @@
           <dc:Bounds x="1357" y="203" width="100" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="K04_Verfallen_di" bpmnElement="K04_Verfallen">
-        <dc:Bounds x="1387" y="250" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1372" y="292" width="66" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_04_35_di" bpmnElement="Flow_04_35">
         <di:waypoint x="1467" y="190" />
-        <di:waypoint x="1467" y="268" />
-        <di:waypoint x="1423" y="268" />
+        <di:waypoint x="1467" y="318" />
+        <di:waypoint x="2175" y="318" />
+        <di:waypoint x="2175" y="163" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="K04_GW_di" bpmnElement="K04_GW" isMarkerVisible="true">
         <dc:Bounds x="1600" y="113" width="50" height="50" />
