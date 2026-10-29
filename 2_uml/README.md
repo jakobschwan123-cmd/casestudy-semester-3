@@ -1,6 +1,6 @@
 # UML-Modelle (objektorientierte Analyse)
 
-Das UML-Modell liegt in Visual Paradigm 18 auf dem Teamwork-Server der DHBW (Repository **WWI25B4G1**, trunk). Abgegeben wird der Export `UML-WWI25B4-Gruppe1.vpp` (Stand 25.10.2026). Die PNGs sind Exporte aus VP und Quelle für die Abbildungen der Doku.
+Das UML-Modell liegt in Visual Paradigm 18 auf dem Teamwork-Server der DHBW (Repository **WWI25B4G1**, trunk). Abgegeben wird der Export `UML-WWI25B4-Gruppe1.vpp` (Stand 28.10.2026). Die PNGs sind Exporte aus VP und Quelle für die Abbildungen der Doku.
 
 | Datei | Inhalt |
 |---|---|
