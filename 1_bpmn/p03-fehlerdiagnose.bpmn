@@ -196,7 +196,7 @@
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_03_20</bpmn:incoming>
       <bpmn:outgoing>Flow_03_30</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="Ev03_KVA_def" />
+      <bpmn:messageEventDefinition id="Ev03_KVA_def" messageRef="Msg_03_2" />
     </bpmn:intermediateThrowEvent>
     <bpmn:exclusiveGateway id="Join_03" name="">
       <bpmn:incoming>Flow_03_18</bpmn:incoming>
@@ -312,6 +312,11 @@
     <bpmn:sequenceFlow id="Flow_03_2" sourceRef="K03_Planen" targetRef="K03_End" />
   </bpmn:process>
   <bpmn:dataStore id="Store_03_1" name="RepairFlow-Datenbank" />
+  <bpmn:message id="Msg_03_2" name="KVA angestoßen">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=vorgangId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
   <bpmn:message id="Msg_03_1" name="Reparaturabsage">
     <bpmn:extensionElements>
       <zeebe:subscription correlationKey="=vorgangId" />

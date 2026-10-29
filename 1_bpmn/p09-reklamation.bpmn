@@ -384,8 +384,12 @@
     <bpmn:sequenceFlow id="Flow_09_6" sourceRef="K09_Warten" targetRef="K09_Angebot" />
     <bpmn:sequenceFlow id="Flow_09_7" sourceRef="K09_Warten" targetRef="K09_Info" />
     <bpmn:sequenceFlow id="Flow_09_8" sourceRef="K09_Angebot" targetRef="K09_Antwort" />
-    <bpmn:sequenceFlow id="Flow_09_50" name="ja" sourceRef="K09_Antwort" targetRef="K09_Entscheiden" />
-    <bpmn:sequenceFlow id="Flow_09_51" name="nein" sourceRef="K09_Antwort" targetRef="K09_Merge" />
+    <bpmn:sequenceFlow id="Flow_09_50" name="ja" sourceRef="K09_Antwort" targetRef="K09_Entscheiden">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=kundeAntwortet</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09_51" name="nein" sourceRef="K09_Antwort" targetRef="K09_Merge">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(kundeAntwortet)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_09_9" sourceRef="K09_Entscheiden" targetRef="K09_Merge" />
     <bpmn:sequenceFlow id="Flow_09_12" sourceRef="K09_Info" targetRef="K09_Join" />
     <bpmn:sequenceFlow id="Flow_09_13" sourceRef="K09_Join" targetRef="K09_End" />
