@@ -1,13 +1,13 @@
 # UML-Modelle (objektorientierte Analyse)
 
-Das UML-Modell liegt in Visual Paradigm 18 auf dem Teamwork-Server der DHBW (Repository **WWI25B4G1**, trunk). Abgegeben wird der Export `UML-WWI25B4-Gruppe1.vpp` (Stand 28.10.2026). Die PNGs sind Exporte aus VP und Quelle für die Abbildungen der Doku.
+Das UML-Modell liegt in Visual Paradigm 18 auf dem Teamwork-Server der DHBW (Repository **WWI25B4G1**, trunk). Abgegeben wird der Export `UML-WWI25B4-Gruppe1.vpp` (Stand 29.10.2026). Die PNGs sind Exporte aus VP und Quelle für die Abbildungen der Doku.
 
 | Datei | Inhalt |
 |---|---|
 | UML-WWI25B4-Gruppe1.vpp | Visual-Paradigm-Projekt mit Use-Case-Diagramm, Klassendiagramm und sechs Sequenzdiagrammen als Unterdiagramme der Use Cases (Abgabedatei) |
 | usecase-diagramm.png | ud : RepairFlow, 19 Use Cases, 17 Akteure (Abb. 4) |
 | klassendiagramm.png | cd : RepairFlow, 29 Klassen (inkl. KundenApp und Werkstattoberflaeche), 7 Aufzählungen, 40 Assoziationen (Abb. 5) |
-| sequenz-01-sofortdiagnose.png … sequenz-06-nachbestellvorschlag.png | SD1 (UC01), SD2 (UC07), SD3 (UC09), SD4 (UC14), SD5 (UC16), SD6 (UC10, Datei heißt aus historischen Gründen nachbestellvorschlag); SD1 und SD3 sind Abb. 6 und 7. Stand der PNGs: 28.10.2026 |
+| sequenz-01-sofortdiagnose.png … sequenz-06-nachbestellvorschlag.png | SD1 (UC01), SD2 (UC07), SD3 (UC09), SD4 (UC14), SD5 (UC16), SD6 (UC10, Datei heißt aus historischen Gründen nachbestellvorschlag); SD1 und SD3 sind Abb. 6 und 7. Stand der PNGs: 29.10.2026 |
 
 Die früheren PlantUML-Vorlagen und XMI-Importdateien sind seit dem 19.10.2026 entfernt, weil das VP-Modell vollständig ist. Sie stehen in der Git-Historie.
 
