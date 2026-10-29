@@ -23,15 +23,16 @@ Abstimmung über die WhatsApp-Gruppe, Dateien ausschließlich über das GitHub-R
 
 ## Präsentation
 
-Die Abschlusspräsentation wird individuell bewertet, alle Gruppenmitglieder müssen vortragen. Beim PDF-Export muss stehen, wer welchen Beitrag verantwortet. Seit dem 15.10.2026 trägt jede Person vor, was sie verantwortet (E-23). Die Präsentation ist seit dem 15.10.2026 als Pitch und Zusammenfassung aufgebaut, ohne Diagrammbilder (E-25); Sprechtexte in `4_praesentation/Sprechtext_Abschlusspraesentation.docx` und in den Notizen. Zuordnung (steht auch auf Folie 2 und auf der letzten Folie):
+Die Abschlusspräsentation wird individuell bewertet, alle Gruppenmitglieder müssen vortragen. Beim PDF-Export muss stehen, wer welchen Beitrag verantwortet. Seit dem 15.10.2026 trägt jede Person vor, was sie verantwortet (E-23). Die Präsentation ist seit dem 15.10.2026 als Pitch und Zusammenfassung aufgebaut, ohne Diagrammbilder (E-25); Sprechtexte nur in `4_praesentation/Sprechtext_Abschlusspraesentation.docx`, nicht in den Notizen der PPTX. Zuordnung der 24 Folien (steht auch auf Folie 2 und auf Folie 24):
 
 | Teil | Folien | Vortragende(r) |
 |---|---|---|
-| Einleitung und Agenda; Geschäftsmodell und Ausblick; Fazit | 1–2, 17–18 | Nina Sattler |
-| Das Problem; Auftragsreise; Rollen und Use Cases | 3, 6, 12 | David Leismann |
-| Lösung, Nutzenversprechen, KI-Sofortdiagnose, Live-Demo der Kunden-App | 4–5, 7–8 | Adrian Wenzler |
-| Ergebnisse in Zahlen, Prozesslandkarte, Prozess-Highlights | 9–11 | Maximilian Ewald |
-| Datenmodell; Vorgehen und Projektmanagement | 13–14 | Kilian Platter |
-| Qualität; Herausforderungen und Lernerfahrungen | 15–16 | Jakob Schwan |
+| Titel und Team; Agenda; Das Problem; RepairFlow: die Lösung | 1–7 | David Leismann |
+| Drei Nutzenversprechen; Wer macht was im System?; Das Datenmodell | 8, 17–18 | Kilian Platter |
+| Auftragsreise; Drei Prozess-Highlights; Live-Demo | 9–12 | Maximilian Ewald |
+| KI-Sofortdiagnose; Ergebnisse in Zahlen; Zehn Prozesse, 62 Prozent automatisiert | 13–16 | Adrian Wenzler |
+| Qualität; Herausforderungen und Lernerfahrungen | 19–20 | Jakob Schwan |
+| Vorgehen und Projektmanagement; Geschäftsmodell und Ausblick; Fazit | 21–23 | Nina Sattler |
+| Beiträge der Vortragenden | 24 | alle |
 
 Termin laut `Allgemeines.docx` (Moodle): 27.10.2026, 09:00 Uhr, Raum B458. Der 22.10. ist der letzte Gruppentermin (Generalprobe). Sprintplan und Trello-Board: Doku Kapitel 4.
