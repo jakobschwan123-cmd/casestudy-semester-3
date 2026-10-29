@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_09" targetNamespace="http://repairflow.example/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
   <bpmn:collaboration id="Collab_09">
-    <bpmn:documentation>Meldet der Kunde nach der Abholung einen Mangel, wird die Reklamation dem Ursprungsauftrag zugeordnet, der Mangel geprüft und der Gewährleistungsfall bewertet. Je nach Ergebnis folgt kostenfreie Nacharbeit (Freigabe durch die Werkstattleitung) oder ein kostenpflichtiges Angebot. Antwortet der Kunde drei Tage lang nicht, lehnt er das Angebot ab oder sind nicht alle Teile beschaffbar, wird die Reklamation abgelehnt und der Kunde informiert. Ist ein Lieferantenteil defekt, läuft die Retoure nach der Abholung über Prozess 10; der Kunde wartet nicht darauf. Die Nacharbeit wird als neuer Reparaturauftrag angelegt und über Prozess 07 durchgeführt; die Rückgabe des Geräts läuft in jedem Fall über Prozess 08.</bpmn:documentation>
+    <bpmn:documentation>Meldet der Kunde nach der Abholung einen Mangel, wird die Reklamation dem Ursprungsauftrag zugeordnet, der Mangel geprüft und der Gewährleistungsfall bewertet. Je nach Ergebnis folgt kostenfreie Nacharbeit (Freigabe durch die Werkstattleitung) oder ein kostenpflichtiges Angebot. Antwortet der Kunde drei Tage lang nicht, lehnt er das Angebot ab oder sind nicht alle Teile beschaffbar, wird die Reklamation abgelehnt und der Kunde informiert. Ist ein Lieferantenteil defekt, läuft die Retoure nach der Abholung über Prozess 10; der Kunde wartet nicht darauf. Die Nacharbeit wird als neuer Reparaturauftrag angelegt und über Prozess 07 durchgeführt; die Rückgabe des Geräts läuft in jedem Fall über Prozess 08: bei Gewährleistung kostenfrei, nach einem angenommenen Angebot mit Rechnung über die Reparatur, sonst mit Diagnosepauschale.</bpmn:documentation>
     <bpmn:participant id="Part_09_Werkstatt" name="Werkstattbetrieb (Pilotkunde FixWerk GmbH)" processRef="Proc_09" />
     <bpmn:participant id="Part_09_Kunde" name="Kunde" processRef="Proc_09_Kunde" />
     <bpmn:messageFlow id="MsgFlow_09_1" name="Mangelmeldung" sourceRef="K09_Melden" targetRef="Start_09" />
@@ -229,6 +229,9 @@
     <bpmn:callActivity id="T09_Abholung" name="08 Abholung abwickeln">
       <bpmn:extensionElements>
         <zeebe:calledElement processId="Proc_08" propagateAllChildVariables="false" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=if gewaehrleistung = true then &#34;kostenfrei&#34; else if angebotAngenommen = true and teileVollstaendig = true then &#34;reparatur&#34; else &#34;pauschale&#34;" target="abrechnung" />
+        </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_09_35</bpmn:incoming>
       <bpmn:outgoing>Flow_09_36</bpmn:outgoing>
