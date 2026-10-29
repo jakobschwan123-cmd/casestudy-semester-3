@@ -6,16 +6,16 @@ Arbeitsweise am Gruppentermin: Zweierteams prüfen gegenseitig ihre Diagramme (M
 
 ## Zuständigkeiten ab 15.10.2026 (E-23)
 
-Nur Kilian und David haben Zugriff auf Visual Paradigm, deshalb liegen alle VP-Diagramme bei ihnen. Die übrigen Arbeiten sind so verteilt, dass jede Person im Gesamtprojekt einen vergleichbaren Anteil verantwortet. Offene Aufgaben stehen ohne Namen in `TODO.md` und werden im Gruppentermin nach dieser Tabelle zugeteilt.
+Nur Kilian und David haben Zugriff auf Visual Paradigm, deshalb liegen alle VP-Diagramme bei ihnen. Die übrigen Arbeiten sind so verteilt, dass jede Person im Gesamtprojekt einen vergleichbaren Anteil verantwortet. Offene Aufgaben stehen ohne Namen in `TODO.md` und werden im Gruppentermin nach dieser Tabelle zugeteilt. Die Foliennummern folgen der gehaltenen Präsentation mit 24 Folien (Folie 24).
 
 | Person | Verantwortet im Gesamtprojekt |
 |---|---|
-| Nina | Planung und Termine, Redaktion der Doku (Kapitel 1, 4, 7, Abbildungen, PDF), Abgabe-Archiv, Folien 1–2 und 17–18 |
-| David | Use-Case-Diagramm (Rollenstruktur E-24), SD5, SD6, Abgleich Use Cases/SD mit den Prozessen (E-18), P05/P06 (E-20), Folien 3, 6 und 12 |
-| Adrian | Fachkonzept (Kapitel 2), Entscheidungslog und Bestätigungen E-19/E-20/E-22, Abschnitt 5.2, Kapitel 6, Folien 4, 5, 7 und 8 (Live-Demo) |
-| Kilian | Klassendiagramm, SD1 bis SD4, VP-Projekt, Konsistenz der UML-Modelle, Gesamtprüfungen (E-15, E-17, E-22), Scrum, Folien 13 und 14 |
-| Maximilian | Alle zehn BPMN-Dateien im Camunda Modeler, Kennzahlen, Abschnitt 5.1, Folien 9–11 |
-| Jakob | QA-Checkliste, Review aller Pull Requests, Logikfehler P07/P08 (E-19), Abschnitte 3.2 und 5.6, Präsentations-PDF, Folien 15 und 16 |
+| Nina | Planung und Termine, Redaktion der Doku (Kapitel 1, 4, 7, Abbildungen, PDF), Abgabe-Archiv, Folien 21–23 |
+| David | Use-Case-Diagramm (Rollenstruktur E-24), SD5, SD6, Abgleich Use Cases/SD mit den Prozessen (E-18), P05/P06 (E-20), Folien 1–7 |
+| Adrian | Fachkonzept (Kapitel 2), Entscheidungslog und Bestätigungen E-19/E-20/E-22, Abschnitt 5.2, Kapitel 6, Folien 13–16 |
+| Kilian | Klassendiagramm, SD1 bis SD4, VP-Projekt, Konsistenz der UML-Modelle, Gesamtprüfungen (E-15, E-17, E-22), Scrum, Folien 8 und 17–18 |
+| Maximilian | Alle zehn BPMN-Dateien im Camunda Modeler, Kennzahlen, Abschnitt 5.1, Folien 9–12 (mit Live-Demo) |
+| Jakob | QA-Checkliste, Review aller Pull Requests, Logikfehler P07/P08 (E-19), Abschnitte 3.2 und 5.6, Präsentations-PDF, Folien 19–20 |
 
 ## Kommunikation
 
